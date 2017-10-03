@@ -9,9 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/")
 public class HomeController {
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
-    public ModelAndView main() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("welcome");
-        return modelAndView;
+    public String main() {
+        return "welcome";
     }
 }
