@@ -4,6 +4,7 @@ import com.internetshop.entities.ClientEntity;
 import com.internetshop.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,8 +21,10 @@ public class ClientController {
     private ClientService clientService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    @ResponseBody
-    public List<ClientEntity> getAllUsers() {
-        return clientService.getAllClients();
+//    @ResponseBody
+    public String/*List<ClientEntity>*/ getAllUsers(ModelMap modelMap) {
+//        return clientService.getAllClients();
+        modelMap.put("listClient", clientService.getAllClients());
+        return "client_page";
     }
 }

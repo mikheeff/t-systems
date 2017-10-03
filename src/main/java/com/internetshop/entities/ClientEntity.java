@@ -30,14 +30,6 @@ public class ClientEntity {
     public ClientEntity() {
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public ClientEntity(String name, String surname, Date birthdate, String email, String password, String phone, int order_counter, int id_role) {
         this.name = name;
         this.surname = surname;
@@ -47,6 +39,14 @@ public class ClientEntity {
         this.phone = phone;
         this.order_counter = order_counter;
         this.id_role = id_role;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
