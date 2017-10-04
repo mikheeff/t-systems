@@ -13,6 +13,9 @@
     <title>Catalog of games</title>
 </head>
 <body>
+
+<a href="${pageContext.request.contextPath}/catalog/add">Add new goods</a>
+<br>
 <table border="1" cellpadding="2" cellspacing="2">
     <tr>
         <th>Id</th>
@@ -31,7 +34,7 @@
             <td>${goodsVar.id}</td>
             <td>${goodsVar.name}</td>
             <td>${goodsVar.price}</td>
-            <td>${goodsVar.nuberOfPlayaers}</td>
+            <td>${goodsVar.numberOfPlayers}</td>
             <td>${goodsVar.duration}</td>
             <td>${goodsVar.rules}</td>
             <td>${goodsVar.amount}</td>

@@ -1,5 +1,6 @@
 package com.internetshop.repository.impl;
 
+import com.internetshop.entities.CategoryEntity;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.GoodsEntity;
 import com.internetshop.repository.api.GoodsRepository;
@@ -17,6 +18,7 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     public List<GoodsEntity> getAll() {
         emf = Persistence.createEntityManagerFactory("item-manager-pu");
-        return emf.createEntityManager().createQuery("select c from GoodsEntity c ", GoodsEntity.class).getResultList();
+//        return emf.createEntityManager().createQuery("select goods.id,goods.name,goods.price,goods.nuberOfPlayaers,goods.duration,goods.rules,goods.amount,goods.visible,cat.name,goods.description from GoodsEntity goods,CategoryEntity cat where goods.id_category=cat.id", GoodsEntity.class).getResultList();
+        return emf.createEntityManager().createQuery("select goods from GoodsEntity goods",GoodsEntity.class).getResultList();
     }
 }
