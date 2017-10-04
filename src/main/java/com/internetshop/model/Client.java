@@ -1,21 +1,38 @@
 package com.internetshop.model;
 
 public class Client {
+    private int id;
     private String name;
     private String surname;
     private String birthdate;
     private String email;
     private String password;
+    private String phone;
+    private int order_counter;
+    private int id_role;
+
 
     public Client() {
     }
 
-    public Client(String name, String surname, String birthdate, String email, String password) {
+    public Client(int id, String name, String surname, String birthdate, String email, String password, String phone, int order_counter, int id_role) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
         this.email = email;
         this.password = password;
+        this.phone = phone;
+        this.order_counter = order_counter;
+        this.id_role = id_role;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -56,6 +73,30 @@ public class Client {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public int getOrder_counter() {
+        return order_counter;
+    }
+
+    public void setOrder_counter(int order_counter) {
+        this.order_counter = order_counter;
+    }
+
+    public int getId_role() {
+        return id_role;
+    }
+
+    public void setId_role(int id_role) {
+        this.id_role = id_role;
     }
 
     @Override

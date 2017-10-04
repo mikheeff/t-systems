@@ -1,22 +1,37 @@
-package com.internetshop.model;
+package com.internetshop.entities;
 
-public class Goods {
+import javax.persistence.*;
+
+@Entity
+@Table (name = "goods")
+public class GoodsEntity {
+    @Id
+    @Column(name = "idgoods")
+    @GeneratedValue
     private int id;
+    @Column (name = "name")
     private String name;
+    @Column (name = "price")
     private float price;
+    @Column (name = "number_of_players")
     private int nuberOfPlayaers;
+    @Column (name = "duration")
     private float duration;
+    @Column (name = "rules")
     private String rules;
+    @Column (name = "amount")
     private int amount;
+    @Column (name = "visible")
     private int visible;
+    @Column (name = "description")
     private String description;
+    @Column (name = "id_category")
     private int id_category;
 
-    public Goods() {
+    public GoodsEntity() {
     }
 
-    public Goods(int id, String name, float price, int nuberOfPlayaers, float duration, String rules, int amount, int visible, String description, int id_category) {
-        this.id = id;
+    public GoodsEntity(String name, float price, int nuberOfPlayaers, float duration, String rules, int amount, int visible, String description, int id_category) {
         this.name = name;
         this.price = price;
         this.nuberOfPlayaers = nuberOfPlayaers;
