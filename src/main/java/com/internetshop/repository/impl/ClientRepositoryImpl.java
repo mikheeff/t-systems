@@ -13,11 +13,8 @@ import java.util.List;
 @Repository
 public class ClientRepositoryImpl implements ClientRepository {
 
-    //private List<ClientEntity> clients = Arrays.asList(new ClientEntity("Vasya","Ivanov","01.01.1992","vasya@mail.ru","vasya1992"));
     @PersistenceUnit(unitName = "item-manager-pu")
-    private EntityManagerFactory emf;
-    @PersistenceContext(unitName = "item-manager-pu")
-    private EntityManager em;
+    private EntityManagerFactory emf;  //конструктор?
 
 
     public List<ClientEntity> getAll() {
