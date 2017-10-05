@@ -27,8 +27,8 @@
                 <td>${clientVar.email}</td>
                 <td>${clientVar.password}</td>
                 <td>${clientVar.phone}</td>
-                <td>${clientVar.order_counter}</td>
-                <td>${clientVar.id_role}</td>
+                <td>${clientVar.orderCounter}</td>
+                <td>${clientVar.idRole}</td>
             </tr>
         </c:forEach>
     </table>

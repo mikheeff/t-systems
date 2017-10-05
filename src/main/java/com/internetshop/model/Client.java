@@ -8,14 +8,14 @@ public class Client {
     private String email;
     private String password;
     private String phone;
-    private int order_counter;
+    private int orderCounter;
     private int id_role;
 
 
     public Client() {
     }
 
-    public Client(int id, String name, String surname, String birthdate, String email, String password, String phone, int order_counter, int id_role) {
+    public Client(int id, String name, String surname, String birthdate, String email, String password, String phone, int orderCounter, int id_role) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -23,7 +23,7 @@ public class Client {
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.order_counter = order_counter;
+        this.orderCounter = orderCounter;
         this.id_role = id_role;
     }
 
@@ -83,12 +83,12 @@ public class Client {
         this.phone = phone;
     }
 
-    public int getOrder_counter() {
-        return order_counter;
+    public int getOrderCounter() {
+        return orderCounter;
     }
 
-    public void setOrder_counter(int order_counter) {
-        this.order_counter = order_counter;
+    public void setOrderCounter(int orderCounter) {
+        this.orderCounter = orderCounter;
     }
 
     public int getId_role() {

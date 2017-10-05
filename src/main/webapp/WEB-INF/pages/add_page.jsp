@@ -48,7 +48,7 @@
             </tr>
             <tr>
                 <td>Category Id</td>
-                <td><spring:input path="idCategory"/></td>
+                <td><spring:input path="categoryId"/></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>

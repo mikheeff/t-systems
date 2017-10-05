@@ -48,8 +48,8 @@ public class GoodsEntity {
         return category;
     }
 
-    public void setCategory(CategoryEntity categories) {
-        this.category = categories;
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
     }
 
     public int getId() {

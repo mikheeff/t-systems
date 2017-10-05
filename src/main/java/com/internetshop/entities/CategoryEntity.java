@@ -1,6 +1,8 @@
 package com.internetshop.entities;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "category")
@@ -11,13 +13,24 @@ public class CategoryEntity {
     private int id;
     @Column(name = "name")
     private String name;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<GoodsEntity> GoodsSet = new HashSet<>();
+
 
     public CategoryEntity() {
     }
 
-    public CategoryEntity(int id, String name) {
-        this.id = id;
+    public CategoryEntity(String name, Set<GoodsEntity> goodsSet) {
         this.name = name;
+        GoodsSet = goodsSet;
+    }
+
+    public Set<GoodsEntity> getGoodsSet() {
+        return GoodsSet;
+    }
+
+    public void setGoodsSet(Set<GoodsEntity> goodsSet) {
+        GoodsSet = goodsSet;
     }
 
     public int getId() {

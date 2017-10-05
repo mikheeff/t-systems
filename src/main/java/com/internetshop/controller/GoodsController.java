@@ -1,6 +1,7 @@
 package com.internetshop.controller;
 
 import com.internetshop.entities.GoodsEntity;
+import com.internetshop.model.Goods;
 import com.internetshop.service.api.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,11 +38,11 @@ public class GoodsController {
 //    }
     @RequestMapping(value ="/add", method = RequestMethod.GET)
     public String addGoods(ModelMap modelMap) {
-        modelMap.put("goods", new GoodsEntity());
+        modelMap.put("goods", new Goods());
         return "add_page";
     }
     @RequestMapping(value ="/add", method = RequestMethod.POST)
-    public String addGoods(@ModelAttribute (value = "goods") GoodsEntity goods, ModelMap modelMap) {
+    public String addGoods(@ModelAttribute (value = "goods") Goods goods, ModelMap modelMap) {
         this.goodsService.addGoods(goods);
         modelMap.put("listGoods", goodsService.getAllGoods());
         return "catalog_page";

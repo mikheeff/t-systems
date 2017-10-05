@@ -1,31 +1,41 @@
 package com.internetshop.model;
 
+
 public class Goods {
     private int id;
     private String name;
     private float price;
-    private int numberOfPlayaers;
+    private int numberOfPlayers;
     private float duration;
     private String rules;
     private int amount;
     private int visible;
     private String description;
-    private int id_category;
+    private int categoryId;
 
     public Goods() {
     }
 
-    public Goods(int id, String name, float price, int numberOfPlayaers, float duration, String rules, int amount, int visible, String description, int id_category) {
+    public Goods(int id, String name, float price, int numberOfPlayers, float duration, String rules, int amount, int visible, String description, int categoryId) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.numberOfPlayaers = numberOfPlayaers;
+        this.numberOfPlayers = numberOfPlayers;
         this.duration = duration;
         this.rules = rules;
         this.amount = amount;
         this.visible = visible;
         this.description = description;
-        this.id_category = id_category;
+        this.categoryId = categoryId;
+    }
+
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public int getId() {
@@ -52,12 +62,12 @@ public class Goods {
         this.price = price;
     }
 
-    public int getNumberOfPlayaers() {
-        return numberOfPlayaers;
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
     }
 
-    public void setNuberOfPlayaers(int nuberOfPlayaers) {
-        this.numberOfPlayaers = nuberOfPlayaers;
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
 
     public float getDuration() {
@@ -100,11 +110,4 @@ public class Goods {
         this.description = description;
     }
 
-    public int getId_category() {
-        return id_category;
-    }
-
-    public void setId_category(int id_category) {
-        this.id_category = id_category;
-    }
 }

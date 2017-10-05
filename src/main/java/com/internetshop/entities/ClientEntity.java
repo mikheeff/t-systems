@@ -23,22 +23,22 @@ public class ClientEntity {
     @Column (name = "phone")
     private String phone;
     @Column (name = "order_counter")
-    private int order_counter;
+    private int orderCounter;
     @Column (name = "id_role")
-    private int id_role;
+    private int idRole;
 
     public ClientEntity() {
     }
 
-    public ClientEntity(String name, String surname, Date birthdate, String email, String password, String phone, int order_counter, int id_role) {
+    public ClientEntity(String name, String surname, Date birthdate, String email, String password, String phone, int orderCounter, int idRole) {
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.order_counter = order_counter;
-        this.id_role = id_role;
+        this.orderCounter = orderCounter;
+        this.idRole = idRole;
     }
 
     public int getId() {
@@ -97,19 +97,19 @@ public class ClientEntity {
         this.phone = phone;
     }
 
-    public int getOrder_counter() {
-        return order_counter;
+    public int getOrderCounter() {
+        return orderCounter;
     }
 
-    public void setOrder_counter(int order_counter) {
-        this.order_counter = order_counter;
+    public void setOrderCounter(int orderCounter) {
+        this.orderCounter = orderCounter;
     }
 
-    public int getId_role() {
-        return id_role;
+    public int getIdRole() {
+        return idRole;
     }
 
-    public void setId_role(int id_role) {
-        this.id_role = id_role;
+    public void setIdRole(int idRole) {
+        this.idRole = idRole;
     }
 }
