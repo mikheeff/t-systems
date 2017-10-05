@@ -40,7 +40,7 @@
             <td>${goodsVar.amount}</td>
             <td>${goodsVar.visible}</td>
             <td>${goodsVar.description}</td>
-            <td>${goodsVar.id_category}</td>
+            <td>${goodsVar.idCategory}</td>
         </tr>
     </c:forEach>
 </table>

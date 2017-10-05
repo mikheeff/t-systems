@@ -15,7 +15,8 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @PersistenceUnit(unitName = "item-manager-pu")
     private EntityManagerFactory emf;  //конструктор?
-
+    @PersistenceContext(unitName = "item-manager-pu")
+    private EntityManager em;
 
     public List<ClientEntity> getAll() {
         emf = Persistence.createEntityManagerFactory("item-manager-pu");

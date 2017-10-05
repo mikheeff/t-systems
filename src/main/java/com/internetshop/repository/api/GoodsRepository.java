@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface GoodsRepository {
     List<GoodsEntity> getAll();
+    void addGoods(GoodsEntity goodsEntity);
 }

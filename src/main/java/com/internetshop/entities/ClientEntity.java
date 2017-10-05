@@ -8,7 +8,7 @@ import java.util.Date;
 public class ClientEntity {
     @Id
     @Column(name = "idClient")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "name")
     private String name;

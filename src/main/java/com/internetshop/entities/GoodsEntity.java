@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class GoodsEntity {
     @Id
     @Column(name = "idgoods")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column (name = "name")
     private String name;
@@ -26,12 +26,12 @@ public class GoodsEntity {
     @Column (name = "description")
     private String description;
     @Column (name = "id_category")
-    private int id_category;
+    private int idCategory;
 
     public GoodsEntity() {
     }
 
-    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, String rules, int amount, int visible, String description, int id_category) {
+    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, String rules, int amount, int visible, String description, int idCategory) {
         this.name = name;
         this.price = price;
         this.numberOfPlayers = numberOfPlayers;
@@ -40,7 +40,7 @@ public class GoodsEntity {
         this.amount = amount;
         this.visible = visible;
         this.description = description;
-        this.id_category = id_category;
+        this.idCategory = idCategory;
     }
 
     public int getId() {
@@ -71,7 +71,7 @@ public class GoodsEntity {
         return numberOfPlayers;
     }
 
-    public void setNumberOfPlayers(int nuberOfPlayers) {
+    public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
 
@@ -115,11 +115,11 @@ public class GoodsEntity {
         this.description = description;
     }
 
-    public int getId_category() {
-        return id_category;
+    public int getIdCategory() {
+        return idCategory;
     }
 
-    public void setId_category(int id_category) {
-        this.id_category = id_category;
+    public void setIdCategory(int idCategory) {
+        this.idCategory = idCategory;
     }
 }

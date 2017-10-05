@@ -12,7 +12,7 @@
     <title>Add new goods</title>
 </head>
 <body>
-    <spring:form method="post" commandName="goods" action="add.html">
+    <spring:form method="post" commandName="goods" action="add">
         <table border="0" cellpadding="2" cellspacing="2">
             <tr>
                 <td>Name</td>
@@ -48,7 +48,7 @@
             </tr>
             <tr>
                 <td>Category Id</td>
-                <td><spring:input path="id_category"/></td>
+                <td><spring:input path="idCategory"/></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>
