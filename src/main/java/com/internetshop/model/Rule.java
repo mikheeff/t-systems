@@ -6,8 +6,11 @@ import java.util.Set;
 public class Rule {
     private int id;
     private String name;
-    private Set<Goods> GoodsSet = new HashSet<>();
+    private Set<Goods> GoodsSet = new HashSet<>(); // ???? как ковертить в DTO?
 
+    public Rule(){
+
+    }
     public Rule(int id, String name, Set<Goods> goodsSet) {
         this.id = id;
         this.name = name;

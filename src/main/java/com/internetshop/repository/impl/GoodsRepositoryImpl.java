@@ -29,4 +29,17 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         em.getTransaction().commit();
     }
 
+    @Override
+    public void deleteGoodsById(int id) {
+        EntityManager em = this.emf.createEntityManager();
+        em.getTransaction().begin();
+        em.remove(em.find(GoodsEntity.class,id));
+        em.getTransaction().commit();
+    }
+
+    @Override
+    public GoodsEntity getGoodsById(int id) {
+        EntityManager em = this.emf.createEntityManager();
+        return em.find(GoodsEntity.class,id);
+    }
 }

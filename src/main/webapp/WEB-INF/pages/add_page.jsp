@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <td>Complexity of the rule</td>
-                <td><spring:input path="ruleId"/></td>
+                <td><spring:input path="rule.id"/></td>
             </tr>
             <tr>
                 <td>Amount</td>
@@ -48,7 +48,7 @@
             </tr>
             <tr>
                 <td>Category Id</td>
-                <td><spring:input path="categoryId"/></td>
+                <td><spring:input path="category.id"/></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -44,6 +45,13 @@ public class GoodsController {
     @RequestMapping(value ="/add", method = RequestMethod.POST)
     public String addGoods(@ModelAttribute (value = "goods") Goods goods, ModelMap modelMap) {
         this.goodsService.addGoods(goods);
+        modelMap.put("listGoods", goodsService.getAllGoods());
+        return "catalog_page";
+    }
+
+    @RequestMapping(value ="/delete/{id}", method = RequestMethod.GET)
+    public String deleteGoods(@PathVariable(value = "id") int id, ModelMap modelMap) {
+        this.goodsService.deleteGoodsById(id);
         modelMap.put("listGoods", goodsService.getAllGoods());
         return "catalog_page";
     }

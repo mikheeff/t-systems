@@ -7,35 +7,35 @@ public class Goods {
     private float price;
     private int numberOfPlayers;
     private float duration;
-    private int ruleId;
+    private Rule rule;
     private int amount;
     private int visible;
     private String description;
-    private int categoryId;
+    private Category category;
 
     public Goods() {
     }
 
-    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int ruleId, int amount, int visible, String description, int categoryId) {
+    public Goods(int id, String name, float price, int numberOfPlayers, float duration, Rule rule, int amount, int visible, String description, Category category) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.numberOfPlayers = numberOfPlayers;
         this.duration = duration;
-        this.ruleId = ruleId;
+        this.rule = rule;
         this.amount = amount;
         this.visible = visible;
         this.description = description;
-        this.categoryId = categoryId;
+        this.category = category;
     }
 
 
-    public int getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public int getId() {
@@ -78,12 +78,12 @@ public class Goods {
         this.duration = duration;
     }
 
-    public int getRuleId() {
-        return ruleId;
+    public Rule getRule() {
+        return rule;
     }
 
-    public void setRuleId(int ruleId) {
-        this.ruleId = ruleId;
+    public void setRule(Rule rule) {
+        this.rule = rule;
     }
 
     public int getAmount() {

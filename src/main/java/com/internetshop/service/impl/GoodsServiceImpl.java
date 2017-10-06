@@ -3,12 +3,15 @@ package com.internetshop.service.impl;
 import com.internetshop.entities.CategoryEntity;
 import com.internetshop.entities.GoodsEntity;
 import com.internetshop.entities.RuleEntity;
+import com.internetshop.model.Category;
 import com.internetshop.model.Goods;
+import com.internetshop.model.Rule;
 import com.internetshop.repository.api.GoodsRepository;
 import com.internetshop.service.api.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
 import java.util.List;
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -28,13 +31,33 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void addGoods(Goods goods) {
         CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.setId(goods.getCategoryId());
+        categoryEntity.setId(goods.getCategory().getId());
         RuleEntity ruleEntity = new RuleEntity();
-        ruleEntity.setId(goods.getRuleId());
+        ruleEntity.setId(goods.getRule().getId());
         GoodsEntity goodsEntity = new GoodsEntity(goods.getName(),goods.getPrice(),goods.getNumberOfPlayers(),goods.getDuration(),goods.getAmount(), goods.getVisible(),goods.getDescription(),categoryEntity,ruleEntity);
         this.goodsRepository.addGoods(goodsEntity);
     }
 
+    @Override
+    public void deleteGoodsById(int id) {
+        this.goodsRepository.deleteGoodsById(id);
+    }
 
-
+    @Override
+    public Goods getGoodsById(int id) {
+        Category category = new Category();
+        category.setId(goodsRepository.getGoodsById(id).getCategory().getId());
+        category.setName(goodsRepository.getGoodsById(id).getCategory().getName());
+//        for (GoodsEntity ge : goodsRepository.getGoodsById(id).getCategory().getGoodsSet()) {
+//            Goods goods = new goods
+//            for(Goods g : category.getGoodsSet()){
+//                g.
+//            }
+//        }
+        Rule rule = new Rule();
+        rule.setId(goodsRepository.getGoodsById(id).getRule().getId());
+        rule.setName(goodsRepository.getGoodsById(id).getRule().getName());
+        Goods goods = new Goods(goodsRepository.getGoodsById(id).getId(),goodsRepository.getGoodsById(id).getName(),goodsRepository.getGoodsById(id).getPrice(),goodsRepository.getGoodsById(id).getNumberOfPlayers(),goodsRepository.getGoodsById(id).getDuration(),rule,goodsRepository.getGoodsById(id).getAmount(),goodsRepository.getGoodsById(id).getVisible(),goodsRepository.getGoodsById(id).getDescription(),category);
+        return goods;
+    }
 }

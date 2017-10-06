@@ -28,6 +28,7 @@
         <th>Is Visible</th>
         <th>Description</th>
         <th>Category Id</th>
+        <th>Option</th>
     </tr>
     <c:forEach var="goodsVar" items="${listGoods}">
         <tr>
@@ -41,6 +42,9 @@
             <td>${goodsVar.visible}</td>
             <td>${goodsVar.description}</td>
             <td>${goodsVar.category.name}</td>
+            <td>
+                <a href="${pageContext.request.contextPath}/catalog/delete/${goodsVar.id}" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
         </tr>
     </c:forEach>
 </table>

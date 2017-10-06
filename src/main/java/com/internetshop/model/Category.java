@@ -10,6 +10,9 @@ public class Category {
     private String name;
     private Set<Goods> GoodsSet = new HashSet<>();
 
+    public Category(){
+
+    }
     public Category(int id, String name, Set<Goods> goodsSet) {
         this.id = id;
         this.name = name;
