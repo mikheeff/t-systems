@@ -23,7 +23,7 @@
         <th>Price</th>
         <th>Number of players</th>
         <th>Game duration</th>
-        <th>Complexity of the rules</th>
+        <th>Complexity of the rule</th>
         <th>Amount</th>
         <th>Is Visible</th>
         <th>Description</th>
@@ -36,7 +36,7 @@
             <td>${goodsVar.price}</td>
             <td>${goodsVar.numberOfPlayers}</td>
             <td>${goodsVar.duration}</td>
-            <td>${goodsVar.rules}</td>
+            <td>${goodsVar.rule.name}</td>
             <td>${goodsVar.amount}</td>
             <td>${goodsVar.visible}</td>
             <td>${goodsVar.description}</td>

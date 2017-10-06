@@ -16,9 +16,7 @@ public class GoodsEntity {
     @Column(name = "number_of_players")
     private int numberOfPlayers;
     @Column(name = "duration")
-    private float duration;
-    @Column(name = "rules")
-    private String rules;
+    private float duration;;
     @Column(name = "amount")
     private int amount;
     @Column(name = "visible")
@@ -28,20 +26,23 @@ public class GoodsEntity {
     @ManyToOne
     @JoinColumn(name = "id_category")
     private CategoryEntity category;
+    @ManyToOne
+    @JoinColumn(name = "rule_id")
+    private RuleEntity rule;
 
     public GoodsEntity() {
     }
 
-    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, String rules, int amount, int visible, String description, CategoryEntity category) {
+    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, CategoryEntity category, RuleEntity rule) {
         this.name = name;
         this.price = price;
         this.numberOfPlayers = numberOfPlayers;
         this.duration = duration;
-        this.rules = rules;
         this.amount = amount;
         this.visible = visible;
         this.description = description;
         this.category = category;
+        this.rule = rule;
     }
 
     public CategoryEntity getCategory() {
@@ -92,12 +93,12 @@ public class GoodsEntity {
         this.duration = duration;
     }
 
-    public String getRules() {
-        return rules;
+    public RuleEntity getRule() {
+        return rule;
     }
 
-    public void setRules(String rules) {
-        this.rules = rules;
+    public void setRule(RuleEntity rule) {
+        this.rule = rule;
     }
 
     public int getAmount() {

@@ -31,8 +31,8 @@
                 <td><spring:input path="duration"/></td>
             </tr>
             <tr>
-                <td>Complexity of the rules</td>
-                <td><spring:input path="rules"/></td>
+                <td>Complexity of the rule</td>
+                <td><spring:input path="ruleId"/></td>
             </tr>
             <tr>
                 <td>Amount</td>
