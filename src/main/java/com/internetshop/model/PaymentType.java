@@ -1,14 +1,14 @@
 package com.internetshop.model;
 
-public class Status {
+public class PaymentType {
     private int id;
     private String name;
 
-    public Status(){
+    PaymentType(){
 
     }
 
-    public Status(int id, String name) {
+    public PaymentType(int id, String name) {
         this.id = id;
         this.name = name;
     }

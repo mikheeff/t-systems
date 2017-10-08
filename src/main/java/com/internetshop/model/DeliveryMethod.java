@@ -1,14 +1,14 @@
 package com.internetshop.model;
 
-public class Status {
+public class DeliveryMethod {
     private int id;
     private String name;
 
-    public Status(){
+    public DeliveryMethod(){
 
     }
 
-    public Status(int id, String name) {
+    public DeliveryMethod(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -28,4 +28,5 @@ public class Status {
     public void setName(String name) {
         this.name = name;
     }
+
 }
