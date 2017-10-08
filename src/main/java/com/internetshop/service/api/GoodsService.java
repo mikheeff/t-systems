@@ -11,4 +11,6 @@ public interface GoodsService {
     void addGoods(Goods goods);
     void deleteGoodsById(int id);
     Goods getGoodsById(int id);
+    void updateGoods(Goods goods);
+    GoodsEntity convertToDAO(Goods goods);
 }

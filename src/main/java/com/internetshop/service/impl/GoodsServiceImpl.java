@@ -30,12 +30,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public void addGoods(Goods goods) {
-        CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.setId(goods.getCategory().getId());
-        RuleEntity ruleEntity = new RuleEntity();
-        ruleEntity.setId(goods.getRule().getId());
-        GoodsEntity goodsEntity = new GoodsEntity(goods.getName(),goods.getPrice(),goods.getNumberOfPlayers(),goods.getDuration(),goods.getAmount(), goods.getVisible(),goods.getDescription(),categoryEntity,ruleEntity);
-        this.goodsRepository.addGoods(goodsEntity);
+        this.goodsRepository.addGoods(convertToDAO(goods));
     }
 
     @Override
@@ -59,5 +54,34 @@ public class GoodsServiceImpl implements GoodsService {
         rule.setName(goodsRepository.getGoodsById(id).getRule().getName());
         Goods goods = new Goods(goodsRepository.getGoodsById(id).getId(),goodsRepository.getGoodsById(id).getName(),goodsRepository.getGoodsById(id).getPrice(),goodsRepository.getGoodsById(id).getNumberOfPlayers(),goodsRepository.getGoodsById(id).getDuration(),rule,goodsRepository.getGoodsById(id).getAmount(),goodsRepository.getGoodsById(id).getVisible(),goodsRepository.getGoodsById(id).getDescription(),category);
         return goods;
+    }
+
+    @Override
+    public void updateGoods(Goods goods) {
+        GoodsEntity goodsEntity = this.goodsRepository.getGoodsById(goods.getId());
+        goodsEntity.setName(goods.getName());
+        goodsEntity.setPrice(goods.getPrice());
+        goodsEntity.setNumberOfPlayers(goods.getNumberOfPlayers());
+        goodsEntity.setDuration(goods.getDuration());
+        goodsEntity.setAmount(goods.getAmount());
+        goodsEntity.setVisible(goods.getVisible());
+        goodsEntity.setDescription(goods.getDescription());
+
+        RuleEntity ruleEntity = goodsEntity.getRule();
+        ruleEntity.setId(goods.getRule().getId());
+
+        CategoryEntity categoryEntity = goodsEntity.getCategory();
+        categoryEntity.setId(goods.getCategory().getId());
+        this.goodsRepository.updateGoods(goodsEntity);
+    }
+
+    @Override
+    public GoodsEntity convertToDAO(Goods goods) {
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setId(goods.getCategory().getId());
+        RuleEntity ruleEntity = new RuleEntity();
+        ruleEntity.setId(goods.getRule().getId());
+        GoodsEntity goodsEntity = new GoodsEntity(goods.getName(),goods.getPrice(),goods.getNumberOfPlayers(),goods.getDuration(),goods.getAmount(), goods.getVisible(),goods.getDescription(),categoryEntity,ruleEntity);
+        return goodsEntity;
     }
 }

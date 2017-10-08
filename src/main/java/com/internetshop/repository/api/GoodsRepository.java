@@ -9,4 +9,5 @@ public interface GoodsRepository {
     void addGoods(GoodsEntity goodsEntity);
     void deleteGoodsById(int id);
     GoodsEntity getGoodsById(int id);
+    void updateGoods(GoodsEntity goodsEntity);
 }

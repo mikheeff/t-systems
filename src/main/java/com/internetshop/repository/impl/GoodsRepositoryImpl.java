@@ -42,4 +42,12 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         EntityManager em = this.emf.createEntityManager();
         return em.find(GoodsEntity.class,id);
     }
+
+    @Override
+    public void updateGoods(GoodsEntity goodsEntity) {
+        EntityManager em = this.emf.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(goodsEntity);
+        em.getTransaction().commit();
+    }
 }

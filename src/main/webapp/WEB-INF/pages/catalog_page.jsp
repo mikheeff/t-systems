@@ -43,7 +43,8 @@
             <td>${goodsVar.description}</td>
             <td>${goodsVar.category.name}</td>
             <td>
-                <a href="${pageContext.request.contextPath}/catalog/delete/${goodsVar.id}" onclick="return confirm('Are you sure?')">Delete</a>
+                <a href="${pageContext.request.contextPath}/catalog/delete/${goodsVar.id}" onclick="return confirm('Are you sure?')">Delete</a> |
+                <a href="${pageContext.request.contextPath}/catalog/edit/${goodsVar.id}">Edit</a>
             </td>
         </tr>
     </c:forEach>
