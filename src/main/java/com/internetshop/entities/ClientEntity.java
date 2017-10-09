@@ -27,7 +27,7 @@ public class ClientEntity {
     @Column (name = "order_counter")
     private int orderCounter;
 
-    @OneToOne(fetch=FetchType.LAZY)
+    @OneToOne(fetch=FetchType.LAZY)   //
     @JoinColumn(referencedColumnName = "id_client")
     private ClientAddressEntity clientAddressEntity;
 
