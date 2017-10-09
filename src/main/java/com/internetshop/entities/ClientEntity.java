@@ -1,5 +1,7 @@
 package com.internetshop.entities;
 
+import com.internetshop.model.Role;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -24,13 +26,19 @@ public class ClientEntity {
     private String phone;
     @Column (name = "order_counter")
     private int orderCounter;
-    @Column (name = "id_role")
-    private int idRole;
+
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(referencedColumnName = "id_client")
+    private ClientAddressEntity clientAddressEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private RoleEntity roleEntity;
 
     public ClientEntity() {
     }
 
-    public ClientEntity(String name, String surname, Date birthdate, String email, String password, String phone, int orderCounter, int idRole) {
+    public ClientEntity(String name, String surname, Date birthdate, String email, String password, String phone, int orderCounter, ClientAddressEntity clientAddressEntity, RoleEntity roleEntity) {
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
@@ -38,7 +46,8 @@ public class ClientEntity {
         this.password = password;
         this.phone = phone;
         this.orderCounter = orderCounter;
-        this.idRole = idRole;
+        this.clientAddressEntity = clientAddressEntity;
+        this.roleEntity = roleEntity;
     }
 
     public int getId() {
@@ -105,11 +114,20 @@ public class ClientEntity {
         this.orderCounter = orderCounter;
     }
 
-    public int getIdRole() {
-        return idRole;
+
+    public ClientAddressEntity getClientAddressEntity() {
+        return clientAddressEntity;
     }
 
-    public void setIdRole(int idRole) {
-        this.idRole = idRole;
+    public void setClientAddressEntity(ClientAddressEntity clientAddressEntity) {
+        this.clientAddressEntity = clientAddressEntity;
+    }
+
+    public RoleEntity getRoleEntity() {
+        return roleEntity;
+    }
+
+    public void setRoleEntity(RoleEntity roleEntity) {
+        this.roleEntity = roleEntity;
     }
 }

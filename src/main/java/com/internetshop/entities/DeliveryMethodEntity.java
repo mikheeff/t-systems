@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "delivery_method")
+@Table(name = "deliveryMethod")
 public class DeliveryMethodEntity {
     @Id
     @Column(name = "method_id")
@@ -14,7 +14,7 @@ public class DeliveryMethodEntity {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "delivery_method", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "deliveryMethod", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<OrderEntity> orderEntities = new HashSet<>();
 
     public DeliveryMethodEntity(){

@@ -3,7 +3,6 @@ package com.internetshop.model;
 import javax.persistence.Entity;
 import java.util.Date;
 
-@Entity
 public class Order {
     private int id;
     private Date date;

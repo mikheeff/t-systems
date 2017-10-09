@@ -10,12 +10,13 @@ public class Client {
     private String phone;
     private int orderCounter;
     private int id_role;
+    private ClientAddress clientAddress;
 
 
     public Client() {
     }
 
-    public Client(int id, String name, String surname, String birthdate, String email, String password, String phone, int orderCounter, int id_role) {
+    public Client(int id, String name, String surname, String birthdate, String email, String password, String phone, int orderCounter, int id_role, ClientAddress clientAddress) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -25,6 +26,7 @@ public class Client {
         this.phone = phone;
         this.orderCounter = orderCounter;
         this.id_role = id_role;
+        this.clientAddress = clientAddress;
     }
 
     public int getId() {
@@ -97,6 +99,14 @@ public class Client {
 
     public void setId_role(int id_role) {
         this.id_role = id_role;
+    }
+
+    public ClientAddress getClientAddress() {
+        return clientAddress;
+    }
+
+    public void setClientAddress(ClientAddress clientAddress) {
+        this.clientAddress = clientAddress;
     }
 
     @Override
