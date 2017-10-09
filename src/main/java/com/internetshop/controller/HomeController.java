@@ -14,6 +14,6 @@ public class HomeController {
     private GoodsService goodsService;
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
     public String main() {
-        return "welcome";
+        return "index";
     }
 }
