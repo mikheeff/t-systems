@@ -1,6 +1,5 @@
 package com.internetshop.controller;
 
-import com.internetshop.entities.GoodsEntity;
 import com.internetshop.model.Goods;
 import com.internetshop.service.api.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class GoodsController {
     private static final int amountOfPicturesOnPage = 9;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getAllUsers(ModelMap modelMap) {
+    public String getAllGoods(ModelMap modelMap) {
         List<Goods> goodsList = new ArrayList<>();
         List<Goods> allGoodsList = goodsService.getAllGoods();
 
@@ -33,10 +32,10 @@ public class GoodsController {
         modelMap.put("currentPage",1);
         modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
         modelMap.put("listGoods",goodsList);
-        return "products";
+        return "goods";
     }
     @RequestMapping(value ="/page/{number}", method = RequestMethod.GET)
-    public String getAllUsers(@PathVariable(value = "number") int number, ModelMap modelMap) {
+    public String getAllGoods(@PathVariable(value = "number") int number, ModelMap modelMap) {
         List<Goods> goodsList = new ArrayList<>();
         List<Goods> allGoodsList = goodsService.getAllGoods();
 
@@ -46,7 +45,7 @@ public class GoodsController {
         modelMap.put("currentPage",number);
         modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
         modelMap.put("listGoods", goodsList);
-        return "products";
+        return "goods";
     }
 
 
@@ -79,10 +78,23 @@ public class GoodsController {
         modelMap.put("listGoods", goodsService.getAllGoods());
         return "catalog_page";
     }
+    @RequestMapping(value ="/goods",method = RequestMethod.GET)
+    public String getGoodsById(ModelMap modelMap) {
+//        modelMap.put("currentPage",1);
+//        modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
+//        modelMap.put("listGoods",goodsList);
+        return "goods_detail";
+    }
+    @RequestMapping(value ="/goods/{id}", method = RequestMethod.GET)
+    public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap) {
+        modelMap.put("goods", goodsService.getGoodsById(id));
+        return "goods_detail";
+    }
+
     public int getAmountOfPages(List<Goods> allGoodsList){
         int amountOfPages;
         if (allGoodsList.size()%amountOfPicturesOnPage==0){
-            return allGoodsList.size()/9;
+            return allGoodsList.size()/amountOfPicturesOnPage;
         }
         else {
             return allGoodsList.size()/amountOfPicturesOnPage+1;

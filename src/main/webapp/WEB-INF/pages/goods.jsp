@@ -55,25 +55,25 @@
 						<ul>
 							<li><a href="${pageContext.request.contextPath}/catalog">Catalog</a>
 								<ul>
-									<li><a href="products.jsp">For funny company</a></li>
-									<li><a href="products.jsp">Interesting strategy</a></li>
-									<li><a href="products.jsp">Kids from 3 to 8</a></li>
-									<li><a href="products.jsp">Logic</a></li>
-									<li><a href="products.jsp">Convenient to take on the road</a></li>
-									<li><a href="products.jsp">For two</a></li>
+									<li><a href="goods.jsp">For funny company</a></li>
+									<li><a href="goods.jsp">Interesting strategy</a></li>
+									<li><a href="goods.jsp">Kids from 3 to 8</a></li>
+									<li><a href="goods.jsp">Logic</a></li>
+									<li><a href="goods.jsp">Convenient to take on the road</a></li>
+									<li><a href="goods.jsp">For two</a></li>
 								</ul>
 							</li>
-							<li><a href="products.jsp">Best Sellers</a>
-							<li><a href="products.jsp">How To Buy</a></li>
-							<li><a href="products.jsp">F.A.Q</a></li>
-							<li><a href="products.jsp">About us</a></li>
+							<li><a href="goods.jsp">Best Sellers</a>
+							<li><a href="goods.jsp">How To Buy</a></li>
+							<li><a href="goods.jsp">F.A.Q</a></li>
+							<li><a href="goods.jsp">About us</a></li>
 						</ul>
 					</nav>
 				</div>
 			</section>	
 			<section class="header_text sub">
 			<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="All games" >
-				<h4><span>All games</span></h4>
+				<h3><span>All games</span></h3>
 			</section>
 			<section class="main-content">
 				
@@ -84,8 +84,8 @@
 							<li class="span3">
 								<div class="product-box">
 									<span class="sale_tag"></span>												
-									<a href="product_detail.html"><img alt="" src="${goodsVar.img}" width="342" height="342"></a><br/>
-									<a href="product_detail.html" class="title">${goodsVar.name}</a><br/>
+									<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}" width="342" height="342"></a><br/>
+									<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}" class="title">${goodsVar.name}</a><br/>
 									<a href="#" class="category">${goodsVar.category.name}</a>
 									<p class="price">${goodsVar.price} &#8381;</p>
 								</div>
@@ -119,20 +119,21 @@
 						<div class="block">	
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
-								<li><a href="products.jsp">For funny company</a></li>
-								<li class="active"><a href="products.jsp">Interesting strategy</a></li>
-								<li><a href="products.jsp">Kids from 3 to 8</a></li>
-								<li><a href="products.jsp">Logic</a></li>
-								<li><a href="products.jsp">Convenient to take on the road</a></li>
-								<li><a href="products.jsp">For two</a></li>
+								<li class="active"><a href="goods.jsp">All games</a></li>
+								<li><a href="goods.jsp">For funny company</a></li>
+								<li><a href="goods.jsp">Interesting strategy</a></li>
+								<li><a href="goods.jsp">Kids from 3 to 8</a></li>
+								<li><a href="goods.jsp">Logic</a></li>
+								<li><a href="goods.jsp">Convenient to take on the road</a></li>
+								<li><a href="goods.jsp">For two</a></li>
 							</ul>
 							<br/>
 							<ul class="nav nav-list below">
 								<li class="nav-header">MANUFACTURES</li>
-								<li><a href="products.jsp">Adidas</a></li>
-								<li><a href="products.jsp">Nike</a></li>
-								<li><a href="products.jsp">Dunlop</a></li>
-								<li><a href="products.jsp">Yamaha</a></li>
+								<li><a href="goods.jsp">Adidas</a></li>
+								<li><a href="goods.jsp">Nike</a></li>
+								<li><a href="goods.jsp">Dunlop</a></li>
+								<li><a href="goods.jsp">Yamaha</a></li>
 							</ul>
 						</div>
 						<div class="block">
@@ -150,7 +151,7 @@
 												<div class="product-box">
 													<span class="sale_tag"></span>												
 													<img alt="" src="/resources/themes/images/ladies/1.jpg"><br/>
-													<a href="product_detail.html" class="title">Fusce id molestie massa</a><br/>
+													<a href="goods_detail.jsp" class="title">Fusce id molestie massa</a><br/>
 													<a href="#" class="category">Suspendisse aliquet</a>
 													<p class="price">$261</p>
 												</div>
@@ -162,7 +163,7 @@
 											<li class="span3">
 												<div class="product-box">												
 													<img alt="" src="/resources/themes/images/ladies/2.jpg"><br/>
-													<a href="product_detail.html" class="title">Tempor sem sodales</a><br/>
+													<a href="goods_detail.jsp" class="title">Tempor sem sodales</a><br/>
 													<a href="#" class="category">Urna nec lectus mollis</a>
 													<p class="price">$134</p>
 												</div>
