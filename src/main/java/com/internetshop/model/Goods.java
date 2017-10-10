@@ -5,7 +5,7 @@ public class Goods {
     private int id;
     private String name;
     private float price;
-    private int numberOfPlayers;
+    private String numberOfPlayers;
     private float duration;
     private int amount;
     private int visible;
@@ -17,7 +17,7 @@ public class Goods {
     public Goods() {
     }
 
-    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, Category category, Rule rule) {
+    public Goods(int id, String name, float price, String numberOfPlayers, float duration, int amount, int visible, String description, String img, Category category, Rule rule) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -63,11 +63,11 @@ public class Goods {
         this.price = price;
     }
 
-    public int getNumberOfPlayers() {
+    public String getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
-    public void setNumberOfPlayers(int numberOfPlayers) {
+    public void setNumberOfPlayers(String numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
 

@@ -21,8 +21,13 @@ public class GoodsController {
     @RequestMapping(method = RequestMethod.GET)
     public String getAllUsers(ModelMap modelMap) {
         modelMap.put("listGoods", goodsService.getAllGoods());
-        return "catalog_page";
+        return "products";
     }
+//    @RequestMapping(value ="/page/{page}", method = RequestMethod.GET)
+//    public String getAllUsers(@PathVariable(value = "page") int page, ModelMap modelMap) {
+//        modelMap.put("listGoods", goodsService.getAllGoods());
+//        return "products";
+//    }
 
 
     @RequestMapping(value ="../add", method = RequestMethod.GET)

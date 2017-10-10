@@ -13,6 +13,10 @@ public class Category {
     public Category(){
 
     }
+    public Category(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
     public Category(int id, String name, Set<Goods> goodsSet) {
         this.id = id;
         this.name = name;

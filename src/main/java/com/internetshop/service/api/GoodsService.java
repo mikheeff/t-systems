@@ -7,10 +7,11 @@ import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 public interface GoodsService {
-    List<GoodsEntity> getAllGoods();
+    List<Goods> getAllGoods();
     void addGoods(Goods goods);
     void deleteGoodsById(int id);
     Goods getGoodsById(int id);
     void updateGoods(Goods goods);
     GoodsEntity convertToDAO(Goods goods);
+    Goods convertToDTO(GoodsEntity goodsEntity);
 }

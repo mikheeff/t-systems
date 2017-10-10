@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.management.relation.Role;
+import java.util.ArrayList;
 import java.util.List;
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -24,8 +25,12 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public List<GoodsEntity> getAllGoods() {
-        return goodsRepository.getAll();
+    public List<Goods> getAllGoods() {
+        List<Goods> goodsList = new ArrayList<>();
+        for (GoodsEntity goodsEntity:goodsRepository.getAll()) {
+            goodsList.add(convertToDTO(goodsEntity));
+        }
+        return goodsList;
     }
 
     @Override
@@ -83,5 +88,13 @@ public class GoodsServiceImpl implements GoodsService {
         ruleEntity.setId(goods.getRule().getId());
         GoodsEntity goodsEntity = new GoodsEntity(goods.getName(),goods.getPrice(),goods.getNumberOfPlayers(),goods.getDuration(),goods.getAmount(), goods.getVisible(),goods.getDescription(),goods.getImg(),categoryEntity,ruleEntity);
         return goodsEntity;
+    }
+
+    @Override
+    public Goods convertToDTO(GoodsEntity goodsEntity) {
+        Category category = new Category(goodsEntity.getCategory().getId(),goodsEntity.getCategory().getName());
+        Rule rule = new Rule(goodsEntity.getRule().getId(),goodsEntity.getRule().getName());
+        Goods goods = new Goods(goodsEntity.getId(),goodsEntity.getName(),goodsEntity.getPrice(),goodsEntity.getNumberOfPlayers(),goodsEntity.getDuration(),goodsEntity.getAmount(),goodsEntity.getVisible(),goodsEntity.getDescription(),goodsEntity.getImg(),category,rule);
+        return goods;
     }
 }

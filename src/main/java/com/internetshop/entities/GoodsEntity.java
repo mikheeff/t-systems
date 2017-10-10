@@ -14,7 +14,7 @@ public class GoodsEntity {
     @Column(name = "price")
     private float price;
     @Column(name = "number_of_players")
-    private int numberOfPlayers;
+    private String numberOfPlayers;
     @Column(name = "duration")
     private float duration;;
     @Column(name = "amount")
@@ -35,7 +35,7 @@ public class GoodsEntity {
     public GoodsEntity() {
     }
 
-    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, CategoryEntity category, RuleEntity rule) {
+    public GoodsEntity(String name, float price, String numberOfPlayers, float duration, int amount, int visible, String description, String img, CategoryEntity category, RuleEntity rule) {
         this.name = name;
         this.price = price;
         this.numberOfPlayers = numberOfPlayers;
@@ -80,11 +80,11 @@ public class GoodsEntity {
         this.price = price;
     }
 
-    public int getNumberOfPlayers() {
+    public String getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
-    public void setNumberOfPlayers(int numberOfPlayers) {
+    public void setNumberOfPlayers(String numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
 

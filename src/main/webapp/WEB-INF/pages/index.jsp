@@ -52,20 +52,20 @@
 					<a href="index.jsp" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul>
-							<li><a href="./products.html">Catalog</a>
+							<li><a href="${pageContext.request.contextPath}/catalog">Catalog</a>
 								<ul>
-									<li><a href="./products.html">For funny company</a></li>
-									<li><a href="./products.html">Interesting strategy</a></li>
-									<li><a href="./products.html">Kids from 3 to 8</a></li>
-									<li><a href="./products.html">Logic</a></li>
-									<li><a href="./products.html">Convenient to take on the road</a></li>
-									<li><a href="./products.html">For two</a></li>
+									<li><a href="products.jsp">For funny company</a></li>
+									<li><a href="products.jsp">Interesting strategy</a></li>
+									<li><a href="products.jsp">Kids from 3 to 8</a></li>
+									<li><a href="products.jsp">Logic</a></li>
+									<li><a href="products.jsp">Convenient to take on the road</a></li>
+									<li><a href="products.jsp">For two</a></li>
 								</ul>
 							</li>															
-							<li><a href="./products.html">Best Sellers</a>
-							<li><a href="./products.html">How To Buy</a></li>
-							<li><a href="./products.html">F.A.Q</a></li>
-							<li><a href="./products.html">About us</a></li>
+							<li><a href="products.jsp">Best Sellers</a>
+							<li><a href="products.jsp">How To Buy</a></li>
+							<li><a href="products.jsp">F.A.Q</a></li>
+							<li><a href="products.jsp">About us</a></li>
 						</ul>
 					</nav>
 				</div>
@@ -111,7 +111,7 @@
 														<span class="sale_tag"></span>
 														<p><a href="product_detail.html"><img src="http://igraland.by/upload/iblock/15f/15f080c4071b5b3d1e42b44197178263.jpg" width="342" height="342" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Ut wisi enim ad</a><br/>
-														<a href="products.html" class="category">Commodo consequat</a>
+														<a href="products.jsp" class="category">Commodo consequat</a>
 														<p class="price">$17.25</p>
 													</div>
 												</li>
@@ -120,7 +120,7 @@
 														<span class="sale_tag"></span>
 														<p><a href="product_detail.html"><img src="/resources/themes/images/ladies/2.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Quis nostrud exerci tation</a><br/>
-														<a href="products.html" class="category">Quis nostrud</a>
+														<a href="products.jsp" class="category">Quis nostrud</a>
 														<p class="price">$32.50</p>
 													</div>
 												</li>
@@ -128,7 +128,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/ladies/3.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Know exactly turned</a><br/>
-														<a href="products.html" class="category">Quis nostrud</a>
+														<a href="products.jsp" class="category">Quis nostrud</a>
 														<p class="price">$14.20</p>
 													</div>
 												</li>
@@ -136,7 +136,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/ladies/4.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">You think fast</a><br/>
-														<a href="products.html" class="category">World once</a>
+														<a href="products.jsp" class="category">World once</a>
 														<p class="price">$31.45</p>
 													</div>
 												</li>
@@ -148,7 +148,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/ladies/5.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Know exactly</a><br/>
-														<a href="products.html" class="category">Quis nostrud</a>
+														<a href="products.jsp" class="category">Quis nostrud</a>
 														<p class="price">$22.30</p>
 													</div>
 												</li>
@@ -156,7 +156,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/ladies/6.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Ut wisi enim ad</a><br/>
-														<a href="products.html" class="category">Commodo consequat</a>
+														<a href="products.jsp" class="category">Commodo consequat</a>
 														<p class="price">$40.25</p>
 													</div>
 												</li>
@@ -164,7 +164,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/ladies/7.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">You think water</a><br/>
-														<a href="products.html" class="category">World once</a>
+														<a href="products.jsp" class="category">World once</a>
 														<p class="price">$10.45</p>
 													</div>
 												</li>
@@ -172,7 +172,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/ladies/8.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Quis nostrud exerci</a><br/>
-														<a href="products.html" class="category">Quis nostrud</a>
+														<a href="products.jsp" class="category">Quis nostrud</a>
 														<p class="price">$35.50</p>
 													</div>
 												</li>																																	
@@ -200,7 +200,7 @@
 														<span class="sale_tag"></span>
 														<p><a href="product_detail.html"><img src="/resources/themes/images/cloth/bootstrap-women-ware2.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Ut wisi enim ad</a><br/>
-														<a href="products.html" class="category">Commodo consequat</a>
+														<a href="products.jsp" class="category">Commodo consequat</a>
 														<p class="price">$25.50</p>
 													</div>
 												</li>
@@ -208,7 +208,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/cloth/bootstrap-women-ware1.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Quis nostrud exerci tation</a><br/>
-														<a href="products.html" class="category">Quis nostrud</a>
+														<a href="products.jsp" class="category">Quis nostrud</a>
 														<p class="price">$17.55</p>
 													</div>
 												</li>
@@ -216,7 +216,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/cloth/bootstrap-women-ware6.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Know exactly turned</a><br/>
-														<a href="products.html" class="category">Quis nostrud</a>
+														<a href="products.jsp" class="category">Quis nostrud</a>
 														<p class="price">$25.30</p>
 													</div>
 												</li>
@@ -224,7 +224,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/cloth/bootstrap-women-ware5.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">You think fast</a><br/>
-														<a href="products.html" class="category">World once</a>
+														<a href="products.jsp" class="category">World once</a>
 														<p class="price">$25.60</p>
 													</div>
 												</li>
@@ -236,7 +236,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/cloth/bootstrap-women-ware4.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Know exactly</a><br/>
-														<a href="products.html" class="category">Quis nostrud</a>
+														<a href="products.jsp" class="category">Quis nostrud</a>
 														<p class="price">$45.50</p>
 													</div>
 												</li>
@@ -244,7 +244,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/cloth/bootstrap-women-ware3.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Ut wisi enim ad</a><br/>
-														<a href="products.html" class="category">Commodo consequat</a>
+														<a href="products.jsp" class="category">Commodo consequat</a>
 														<p class="price">$33.50</p>
 													</div>
 												</li>
@@ -252,7 +252,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/cloth/bootstrap-women-ware2.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">You think water</a><br/>
-														<a href="products.html" class="category">World once</a>
+														<a href="products.jsp" class="category">World once</a>
 														<p class="price">$45.30</p>
 													</div>
 												</li>
@@ -260,7 +260,7 @@
 													<div class="product-box">
 														<p><a href="product_detail.html"><img src="/resources/themes/images/cloth/bootstrap-women-ware1.jpg" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Quis nostrud exerci</a><br/>
-														<a href="products.html" class="category">Quis nostrud</a>
+														<a href="products.jsp" class="category">Quis nostrud</a>
 														<p class="price">$25.20</p>
 													</div>
 												</li>																																	
