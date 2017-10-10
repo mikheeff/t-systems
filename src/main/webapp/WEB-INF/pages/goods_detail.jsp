@@ -135,7 +135,7 @@
 									<li class=""><a href="#profile">Additional Information</a></li>
 								</ul>							 
 								<div class="tab-content">
-									<div class="tab-pane active" id="home">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem</div>
+									<div class="tab-pane active" id="home">${goods.description}</div>
 									<div class="tab-pane" id="profile">
 										<table class="table table-striped shop_attributes">	
 											<tbody>
@@ -228,15 +228,16 @@
 						</div>
 					</div>
 					<div class="span3 col">
-						<div class="block">	
+						<div class="block">
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
-								<li><a href="goods.jsp">Nullam semper elementum</a></li>
-								<li class="active"><a href="goods.jsp">Phasellus ultricies</a></li>
-								<li><a href="goods.jsp">Donec laoreet dui</a></li>
-								<li><a href="goods.jsp">Nullam semper elementum</a></li>
-								<li><a href="goods.jsp">Phasellus ultricies</a></li>
-								<li><a href="goods.jsp">Donec laoreet dui</a></li>
+								<li class="active"><a href="goods.jsp">All games</a></li>
+								<li><a href="goods.jsp">For funny company</a></li>
+								<li><a href="goods.jsp">Interesting strategy</a></li>
+								<li><a href="goods.jsp">Kids from 3 to 8</a></li>
+								<li><a href="goods.jsp">Logic</a></li>
+								<li><a href="goods.jsp">Convenient to take on the road</a></li>
+								<li><a href="goods.jsp">For two</a></li>
 							</ul>
 							<br/>
 							<ul class="nav nav-list below">
