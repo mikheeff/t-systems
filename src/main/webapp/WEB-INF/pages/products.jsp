@@ -50,7 +50,7 @@
 		<div id="wrapper" class="container">
 			<section class="navbar main-menu">
 				<div class="navbar-inner main-menu">				
-					<a href="index.jsp" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
+					<a href="${pageContext.request.contextPath}/" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul>
 							<li><a href="${pageContext.request.contextPath}/catalog">Catalog</a>
@@ -96,12 +96,22 @@
 						<hr>
 						<div class="pagination pagination-small pagination-centered">
 							<ul>
-								<li><a href="#">Prev</a></li>
-								<li class="active"><a href="#">1</a></li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#">Next</a></li>
+								<c:if test="${currentPage>1}" >
+								<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage-1}">Prev</a></li>
+								</c:if>
+
+								<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
+									<li
+									<c:if test="${count.index==currentPage}" >
+										 class="active"
+									</c:if>
+									><a href="${pageContext.request.contextPath}/catalog/page/${i}">${i}</a></li>
+								</c:forEach>
+
+								<c:if test="${currentPage<amountOfPages}" >
+									<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage+1}">Next</a></li>
+								</c:if>
+
 							</ul>
 						</div>
 					</div>
@@ -109,12 +119,12 @@
 						<div class="block">	
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
-								<li><a href="products.jsp">Nullam semper elementum</a></li>
-								<li class="active"><a href="products.jsp">Phasellus ultricies</a></li>
-								<li><a href="products.jsp">Donec laoreet dui</a></li>
-								<li><a href="products.jsp">Nullam semper elementum</a></li>
-								<li><a href="products.jsp">Phasellus ultricies</a></li>
-								<li><a href="products.jsp">Donec laoreet dui</a></li>
+								<li><a href="products.jsp">For funny company</a></li>
+								<li class="active"><a href="products.jsp">Interesting strategy</a></li>
+								<li><a href="products.jsp">Kids from 3 to 8</a></li>
+								<li><a href="products.jsp">Logic</a></li>
+								<li><a href="products.jsp">Convenient to take on the road</a></li>
+								<li><a href="products.jsp">For two</a></li>
 							</ul>
 							<br/>
 							<ul class="nav nav-list below">
