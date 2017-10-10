@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Bootstrap E-commerce Templates</title>
+		<title>Board games: Dice games </title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
@@ -31,7 +31,7 @@
 			<div class="row">
 				<div class="span4">
 					<form method="POST" class="search_form">
-						<input type="text" class="input-block-level search-query" Placeholder="eg. T-sirt">
+						<input type="text" class="input-block-level search-query" Placeholder="Search">
 					</form>
 				</div>
 				<div class="span8">
@@ -52,24 +52,20 @@
 					<a href="index.jsp" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul>
-							<li><a href="./products.html">Woman</a>					
+							<li><a href="./products.html">Catalog</a>
 								<ul>
-									<li><a href="./products.html">Lacinia nibh</a></li>									
-									<li><a href="./products.html">Eget molestie</a></li>
-									<li><a href="./products.html">Varius purus</a></li>									
+									<li><a href="./products.html">For funny company</a></li>
+									<li><a href="./products.html">Interesting strategy</a></li>
+									<li><a href="./products.html">Kids from 3 to 8</a></li>
+									<li><a href="./products.html">Logic</a></li>
+									<li><a href="./products.html">Convenient to take on the road</a></li>
+									<li><a href="./products.html">For two</a></li>
 								</ul>
 							</li>															
-							<li><a href="./products.html">Man</a></li>			
-							<li><a href="./products.html">Sport</a>
-								<ul>									
-									<li><a href="./products.html">Gifts and Tech</a></li>
-									<li><a href="./products.html">Ties and Hats</a></li>
-									<li><a href="./products.html">Cold Weather</a></li>
-								</ul>
-							</li>							
-							<li><a href="./products.html">Hangbag</a></li>
-							<li><a href="./products.html">Best Seller</a></li>
-							<li><a href="./products.html">Top Seller</a></li>
+							<li><a href="./products.html">Best Sellers</a>
+							<li><a href="./products.html">How To Buy</a></li>
+							<li><a href="./products.html">F.A.Q</a></li>
+							<li><a href="./products.html">About us</a></li>
 						</ul>
 					</nav>
 				</div>
@@ -92,8 +88,8 @@
 				</div>			
 			</section>
 			<section class="header_text">
-				We stand for top quality templates. Our genuine developers always optimized bootstrap commercial templates. 
-				<br/>Don't miss to use our cheap abd best bootstrap templates.
+				Board games and not only.
+				<br/>The best of the popular. The most popular of the best. And a good place to buy them.
 			</section>
 			<section class="main-content">
 				<div class="row">
@@ -113,7 +109,7 @@
 												<li class="span3">
 													<div class="product-box">
 														<span class="sale_tag"></span>
-														<p><a href="product_detail.html"><img src="/resources/themes/images/ladies/1.jpg" alt="" /></a></p>
+														<p><a href="product_detail.html"><img src="http://igraland.by/upload/iblock/15f/15f080c4071b5b3d1e42b44197178263.jpg" width="342" height="342" alt="" /></a></p>
 														<a href="product_detail.html" class="title">Ut wisi enim ad</a><br/>
 														<a href="products.html" class="category">Commodo consequat</a>
 														<p class="price">$17.25</p>

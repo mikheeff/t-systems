@@ -36,6 +36,6 @@
     </listener>
 
     <welcome-file-list>
-        <welcome-file>welcome</welcome-file>
+        <welcome-file>index</welcome-file>
     </welcome-file-list>
 </web-app>

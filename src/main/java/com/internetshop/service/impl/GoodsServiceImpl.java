@@ -52,7 +52,7 @@ public class GoodsServiceImpl implements GoodsService {
         Rule rule = new Rule();
         rule.setId(goodsRepository.getGoodsById(id).getRule().getId());
         rule.setName(goodsRepository.getGoodsById(id).getRule().getName());
-        Goods goods = new Goods(goodsRepository.getGoodsById(id).getId(),goodsRepository.getGoodsById(id).getName(),goodsRepository.getGoodsById(id).getPrice(),goodsRepository.getGoodsById(id).getNumberOfPlayers(),goodsRepository.getGoodsById(id).getDuration(),rule,goodsRepository.getGoodsById(id).getAmount(),goodsRepository.getGoodsById(id).getVisible(),goodsRepository.getGoodsById(id).getDescription(),category);
+        Goods goods = new Goods(goodsRepository.getGoodsById(id).getId(),goodsRepository.getGoodsById(id).getName(),goodsRepository.getGoodsById(id).getPrice(),goodsRepository.getGoodsById(id).getNumberOfPlayers(),goodsRepository.getGoodsById(id).getDuration(),goodsRepository.getGoodsById(id).getAmount(),goodsRepository.getGoodsById(id).getVisible(),goodsRepository.getGoodsById(id).getDescription(),goodsRepository.getGoodsById(id).getImg(),category,rule);
         return goods;
     }
 
@@ -81,7 +81,7 @@ public class GoodsServiceImpl implements GoodsService {
         categoryEntity.setId(goods.getCategory().getId());
         RuleEntity ruleEntity = new RuleEntity();
         ruleEntity.setId(goods.getRule().getId());
-        GoodsEntity goodsEntity = new GoodsEntity(goods.getName(),goods.getPrice(),goods.getNumberOfPlayers(),goods.getDuration(),goods.getAmount(), goods.getVisible(),goods.getDescription(),categoryEntity,ruleEntity);
+        GoodsEntity goodsEntity = new GoodsEntity(goods.getName(),goods.getPrice(),goods.getNumberOfPlayers(),goods.getDuration(),goods.getAmount(), goods.getVisible(),goods.getDescription(),goods.getImg(),categoryEntity,ruleEntity);
         return goodsEntity;
     }
 }

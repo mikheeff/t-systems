@@ -27,7 +27,9 @@
         <th>Amount</th>
         <th>Is Visible</th>
         <th>Description</th>
-        <th>Category Id</th>
+        <th>Img</th>
+        <th>Category</th>
+        <th>Rules</th>
         <th>Option</th>
     </tr>
     <c:forEach var="goodsVar" items="${listGoods}">
@@ -41,7 +43,9 @@
             <td>${goodsVar.amount}</td>
             <td>${goodsVar.visible}</td>
             <td>${goodsVar.description}</td>
+            <td>${goodsVar.img}</td>
             <td>${goodsVar.category.name}</td>
+            <td>${goodsVar.rule.name}</td>
             <td>
                 <a href="${pageContext.request.contextPath}/catalog/delete/${goodsVar.id}" onclick="return confirm('Are you sure?')">Delete</a> |
                 <a href="${pageContext.request.contextPath}/catalog/edit/${goodsVar.id}">Edit</a>

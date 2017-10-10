@@ -7,28 +7,29 @@ public class Goods {
     private float price;
     private int numberOfPlayers;
     private float duration;
-    private Rule rule;
     private int amount;
     private int visible;
     private String description;
+    private String img;
     private Category category;
+    private Rule rule;
 
     public Goods() {
     }
 
-    public Goods(int id, String name, float price, int numberOfPlayers, float duration, Rule rule, int amount, int visible, String description, Category category) {
+    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, Category category, Rule rule) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.numberOfPlayers = numberOfPlayers;
         this.duration = duration;
-        this.rule = rule;
         this.amount = amount;
         this.visible = visible;
         this.description = description;
+        this.img = img;
         this.category = category;
+        this.rule = rule;
     }
-
 
     public Category getCategory() {
         return category;
@@ -110,4 +111,11 @@ public class Goods {
         this.description = description;
     }
 
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 }
