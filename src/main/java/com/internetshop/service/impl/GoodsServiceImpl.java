@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class GoodsServiceImpl implements GoodsService {
 
@@ -27,7 +28,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getAllGoods() {
         List<Goods> goodsList = new ArrayList<>();
-        for (GoodsEntity goodsEntity:goodsRepository.getAll()) {
+        for (GoodsEntity goodsEntity : goodsRepository.getAll()) {
             goodsList.add(convertToDTO(goodsEntity));
         }
         return goodsList;
@@ -57,7 +58,7 @@ public class GoodsServiceImpl implements GoodsService {
         Rule rule = new Rule();
         rule.setId(goodsRepository.getGoodsById(id).getRule().getId());
         rule.setName(goodsRepository.getGoodsById(id).getRule().getName());
-        Goods goods = new Goods(goodsRepository.getGoodsById(id).getId(),goodsRepository.getGoodsById(id).getName(),goodsRepository.getGoodsById(id).getPrice(),goodsRepository.getGoodsById(id).getNumberOfPlayers(),goodsRepository.getGoodsById(id).getDuration(),goodsRepository.getGoodsById(id).getAmount(),goodsRepository.getGoodsById(id).getVisible(),goodsRepository.getGoodsById(id).getDescription(),goodsRepository.getGoodsById(id).getImg(),category,rule);
+        Goods goods = new Goods(goodsRepository.getGoodsById(id).getId(), goodsRepository.getGoodsById(id).getName(), goodsRepository.getGoodsById(id).getPrice(), goodsRepository.getGoodsById(id).getNumberOfPlayers(), goodsRepository.getGoodsById(id).getDuration(), goodsRepository.getGoodsById(id).getAmount(), goodsRepository.getGoodsById(id).getVisible(), goodsRepository.getGoodsById(id).getDescription(), goodsRepository.getGoodsById(id).getImg(), category, rule);
         return goods;
     }
 
@@ -83,10 +84,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public Goods getRandomGoods() {
         List<Integer> allIdList = new ArrayList<>();
-        for(Goods g:getAllGoods()){
+        for (Goods g : getAllGoods()) {
             allIdList.add(g.getId());
         }
-        return getGoodsById(allIdList.get((int)(Math.random()*allIdList.size())));
+        return getGoodsById(allIdList.get((int) (Math.random() * allIdList.size())));
     }
 
     @Override
@@ -95,15 +96,15 @@ public class GoodsServiceImpl implements GoodsService {
         categoryEntity.setId(goods.getCategory().getId());
         RuleEntity ruleEntity = new RuleEntity();
         ruleEntity.setId(goods.getRule().getId());
-        GoodsEntity goodsEntity = new GoodsEntity(goods.getName(),goods.getPrice(),goods.getNumberOfPlayers(),goods.getDuration(),goods.getAmount(), goods.getVisible(),goods.getDescription(),goods.getImg(),categoryEntity,ruleEntity);
+        GoodsEntity goodsEntity = new GoodsEntity(goods.getName(), goods.getPrice(), goods.getNumberOfPlayers(), goods.getDuration(), goods.getAmount(), goods.getVisible(), goods.getDescription(), goods.getImg(), categoryEntity, ruleEntity);
         return goodsEntity;
     }
 
     @Override
     public Goods convertToDTO(GoodsEntity goodsEntity) {
-        Category category = new Category(goodsEntity.getCategory().getId(),goodsEntity.getCategory().getName());
-        Rule rule = new Rule(goodsEntity.getRule().getId(),goodsEntity.getRule().getName());
-        Goods goods = new Goods(goodsEntity.getId(),goodsEntity.getName(),goodsEntity.getPrice(),goodsEntity.getNumberOfPlayers(),goodsEntity.getDuration(),goodsEntity.getAmount(),goodsEntity.getVisible(),goodsEntity.getDescription(),goodsEntity.getImg(),category,rule);
+        Category category = new Category(goodsEntity.getCategory().getId(), goodsEntity.getCategory().getName());
+        Rule rule = new Rule(goodsEntity.getRule().getId(), goodsEntity.getRule().getName());
+        Goods goods = new Goods(goodsEntity.getId(), goodsEntity.getName(), goodsEntity.getPrice(), goodsEntity.getNumberOfPlayers(), goodsEntity.getDuration(), goodsEntity.getAmount(), goodsEntity.getVisible(), goodsEntity.getDescription(), goodsEntity.getImg(), category, rule);
         return goods;
     }
 }

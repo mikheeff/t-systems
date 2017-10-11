@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.util.List;
+
 @Repository
 public class GoodsRepositoryImpl implements GoodsRepository {
 
@@ -18,7 +19,20 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     public List<GoodsEntity> getAll() {
         emf = Persistence.createEntityManagerFactory("item-manager-pu");
-        return emf.createEntityManager().createQuery("select goods from GoodsEntity goods",GoodsEntity.class).getResultList();
+        return emf.createEntityManager().createQuery("select goods from GoodsEntity goods", GoodsEntity.class).getResultList();
+    }
+
+    public List<GoodsEntity> getAll(int firstId, int maxResults) {
+        emf = Persistence.createEntityManagerFactory("item-manager-pu");
+        return emf.createEntityManager().createQuery("select goods from GoodsEntity goods", GoodsEntity.class).getResultList();
+    }
+
+
+    public List<GoodsEntity> getAll(int firstId, int maxResults, String category) {
+        emf = Persistence.createEntityManagerFactory("item-manager-pu");
+        return emf.createEntityManager()
+                .createQuery("select goods from GoodsEntity goods where category.name = :category", GoodsEntity.class)
+                .setParameter("category", category).getResultList();
     }
 
     @Override
@@ -33,14 +47,14 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     public void deleteGoodsById(int id) {
         EntityManager em = this.emf.createEntityManager();
         em.getTransaction().begin();
-        em.remove(em.find(GoodsEntity.class,id));
+        em.remove(em.find(GoodsEntity.class, id));
         em.getTransaction().commit();
     }
 
     @Override
     public GoodsEntity getGoodsById(int id) {
         EntityManager em = this.emf.createEntityManager();
-        return em.find(GoodsEntity.class,id);
+        return em.find(GoodsEntity.class, id);
     }
 
     @Override

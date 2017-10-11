@@ -21,4 +21,9 @@ public class HomeController {
         modelMap.put("randomGoods",goodsController.getRandomGoods());
         return "index";
     }
+
+    @RequestMapping(value ="registration",method = RequestMethod.GET)
+    public String getGoodsById(ModelMap modelMap) {
+        return "register";
+    }
 }

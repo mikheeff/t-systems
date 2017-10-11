@@ -41,7 +41,7 @@
 							<li><a href="#">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
 							<li><a href="checkout.html">Checkout</a></li>					
-							<li><a href="register.html">Login</a></li>			
+							<li><a href="${pageContext.request.contextPath}/registration">Login</a></li>
 						</ul>
 					</div>
 				</div>
@@ -73,14 +73,14 @@
 			</section>	
 			<section class="header_text sub">
 			<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="All games" >
-				<h3><span>All games</span></h3>
+				<h3><span>ALL GAMES</span></h3>
 			</section>
 			<section class="main-content">
 				
 				<div class="row">						
 					<div class="span9">								
 						<ul class="thumbnails listing-products">
-							<c:forEach var="goodsVar"  begin = "0" end = "8" items="${listGoods}">
+							<c:forEach var="goodsVar" items="${listGoods}">
 							<li class="span3">
 								<div class="product-box">
 									<span class="sale_tag"></span>												
@@ -119,6 +119,7 @@
 						<div class="block">	
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
+								<%--<c:forEach var="goodsVar"  begin = "0" end = "8" items="${listGoods}">--%>
 								<li class="active"><a href="goods.jsp">All games</a></li>
 								<li><a href="goods.jsp">For funny company</a></li>
 								<li><a href="goods.jsp">Interesting strategy</a></li>
@@ -203,7 +204,7 @@
 							<li><a href="./about.html">About Us</a></li>
 							<li><a href="./contact.html">Contac Us</a></li>
 							<li><a href="./cart.html">Your Cart</a></li>
-							<li><a href="./register.html">Login</a></li>							
+							<li><a href="register.jsp">Login</a></li>
 						</ul>					
 					</div>
 					<div class="span4">

@@ -41,7 +41,7 @@
 							<li><a href="#">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
 							<li><a href="checkout.html">Checkout</a></li>
-							<li><a href="register.html">Login</a></li>
+							<li><a href="register.jsp">Login</a></li>
 						</ul>
 					</div>
 				</div>
@@ -287,7 +287,7 @@
 							<li><a href="./about.html">About Us</a></li>
 							<li><a href="./contact.html">Contac Us</a></li>
 							<li><a href="./cart.html">Your Cart</a></li>
-							<li><a href="./register.html">Login</a></li>
+							<li><a href="register.jsp">Login</a></li>
 						</ul>
 					</div>
 					<div class="span4">

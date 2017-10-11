@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,13 +27,14 @@ public class GoodsController {
     private static final int amountOfRandomGoodsOnPage = 6;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getAllGoods(ModelMap modelMap) {
+    public String getAllGoods(ModelMap modelMap, HttpSession session) {
         List<Goods> goodsList = new ArrayList<>();
         List<Goods> allGoodsList = goodsService.getAllGoods();
 
         for (int i = 0; i < amountOfGoodsOnPage; i++) {
             goodsList.add(allGoodsList.get(i));
         }
+        modelMap.put("allGoodsList",allGoodsList);
         modelMap.put("currentPage",1);
         modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
         modelMap.put("listGoods",goodsList);
@@ -53,6 +55,21 @@ public class GoodsController {
         modelMap.put("randomGoods",getRandomGoods());
         return "goods";
     }
+//    @RequestMapping(value ="/{category}/{id}", method = RequestMethod.GET)
+//    public String getAllGoodsByFilter(@PathVariable(value = "id") int number, @PathVariable("category") String category, ModelMap modelMap) {
+//        List<Goods> goodsList = new ArrayList<>();
+//        List<Goods> allGoodsList = goodsService.getAllGoods();
+//
+//        for (int i = (number-1)* amountOfGoodsOnPage, j = 0; (i < allGoodsList.size())&&(j< amountOfGoodsOnPage); i++) { //Цикл разбивает искходный список на подсписок из 9 и менее элементов
+//            goodsList.add(allGoodsList.get(i));
+//        }
+//        modelMap.put("currentPage",number);
+//        modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
+//        modelMap.put("listGoods", goodsList);
+//        modelMap.put("randomGoods",getRandomGoods());
+//        return "goods";
+//    }
+
 
 
     @RequestMapping(value ="../add", method = RequestMethod.GET)
@@ -84,13 +101,7 @@ public class GoodsController {
         modelMap.put("listGoods", goodsService.getAllGoods());
         return "catalog_page";
     }
-    @RequestMapping(value ="/goods",method = RequestMethod.GET)
-    public String getGoodsById(ModelMap modelMap) {
-//        modelMap.put("currentPage",1);
-//        modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
-//        modelMap.put("listGoods",goodsList);
-        return "goods_detail";
-    }
+
     @RequestMapping(value ="/goods/{id}", method = RequestMethod.GET)
     public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap) {
         modelMap.put("goods", goodsService.getGoodsById(id));
