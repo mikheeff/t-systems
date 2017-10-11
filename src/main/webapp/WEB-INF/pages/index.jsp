@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -105,77 +106,33 @@
 								<div id="myCarousel" class="myCarousel carousel slide">
 									<div class="carousel-inner">
 										<div class="active item">
-											<ul class="thumbnails">												
-												<li class="span3">
-													<div class="product-box">
-														<span class="sale_tag"></span>
-														<p><a href="goods_detail.jsp"><img src="http://igraland.by/upload/iblock/15f/15f080c4071b5b3d1e42b44197178263.jpg" width="342" height="342" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Ut wisi enim ad</a><br/>
-														<a href="goods.jsp" class="category">Commodo consequat</a>
-														<p class="price">$17.25</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<span class="sale_tag"></span>
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/ladies/2.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Quis nostrud exerci tation</a><br/>
-														<a href="goods.jsp" class="category">Quis nostrud</a>
-														<p class="price">$32.50</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/ladies/3.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Know exactly turned</a><br/>
-														<a href="goods.jsp" class="category">Quis nostrud</a>
-														<p class="price">$14.20</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/ladies/4.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">You think fast</a><br/>
-														<a href="goods.jsp" class="category">World once</a>
-														<p class="price">$31.45</p>
-													</div>
-												</li>
+											<ul class="thumbnails">
+												<c:forEach var="goodsVar"  begin = "0" end = "3" items="${randomGoods}">
+													<li class="span3">
+														<div class="product-box">
+															<span class="sale_tag"></span>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
+															<a href="#" class="category">${goodsVar.category.name}</a>
+															<p class="price">${goodsVar.price} &#8381;</p>
+														</div>
+													</li>
+												</c:forEach>
 											</ul>
 										</div>
 										<div class="item">
 											<ul class="thumbnails">
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/ladies/5.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Know exactly</a><br/>
-														<a href="goods.jsp" class="category">Quis nostrud</a>
-														<p class="price">$22.30</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/ladies/6.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Ut wisi enim ad</a><br/>
-														<a href="goods.jsp" class="category">Commodo consequat</a>
-														<p class="price">$40.25</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/ladies/7.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">You think water</a><br/>
-														<a href="goods.jsp" class="category">World once</a>
-														<p class="price">$10.45</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/ladies/8.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Quis nostrud exerci</a><br/>
-														<a href="goods.jsp" class="category">Quis nostrud</a>
-														<p class="price">$35.50</p>
-													</div>
-												</li>																																	
+												<c:forEach var="goodsVar"  begin = "2" end = "5" items="${randomGoods}">
+													<li class="span3">
+														<div class="product-box">
+															<span class="sale_tag"></span>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
+															<a href="#" class="category">${goodsVar.category.name}</a>
+															<p class="price">${goodsVar.price} &#8381;</p>
+														</div>
+													</li>
+												</c:forEach>
 											</ul>
 										</div>
 									</div>							
@@ -194,76 +151,33 @@
 								<div id="myCarousel-2" class="myCarousel carousel slide">
 									<div class="carousel-inner">
 										<div class="active item">
-											<ul class="thumbnails">												
-												<li class="span3">
-													<div class="product-box">
-														<span class="sale_tag"></span>
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/cloth/bootstrap-women-ware2.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Ut wisi enim ad</a><br/>
-														<a href="goods.jsp" class="category">Commodo consequat</a>
-														<p class="price">$25.50</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/cloth/bootstrap-women-ware1.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Quis nostrud exerci tation</a><br/>
-														<a href="goods.jsp" class="category">Quis nostrud</a>
-														<p class="price">$17.55</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/cloth/bootstrap-women-ware6.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Know exactly turned</a><br/>
-														<a href="goods.jsp" class="category">Quis nostrud</a>
-														<p class="price">$25.30</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/cloth/bootstrap-women-ware5.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">You think fast</a><br/>
-														<a href="goods.jsp" class="category">World once</a>
-														<p class="price">$25.60</p>
-													</div>
-												</li>
+											<ul class="thumbnails">
+												<c:forEach var="goodsVar"  begin = "0" end = "3" items="${randomGoods}">
+													<li class="span3">
+														<div class="product-box">
+															<span class="sale_tag"></span>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
+															<a href="#" class="category">${goodsVar.category.name}</a>
+															<p class="price">${goodsVar.price} &#8381;</p>
+														</div>
+													</li>
+												</c:forEach>
 											</ul>
 										</div>
 										<div class="item">
 											<ul class="thumbnails">
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/cloth/bootstrap-women-ware4.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Know exactly</a><br/>
-														<a href="goods.jsp" class="category">Quis nostrud</a>
-														<p class="price">$45.50</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/cloth/bootstrap-women-ware3.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Ut wisi enim ad</a><br/>
-														<a href="goods.jsp" class="category">Commodo consequat</a>
-														<p class="price">$33.50</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/cloth/bootstrap-women-ware2.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">You think water</a><br/>
-														<a href="goods.jsp" class="category">World once</a>
-														<p class="price">$45.30</p>
-													</div>
-												</li>
-												<li class="span3">
-													<div class="product-box">
-														<p><a href="goods_detail.jsp"><img src="/resources/themes/images/cloth/bootstrap-women-ware1.jpg" alt="" /></a></p>
-														<a href="goods_detail.jsp" class="title">Quis nostrud exerci</a><br/>
-														<a href="goods.jsp" class="category">Quis nostrud</a>
-														<p class="price">$25.20</p>
-													</div>
-												</li>																																	
+												<c:forEach var="goodsVar"  begin = "2" end = "5" items="${randomGoods}">
+													<li class="span3">
+														<div class="product-box">
+															<span class="sale_tag"></span>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
+															<a href="#" class="category">${goodsVar.category.name}</a>
+															<p class="price">${goodsVar.price} &#8381;</p>
+														</div>
+													</li>
+												</c:forEach>
 											</ul>
 										</div>
 									</div>							

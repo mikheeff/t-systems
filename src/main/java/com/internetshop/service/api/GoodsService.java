@@ -14,4 +14,5 @@ public interface GoodsService {
     void updateGoods(Goods goods);
     GoodsEntity convertToDAO(Goods goods);
     Goods convertToDTO(GoodsEntity goodsEntity);
+    Goods getRandomGoods();
 }

@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/catalog")
@@ -19,19 +21,22 @@ public class GoodsController {
 
     @Autowired
     private GoodsService goodsService;
-    private static final int amountOfPicturesOnPage = 9;
+
+    private static final int amountOfGoodsOnPage = 9;
+    private static final int amountOfRandomGoodsOnPage = 6;
 
     @RequestMapping(method = RequestMethod.GET)
     public String getAllGoods(ModelMap modelMap) {
         List<Goods> goodsList = new ArrayList<>();
         List<Goods> allGoodsList = goodsService.getAllGoods();
 
-        for (int i = 0; i < amountOfPicturesOnPage; i++) {
+        for (int i = 0; i < amountOfGoodsOnPage; i++) {
             goodsList.add(allGoodsList.get(i));
         }
         modelMap.put("currentPage",1);
         modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
         modelMap.put("listGoods",goodsList);
+        modelMap.put("randomGoods",getRandomGoods());
         return "goods";
     }
     @RequestMapping(value ="/page/{number}", method = RequestMethod.GET)
@@ -39,12 +44,13 @@ public class GoodsController {
         List<Goods> goodsList = new ArrayList<>();
         List<Goods> allGoodsList = goodsService.getAllGoods();
 
-        for (int i = (number-1)*amountOfPicturesOnPage , j = 0; (i < allGoodsList.size())&&(j<amountOfPicturesOnPage); i++) { //Цикл разбивает искходный список на подсписок из 9 и менее элементов
+        for (int i = (number-1)* amountOfGoodsOnPage, j = 0; (i < allGoodsList.size())&&(j< amountOfGoodsOnPage); i++) { //Цикл разбивает искходный список на подсписок из 9 и менее элементов
             goodsList.add(allGoodsList.get(i));
         }
         modelMap.put("currentPage",number);
         modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
         modelMap.put("listGoods", goodsList);
+        modelMap.put("randomGoods",getRandomGoods());
         return "goods";
     }
 
@@ -88,16 +94,24 @@ public class GoodsController {
     @RequestMapping(value ="/goods/{id}", method = RequestMethod.GET)
     public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap) {
         modelMap.put("goods", goodsService.getGoodsById(id));
+        modelMap.put("randomGoods",getRandomGoods());
         return "goods_detail";
     }
 
     public int getAmountOfPages(List<Goods> allGoodsList){
         int amountOfPages;
-        if (allGoodsList.size()%amountOfPicturesOnPage==0){
-            return allGoodsList.size()/amountOfPicturesOnPage;
+        if (allGoodsList.size()% amountOfGoodsOnPage ==0){
+            return allGoodsList.size()/ amountOfGoodsOnPage;
         }
         else {
-            return allGoodsList.size()/amountOfPicturesOnPage+1;
+            return allGoodsList.size()/ amountOfGoodsOnPage +1;
         }
+    }
+    public Set<Goods> getRandomGoods(){
+        Set<Goods> randomGoods = new HashSet<>();
+        while (randomGoods.size()<amountOfRandomGoodsOnPage) {
+            randomGoods.add(goodsService.getRandomGoods());
+        }
+        return randomGoods;
     }
 }

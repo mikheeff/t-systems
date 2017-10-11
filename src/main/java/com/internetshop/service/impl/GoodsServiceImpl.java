@@ -81,6 +81,15 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public Goods getRandomGoods() {
+        List<Integer> allIdList = new ArrayList<>();
+        for(Goods g:getAllGoods()){
+            allIdList.add(g.getId());
+        }
+        return getGoodsById(allIdList.get((int)(Math.random()*allIdList.size())));
+    }
+
+    @Override
     public GoodsEntity convertToDAO(Goods goods) {
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setId(goods.getCategory().getId());

@@ -50,4 +50,5 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         em.merge(goodsEntity);
         em.getTransaction().commit();
     }
+
 }
