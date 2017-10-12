@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -96,13 +98,8 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public Goods getRandomGoods() {
-//        List<Integer> allIdList = new ArrayList<>();
-//        for (Goods g : getAllGoods()) {
-//            allIdList.add(g.getId());
-//        }
-//        return getGoodsById(allIdList.get((int) (Math.random() * getAmountOfGoods())));
-        return convertGoodsToDTO(goodsRepository.getRandomGoods());
+    public int getRandomGoodsId() {
+        return goodsRepository.getRandomGoodsId();
     }
 
     @Override

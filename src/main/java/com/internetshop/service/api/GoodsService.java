@@ -17,7 +17,7 @@ public interface GoodsService {
     void updateGoods(Goods goods);
     GoodsEntity convertGoodsToDAO(Goods goods);
     Goods convertGoodsToDTO(GoodsEntity goodsEntity);
-    Goods getRandomGoods();
+    int getRandomGoodsId();
     long getAmountOfGoods();
     long getAmountOfGoodsByCategoryName(String categoryName);
     List<Category> getAllCategories();

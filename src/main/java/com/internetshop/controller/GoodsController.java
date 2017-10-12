@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -110,11 +112,15 @@ public class GoodsController {
         }
     }
 
-    public Set<Goods> getRandomGoods(){
-        Set<Goods> randomGoodsSet = new HashSet<>();
-        while (randomGoodsSet.size()<amountOfRandomGoodsOnPage) {
-            randomGoodsSet.add(goodsService.getRandomGoods());
+    public List<Goods> getRandomGoods(){
+        Set<Integer> randomGoodsIdSet = new HashSet<>();
+        while (randomGoodsIdSet.size()<amountOfRandomGoodsOnPage) { //todo а если количество товаров будет всегда меньше запрашиваемо числа случайных товаров?
+            randomGoodsIdSet.add(goodsService.getRandomGoodsId());
         }
-        return randomGoodsSet;
+        List<Goods> goodsList = new ArrayList<>();
+        for(int id : randomGoodsIdSet){
+            goodsList.add(goodsService.getGoodsById(id));
+        }
+        return goodsList;
     }
 }

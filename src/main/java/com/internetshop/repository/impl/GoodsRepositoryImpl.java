@@ -83,10 +83,9 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     @Override
-    public GoodsEntity getRandomGoods() {
+    public int getRandomGoodsId() {
         EntityManager em = this.emf.createEntityManager();
-        GoodsEntity goodsEntity =  em.createQuery("select goods from GoodsEntity goods order by rand()",GoodsEntity.class).setMaxResults(1).getSingleResult();
-        return goodsEntity;
+        return em.createQuery("select goods.id from GoodsEntity goods order by rand()",Integer.class).setMaxResults(1).getSingleResult();
     }
 
     @Override
