@@ -13,8 +13,9 @@ public interface GoodsRepository {
     void deleteGoodsById(int id);
     GoodsEntity getGoodsById(int id);
     void updateGoods(GoodsEntity goodsEntity);
-    int getAmountOfGoods();
-    int getAmountOfGoodsByCategoryName(String categoryName);
+    long getAmountOfGoods();
+    long getAmountOfGoodsByCategoryName(String categoryName);
+    GoodsEntity getRandomGoods();
     List<CategoryEntity> getAllCategories();
 
 }

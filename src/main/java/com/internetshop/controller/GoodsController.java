@@ -93,7 +93,7 @@ public class GoodsController {
         return "goods_detail";
     }
 
-    public int getAmountOfPages(){
+    public long getAmountOfPages(){
         if (goodsService.getAmountOfGoods()% amountOfGoodsOnPage ==0){
             return goodsService.getAmountOfGoods()/ amountOfGoodsOnPage;
         }
@@ -101,7 +101,7 @@ public class GoodsController {
             return goodsService.getAmountOfGoods()/ amountOfGoodsOnPage +1;
         }
     }
-    public int getAmountOfPages(String categoryName){
+    public long getAmountOfPages(String categoryName){
         if (goodsService.getAmountOfGoodsByCategoryName(categoryName)% amountOfGoodsOnPage ==0){
             return goodsService.getAmountOfGoodsByCategoryName(categoryName)/ amountOfGoodsOnPage;
         }

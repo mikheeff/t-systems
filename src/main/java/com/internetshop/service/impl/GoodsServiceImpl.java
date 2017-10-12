@@ -97,20 +97,21 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public Goods getRandomGoods() {
-        List<Integer> allIdList = new ArrayList<>();
-        for (Goods g : getAllGoods()) {
-            allIdList.add(g.getId());
-        }
-        return getGoodsById(allIdList.get((int) (Math.random() * allIdList.size())));
+//        List<Integer> allIdList = new ArrayList<>();
+//        for (Goods g : getAllGoods()) {
+//            allIdList.add(g.getId());
+//        }
+//        return getGoodsById(allIdList.get((int) (Math.random() * getAmountOfGoods())));
+        return convertGoodsToDTO(goodsRepository.getRandomGoods());
     }
 
     @Override
-    public int getAmountOfGoods() {
+    public long getAmountOfGoods() {
         return goodsRepository.getAmountOfGoods();
     }
 
     @Override
-    public int getAmountOfGoodsByCategoryName(String categoryName) {
+    public long getAmountOfGoodsByCategoryName(String categoryName) {
         return goodsRepository.getAmountOfGoodsByCategoryName(categoryName);
     }
 

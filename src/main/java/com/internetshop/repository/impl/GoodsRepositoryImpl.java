@@ -16,24 +16,25 @@ import static java.lang.Math.toIntExact;
 public class GoodsRepositoryImpl implements GoodsRepository {
 
     @PersistenceUnit(unitName = "item-manager-pu")
-    private EntityManagerFactory emf;
+    private EntityManagerFactory emf= Persistence.createEntityManagerFactory("item-manager-pu");
+
 
 
     public List<GoodsEntity> getAll() {
-        emf = Persistence.createEntityManagerFactory("item-manager-pu");
-        return emf.createEntityManager().createQuery("select goods from GoodsEntity goods", GoodsEntity.class).getResultList();
+        EntityManager em = this.emf.createEntityManager();
+        return em.createQuery("select goods from GoodsEntity goods", GoodsEntity.class).getResultList();
     }
 
     public List<GoodsEntity> getAll(int firstId, int maxResults) {
-        emf = Persistence.createEntityManagerFactory("item-manager-pu");
-        return emf.createEntityManager().createQuery("select goods from GoodsEntity goods", GoodsEntity.class).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
+        EntityManager em = this.emf.createEntityManager();
+        return em.createQuery("select goods from GoodsEntity goods", GoodsEntity.class).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
     }
 
 
     @Override
     public List<GoodsEntity> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName) {
-        emf = Persistence.createEntityManagerFactory("item-manager-pu");
-        return emf.createEntityManager()
+        EntityManager em = this.emf.createEntityManager();
+        return em
                 .createQuery("select goods from GoodsEntity goods where category.name = :category", GoodsEntity.class)
                 .setParameter("category", categoryName).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
     }
@@ -70,21 +71,28 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     @Override
-    public int getAmountOfGoods() {
-        emf = Persistence.createEntityManagerFactory("item-manager-pu");
-        return toIntExact(emf.createEntityManager().createQuery("select count(*) FROM GoodsEntity goods",Long.class).getSingleResult()); //безопасный каст из long в int, в случае переполнения вылетает эксепшн
+    public long getAmountOfGoods() {
+        EntityManager em = this.emf.createEntityManager();
+        return em.createQuery("select count(*) FROM GoodsEntity goods",Long.class).getSingleResult();
     }
 
     @Override
-    public int getAmountOfGoodsByCategoryName(String categoryName) {
-        emf = Persistence.createEntityManagerFactory("item-manager-pu");
-        return toIntExact(emf.createEntityManager().createQuery("select count(*) from GoodsEntity goods where category.name = :category",Long.class).setParameter("category", categoryName).getSingleResult()); //безопасный каст из long в int, в случае переполнения вылетает эксепшн
+    public long getAmountOfGoodsByCategoryName(String categoryName) {
+        EntityManager em = this.emf.createEntityManager();
+        return em.createQuery("select count(*) from GoodsEntity goods where category.name = :category",Long.class).setParameter("category", categoryName).getSingleResult();
+    }
+
+    @Override
+    public GoodsEntity getRandomGoods() {
+        EntityManager em = this.emf.createEntityManager();
+        GoodsEntity goodsEntity =  em.createQuery("select goods from GoodsEntity goods order by rand()",GoodsEntity.class).setMaxResults(1).getSingleResult();
+        return goodsEntity;
     }
 
     @Override
     public List<CategoryEntity> getAllCategories() {
-        emf = Persistence.createEntityManagerFactory("item-manager-pu");
-        return emf.createEntityManager().createQuery("select categories from CategoryEntity categories", CategoryEntity.class).getResultList();
+        EntityManager em = this.emf.createEntityManager();
+        return em.createQuery("select categories from CategoryEntity categories", CategoryEntity.class).getResultList();
 
     }
 }
