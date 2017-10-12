@@ -23,52 +23,37 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
-    private static final int amountOfGoodsOnPage = 9;
+    private static final int amountOfGoodsOnPage = 9; //при вводе больше 9 едет картинки на первой странице??
     private static final int amountOfRandomGoodsOnPage = 6;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String getAllGoods(ModelMap modelMap, HttpSession session) {
-        List<Goods> goodsList = new ArrayList<>();
-        List<Goods> allGoodsList = goodsService.getAllGoods();
-
-        for (int i = 0; i < amountOfGoodsOnPage; i++) {
-            goodsList.add(allGoodsList.get(i));
-        }
-        modelMap.put("allGoodsList",allGoodsList);
+    public String getAllGoods(ModelMap modelMap) { // TODO: 11.10.2017 HttpSession session
         modelMap.put("currentPage",1);
-        modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
-        modelMap.put("listGoods",goodsList);
+        modelMap.put("amountOfPages",getAmountOfPages());
+        modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
         modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
+
         return "goods";
     }
     @RequestMapping(value ="/page/{number}", method = RequestMethod.GET)
     public String getAllGoods(@PathVariable(value = "number") int number, ModelMap modelMap) {
-        List<Goods> goodsList = new ArrayList<>();
-        List<Goods> allGoodsList = goodsService.getAllGoods();
-
-        for (int i = (number-1)* amountOfGoodsOnPage, j = 0; (i < allGoodsList.size())&&(j< amountOfGoodsOnPage); i++) { //Цикл разбивает искходный список на подсписок из 9 и менее элементов
-            goodsList.add(allGoodsList.get(i));
-        }
         modelMap.put("currentPage",number);
-        modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
-        modelMap.put("listGoods", goodsList);
+        modelMap.put("amountOfPages",getAmountOfPages());
+        modelMap.put("listGoods", goodsService.getAllGoods(amountOfGoodsOnPage*(number-1),amountOfGoodsOnPage));
         modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
         return "goods";
     }
-//    @RequestMapping(value ="/{category}/{id}", method = RequestMethod.GET)
-//    public String getAllGoodsByFilter(@PathVariable(value = "id") int number, @PathVariable("category") String category, ModelMap modelMap) {
-//        List<Goods> goodsList = new ArrayList<>();
-//        List<Goods> allGoodsList = goodsService.getAllGoods();
-//
-//        for (int i = (number-1)* amountOfGoodsOnPage, j = 0; (i < allGoodsList.size())&&(j< amountOfGoodsOnPage); i++) { //Цикл разбивает искходный список на подсписок из 9 и менее элементов
-//            goodsList.add(allGoodsList.get(i));
-//        }
+    @RequestMapping(value ="/{category}/{id}", method = RequestMethod.GET)
+    public String getAllGoodsByCategory(@PathVariable(value = "id") int number, @PathVariable("category") String categoryName, ModelMap modelMap) {
+//        getAllGoods(modelMap);
 //        modelMap.put("currentPage",number);
 //        modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
 //        modelMap.put("listGoods", goodsList);
 //        modelMap.put("randomGoods",getRandomGoods());
-//        return "goods";
-//    }
+        return "goods";
+    }
 
 
 
@@ -109,20 +94,20 @@ public class GoodsController {
         return "goods_detail";
     }
 
-    public int getAmountOfPages(List<Goods> allGoodsList){
-        int amountOfPages;
-        if (allGoodsList.size()% amountOfGoodsOnPage ==0){
-            return allGoodsList.size()/ amountOfGoodsOnPage;
+    public int getAmountOfPages(){
+        if (goodsService.getAmountOfGoods()% amountOfGoodsOnPage ==0){
+            return goodsService.getAmountOfGoods()/ amountOfGoodsOnPage;
         }
         else {
-            return allGoodsList.size()/ amountOfGoodsOnPage +1;
+            return goodsService.getAmountOfGoods()/ amountOfGoodsOnPage +1;
         }
     }
+
     public Set<Goods> getRandomGoods(){
-        Set<Goods> randomGoods = new HashSet<>();
-        while (randomGoods.size()<amountOfRandomGoodsOnPage) {
-            randomGoods.add(goodsService.getRandomGoods());
+        Set<Goods> randomGoodsSet = new HashSet<>();
+        while (randomGoodsSet.size()<amountOfRandomGoodsOnPage) {
+            randomGoodsSet.add(goodsService.getRandomGoods());
         }
-        return randomGoods;
+        return randomGoodsSet;
     }
 }

@@ -11,7 +11,6 @@ import com.internetshop.service.api.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,14 +28,22 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Goods> getAllGoods() {
         List<Goods> goodsList = new ArrayList<>();
         for (GoodsEntity goodsEntity : goodsRepository.getAll()) {
-            goodsList.add(convertToDTO(goodsEntity));
+            goodsList.add(convertGoodsToDTO(goodsEntity));
+        }
+        return goodsList;
+    }
+    @Override
+    public List<Goods> getAllGoods(int firstId, int maxResults) {
+        List<Goods> goodsList = new ArrayList<>();
+        for (GoodsEntity goodsEntity : goodsRepository.getAll(firstId,maxResults)) {
+            goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
     }
 
     @Override
     public void addGoods(Goods goods) {
-        this.goodsRepository.addGoods(convertToDAO(goods));
+        this.goodsRepository.addGoods(convertGoodsToDAO(goods));
     }
 
     @Override
@@ -46,19 +53,17 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public Goods getGoodsById(int id) {
+        GoodsEntity goodsEntity = goodsRepository.getGoodsById(id);
+
         Category category = new Category();
-        category.setId(goodsRepository.getGoodsById(id).getCategory().getId());
-        category.setName(goodsRepository.getGoodsById(id).getCategory().getName());
-//        for (GoodsEntity ge : goodsRepository.getGoodsById(id).getCategory().getGoodsSet()) {
-//            Goods goods = new goods
-//            for(Goods g : category.getGoodsSet()){
-//                g.
-//            }
-//        }
+        category.setId(goodsEntity.getCategory().getId());
+        category.setName(goodsEntity.getCategory().getName());
+
         Rule rule = new Rule();
-        rule.setId(goodsRepository.getGoodsById(id).getRule().getId());
-        rule.setName(goodsRepository.getGoodsById(id).getRule().getName());
-        Goods goods = new Goods(goodsRepository.getGoodsById(id).getId(), goodsRepository.getGoodsById(id).getName(), goodsRepository.getGoodsById(id).getPrice(), goodsRepository.getGoodsById(id).getNumberOfPlayers(), goodsRepository.getGoodsById(id).getDuration(), goodsRepository.getGoodsById(id).getAmount(), goodsRepository.getGoodsById(id).getVisible(), goodsRepository.getGoodsById(id).getDescription(), goodsRepository.getGoodsById(id).getImg(), category, rule);
+        rule.setId(goodsEntity.getRule().getId());
+        rule.setName(goodsEntity.getRule().getName());
+
+        Goods goods = new Goods(goodsEntity.getId(), goodsEntity.getName(), goodsEntity.getPrice(), goodsEntity.getNumberOfPlayers(), goodsEntity.getDuration(), goodsEntity.getAmount(), goodsEntity.getVisible(), goodsEntity.getDescription(), goodsEntity.getImg(), category, rule);
         return goods;
     }
 
@@ -91,7 +96,22 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public GoodsEntity convertToDAO(Goods goods) {
+    public int getAmountOfGoods() {
+        return goodsRepository.getAmountOfGoods();
+    }
+
+    @Override
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        for (CategoryEntity categoryEntity  : goodsRepository.getAllCategories()) {
+            Category category = new Category(categoryEntity.getId(), categoryEntity.getName());
+            categories.add(category);
+        }
+        return categories;
+    }
+
+    @Override
+    public GoodsEntity convertGoodsToDAO(Goods goods) {
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setId(goods.getCategory().getId());
         RuleEntity ruleEntity = new RuleEntity();
@@ -101,10 +121,11 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public Goods convertToDTO(GoodsEntity goodsEntity) {
+    public Goods convertGoodsToDTO(GoodsEntity goodsEntity) {
         Category category = new Category(goodsEntity.getCategory().getId(), goodsEntity.getCategory().getName());
         Rule rule = new Rule(goodsEntity.getRule().getId(), goodsEntity.getRule().getName());
         Goods goods = new Goods(goodsEntity.getId(), goodsEntity.getName(), goodsEntity.getPrice(), goodsEntity.getNumberOfPlayers(), goodsEntity.getDuration(), goodsEntity.getAmount(), goodsEntity.getVisible(), goodsEntity.getDescription(), goodsEntity.getImg(), category, rule);
         return goods;
     }
+
 }

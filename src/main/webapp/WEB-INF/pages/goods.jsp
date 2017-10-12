@@ -119,14 +119,19 @@
 						<div class="block">	
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
-								<%--<c:forEach var="goodsVar"  begin = "0" end = "8" items="${listGoods}">--%>
-								<li class="active"><a href="goods.jsp">All games</a></li>
-								<li><a href="goods.jsp">For funny company</a></li>
-								<li><a href="goods.jsp">Interesting strategy</a></li>
-								<li><a href="goods.jsp">Kids from 3 to 8</a></li>
-								<li><a href="goods.jsp">Logic</a></li>
-								<li><a href="goods.jsp">Convenient to take on the road</a></li>
-								<li><a href="goods.jsp">For two</a></li>
+								<c:forEach var="categoryVar" items="${listCategory}">
+									<li
+									<%--<c:if test="${count.index==currentPage}" >--%>
+										<%--class="active"--%>
+									<%--</c:if>--%>
+									><a href="{pageContext.request.contextPath}/${categoryVar.name}/${categoryVar.id}">${categoryVar.name}</a></li>
+								</c:forEach>
+								<%--<li><a href="${pageContext.request.contextPath}/${}/${}">For funny company</a></li>--%>
+								<%--<li><a href="goods.jsp">Interesting strategy</a></li>--%>
+								<%--<li><a href="goods.jsp">Kids from 3 to 8</a></li>--%>
+								<%--<li><a href="goods.jsp">Logic</a></li>--%>
+								<%--<li><a href="goods.jsp">Convenient to take on the road</a></li>--%>
+								<%--<li><a href="goods.jsp">For two</a></li>--%>
 							</ul>
 							<br/>
 							<ul class="nav nav-list below">

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Queue;
+import static java.lang.Math.toIntExact;
 
 @Repository
 public class GoodsRepositoryImpl implements GoodsRepository {
@@ -24,7 +26,7 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     public List<GoodsEntity> getAll(int firstId, int maxResults) {
         emf = Persistence.createEntityManagerFactory("item-manager-pu");
-        return emf.createEntityManager().createQuery("select goods from GoodsEntity goods", GoodsEntity.class).getResultList();
+        return emf.createEntityManager().createQuery("select goods from GoodsEntity goods", GoodsEntity.class).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
     }
 
 
@@ -65,4 +67,15 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         em.getTransaction().commit();
     }
 
+    @Override
+    public int getAmountOfGoods() {
+        emf = Persistence.createEntityManagerFactory("item-manager-pu");
+        return toIntExact(emf.createEntityManager().createQuery("select count(*) FROM GoodsEntity goods",Long.class).getSingleResult()); //безопасный каст из long в int, в случае переполнения вылетает эксепшн
+    }
+
+    @Override
+    public List<CategoryEntity> getAllCategories() {
+        emf = Persistence.createEntityManagerFactory("item-manager-pu");
+        return emf.createEntityManager().createQuery("select categories from CategoryEntity categories", CategoryEntity.class).getResultList();
+    }
 }
