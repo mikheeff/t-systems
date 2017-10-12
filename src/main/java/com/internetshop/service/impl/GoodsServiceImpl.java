@@ -42,6 +42,15 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public List<Goods> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName) {
+        List<Goods> goodsList = new ArrayList<>();
+        for (GoodsEntity goodsEntity : goodsRepository.getAllGoodsByCategoryName(firstId,maxResults,categoryName)) {
+            goodsList.add(convertGoodsToDTO(goodsEntity));
+        }
+        return goodsList;
+    }
+
+    @Override
     public void addGoods(Goods goods) {
         this.goodsRepository.addGoods(convertGoodsToDAO(goods));
     }
@@ -98,6 +107,11 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public int getAmountOfGoods() {
         return goodsRepository.getAmountOfGoods();
+    }
+
+    @Override
+    public int getAmountOfGoodsByCategoryName(String categoryName) {
+        return goodsRepository.getAmountOfGoodsByCategoryName(categoryName);
     }
 
     @Override

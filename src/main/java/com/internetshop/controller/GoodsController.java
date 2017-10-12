@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -33,29 +30,31 @@ public class GoodsController {
         modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("categoryFilter",false);
 
         return "goods";
     }
-    @RequestMapping(value ="/page/{number}", method = RequestMethod.GET)
-    public String getAllGoods(@PathVariable(value = "number") int number, ModelMap modelMap) {
-        modelMap.put("currentPage",number);
+    @RequestMapping(value = "/page/{page}", method = RequestMethod.GET)
+    public String getAllGoods(@PathVariable(value = "page") int page, ModelMap modelMap) {
+        modelMap.put("currentPage",page);
         modelMap.put("amountOfPages",getAmountOfPages());
-        modelMap.put("listGoods", goodsService.getAllGoods(amountOfGoodsOnPage*(number-1),amountOfGoodsOnPage));
+        modelMap.put("listGoods", goodsService.getAllGoods(amountOfGoodsOnPage*(page-1),amountOfGoodsOnPage));
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("categoryFilter",false);
         return "goods";
     }
-    @RequestMapping(value ="/{category}/{id}", method = RequestMethod.GET)
-    public String getAllGoodsByCategory(@PathVariable(value = "id") int number, @PathVariable("category") String categoryName, ModelMap modelMap) {
-//        getAllGoods(modelMap);
-//        modelMap.put("currentPage",number);
-//        modelMap.put("amountOfPages",getAmountOfPages(allGoodsList));
-//        modelMap.put("listGoods", goodsList);
-//        modelMap.put("randomGoods",getRandomGoods());
+    @RequestMapping(value ="/{category}/page/{page}", method = RequestMethod.GET)
+    public String getAllGoodsByCategory(@PathVariable("category") String categoryName,@PathVariable(value = "page") int page, ModelMap modelMap) {
+        modelMap.put("currentPage",page);
+        modelMap.put("amountOfPages",getAmountOfPages(categoryName));
+        modelMap.put("listGoods", goodsService.getAllGoodsByCategoryName(0,amountOfGoodsOnPage,categoryName));
+        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("categoryName",categoryName);
+        modelMap.put("categoryFilter",true);
         return "goods";
     }
-
-
 
     @RequestMapping(value ="../add", method = RequestMethod.GET)
     public String addGoods(ModelMap modelMap) {
@@ -100,6 +99,14 @@ public class GoodsController {
         }
         else {
             return goodsService.getAmountOfGoods()/ amountOfGoodsOnPage +1;
+        }
+    }
+    public int getAmountOfPages(String categoryName){
+        if (goodsService.getAmountOfGoodsByCategoryName(categoryName)% amountOfGoodsOnPage ==0){
+            return goodsService.getAmountOfGoodsByCategoryName(categoryName)/ amountOfGoodsOnPage;
+        }
+        else {
+            return goodsService.getAmountOfGoodsByCategoryName(categoryName)/ amountOfGoodsOnPage +1;
         }
     }
 

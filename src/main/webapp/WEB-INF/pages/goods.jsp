@@ -96,6 +96,8 @@
 						<hr>
 						<div class="pagination pagination-small pagination-centered">
 							<ul>
+								<c:if test="${!categoryFilter}" >
+
 								<c:if test="${currentPage>1}" >
 								<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage-1}">Prev</a></li>
 								</c:if>
@@ -112,6 +114,27 @@
 									<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage+1}">Next</a></li>
 								</c:if>
 
+
+								</c:if><c:if test="${categoryFilter}" >
+
+								<c:if test="${currentPage>1}" >
+								<li><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${currentPage-1}">Prev</a></li>
+								</c:if>
+
+								<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
+									<li
+									<c:if test="${count.index==currentPage}" >
+										 class="active"
+									</c:if>
+									><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${i}">${i}</a></li>
+								</c:forEach>
+
+								<c:if test="${currentPage<amountOfPages}" >
+									<li><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${currentPage+1}">Next</a></li>
+								</c:if>
+
+								</c:if>
+
 							</ul>
 						</div>
 					</div>
@@ -124,7 +147,7 @@
 									<%--<c:if test="${count.index==currentPage}" >--%>
 										<%--class="active"--%>
 									<%--</c:if>--%>
-									><a href="{pageContext.request.contextPath}/${categoryVar.name}/${categoryVar.id}">${categoryVar.name}</a></li>
+									><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a></li>
 								</c:forEach>
 								<%--<li><a href="${pageContext.request.contextPath}/${}/${}">For funny company</a></li>--%>
 								<%--<li><a href="goods.jsp">Interesting strategy</a></li>--%>

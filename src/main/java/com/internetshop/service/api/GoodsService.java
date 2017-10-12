@@ -10,6 +10,7 @@ import java.util.List;
 public interface GoodsService {
     List<Goods> getAllGoods();
     List<Goods> getAllGoods(int firstId,int maxResults);
+    List<Goods> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName);
     void addGoods(Goods goods);
     void deleteGoodsById(int id);
     Goods getGoodsById(int id);
@@ -18,5 +19,6 @@ public interface GoodsService {
     Goods convertGoodsToDTO(GoodsEntity goodsEntity);
     Goods getRandomGoods();
     int getAmountOfGoods();
+    int getAmountOfGoodsByCategoryName(String categoryName);
     List<Category> getAllCategories();
 }

@@ -30,12 +30,14 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
 
-    public List<GoodsEntity> getAll(int firstId, int maxResults, String category) {
+    @Override
+    public List<GoodsEntity> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName) {
         emf = Persistence.createEntityManagerFactory("item-manager-pu");
         return emf.createEntityManager()
                 .createQuery("select goods from GoodsEntity goods where category.name = :category", GoodsEntity.class)
-                .setParameter("category", category).getResultList();
+                .setParameter("category", categoryName).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
     }
+
 
     @Override
     public void addGoods(GoodsEntity goodsEntity) {
@@ -74,8 +76,15 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     @Override
+    public int getAmountOfGoodsByCategoryName(String categoryName) {
+        emf = Persistence.createEntityManagerFactory("item-manager-pu");
+        return toIntExact(emf.createEntityManager().createQuery("select count(*) from GoodsEntity goods where category.name = :category",Long.class).setParameter("category", categoryName).getSingleResult()); //безопасный каст из long в int, в случае переполнения вылетает эксепшн
+    }
+
+    @Override
     public List<CategoryEntity> getAllCategories() {
         emf = Persistence.createEntityManagerFactory("item-manager-pu");
         return emf.createEntityManager().createQuery("select categories from CategoryEntity categories", CategoryEntity.class).getResultList();
+
     }
 }
