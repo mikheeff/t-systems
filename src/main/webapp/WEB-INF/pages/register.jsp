@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -40,8 +41,8 @@
 						<ul class="user-menu">
 							<li><a href="#">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
-							<li><a href="checkout.html">Checkout</a></li>
-							<li><a href="${pageContext.request.contextPath}/registration">Login</a></li>
+							<li><a href="checkout.jsp">Checkout</a></li>
+							<li><a href="${pageContext.request.contextPath}profile">Login</a></li>
 						</ul>
 					</div>
 				</div>
@@ -90,7 +91,7 @@
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label">Username</label>
+									<label class="control-label">Password</label>
 									<div class="controls">
 										<input type="password" placeholder="Enter your password" id="password" class="input-xlarge">
 									</div>
@@ -105,33 +106,39 @@
 					</div>
 					<div class="span7">					
 						<h4 class="title"><span class="text"><strong>Register</strong> Form</span></h4>
-						<form action="#" method="post" class="form-stacked">
+						<spring:form action="profile" method="post" commandName="newClient" class="form-stacked">
 							<fieldset>
 								<div class="control-group">
-									<label class="control-label">Username</label>
+									<label class="control-label">Name</label>
 									<div class="controls">
-										<input type="text" placeholder="Enter your username" class="input-xlarge">
+										<spring:input path="name" type="text" placeholder="Enter your name" class="input-xlarge"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Email address:</label>
 									<div class="controls">
-										<input type="password" placeholder="Enter your email" class="input-xlarge">
+										<spring:input path="email" type="text" placeholder="Enter your email" class="input-xlarge"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Password:</label>
 									<div class="controls">
-										<input type="password" placeholder="Enter your password" class="input-xlarge">
+										<spring:input path="password" type="password" placeholder="Enter your password" class="input-xlarge"/>
 									</div>
-								</div>							                            
+								</div>
+								<div class="control-group">
+									<label class="control-label">Phone number:</label>
+									<div class="controls">
+										<spring:input path="phone" type="text" placeholder="Enter your phone number" class="input-xlarge"/>
+									</div>
+								</div>
 								<div class="control-group">
 									<p>Now that we know who you are. I'm not a mistake! In a comic, you know how you can tell who the arch-villain's going to be?</p>
 								</div>
 								<hr>
-								<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Create your account"></div>
+								<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Create new account"></div>
 							</fieldset>
-						</form>					
+						</spring:form>
 					</div>				
 				</div>
 			</section>			
@@ -177,7 +184,7 @@
 		<script>
 			$(document).ready(function() {
 				$('#checkout').click(function (e) {
-					document.location.href = "checkout.html";
+					document.location.href = "checkout.jsp";
 				})
 			});
 		</script>		

@@ -40,8 +40,8 @@
 						<ul class="user-menu">				
 							<li><a href="#">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
-							<li><a href="checkout.html">Checkout</a></li>					
-							<li><a href="${pageContext.request.contextPath}/registration">Login</a></li>
+							<li><a href="checkout.jsp">Checkout</a></li>
+							<li><a href="${pageContext.request.contextPath}profile">Login</a></li>
 						</ul>
 					</div>
 				</div>
@@ -70,10 +70,15 @@
 						</ul>
 					</nav>
 				</div>
-			</section>	
+			</section>
 			<section class="header_text sub">
-			<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="All games" >
+			<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="" >
+				<c:if test="${!categoryFilter}" >
 				<h3><span>ALL GAMES</span></h3>
+				</c:if>
+				<c:if test="${categoryFilter}" >
+					<h3><span>${categoryName.toUpperCase()}</span></h3>
+				</c:if>
 			</section>
 			<section class="main-content">
 				
@@ -98,40 +103,41 @@
 							<ul>
 								<c:if test="${!categoryFilter}" >
 
-								<c:if test="${currentPage>1}" >
-								<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage-1}">Prev</a></li>
-								</c:if>
-
-								<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
-									<li
-									<c:if test="${count.index==currentPage}" >
-										 class="active"
+									<c:if test="${currentPage>1}" >
+									<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage-1}">Prev</a></li>
 									</c:if>
-									><a href="${pageContext.request.contextPath}/catalog/page/${i}">${i}</a></li>
-								</c:forEach>
 
-								<c:if test="${currentPage<amountOfPages}" >
-									<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage+1}">Next</a></li>
-								</c:if>
+									<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
+										<li
+										<c:if test="${count.index==currentPage}" >
+											 class="active"
+										</c:if>
+										><a href="${pageContext.request.contextPath}/catalog/page/${i}">${i}</a></li>
+									</c:forEach>
 
-
-								</c:if><c:if test="${categoryFilter}" >
-
-								<c:if test="${currentPage>1}" >
-								<li><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${currentPage-1}">Prev</a></li>
-								</c:if>
-
-								<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
-									<li
-									<c:if test="${count.index==currentPage}" >
-										 class="active"
+									<c:if test="${currentPage<amountOfPages}" >
+										<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage+1}">Next</a></li>
 									</c:if>
-									><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${i}">${i}</a></li>
-								</c:forEach>
 
-								<c:if test="${currentPage<amountOfPages}" >
-									<li><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${currentPage+1}">Next</a></li>
 								</c:if>
+
+								<c:if test="${categoryFilter}" >
+
+									<c:if test="${currentPage>1}" >
+									<li><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${currentPage-1}">Prev</a></li>
+									</c:if>
+
+									<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
+										<li
+										<c:if test="${count.index==currentPage}" >
+											 class="active"
+										</c:if>
+										><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${i}">${i}</a></li>
+									</c:forEach>
+
+									<c:if test="${currentPage<amountOfPages}" >
+										<li><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${currentPage+1}">Next</a></li>
+									</c:if>
 
 								</c:if>
 
@@ -142,19 +148,18 @@
 						<div class="block">	
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
-								<c:forEach var="categoryVar" items="${listCategory}">
 									<li
-									<%--<c:if test="${count.index==currentPage}" >--%>
-										<%--class="active"--%>
-									<%--</c:if>--%>
+									<c:if test="${!categoryFilter}" >
+									class="active"
+									</c:if>
+									><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
+								<c:forEach var="categoryVar"  items="${listCategory}">
+									<li
+									<c:if test="${categoryVar.name == categoryName}" >
+										class="active"
+									</c:if>
 									><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a></li>
 								</c:forEach>
-								<%--<li><a href="${pageContext.request.contextPath}/${}/${}">For funny company</a></li>--%>
-								<%--<li><a href="goods.jsp">Interesting strategy</a></li>--%>
-								<%--<li><a href="goods.jsp">Kids from 3 to 8</a></li>--%>
-								<%--<li><a href="goods.jsp">Logic</a></li>--%>
-								<%--<li><a href="goods.jsp">Convenient to take on the road</a></li>--%>
-								<%--<li><a href="goods.jsp">For two</a></li>--%>
 							</ul>
 							<br/>
 							<ul class="nav nav-list below">

@@ -1,7 +1,5 @@
 package com.internetshop.entities;
 
-import com.internetshop.model.Role;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -27,8 +25,8 @@ public class ClientEntity {
     @Column (name = "order_counter")
     private int orderCounter;
 
-    @OneToOne(fetch=FetchType.LAZY)   //
-    @JoinColumn(referencedColumnName = "id_client")
+    @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY, mappedBy="clientEntity")   //
+//    @JoinColumn(referencedColumnName = "idClient")
     private ClientAddressEntity clientAddressEntity;
 
     @ManyToOne

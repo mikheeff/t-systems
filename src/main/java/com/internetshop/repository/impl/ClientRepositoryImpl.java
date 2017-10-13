@@ -14,12 +14,16 @@ import java.util.List;
 public class ClientRepositoryImpl implements ClientRepository {
 
     @PersistenceUnit(unitName = "item-manager-pu")
-    private EntityManagerFactory emf;  //конструктор?
-    @PersistenceContext(unitName = "item-manager-pu")
-    private EntityManager em;
+    private EntityManager em = Persistence.createEntityManagerFactory("item-manager-pu").createEntityManager();
 
     public List<ClientEntity> getAll() {
-        emf = Persistence.createEntityManagerFactory("item-manager-pu");
-        return emf.createEntityManager().createQuery("select c from ClientEntity c ", ClientEntity.class).getResultList();
+        return em.createQuery("select c from ClientEntity c ", ClientEntity.class).getResultList();
+    }
+
+    @Override
+    public void addClient(ClientEntity clientEntity) {
+        em.getTransaction().begin();
+        em.persist(clientEntity);
+        em.getTransaction().commit();
     }
 }

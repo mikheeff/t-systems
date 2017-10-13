@@ -1,10 +1,12 @@
 package com.internetshop.model;
 
+import java.util.Date;
+
 public class Client {
     private int id;
     private String name;
     private String surname;
-    private String birthdate;
+    private Date birthdate;
     private String email;
     private String password;
     private String phone;
@@ -16,7 +18,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(int id, String name, String surname, String birthdate, String email, String password, String phone, int orderCounter, int id_role, ClientAddress clientAddress) {
+    public Client(int id, String name, String surname, Date birthdate, String email, String password, String phone, int orderCounter, int id_role, ClientAddress clientAddress) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -53,11 +55,11 @@ public class Client {
         this.surname = surname;
     }
 
-    public String getBirthdate() {
+    public Date getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(String birthdate) {
+    public void setBirthdate(Date birthdate) {
         this.birthdate = birthdate;
     }
 

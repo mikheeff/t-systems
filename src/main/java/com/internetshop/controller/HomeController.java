@@ -22,8 +22,5 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping(value ="registration",method = RequestMethod.GET)
-    public String getGoodsById(ModelMap modelMap) {
-        return "register";
-    }
+
 }
