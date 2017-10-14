@@ -74,7 +74,7 @@
 	</section>
 	<section class="header_text sub">
 		<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="" >
-				<h4><span>Check Out</span></h4>
+				<h4><span>${client.name.toUpperCase()}, its your profile</span></h4>
 			</section>	
 			<section class="main-content">
 				<div class="row">
@@ -86,10 +86,10 @@
 								</div>
 								<div id="collapseTwo" class="accordion-body collapse">
 									<div class="accordion-inner">
+										<spring:form action="profile/edit" method="post" modelAttribute="client" class="form-stacked">
 										<div class="row-fluid">
 											<div class="span6">
 												<h4>Your Personal Details</h4>
-												<spring:form action="profile/edit" method="post" modelAttribute="client" class="form-stacked">
 													<fieldset>
 														<div class="control-group">
 															<label class="control-label">Your ID</label>
@@ -133,76 +133,67 @@
 																<spring:input path="phone" type="text" placeholder="" class="input-xlarge"/>
 															</div>
 														</div>
-														<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Edit your profile"></div>
 													</fieldset>
-												</spring:form>
 											</div>
 											<div class="span6">
 												<h4>Your Address</h4>
-												<div class="control-group">
-													<label class="control-label">Company</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+												<fieldset>
+													<div class="control-group">
+														<label class="control-label"><span class="required"></span> Country:</label>
+														<div class="controls">
+															<spring:select path="clientAddress.country" class="input-xlarge">
+																<spring:option value="">---Please Select---</spring:option>
+																<spring:option value="AFG">Afghanistan</spring:option>
+																<spring:option value="ALB">Albania</spring:option>
+																<spring:option value="ALG">Algeria</spring:option>
+																<spring:option value="ASA">American Samoa</spring:option>
+																<spring:option value="AND">Andorra</spring:option>
+																<spring:option value="ANG">Angola</spring:option>
+															</spring:select>
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label">Company ID:</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+													<div class="control-group">
+														<label class="control-label"><span class="required"></span> Region / State:</label>
+														<div class="controls">
+															<spring:input path="clientAddress.city" type="text" placeholder="" class="input-xlarge"/>
+														</div>
 													</div>
-												</div>					  
-												<div class="control-group">
-													<label class="control-label"><span class="required">*</span> Address 1:</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+													<div class="control-group">
+														<label class="control-label"><span class="required"></span> Post Code:</label>
+														<div class="controls">
+															<spring:input path="clientAddress.postcode" type="text" placeholder="" class="input-xlarge"/>
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label">Address 2:</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+													<div class="control-group">
+														<label class="control-label"><span class="required"></span> Street:</label>
+														<div class="controls">
+															<spring:input path="clientAddress.street" type="text" placeholder="" class="input-xlarge"/>
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label"><span class="required">*</span> City:</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+													<div class="control-group">
+														<label class="control-label"><span class="required"></span> House:</label>
+														<div class="controls">
+															<spring:input path="clientAddress.house" type="text" placeholder="" class="input-xlarge"/>
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label"><span class="required">*</span> Post Code:</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
+													<div class="control-group">
+														<label class="control-label"><span class="required"></span> Flat:</label>
+														<div class="controls">
+															<spring:input path="clientAddress.flat" type="text" placeholder="" class="input-xlarge"/>
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label"><span class="required">*</span> Country:</label>
-													<div class="controls">
-														<select class="input-xlarge">
-															<option value="1">Afghanistan</option>
-															<option value="2">Albania</option>
-															<option value="3">Algeria</option>
-															<option value="4">American Samoa</option>
-															<option value="5">Andorra</option>
-															<option value="6">Angola</option>
-														</select>
+													<div class="control-group">
+														<label class="control-label"><span class="required"></span> Additional Information:</label>
+														<div class="controls">
+															<spring:input path="clientAddress.addition" type="text" placeholder="" class="input-xlarge"/>
+														</div>
 													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label"><span class="required">*</span> Region / State:</label>
-													<div class="controls">
-														<select name="zone_id" class="input-xlarge">
-															<option value=""> --- Please Select --- </option>
-															<option value="3513">Aberdeen</option>
-															<option value="3514">Aberdeenshire</option>
-															<option value="3515">Anglesey</option>
-															<option value="3516">Angus</option>
-															<option value="3517">Argyll and Bute</option>
-														</select>
-													</div>
-												</div>
+												</fieldset>
+												<hr>
+												<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Edit your profile"></div>
 											</div>
 										</div>
+										</spring:form>
 									</div>
 								</div>
 							</div>

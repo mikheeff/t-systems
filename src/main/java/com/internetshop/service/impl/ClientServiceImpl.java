@@ -84,15 +84,15 @@ public class ClientServiceImpl implements ClientService {
 //        roleEntity.setId(client.getRole().getId());
 //        roleEntity.setName(client.getRole().getName());
 //
-//        ClientAddressEntity clientAddressEntity = clientEntity.getClientAddressEntity();
+        ClientAddressEntity clientAddressEntity = clientEntity.getClientAddressEntity();
 //        clientAddressEntity.setId(client.getClientAddress().getId());
-//        clientAddressEntity.setCountry(client.getClientAddress().getCountry());
-//        clientAddressEntity.setCity(client.getClientAddress().getCity());
-//        clientAddressEntity.setPostcode(client.getClientAddress().getPostcode());
-//        clientAddressEntity.setStreet(client.getClientAddress().getStreet());
-//        clientAddressEntity.setHouse(client.getClientAddress().getHouse());
-//        clientAddressEntity.setFlat(client.getClientAddress().getFlat());
-//        clientAddressEntity.setAddition(client.getClientAddress().getAddition());
+        clientAddressEntity.setCountry(client.getClientAddress().getCountry());
+        clientAddressEntity.setCity(client.getClientAddress().getCity());
+        clientAddressEntity.setPostcode(client.getClientAddress().getPostcode());
+        clientAddressEntity.setStreet(client.getClientAddress().getStreet());
+        clientAddressEntity.setHouse(client.getClientAddress().getHouse());
+        clientAddressEntity.setFlat(client.getClientAddress().getFlat());
+        clientAddressEntity.setAddition(client.getClientAddress().getAddition());
         if(client.getName()!=null) {
             clientEntity.setName(client.getName());
         }
