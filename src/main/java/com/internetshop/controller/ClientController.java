@@ -10,12 +10,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/")
 public class ClientController {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private HttpSession session;
 
     @RequestMapping(value = "clients/list", method = RequestMethod.GET)
     public String getAllUsers(ModelMap modelMap) {
@@ -29,9 +34,25 @@ public class ClientController {
     }
 
     @RequestMapping(value = "profile", method = RequestMethod.POST)
-    public String addGoods(@ModelAttribute (value = "newClient") Client client, ModelMap modelMap) {
+    public String addClient(@ModelAttribute (value = "newClient") Client client, ModelMap modelMap) {
         this.clientService.addClient(client);
+        session.setAttribute("user",clientService.getUserByEmail(client.getEmail()));
+        modelMap.put("newClient",session.getAttribute("user"));
         return "profile";
     }
+
+    @RequestMapping(value = "profile", method = RequestMethod.GET)
+    public String editClient(ModelMap modelMap) {
+        modelMap.put("client",session.getAttribute("client"));
+        return "profile";
+    }
+
+    @RequestMapping(value = "profile/edit", method = RequestMethod.POST)
+    public String editClient(@ModelAttribute (value = "client") Client client, ModelMap modelMap) {
+//        this.clientService.updateClient(client);
+        modelMap.put("newClient",client);
+        return "profile";
+    }
+
 
 }

@@ -26,4 +26,9 @@ public class ClientRepositoryImpl implements ClientRepository {
         em.persist(clientEntity);
         em.getTransaction().commit();
     }
+
+    @Override
+    public ClientEntity getUserByEmail(String email) {
+        return em.createQuery("select client from ClientEntity client where email = :email", ClientEntity.class).setParameter("email",email).getSingleResult();
+    }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 public interface ClientRepository {
     List<ClientEntity> getAll();
     public void addClient(ClientEntity clientEntity);
+    ClientEntity getUserByEmail(String email);
 }

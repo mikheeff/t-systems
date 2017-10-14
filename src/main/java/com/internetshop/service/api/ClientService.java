@@ -9,4 +9,5 @@ import java.util.List;
 public interface ClientService {
     List<ClientEntity> getAllClients();
     void addClient(Client client);
+    Client getUserByEmail(String email);
 }

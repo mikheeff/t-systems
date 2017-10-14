@@ -11,14 +11,14 @@ public class Client {
     private String password;
     private String phone;
     private int orderCounter;
-    private int id_role;
+    private Role role;
     private ClientAddress clientAddress;
 
 
     public Client() {
     }
 
-    public Client(int id, String name, String surname, Date birthdate, String email, String password, String phone, int orderCounter, int id_role, ClientAddress clientAddress) {
+    public Client(int id, String name, String surname, Date birthdate, String email, String password, String phone, int orderCounter, Role role, ClientAddress clientAddress) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -27,7 +27,7 @@ public class Client {
         this.password = password;
         this.phone = phone;
         this.orderCounter = orderCounter;
-        this.id_role = id_role;
+        this.role = role;
         this.clientAddress = clientAddress;
     }
 
@@ -95,12 +95,12 @@ public class Client {
         this.orderCounter = orderCounter;
     }
 
-    public int getId_role() {
-        return id_role;
+    public Role getRole() {
+        return role;
     }
 
-    public void setId_role(int id_role) {
-        this.id_role = id_role;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public ClientAddress getClientAddress() {

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,36 +89,53 @@
 										<div class="row-fluid">
 											<div class="span6">
 												<h4>Your Personal Details</h4>
-												<div class="control-group">
-													<label class="control-label">First Name</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
-													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label">Last Name</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
-													</div>
-												</div>					  
-												<div class="control-group">
-													<label class="control-label">Email Address</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
-													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label">Telephone</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
-													</div>
-												</div>
-												<div class="control-group">
-													<label class="control-label">Fax</label>
-													<div class="controls">
-														<input type="text" placeholder="" class="input-xlarge">
-													</div>
-												</div>
+												<spring:form action="profile/edit" method="post" commandName="newClient" class="form-stacked">
+													<fieldset>
+														<div class="control-group">
+															<label class="control-label">Your ID</label>
+															<div class="controls">
+																<spring:input path="id" readonly="true" type="text" placeholder="" class="input-xlarge"/>
+															</div>
+														</div>
+														<div class="control-group">
+															<label class="control-label">First Name*</label>
+															<div class="controls">
+																<spring:input path="name" type="text" placeholder="" class="input-xlarge"/>
+															</div>
+														</div>
+														<div class="control-group">
+															<label class="control-label">Last Name</label>
+															<div class="controls">
+																<spring:input path="surname" type="text" placeholder="" class="input-xlarge"/>
+															</div>
+														</div>
+														<div class="control-group">
+															<label class="control-label">Birthday</label>
+															<div class="controls">
+																<spring:input path="birthdate" type="text" placeholder="" class="input-xlarge"/>
+															</div>
+														</div>
+														<div class="control-group">
+															<label class="control-label">Email Address*</label>
+															<div class="controls">
+																<spring:input path="email" type="text" placeholder="" class="input-xlarge"/>
+															</div>
+														</div>
+														<div class="control-group">
+															<label class="control-label">Password*</label>
+															<div class="controls">
+																<spring:input path="password" type="password" placeholder="" class="input-xlarge"/>
+															</div>
+														</div>
+														<div class="control-group">
+															<label class="control-label">Phone number</label>
+															<div class="controls">
+																<spring:input path="phone" type="text" placeholder="" class="input-xlarge"/>
+															</div>
+														</div>
+														<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Edit your profile"></div>
+													</fieldset>
+												</spring:form>
 											</div>
 											<div class="span6">
 												<h4>Your Address</h4>

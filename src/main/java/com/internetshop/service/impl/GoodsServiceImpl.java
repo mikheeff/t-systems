@@ -74,7 +74,18 @@ public class GoodsServiceImpl implements GoodsService {
         rule.setId(goodsEntity.getRule().getId());
         rule.setName(goodsEntity.getRule().getName());
 
-        Goods goods = new Goods(goodsEntity.getId(), goodsEntity.getName(), goodsEntity.getPrice(), goodsEntity.getNumberOfPlayers(), goodsEntity.getDuration(), goodsEntity.getAmount(), goodsEntity.getVisible(), goodsEntity.getDescription(), goodsEntity.getImg(), category, rule);
+        Goods goods = new Goods(
+                goodsEntity.getId(),
+                goodsEntity.getName(),
+                goodsEntity.getPrice(),
+                goodsEntity.getNumberOfPlayers(),
+                goodsEntity.getDuration(),
+                goodsEntity.getAmount(),
+                goodsEntity.getVisible(),
+                goodsEntity.getDescription(),
+                goodsEntity.getImg(),
+                category,
+                rule);
         return goods;
     }
 
@@ -128,7 +139,17 @@ public class GoodsServiceImpl implements GoodsService {
         categoryEntity.setId(goods.getCategory().getId());
         RuleEntity ruleEntity = new RuleEntity();
         ruleEntity.setId(goods.getRule().getId());
-        GoodsEntity goodsEntity = new GoodsEntity(goods.getName(), goods.getPrice(), goods.getNumberOfPlayers(), goods.getDuration(), goods.getAmount(), goods.getVisible(), goods.getDescription(), goods.getImg(), categoryEntity, ruleEntity);
+        GoodsEntity goodsEntity = new GoodsEntity(
+                goods.getName(),
+                goods.getPrice(),
+                goods.getNumberOfPlayers(),
+                goods.getDuration(),
+                goods.getAmount(),
+                goods.getVisible(),
+                goods.getDescription(),
+                goods.getImg(),
+                categoryEntity,
+                ruleEntity);
         return goodsEntity;
     }
 
@@ -136,7 +157,18 @@ public class GoodsServiceImpl implements GoodsService {
     public Goods convertGoodsToDTO(GoodsEntity goodsEntity) {
         Category category = new Category(goodsEntity.getCategory().getId(), goodsEntity.getCategory().getName());
         Rule rule = new Rule(goodsEntity.getRule().getId(), goodsEntity.getRule().getName());
-        Goods goods = new Goods(goodsEntity.getId(), goodsEntity.getName(), goodsEntity.getPrice(), goodsEntity.getNumberOfPlayers(), goodsEntity.getDuration(), goodsEntity.getAmount(), goodsEntity.getVisible(), goodsEntity.getDescription(), goodsEntity.getImg(), category, rule);
+        Goods goods = new Goods(
+                goodsEntity.getId(),
+                goodsEntity.getName(),
+                goodsEntity.getPrice(),
+                goodsEntity.getNumberOfPlayers(),
+                goodsEntity.getDuration(),
+                goodsEntity.getAmount(),
+                goodsEntity.getVisible(),
+                goodsEntity.getDescription(),
+                goodsEntity.getImg(),
+                category,
+                rule);
         return goods;
     }
 
