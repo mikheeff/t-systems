@@ -1,5 +1,6 @@
 package com.internetshop.repository.api;
 
+import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.model.Client;
 
@@ -7,6 +8,11 @@ import java.util.List;
 
 public interface ClientRepository {
     List<ClientEntity> getAll();
-    public void addClient(ClientEntity clientEntity);
+    void addClient(ClientEntity clientEntity);
     ClientEntity getUserByEmail(String email);
+    ClientEntity getUserById(int id);
+    void updateUser(ClientEntity clientEntity);
+    void addAddress(ClientAddressEntity clientAddressEntity);
+
+
 }

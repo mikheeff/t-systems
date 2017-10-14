@@ -89,7 +89,7 @@
 										<div class="row-fluid">
 											<div class="span6">
 												<h4>Your Personal Details</h4>
-												<spring:form action="profile/edit" method="post" commandName="newClient" class="form-stacked">
+												<spring:form action="profile/edit" method="post" modelAttribute="client" class="form-stacked">
 													<fieldset>
 														<div class="control-group">
 															<label class="control-label">Your ID</label>
@@ -109,12 +109,12 @@
 																<spring:input path="surname" type="text" placeholder="" class="input-xlarge"/>
 															</div>
 														</div>
-														<div class="control-group">
-															<label class="control-label">Birthday</label>
-															<div class="controls">
-																<spring:input path="birthdate" type="text" placeholder="" class="input-xlarge"/>
-															</div>
-														</div>
+														<%--<div class="control-group">--%>
+															<%--<label class="control-label">Birthday</label>--%>
+															<%--<div class="controls">--%>
+																<%--<spring:input path="birthdate" type="date" placeholder="" class="input-xlarge"/>--%>
+															<%--</div>--%>
+														<%--</div>--%>
 														<div class="control-group">
 															<label class="control-label">Email Address*</label>
 															<div class="controls">

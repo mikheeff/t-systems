@@ -1,5 +1,6 @@
 package com.internetshop.repository.impl;
 
+import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.model.Client;
 import com.internetshop.repository.api.ClientRepository;
@@ -22,13 +23,35 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public void addClient(ClientEntity clientEntity) {
+        ClientAddressEntity clientAddressEntity = new ClientAddressEntity();
         em.getTransaction().begin();
+        em.persist(clientAddressEntity);
+        clientEntity.setClientAddressEntity(clientAddressEntity);
         em.persist(clientEntity);
+        em.getTransaction().commit();
+    }
+
+    @Override
+    public void addAddress(ClientAddressEntity clientAddressEntity) {
+        em.getTransaction().begin();
+        em.persist(clientAddressEntity);
         em.getTransaction().commit();
     }
 
     @Override
     public ClientEntity getUserByEmail(String email) {
         return em.createQuery("select client from ClientEntity client where email = :email", ClientEntity.class).setParameter("email",email).getSingleResult();
+    }
+
+    @Override
+    public ClientEntity getUserById(int id) {
+        return em.find(ClientEntity.class, id);
+    }
+
+    @Override
+    public void updateUser(ClientEntity clientEntity) {
+        em.getTransaction().begin();
+        em.merge(clientEntity);
+        em.getTransaction().commit();
     }
 }

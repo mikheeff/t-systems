@@ -41,7 +41,7 @@
 							<li><a href="#">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
 							<li><a href="checkout.jsp">Checkout</a></li>
-							<li><a href="${pageContext.request.contextPath}/identification">Login</a></li>
+							<li><a href="${pageContext.request.contextPath}clients/identification">Login</a></li>
 						</ul>
 					</div>
 				</div>

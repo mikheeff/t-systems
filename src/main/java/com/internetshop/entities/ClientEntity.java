@@ -25,8 +25,8 @@ public class ClientEntity {
     @Column (name = "order_counter")
     private int orderCounter;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY, mappedBy="clientEntity")   //
-//    @JoinColumn(referencedColumnName = "idClient")
+    @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)   //
+    @JoinColumn(name = "home_address_id")
     private ClientAddressEntity clientAddressEntity;
 
     @ManyToOne

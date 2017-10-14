@@ -28,6 +28,16 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void addClient(Client client) {
         this.clientRepository.addClient(convertClientToDAO(client));
+//        ClientEntity clientEntity = clientRepository.getUserByEmail(client.getEmail());
+//        clientAddressEntity.setId(clientEntity.getId());
+//        clientEntity.setClientAddressEntity(clientAddressEntity);
+//        clientAddressEntity.setClientEntity(clientEntity);
+//        clientRepository.addAddress(clientAddressEntity);
+//        clientRepository.updateUser(clientEntity);
+    }
+
+    @Override
+    public void addAddress() {
     }
 
     @Override
@@ -66,6 +76,41 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
+    @Override
+    public void updateUser(Client client) {
+        ClientEntity clientEntity = clientRepository.getUserById(client.getId());
+
+//        RoleEntity roleEntity = clientEntity.getRoleEntity();
+//        roleEntity.setId(client.getRole().getId());
+//        roleEntity.setName(client.getRole().getName());
+//
+//        ClientAddressEntity clientAddressEntity = clientEntity.getClientAddressEntity();
+//        clientAddressEntity.setId(client.getClientAddress().getId());
+//        clientAddressEntity.setCountry(client.getClientAddress().getCountry());
+//        clientAddressEntity.setCity(client.getClientAddress().getCity());
+//        clientAddressEntity.setPostcode(client.getClientAddress().getPostcode());
+//        clientAddressEntity.setStreet(client.getClientAddress().getStreet());
+//        clientAddressEntity.setHouse(client.getClientAddress().getHouse());
+//        clientAddressEntity.setFlat(client.getClientAddress().getFlat());
+//        clientAddressEntity.setAddition(client.getClientAddress().getAddition());
+        if(client.getName()!=null) {
+            clientEntity.setName(client.getName());
+        }
+        clientEntity.setSurname(client.getSurname());
+//        clientEntity.setBirthdate(client.getBirthdate());  //todo как ввести дату??
+        if(client.getEmail()!=null){
+        clientEntity.setEmail(client.getEmail());
+        }
+        if(client.getPassword()!=null) {
+            clientEntity.setPassword(client.getPassword());
+        }
+        if(client.getPhone()!=null) {
+            clientEntity.setPhone(client.getPhone());
+        }
+
+        clientRepository.updateUser(clientEntity);
+    }
+
     public ClientEntity convertClientToDAO(Client client) {
         RoleEntity role = new RoleEntity();
         role.setId(3);                                  // по умолчанию ставим роль юзера - 3(client)
@@ -78,4 +123,6 @@ public class ClientServiceImpl implements ClientService {
         clientEntity.setRoleEntity(role);
         return clientEntity;
     }
+
+
 }
