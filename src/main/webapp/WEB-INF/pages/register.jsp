@@ -39,10 +39,10 @@
 				<div class="span8">
 					<div class="account pull-right">
 						<ul class="user-menu">
-							<li><a href="#">My Account</a></li>
+							<li><a href="${pageContext.request.contextPath}/clients/profile">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
 							<li><a href="checkout.jsp">Checkout</a></li>
-							<li><a href="${pageContext.request.contextPath}profile">Login</a></li>
+							<li><a href="${pageContext.request.contextPath}/clients/profile">Login</a></li>
 						</ul>
 					</div>
 				</div>
@@ -56,12 +56,9 @@
 					<ul>
 						<li><a href="${pageContext.request.contextPath}/catalog">Catalog</a>
 							<ul>
-								<li><a href="goods.jsp">For funny company</a></li>
-								<li><a href="goods.jsp">Interesting strategy</a></li>
-								<li><a href="goods.jsp">Kids from 3 to 8</a></li>
-								<li><a href="goods.jsp">Logic</a></li>
-								<li><a href="goods.jsp">Convenient to take on the road</a></li>
-								<li><a href="goods.jsp">For two</a></li>
+								<c:forEach var="categoryVar"  items="${listCategory}">
+									<li><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a></li>
+								</c:forEach>
 							</ul>
 						</li>
 						<li><a href="goods.jsp">Best Sellers</a>
@@ -112,12 +109,14 @@
 									<label class="control-label">Name</label>
 									<div class="controls">
 										<spring:input path="name" type="text" placeholder="Enter your name" class="input-xlarge"/>
+										<spring:errors path="name" cssClass="error"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Email address:</label>
 									<div class="controls">
 										<spring:input path="email" type="text" placeholder="Enter your email" class="input-xlarge"/>
+										<spring:errors path="email" cssClass="error"/>
 									</div>
 								</div>
 								<div class="control-group">

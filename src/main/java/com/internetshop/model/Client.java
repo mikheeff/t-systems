@@ -1,14 +1,37 @@
 package com.internetshop.model;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.Date;
 
 public class Client {
     private int id;
+
+    @Size(max = 50,message = "Username must be less then 50 character long")
+    @NotEmpty
+    @Pattern(regexp ="^[\\pL '-]+$",
+    message= "Username must be alphanumeric with no spaces")
     private String name;
     private String surname;
     private Date birthdate;
+
+    @NotEmpty
+    @Size(max = 50)
+    @Pattern(regexp="^[\\w-]+(\\.[\\w-]+)*@([\\w-]+\\.)+[a-zA-Z]+$",
+    message = "Invalid email address")
     private String email;
+
+    @Size(min = 6, max = 50)
+    @Pattern(regexp="^[a-zA-Z0-9]+$",
+    message = "The password must be at least 6 characters long.")
     private String password;
+
+    @NotEmpty
+    @Size(max = 20)
+    @Pattern(regexp="^\\+[1-9][0-9]?[\\s]*\\(?" +
+            "\\d{3}\\)?[-\\s]?\\d{3}[-\\s]?\\d{2}[-\\s]?\\d{2}$")
     private String phone;
     private int orderCounter;
     private Role role;

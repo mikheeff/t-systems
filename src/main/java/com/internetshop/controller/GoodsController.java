@@ -81,17 +81,19 @@ public class GoodsController {
         modelMap.put("goods", goodsService.getGoodsById(id));
         return "edit_page";
     }
-//    @RequestMapping(value ="/edit", method = RequestMethod.POST)
-//    public String editGoods(@ModelAttribute(value = "goods") Goods goods, ModelMap modelMap) {
-//        this.goodsService.updateGoods(goods);
-//        modelMap.put("listGoods", goodsService.getAllGoods());
-//        return "catalog_page";
-//    }
+    @RequestMapping(value ="/edit", method = RequestMethod.POST)
+    public String editGoods(@ModelAttribute(value = "goods") Goods goods, ModelMap modelMap) {
+        this.goodsService.updateGoods(goods);
+        modelMap.put("listGoods", goodsService.getAllGoods());
+        return "catalog_page";
+    }
 
     @RequestMapping(value ="/goods/{id}", method = RequestMethod.GET)
     public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap) {
         modelMap.put("goods", goodsService.getGoodsById(id));
         modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
+
         return "goods_detail";
     }
 

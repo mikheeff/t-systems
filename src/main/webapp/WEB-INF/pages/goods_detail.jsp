@@ -38,10 +38,10 @@
 				<div class="span8">
 					<div class="account pull-right">
 						<ul class="user-menu">
-							<li><a href="#">My Account</a></li>
+							<li><a href="${pageContext.request.contextPath}/clients/profile">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
 							<li><a href="checkout.jsp">Checkout</a></li>
-							<li><a href="register.jsp">Login</a></li>
+							<li><a href="${pageContext.request.contextPath}/clients/profile">Login</a></li>
 						</ul>
 					</div>
 				</div>
@@ -55,12 +55,9 @@
 						<ul>
 							<li><a href="${pageContext.request.contextPath}/catalog">Catalog</a>
 								<ul>
-									<li><a href="goods.jsp">For funny company</a></li>
-									<li><a href="goods.jsp">Interesting strategy</a></li>
-									<li><a href="goods.jsp">Kids from 3 to 8</a></li>
-									<li><a href="goods.jsp">Logic</a></li>
-									<li><a href="goods.jsp">Convenient to take on the road</a></li>
-									<li><a href="goods.jsp">For two</a></li>
+									<c:forEach var="categoryVar"  items="${listCategory}">
+										<li><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a></li>
+									</c:forEach>
 								</ul>
 							</li>
 							<li><a href="goods.jsp">Best Sellers</a>
@@ -203,13 +200,18 @@
 						<div class="block">
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
-								<li class="active"><a href="goods.jsp">All games</a></li>
-								<li><a href="goods.jsp">For funny company</a></li>
-								<li><a href="goods.jsp">Interesting strategy</a></li>
-								<li><a href="goods.jsp">Kids from 3 to 8</a></li>
-								<li><a href="goods.jsp">Logic</a></li>
-								<li><a href="goods.jsp">Convenient to take on the road</a></li>
-								<li><a href="goods.jsp">For two</a></li>
+								<li
+										<c:if test="${!categoryFilter}" >
+											class="active"
+										</c:if>
+								><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
+								<c:forEach var="categoryVar"  items="${listCategory}">
+									<li
+											<c:if test="${categoryVar.name == categoryName}" >
+												class="active"
+											</c:if>
+									><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a></li>
+								</c:forEach>
 							</ul>
 							<br/>
 							<ul class="nav nav-list below">
@@ -300,7 +302,7 @@
 						</ul>
 					</div>
 					<div class="span5">
-						<p class="logo"><img src="themes/images/logo.png" class="site_logo" alt=""></p>
+						<p class="logo"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></p>
 						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. the  Lorem Ipsum has been the industry's standard dummy text ever since the you.</p>
 						<br/>
 						<span class="social_icons">
@@ -316,7 +318,7 @@
 				<span>Copyright 2013 bootstrappage template  All right reserved.</span>
 			</section>
 		</div>
-		<script src="themes/js/common.js"></script>
+		<script src="/resources/themes/js/common.js"></script>
 		<script>
 			$(function () {
 				$('#myTab a:first').tab('show');

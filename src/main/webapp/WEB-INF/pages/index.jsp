@@ -38,7 +38,7 @@
 				<div class="span8">
 					<div class="account pull-right">
 						<ul class="user-menu">				
-							<li><a href="#">My Account</a></li>
+							<li><a href="${pageContext.request.contextPath}clients/profile">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
 							<li><a href="checkout.jsp">Checkout</a></li>
 							<li><a href="${pageContext.request.contextPath}clients/identification">Login</a></li>
@@ -50,17 +50,14 @@
 		<div id="wrapper" class="container">
 			<section class="navbar main-menu">
 				<div class="navbar-inner main-menu">				
-					<a href="index.jsp" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
+					<a href="${pageContext.request.contextPath}/" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul>
 							<li><a href="${pageContext.request.contextPath}/catalog">Catalog</a>
 								<ul>
-									<li><a href="goods.jsp">For funny company</a></li>
-									<li><a href="goods.jsp">Interesting strategy</a></li>
-									<li><a href="goods.jsp">Kids from 3 to 8</a></li>
-									<li><a href="goods.jsp">Logic</a></li>
-									<li><a href="goods.jsp">Convenient to take on the road</a></li>
-									<li><a href="goods.jsp">For two</a></li>
+									<c:forEach var="categoryVar"  items="${listCategory}">
+										<li><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a></li>
+									</c:forEach>
 								</ul>
 							</li>															
 							<li><a href="goods.jsp">Best Sellers</a>
