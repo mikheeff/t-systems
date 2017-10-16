@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -160,7 +161,25 @@
 							</ul>
 							<br/>
 							<ul class="nav nav-list below">
-								<li class="nav-header">MANUFACTURES</li>
+								<%--<fieldset>--%>
+									<li class="nav-header">Filter</li>
+									<%--<spring:form action="profile/edit" method="post" modelAttribute="client" class="form-stacked">--%>
+									<%--<div class="control-group">--%>
+										<%--<label class="control-label"><span class="required"></span> Country:</label>--%>
+										<%--<div class="controls">--%>
+											<%--<spring:select path="clientAddress.country" class="input-xlarge">--%>
+												<%--<spring:option value="">---Please Select---</spring:option>--%>
+												<%--<spring:option value="AFG">Afghanistan</spring:option>--%>
+												<%--<spring:option value="ALB">Albania</spring:option>--%>
+												<%--<spring:option value="ALG">Algeria</spring:option>--%>
+												<%--<spring:option value="ASA">American Samoa</spring:option>--%>
+												<%--<spring:option value="AND">Andorra</spring:option>--%>
+												<%--<spring:option value="ANG">Angola</spring:option>--%>
+											<%--</spring:select>--%>
+										<%--</div>--%>
+									<%--</div>--%>
+									<%--</spring:form>--%>
+								<%--</fieldset>--%>
 								<li><a href="goods.jsp">Adidas</a></li>
 								<li><a href="goods.jsp">Nike</a></li>
 								<li><a href="goods.jsp">Dunlop</a></li>

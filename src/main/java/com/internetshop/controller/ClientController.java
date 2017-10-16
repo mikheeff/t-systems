@@ -49,14 +49,16 @@ public class ClientController {
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String editClient(ModelMap modelMap) {
         modelMap.put("client",session.getAttribute("user"));
+        if(modelMap.get("client")==null)
+            return "redirect:/clients/identification";
         return "profile";
     }
 
     @RequestMapping(value = "/profile/edit", method = RequestMethod.POST)
-    public String editClient(@ModelAttribute (value = "client") /*@Valid*/ Client client, ModelMap modelMap,BindingResult bindingResult) {
-//        if(bindingResult.hasErrors()) {
-//            return "redirect:/clients/profile";
-//        }
+    public String editClient(@ModelAttribute (value = "client") @Valid Client client, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            return "redirect:/clients/profile";
+        }
         this.clientService.updateUser(client);
         session.setAttribute("user",clientService.getUserByEmail(client.getEmail()));
         return "redirect:/clients/profile";

@@ -9,6 +9,7 @@ import com.internetshop.model.Role;
 import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.service.api.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +28,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void addClient(Client client) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        client.setPassword(bCryptPasswordEncoder.encode(client.getPassword()));
+
         this.clientRepository.addClient(convertClientToDAO(client));
+
 //        ClientEntity clientEntity = clientRepository.getUserByEmail(client.getEmail());
 //        clientAddressEntity.setId(clientEntity.getId());
 //        clientEntity.setClientAddressEntity(clientAddressEntity);
