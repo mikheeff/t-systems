@@ -49,7 +49,7 @@ public class ClientController {
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String editClient(ModelMap modelMap) {
         modelMap.put("client",session.getAttribute("user"));
-        if(modelMap.get("client")==null)
+        if(modelMap.get("client") == null)
             return "redirect:/clients/identification";
         return "profile";
     }
