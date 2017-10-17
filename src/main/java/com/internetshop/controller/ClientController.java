@@ -52,24 +52,33 @@ public class ClientController {
         return "register";
     }
 
-    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+//    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+//    public String addClient(@ModelAttribute (value = "client")@Valid Client client, BindingResult bindingResult,ModelMap modelMap) {
+//        if(bindingResult.hasErrors()) {
+//            modelMap.put("newClient",client);
+//            return "register";
+//        }
+//        this.clientService.addClient(client);
+//        session.setAttribute("user",clientService.getUserByEmail(client.getEmail()));
+//        return "redirect:/clients/profile";
+//    }
+
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String editClient(ModelMap modelMap, HttpServletRequest httpServletRequest) {
+        session.setAttribute("client",clientService.getUserByEmail( httpServletRequest.getUserPrincipal().getName()));
+        modelMap.put("client",session.getAttribute("client"));
+        if(modelMap.get("client") == null)
+            return "redirect:/clients/identification";
+        return "profile";
+    }
+    @RequestMapping(value = "/success", method = RequestMethod.POST)
     public String addClient(@ModelAttribute (value = "client")@Valid Client client, BindingResult bindingResult,ModelMap modelMap) {
         if(bindingResult.hasErrors()) {
             modelMap.put("newClient",client);
             return "register";
         }
         this.clientService.addClient(client);
-        session.setAttribute("user",clientService.getUserByEmail(client.getEmail()));
-        return "redirect:/clients/profile";
-    }
-
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String editClient(ModelMap modelMap, HttpServletRequest httpServletRequest) {
-        session.setAttribute("user",clientService.getUserByEmail( httpServletRequest.getUserPrincipal().getName()));
-        modelMap.put("client",session.getAttribute("user"));
-        if(modelMap.get("client") == null)
-            return "redirect:/clients/identification";
-        return "profile";
+        return "registr_success";
     }
 
     @RequestMapping(value = "/profile/edit", method = RequestMethod.POST)
@@ -78,7 +87,7 @@ public class ClientController {
             return "redirect:/clients/profile";
         }
         this.clientService.updateUser(client);
-        session.setAttribute("user",clientService.getUserByEmail(client.getEmail()));
+        session.setAttribute("client",clientService.getUserByEmail(client.getEmail()));
         return "redirect:/clients/profile";
     }
 

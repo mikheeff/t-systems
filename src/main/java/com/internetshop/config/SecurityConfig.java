@@ -31,11 +31,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/clients/profile/**")
                 .access("hasRole('ROLE_CLIENT')")
                 .and()
-                .formLogin().loginProcessingUrl("/j_spring_security_check")
+                .formLogin().loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/clients/profile")
                 .loginPage("/clients/identification").failureUrl("/clients/identification?error")
                 .usernameParameter("username")
                 .passwordParameter("password")
-                .and().logout().logoutSuccessUrl("/clients/identification?logout")
+                .and().logout().logoutUrl("/j_spring_security_logout").logoutSuccessUrl("/clients/identification?logout")
                 .and().csrf()
                 .and().exceptionHandling().accessDeniedPage("/clients/identification");
     }

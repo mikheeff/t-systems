@@ -39,10 +39,28 @@
 		<div class="span8">
 			<div class="account pull-right">
 				<ul class="user-menu">
-					<li><a href="${pageContext.request.contextPath}/clients/profile">My Account</a></li>
+					<c:url value="/j_spring_security_logout" var="logoutUrl" />
+					<script>
+                        function formSubmit() {
+                            document.getElementById("logoutForm").submit();
+                        }
+                        //							</script>
+					<li><a href="${pageContext.request.contextPath}clients/profile">My Account</a></li>
 					<li><a href="cart.html">Your Cart</a></li>
 					<li><a href="checkout.jsp">Checkout</a></li>
-					<li><a href="${pageContext.request.contextPath}/clients/profile">Login</a></li>
+					<c:if test="${client.role.name!=null}" >
+
+						<form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >
+
+							<input type="hidden" size="0"
+								   name="${_csrf.parameterName}"
+								   value="${_csrf.token}" />
+						</form>
+						<li><a href="javascript:formSubmit()">Logout</a></li>
+					</c:if>
+					<c:if test="${client.role.name==null}" >
+						<li><a href="${pageContext.request.contextPath}clients/identification">Login</a></li>
+					</c:if>
 				</ul>
 			</div>
 		</div>
