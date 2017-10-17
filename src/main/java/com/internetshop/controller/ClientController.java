@@ -3,6 +3,7 @@ package com.internetshop.controller;
 import com.internetshop.model.Client;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.impl.ClientServiceImpl;
+import com.internetshop.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,7 +11,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -30,7 +33,21 @@ public class ClientController {
         return "client_page";
     }
     @RequestMapping(value ="/identification",method = RequestMethod.GET)
-    public String identifyUser(ModelMap modelMap) {
+    public String identifyUser(ModelMap modelMap,
+                               @RequestParam(value = "error", required = false) String error,
+                               @RequestParam(value = "logout", required = false) String logout) {
+
+//            ModelAndView model = new ModelAndView();
+        if (error != null) {
+            modelMap.put("error", "Invalid username and password!");
+        }
+
+        if (logout != null) {
+            modelMap.put("msg", "You've been logged out successfully.");
+        }
+//            modelMap.setViewName("login");
+
+//            return model;
         modelMap.put("newClient", new Client());
         return "register";
     }
@@ -47,7 +64,8 @@ public class ClientController {
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String editClient(ModelMap modelMap) {
+    public String editClient(ModelMap modelMap, HttpServletRequest httpServletRequest) {
+        session.setAttribute("user",clientService.getUserByEmail( httpServletRequest.getUserPrincipal().getName()));
         modelMap.put("client",session.getAttribute("user"));
         if(modelMap.get("client") == null)
             return "redirect:/clients/identification";
@@ -63,6 +81,5 @@ public class ClientController {
         session.setAttribute("user",clientService.getUserByEmail(client.getEmail()));
         return "redirect:/clients/profile";
     }
-
 
 }

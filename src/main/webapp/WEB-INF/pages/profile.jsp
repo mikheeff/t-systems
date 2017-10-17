@@ -118,12 +118,12 @@
 																<spring:input path="email" type="text" placeholder="" class="input-xlarge"/>
 															</div>
 														</div>
-														<div class="control-group">
-															<label class="control-label">Password*</label>
-															<div class="controls">
-																<spring:input path="password" type="password" placeholder="" class="input-xlarge"/>
-															</div>
-														</div>
+														<%--<div class="control-group">--%>
+															<%--<label class="control-label">Password*</label>--%>
+															<%--<div class="controls">--%>
+																<%--<spring:input path="password" type="password" placeholder="" class="input-xlarge"/>--%>
+															<%--</div>--%>
+														<%--</div>--%>
 														<div class="control-group">
 															<label class="control-label">Phone number</label>
 															<div class="controls">

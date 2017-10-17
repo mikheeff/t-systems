@@ -1,10 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 	<head>
 		<meta charset="utf-8">
-		<title>Catalog of games</title>
+		<title>Log in or register</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
@@ -27,6 +27,38 @@
 			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 			<script src="/resources/themes/js/respond.min.js"></script>
 		<![endif]-->
+
+		<style>
+			.error {
+				padding: 15px;
+				margin-bottom: 20px;
+				border: 1px solid transparent;
+				border-radius: 4px;
+				color: #a94442;
+				background-color: #f2dede;
+				border-color: #ebccd1;
+			}
+
+			.msg {
+				padding: 15px;
+				margin-bottom: 20px;
+				border: 1px solid transparent;
+				border-radius: 4px;
+				color: #31708f;
+				background-color: #d9edf7;
+				border-color: #bce8f1;
+			}
+
+			#login-box {
+				width: 300px;
+				padding: 20px;
+				margin: 100px auto;
+				background: #fff;
+				-webkit-border-radius: 2px;
+				-moz-border-radius: 2px;
+				border: 1px solid #000;
+			}
+		</style>
 	</head>
 	<body>
 		<div id="top-bar" class="container">
@@ -76,21 +108,28 @@
 	</section>
 			<section class="main-content">				
 				<div class="row">
-					<div class="span5">					
+					<div class="span5" th:fragment="content">
 						<h4 class="title"><span class="text"><strong>Login</strong> Form</span></h4>
-						<form action="#" method="post">
+						<c:if test="${not empty error}">
+							<div class="error">${error}</div>
+						</c:if>
+						<c:if test="${not empty msg}">
+							<div class="msg">${msg}</div>
+						</c:if>
+
+						<form name="loginForm"    action="<c:url value='/j_spring_security_check' />" method="POST">
 							<input type="hidden" name="next" value="/">
 							<fieldset>
 								<div class="control-group">
-									<label class="control-label">Username</label>
+									<label for="username" class="control-label">Email</label>
 									<div class="controls">
-										<input type="text" placeholder="Enter your username" id="username" class="input-xlarge">
+										<input type='text' id="username" name='username' placeholder="Enter your username" id="username" class="input-xlarge">
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label">Password</label>
+									<label for="password" class="control-label">Password</label>
 									<div class="controls">
-										<input type="password" placeholder="Enter your password" id="password" class="input-xlarge">
+										<input type="password" id="password" name="password" placeholder="Enter your password" class="input-xlarge">
 									</div>
 								</div>
 								<div class="control-group">
@@ -99,7 +138,32 @@
 									<p class="reset">Recover your <a tabindex="4" href="#" title="Recover your username or password">username or password</a></p>
 								</div>
 							</fieldset>
-						</form>				
+							<input type="hidden"
+								   name="${_csrf.parameterName}"
+								   value="${_csrf.token}"/>
+						</form>
+						<%--</form>				<form action="#" method="post">--%>
+							<%--<input type="hidden" name="next" value="/">--%>
+							<%--<fieldset>--%>
+								<%--<div class="control-group">--%>
+									<%--<label class="control-label">Username</label>--%>
+									<%--<div class="controls">--%>
+										<%--<input type="text" placeholder="Enter your username" id="username" class="input-xlarge">--%>
+									<%--</div>--%>
+								<%--</div>--%>
+								<%--<div class="control-group">--%>
+									<%--<label class="control-label">Password</label>--%>
+									<%--<div class="controls">--%>
+										<%--<input type="password" placeholder="Enter your password" id="password" class="input-xlarge">--%>
+									<%--</div>--%>
+								<%--</div>--%>
+								<%--<div class="control-group">--%>
+									<%--<input tabindex="3" class="btn btn-inverse large" type="submit" value="Sign into your account">--%>
+									<%--<hr>--%>
+									<%--<p class="reset">Recover your <a tabindex="4" href="#" title="Recover your username or password">username or password</a></p>--%>
+								<%--</div>--%>
+							<%--</fieldset>--%>
+						<%--</form>				--%>
 					</div>
 					<div class="span7">					
 						<h4 class="title"><span class="text"><strong>Register</strong> Form</span></h4>
