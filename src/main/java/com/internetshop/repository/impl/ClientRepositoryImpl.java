@@ -2,6 +2,7 @@ package com.internetshop.repository.impl;
 
 import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
+import com.internetshop.entities.RoleEntity;
 import com.internetshop.model.Client;
 import com.internetshop.repository.api.ClientRepository;
 import org.springframework.stereotype.Repository;
@@ -48,10 +49,16 @@ public class ClientRepositoryImpl implements ClientRepository {
         return em.find(ClientEntity.class, id);
     }
 
+
     @Override
     public void updateUser(ClientEntity clientEntity) {
         em.getTransaction().begin();
         em.merge(clientEntity);
         em.getTransaction().commit();
+    }
+
+    @Override
+    public RoleEntity getRoleById(int id) {
+        return em.createQuery("select roleEntity from RoleEntity roleEntity where id = :id", RoleEntity.class).setParameter("id",id).getSingleResult();
     }
 }

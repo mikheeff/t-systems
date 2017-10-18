@@ -145,6 +145,14 @@
 					</div>
 					<div class="span7">					
 						<h4 class="title"><span class="text"><strong>Register</strong> Form</span></h4>
+
+						<c:if test="${not empty regError}">
+							<div class="error">${regError}</div>
+						</c:if>
+						<%--<c:if test="${not empty msg}">--%>
+							<%--<div class="msg">${msg}</div>--%>
+						<%--</c:if>--%>
+
 						<spring:form action="success" method="post" commandName="newClient" class="form-stacked">
 							<fieldset>
 								<div class="control-group">

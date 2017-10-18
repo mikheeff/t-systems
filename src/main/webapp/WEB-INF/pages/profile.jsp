@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Catalog of games</title>
+	<title>My Account</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="">
 	<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
@@ -90,14 +90,18 @@
 	<section class="header_text sub">
 		<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="" >
 				<h4><span>${client.name.toUpperCase()}, its your profile</span></h4>
-			</section>	
+				<c:if test="${client.role.name!=ROLE_CLIENT}" >
+					<br>
+					<h4><span>Your role is: ${client.role.name}</span></h4>
+				</c:if>
+			</section>
 			<section class="main-content">
 				<div class="row">
 					<div class="span12">
 						<div class="accordion" id="accordion2">
 							<div class="accordion-group">
 								<div class="accordion-heading">
-									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Account &amp; Billing Details</a>
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Account Details</a>
 								</div>
 								<div id="collapseTwo" class="accordion-body collapse">
 									<div class="accordion-inner">

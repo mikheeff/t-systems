@@ -1,15 +1,15 @@
 package com.internetshop.controller;
 
+import com.internetshop.model.Category;
 import com.internetshop.model.Goods;
 import com.internetshop.service.api.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -58,16 +58,29 @@ public class GoodsController {
         return "goods";
     }
 
-    @RequestMapping(value ="../add", method = RequestMethod.GET)
+    @RequestMapping(value ="/employee/add", method = RequestMethod.GET)
     public String addGoods(ModelMap modelMap) {
         modelMap.put("goods", new Goods());
+        modelMap.put("category", new Category());
         return "add_page";
     }
-    @RequestMapping(value ="/add", method = RequestMethod.POST)
-    public String addGoods(@ModelAttribute (value = "goods") Goods goods, ModelMap modelMap) {
-        this.goodsService.addGoods(goods);
-        modelMap.put("listGoods", goodsService.getAllGoods());
-        return "catalog_page";
+    @RequestMapping(value ="/employee/add", method = RequestMethod.POST)
+    public String addGoods(@ModelAttribute (value = "goods") @Valid Goods goods, @ModelAttribute (value = "category")  @Valid Category category, BindingResult bindingResult, ModelMap modelMap) {
+        if(bindingResult.hasErrors()) {
+            modelMap.put("error", "Invalid params!");
+            modelMap.put("goods",goods);
+            modelMap.put("category",category);
+            return "add_page";
+        }
+        if(goods!=null) {
+            this.goodsService.addGoods(goods);
+            modelMap.put("msg", "You've been added new goods out successfully.");
+        }
+        else{
+//            this.goodsService.addCategory(category);
+//            modelMap.put("msg", "You've been added new category goods successfully.");
+        }
+        return "add_page";
     }
 
     @RequestMapping(value ="/delete/{id}", method = RequestMethod.GET)

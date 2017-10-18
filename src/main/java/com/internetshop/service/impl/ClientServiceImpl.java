@@ -51,11 +51,11 @@ public class ClientServiceImpl implements ClientService {
         ClientEntity clientEntity = clientRepository.getUserByEmail(email);
         Role role = new Role(clientEntity.getRoleEntity().getId(),clientEntity.getRoleEntity().getName());
 
-        if (clientEntity.getClientAddressEntity() == null) {                        //если адрес юзера ещё не проинициализирован
-            ClientAddressEntity clientAddressEntity = new ClientAddressEntity();
-            clientAddressEntity.setId(clientEntity.getId());
-            clientEntity.setClientAddressEntity(clientAddressEntity);
-        }
+//        if (clientEntity.getClientAddressEntity() == null) {                        //если адрес юзера ещё не проинициализирован
+//            ClientAddressEntity clientAddressEntity = new ClientAddressEntity();
+//            clientAddressEntity.setId(clientEntity.getId());
+//            clientEntity.setClientAddressEntity(clientAddressEntity);
+//        }
 
         ClientAddress clientAddress = new ClientAddress(
                 clientEntity.getClientAddressEntity().getId(),
@@ -120,7 +120,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientEntity convertClientToDAO(Client client) {
         RoleEntity role = new RoleEntity();
         role.setId(3);                                  // по умолчанию ставим роль юзера - 3(client)
-
+        role.setName(clientRepository.getRoleById(3).getName());
         ClientEntity clientEntity = new ClientEntity();
         clientEntity.setName(client.getName());
         clientEntity.setEmail(client.getEmail());

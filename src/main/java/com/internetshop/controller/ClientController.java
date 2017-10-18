@@ -35,20 +35,21 @@ public class ClientController {
     @RequestMapping(value ="/identification",method = RequestMethod.GET)
     public String identifyUser(ModelMap modelMap,
                                @RequestParam(value = "error", required = false) String error,
-                               @RequestParam(value = "logout", required = false) String logout) {
-
-//            ModelAndView model = new ModelAndView();
+                               @RequestParam(value = "logout", required = false) String logout,
+                               @RequestParam(value = "regError", required = false) String regError) {
+        modelMap.put("newClient", new Client());
         if (error != null) {
-            modelMap.put("error", "Invalid username and password!");
+            modelMap.put("error", "Invalid email or password!");
+        }
+        if (regError != null) {
+            modelMap.put("regError", "Invalid params!");
+//            modelMap.put(session.getAttribute()) //todo хорошо бы сделать, чтобы при невалидных параметрах ввёденные данные не терялись
         }
 
         if (logout != null) {
             modelMap.put("msg", "You've been logged out successfully.");
         }
-//            modelMap.setViewName("login");
 
-//            return model;
-        modelMap.put("newClient", new Client());
         return "register";
     }
 
@@ -67,15 +68,15 @@ public class ClientController {
     public String editClient(ModelMap modelMap, HttpServletRequest httpServletRequest) {
         session.setAttribute("client",clientService.getUserByEmail( httpServletRequest.getUserPrincipal().getName()));
         modelMap.put("client",session.getAttribute("client"));
-        if(modelMap.get("client") == null)
+        if(modelMap.get("client") == null) {
             return "redirect:/clients/identification";
+        }
         return "profile";
     }
     @RequestMapping(value = "/success", method = RequestMethod.POST)
     public String addClient(@ModelAttribute (value = "client")@Valid Client client, BindingResult bindingResult,ModelMap modelMap) {
         if(bindingResult.hasErrors()) {
-            modelMap.put("newClient",client);
-            return "register";
+            return "redirect:/clients/identification?error1";
         }
         this.clientService.addClient(client);
         return "registr_success";

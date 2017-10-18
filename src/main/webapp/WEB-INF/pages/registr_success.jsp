@@ -39,10 +39,10 @@
         <div class="span8">
             <div class="account pull-right">
                 <ul class="user-menu">
-                    <li><a href="${pageContext.request.contextPath}/clients/profile">My Account</a></li>
+                    <li><a href="${pageContext.request.contextPath}/clients/identification">My Account</a></li>
                     <li><a href="cart.html">Your Cart</a></li>
                     <li><a href="checkout.jsp">Checkout</a></li>
-                    <li><a href="${pageContext.request.contextPath}/clients/profile">Login</a></li>
+                    <li><a href="${pageContext.request.contextPath}/clients/identification">Login</a></li>
                 </ul>
             </div>
         </div>
