@@ -1,5 +1,7 @@
 package com.internetshop.controller;
 
+import com.internetshop.Exceptions.NoSuchCategoryException;
+import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.model.Category;
 import com.internetshop.model.Goods;
 import com.internetshop.service.api.GoodsService;
@@ -62,24 +64,35 @@ public class GoodsController {
     public String addGoods(ModelMap modelMap) {
         modelMap.put("goods", new Goods());
         modelMap.put("category", new Category());
+        modelMap.put("listCategory",goodsService.getAllCategories());
         return "add_page";
     }
     @RequestMapping(value ="/employee/add", method = RequestMethod.POST)
-    public String addGoods(@ModelAttribute (value = "goods") @Valid Goods goods, @ModelAttribute (value = "category")  @Valid Category category, BindingResult bindingResult, ModelMap modelMap) {
+    public String addGoods(@ModelAttribute (value = "goods") @Valid Goods goods,
+                           @ModelAttribute (value = "category")  @Valid Category category,
+                           BindingResult bindingResult,
+                           ModelMap modelMap,
+                           @RequestParam(value = "new_goods", required = false) String newGoods,
+                           @RequestParam(value = "new_category", required = false) String newCategory) {
+
         if(bindingResult.hasErrors()) {
             modelMap.put("error", "Invalid params!");
             modelMap.put("goods",goods);
             modelMap.put("category",category);
+            modelMap.put("listCategory",goodsService.getAllCategories());
             return "add_page";
         }
-        if(goods!=null) {
-            this.goodsService.addGoods(goods);
-            modelMap.put("msg", "You've been added new goods out successfully.");
+        if(newGoods!=null) {
+                this.goodsService.addGoods(goods);
+                modelMap.put("msgG", "You've been added new goods successfully.");
         }
         else{
-//            this.goodsService.addCategory(category);
-//            modelMap.put("msg", "You've been added new category goods successfully.");
+            this.goodsService.addCategory(category);
+            modelMap.put("msgC", "You've been added new category successfully.");
         }
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("goods", new Goods());
+        modelMap.put("category", new Category());
         return "add_page";
     }
 

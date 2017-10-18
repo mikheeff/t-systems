@@ -110,7 +110,10 @@
         <div class="row">
             <div class="span5" >
                 <h4 class="title"><span class="text"><strong>New Category</strong> Form</span></h4>
-                <spring:form action="add" method="post" commandName="category" class="form-stacked">
+                <c:if test="${not empty msgC}">
+                    <div class="msg">${msgC}</div>
+                </c:if>
+                <spring:form action="add?new_category" method="post" commandName="category" class="form-stacked">
                     <fieldset>
                         <div class="control-group">
                             <label class="control-label">Name:</label>
@@ -120,7 +123,7 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Create new account"></div>
+                        <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Add new category"></div>
                     </fieldset>
                     <input type="hidden"
                            name="${_csrf.parameterName}"
@@ -130,7 +133,13 @@
             </div>
             <div class="span7">
                 <h4 class="title"><span class="text"><strong>New Goods</strong> Form</span></h4>
-                <spring:form action="add" method="post" commandName="goods" class="form-stacked">
+                <c:if test="${not empty error}">
+                    <div class="error">${error}</div>
+                </c:if>
+                <c:if test="${not empty msgG}">
+                    <div class="msg">${msgG}</div>
+                </c:if>
+                <spring:form action="add?new_goods" method="post" commandName="goods" class="form-stacked">
                     <fieldset>
                         <div class="control-group">
                             <label class="control-label">Name:</label>
@@ -148,14 +157,22 @@
                         </div>
                         <div class="control-group">
                             <label class="control-label">Number Of Players:</label>
-                            <div class="controls">
-                                <spring:input path="numberOfPlayers" type="text" placeholder="Enter number of players" class="input-xlarge"/>
-                            </div>
+                                <div class="controls">
+                                    <spring:select path="numberOfPlayers" class="input-xlarge">
+                                        <c:forEach   begin = "1" end = "10"  varStatus="count">
+                                            <spring:option value="${count.index}">${count.index}</spring:option>
+                                        </c:forEach>
+                                    </spring:select>
+                                </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Duration Of The Game:</label>
                             <div class="controls">
-                                <spring:input path="duration" type="text" placeholder="Enter duration of the game" class="input-xlarge"/>
+                                <spring:select path="duration" class="input-xlarge">
+                                    <c:forEach  begin = "1" end = "8"  varStatus="count">
+                                        <spring:option value="${count.index/2.0}">${count.index/2.0}</spring:option>
+                                    </c:forEach>
+                                </spring:select>
                             </div>
                         </div>
                         <div class="control-group">
@@ -167,25 +184,40 @@
                         <div class="control-group">
                             <label class="control-label">Is Visible:</label>
                             <div class="controls">
-                                <spring:input path="visible" type="text" placeholder="Show goods at the store?" class="input-xlarge"/>
+                                <spring:select path="visible" class="input-xlarge">
+                                <spring:option value="1">Yes</spring:option>
+                                <spring:option value="0">No</spring:option>
+                                </spring:select>
+                                <%--<spring:input path="visible" type="text" placeholder="Show goods at the store?" class="input-xlarge"/>--%>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Description:</label>
                             <div class="controls">
-                                <spring:input path="description" type="text" placeholder="Descriprion" class="input-xlarge"/>
+                                <spring:textarea path="description" cols="20" rows="5"/>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Complexity Of Rules:</label>
                             <div class="controls">
-                                <spring:input path="rule.id" type="text" placeholder="Enter complexity of rules" class="input-xlarge"/>
+                                <spring:select path="rule.name" class="input-xlarge">
+                                    <spring:option value="${'easy'}">Easy</spring:option>
+                                    <spring:option value="${'very easy'}">Very Easy</spring:option>
+                                    <spring:option value="${'medium'}">Medium</spring:option>
+                                    <spring:option value="${'hard'}">Hard</spring:option>
+                                    <spring:option value="${'very hard'}">Very Hard</spring:option>
+                                </spring:select>
+
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Category Name:</label>
                             <div class="controls">
-                                <spring:input path="category.id" type="text" placeholder="Enter the category name" class="input-xlarge"/>
+                                <spring:select path="category.name" class="input-xlarge">
+                                    <c:forEach var="categoryVar"  items="${listCategory}">
+                                        <spring:option value="${categoryVar.name}">${categoryVar.name}</spring:option>
+                                    </c:forEach>
+                                </spring:select>
                             </div>
                         </div>
                         <div class="control-group">
@@ -195,7 +227,7 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Create new account"></div>
+                        <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Add new goods"></div>
                     </fieldset>
                     <input type="hidden"
                            name="${_csrf.parameterName}"

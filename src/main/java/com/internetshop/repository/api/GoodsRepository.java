@@ -1,5 +1,7 @@
 package com.internetshop.repository.api;
 
+import com.internetshop.Exceptions.NoSuchCategoryException;
+import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.entities.CategoryEntity;
 import com.internetshop.entities.GoodsEntity;
 
@@ -17,5 +19,8 @@ public interface GoodsRepository {
     long getAmountOfGoodsByCategoryName(String categoryName);
     int getRandomGoodsId();
     List<CategoryEntity> getAllCategories();
+    int getIdCategoryByName(String name) throws NoSuchCategoryException;
+    void addCategory(CategoryEntity categoryEntity);
+    int getIdRuleByName(String name);
 
 }

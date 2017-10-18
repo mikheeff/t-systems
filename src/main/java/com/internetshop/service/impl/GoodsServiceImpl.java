@@ -1,5 +1,7 @@
 package com.internetshop.service.impl;
 
+import com.internetshop.Exceptions.NoSuchCategoryException;
+import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.entities.CategoryEntity;
 import com.internetshop.entities.GoodsEntity;
 import com.internetshop.entities.RuleEntity;
@@ -12,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -53,7 +53,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public void addGoods(Goods goods) {
+    public void addGoods(Goods goods) throws NoSuchCategoryException, NoSuchRulesException {
         this.goodsRepository.addGoods(convertGoodsToDAO(goods));
     }
 
@@ -134,11 +134,22 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public void addCategory(Category category) {
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setName(category.getName());
+        goodsRepository.addCategory(categoryEntity);
+    }
+
+    @Override
     public GoodsEntity convertGoodsToDAO(Goods goods) {
         CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.setId(goods.getCategory().getId());
+        categoryEntity.setId(goodsRepository.getIdCategoryByName(goods.getCategory().getName()));
+        categoryEntity.setName(goods.getName());
+
         RuleEntity ruleEntity = new RuleEntity();
-        ruleEntity.setId(goods.getRule().getId());
+        ruleEntity.setId(goodsRepository.getIdRuleByName(goods.getRule().getName()));
+        ruleEntity.setName(goods.getName());
+
         GoodsEntity goodsEntity = new GoodsEntity(
                 goods.getName(),
                 goods.getPrice(),
@@ -171,5 +182,6 @@ public class GoodsServiceImpl implements GoodsService {
                 rule);
         return goods;
     }
+
 
 }

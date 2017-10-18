@@ -1,16 +1,14 @@
 package com.internetshop.repository.impl;
 
+import com.internetshop.Exceptions.NoSuchCategoryException;
+import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.entities.CategoryEntity;
-import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.GoodsEntity;
 import com.internetshop.repository.api.GoodsRepository;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Queue;
-import static java.lang.Math.toIntExact;
 
 @Repository
 public class GoodsRepositoryImpl implements GoodsRepository {
@@ -82,5 +80,24 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     public List<CategoryEntity> getAllCategories() {
         return em.createQuery("select categories from CategoryEntity categories", CategoryEntity.class).getResultList();
 
+    }
+
+    @Override
+    public int getIdCategoryByName(String name)  {
+        int id = em.createQuery("select categoryEntity.id from CategoryEntity categoryEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
+        return id;
+    }
+
+    @Override
+    public void addCategory(CategoryEntity categoryEntity) {
+        em.getTransaction().begin();
+        em.persist(categoryEntity);
+        em.getTransaction().commit();
+    }
+
+    @Override
+    public int getIdRuleByName(String name) {
+        int id = em.createQuery("select ruleEntity.id from RuleEntity ruleEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
+            return id;
     }
 }
