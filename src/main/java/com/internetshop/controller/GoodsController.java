@@ -119,9 +119,10 @@ public class GoodsController {
                             ModelMap modelMap) {
         if(bindingResult.hasErrors()) {
             modelMap.put("error", "Invalid params!");
+            modelMap.put("randomGoods",getRandomGoods());
             modelMap.put("goods",goods);
             modelMap.put("listCategory",goodsService.getAllCategories());
-            return "add_page";
+            return "goods_detail";
         }
         this.goodsService.updateGoods(goods);
         modelMap.put("goods", goodsService.getGoodsById(goods.getId()));

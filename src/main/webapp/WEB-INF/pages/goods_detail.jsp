@@ -148,6 +148,10 @@
 								<c:if test="${not empty msg}">
 									<div class="msg">${msg}</div>
 								</c:if>
+
+								<c:if test="${not empty error}">
+									<div class="error">${error}</div>
+								</c:if>
 								<spring:form action="/catalog/employee/edit" method="post" commandName="goods" class="form-stacked" >
 									<fieldset>
 										<div class="control-group">
@@ -165,7 +169,7 @@
 										<div class="control-group">
 											<label class="control-label">Price:</label>
 											<div class="controls">
-												<spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge"/>
+												<spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge" pattern="\d+(\.\d{2})?"/>
 												<spring:errors path="price" cssClass="error"/>
 											</div>
 										</div>
@@ -192,7 +196,7 @@
 										<div class="control-group">
 											<label class="control-label">Amount:</label>
 											<div class="controls">
-												<spring:input path="amount" type="text" placeholder="Enter the quantity of goods" class="input-xlarge"/>
+												<spring:input path="amount" type="text" placeholder="Enter the quantity of goods" class="input-xlarge" pattern="^[ 0-9]+$"/>
 											</div>
 										</div>
 										<div class="control-group">
