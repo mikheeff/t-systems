@@ -67,51 +67,68 @@ public class GoodsController {
         modelMap.put("listCategory",goodsService.getAllCategories());
         return "add_page";
     }
-    @RequestMapping(value ="/employee/add", method = RequestMethod.POST)
+    @RequestMapping(value ="/employee/add/goods", method = RequestMethod.POST)
     public String addGoods(@ModelAttribute (value = "goods") @Valid Goods goods,
-                           @ModelAttribute (value = "category")  @Valid Category category,
-                           BindingResult bindingResult,
-                           ModelMap modelMap,
-                           @RequestParam(value = "new_goods", required = false) String newGoods,
-                           @RequestParam(value = "new_category", required = false) String newCategory) {
+                           BindingResult bindingResultGoods,
+                           ModelMap modelMap) {
 
-        if(bindingResult.hasErrors()) {
-            modelMap.put("error", "Invalid params!");
+        if(bindingResultGoods.hasErrors()) {
+            modelMap.put("error1", "Invalid params!");
             modelMap.put("goods",goods);
+            modelMap.put("category",new Category());
+            modelMap.put("listCategory",goodsService.getAllCategories());
+            return "add_page";
+        }
+
+        this.goodsService.addGoods(goods);
+        modelMap.put("msgG", "You've been added new goods successfully.");
+
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("goods", new Goods());
+        modelMap.put("category", new Category());
+        return "add_page";
+    }
+    @RequestMapping(value = "/employee/add/category",method = RequestMethod.POST)
+    public String addCategory( @ModelAttribute (value = "category")  @Valid Category category,
+                               BindingResult bindingResult,ModelMap modelMap){
+        if(bindingResult.hasErrors()) {
+            modelMap.put("error2", "Invalid params!");
+            modelMap.put("goods",new Goods());
             modelMap.put("category",category);
             modelMap.put("listCategory",goodsService.getAllCategories());
             return "add_page";
         }
-        if(newGoods!=null) {
-                this.goodsService.addGoods(goods);
-                modelMap.put("msgG", "You've been added new goods successfully.");
-        }
-        else{
-            this.goodsService.addCategory(category);
-            modelMap.put("msgC", "You've been added new category successfully.");
-        }
+
+        this.goodsService.addCategory(category);
+        modelMap.put("msgC", "You've been added new category successfully.");
+
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("goods", new Goods());
         modelMap.put("category", new Category());
         return "add_page";
     }
 
-    @RequestMapping(value ="/delete/{id}", method = RequestMethod.GET)
-    public String deleteGoods(@PathVariable(value = "id") int id, ModelMap modelMap) {
+    @RequestMapping(value ="/employee/delete/{id}", method = RequestMethod.GET)
+    public String deleteGoods(@PathVariable(value = "id") int id) {
         this.goodsService.deleteGoodsById(id);
-        modelMap.put("listGoods", goodsService.getAllGoods());
-        return "catalog_page";
+        return "redirect:/catalog";
     }
-    @RequestMapping(value ="/edit/{id}", method = RequestMethod.GET)
-    public String editGoods(@PathVariable(value = "id") int id, ModelMap modelMap) {
-        modelMap.put("goods", goodsService.getGoodsById(id));
-        return "edit_page";
-    }
-    @RequestMapping(value ="/edit", method = RequestMethod.POST)
-    public String editGoods(@ModelAttribute(value = "goods") Goods goods, ModelMap modelMap) {
+
+    @RequestMapping(value ="/employee/edit", method = RequestMethod.POST)
+    public String editGoods(@ModelAttribute(value = "goods")  @Valid Goods goods, BindingResult bindingResult,
+                            ModelMap modelMap) {
+        if(bindingResult.hasErrors()) {
+            modelMap.put("error", "Invalid params!");
+            modelMap.put("goods",goods);
+            modelMap.put("listCategory",goodsService.getAllCategories());
+            return "add_page";
+        }
         this.goodsService.updateGoods(goods);
-        modelMap.put("listGoods", goodsService.getAllGoods());
-        return "catalog_page";
+        modelMap.put("goods", goodsService.getGoodsById(goods.getId()));
+        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("msg", "You've been edited goods successfully.");
+        return "goods_detail";
     }
 
     @RequestMapping(value ="/goods/{id}", method = RequestMethod.GET)

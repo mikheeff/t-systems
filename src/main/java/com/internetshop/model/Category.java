@@ -1,12 +1,16 @@
 package com.internetshop.model;
 
 import com.internetshop.entities.GoodsEntity;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
 public class Category {
     private int id;
+    @Size(max = 50,message = "Name must be less then 50 character long")
+    @NotEmpty(message = "Name must not be empty")
     private String name;
     private Set<Goods> GoodsSet = new HashSet<>();
 

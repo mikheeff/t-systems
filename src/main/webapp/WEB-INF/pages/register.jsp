@@ -138,9 +138,9 @@
 									<p class="reset">Recover your <a tabindex="4" href="#" title="Recover your username or password">username or password</a></p>
 								</div>
 							</fieldset>
-							<input type="hidden"
-								   name="${_csrf.parameterName}"
-								   value="${_csrf.token}"/>
+							<%--<input type="hidden"--%>
+								   <%--name="${_csrf.parameterName}"--%>
+								   <%--value="${_csrf.token}"/>--%>
 						</form>
 					</div>
 					<div class="span7">					
@@ -158,27 +158,27 @@
 								<div class="control-group">
 									<label class="control-label">Name</label>
 									<div class="controls">
-										<spring:input path="name" type="text" placeholder="Enter your name" class="input-xlarge"/>
+										<spring:input path="name" type="text" placeholder="Enter your name" class="input-xlarge" pattern="^[\pL '-]+$"/>
 										<spring:errors path="name" cssClass="error"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Email address:</label>
 									<div class="controls">
-										<spring:input path="email" type="text" placeholder="Enter your email" class="input-xlarge"/>
+										<spring:input path="email" type="text" placeholder="Enter your email" class="input-xlarge" pattern="^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$"/>
 										<spring:errors path="email" cssClass="error"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Password:</label>
 									<div class="controls">
-										<spring:input path="password" type="password" placeholder="Enter your password" class="input-xlarge"/>
+										<spring:input path="password" type="password" placeholder="Enter your password" class="input-xlarge" pattern="^[a-zA-Z0-9]+$"/>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label">Phone number:</label>
 									<div class="controls">
-										<spring:input path="phone" type="text" placeholder="Enter your phone number" class="input-xlarge"/>
+										<spring:input path="phone" type="text" placeholder="Enter your phone number" class="input-xlarge" pattern="^\+[1-9][0-9]?[\s]*\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$"/>
 									</div>
 								</div>
 								<div class="control-group">

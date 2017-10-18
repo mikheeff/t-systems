@@ -2,6 +2,7 @@ package com.internetshop.controller;
 
 import com.internetshop.model.Client;
 import com.internetshop.service.api.ClientService;
+import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.impl.ClientServiceImpl;
 import com.internetshop.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class ClientController {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private GoodsService goodsService;
 
     @Autowired
     private HttpSession session;
@@ -53,16 +57,6 @@ public class ClientController {
         return "register";
     }
 
-//    @RequestMapping(value = "/profile", method = RequestMethod.POST)
-//    public String addClient(@ModelAttribute (value = "client")@Valid Client client, BindingResult bindingResult,ModelMap modelMap) {
-//        if(bindingResult.hasErrors()) {
-//            modelMap.put("newClient",client);
-//            return "register";
-//        }
-//        this.clientService.addClient(client);
-//        session.setAttribute("user",clientService.getUserByEmail(client.getEmail()));
-//        return "redirect:/clients/profile";
-//    }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String editClient(ModelMap modelMap, HttpServletRequest httpServletRequest) {
@@ -71,6 +65,7 @@ public class ClientController {
         if(modelMap.get("client") == null) {
             return "redirect:/clients/identification";
         }
+        modelMap.put("listCategory",goodsService.getAllCategories());
         return "profile";
     }
     @RequestMapping(value = "/success", method = RequestMethod.POST)
@@ -82,7 +77,7 @@ public class ClientController {
         return "registr_success";
     }
 
-    @RequestMapping(value = "/profile/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editClient(@ModelAttribute (value = "client") @Valid Client client, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "redirect:/clients/profile";

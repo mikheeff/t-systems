@@ -45,7 +45,7 @@
                                     document.getElementById("logoutForm").submit();
                                 }
 //							</script>
-							<li><a href="${pageContext.request.contextPath}clients/profile">My Account</a></li>
+							<li><a href="${pageContext.request.contextPath}/clients/profile">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
 							<li><a href="checkout.jsp">Checkout</a></li>
 							<c:if test="${client.role.name!=null}" >

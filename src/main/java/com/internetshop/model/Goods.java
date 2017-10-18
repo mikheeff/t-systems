@@ -1,15 +1,30 @@
 package com.internetshop.model;
 
 
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
+
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Goods {
     private int id;
+    @Size(max = 50,message = "Goods name must be less then 50 character long")
+    @NotEmpty(message = "Name must not be empty")
     private String name;
+    @Digits(integer=7, fraction=2, message = "The price can have only up to 7 digits in the integer portion \n and 2 digits in the fractional portion.")
+    @NotNull(message = "Price must not be empty")
     private float price;
     private String numberOfPlayers;
     private float duration;
+    @Digits(integer=7, fraction=0, message = "The price can have only up to 7 digits.")
+    @NotNull(message = "Amount must not be empty")
     private int amount;
     private int visible;
+    @Size(max = 255,message = "Description must be less then 255 character long")
     private String description;
+    @URL(message = "URL must be valid")
     private String img;
     private Category category;
     private Rule rule;

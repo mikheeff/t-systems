@@ -163,7 +163,7 @@
 					<div class="span3 col">
 						<div class="block">
 							<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
-								<form action="catalog/employee/add">
+								<form action="/catalog/employee/add">
 									<button type="submit" class="btn btn-inverse">Add new Goods or Category</button>
 								</form>
 							</c:if>
@@ -188,6 +188,8 @@
 							<ul class="nav nav-list below">
 								<%--<fieldset>--%>
 									<li class="nav-header">Filter</li>
+									<%--<spring:form action="profile/edit" method="post" modelAttribute="client" class="form-stacked">--%>
+									<%--<div class="control-group">--%>
 										<%--<label class="control-label"><span class="required"></span> Country:</label>--%>
 										<%--<div class="controls">--%>
 											<%--<spring:select path="clientAddress.country" class="input-xlarge">--%>

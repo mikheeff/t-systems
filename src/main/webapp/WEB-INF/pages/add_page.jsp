@@ -113,7 +113,10 @@
                 <c:if test="${not empty msgC}">
                     <div class="msg">${msgC}</div>
                 </c:if>
-                <spring:form action="add?new_category" method="post" commandName="category" class="form-stacked">
+                <c:if test="${not empty error2}">
+                    <div class="error">${error2}</div>
+                </c:if>
+                <spring:form action="/catalog/employee/add/category" method="post" commandName="category" class="form-stacked">
                     <fieldset>
                         <div class="control-group">
                             <label class="control-label">Name:</label>
@@ -133,26 +136,30 @@
             </div>
             <div class="span7">
                 <h4 class="title"><span class="text"><strong>New Goods</strong> Form</span></h4>
-                <c:if test="${not empty error}">
-                    <div class="error">${error}</div>
+                <c:if test="${not empty error1}">
+                    <div class="error">${error1}</div>
                 </c:if>
                 <c:if test="${not empty msgG}">
                     <div class="msg">${msgG}</div>
                 </c:if>
-                <spring:form action="add?new_goods" method="post" commandName="goods" class="form-stacked">
+                <spring:form action="/catalog/employee/add/goods" method="post" commandName="goods" class="form-stacked">
                     <fieldset>
                         <div class="control-group">
                             <label class="control-label">Name:</label>
                             <div class="controls">
                                 <spring:input path="name" type="text" placeholder="Enter name of goods" class="input-xlarge"/>
+                                <fieldset>
                                 <spring:errors path="name" cssClass="error"/>
+                                </fieldset>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Price:</label>
                             <div class="controls">
-                                <spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge"/>
+                                <spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge" pattern="\d+(\.\d{2})?" title="Price must be a number"/>
+                                <fieldset>
                                 <spring:errors path="price" cssClass="error"/>
+                                </fieldset>
                             </div>
                         </div>
                         <div class="control-group">
@@ -178,7 +185,10 @@
                         <div class="control-group">
                             <label class="control-label">Amount:</label>
                             <div class="controls">
-                                <spring:input path="amount" type="text" placeholder="Enter the quantity of goods" class="input-xlarge"/>
+                                <spring:input path="amount" type="text" placeholder="Enter the quantity of goods" class="input-xlarge" pattern="^[ 0-9]+$" title="Amount must be a integer"/>
+                                <fieldset>
+                                    <spring:errors path="amount" cssClass="error"/>
+                                </fieldset>
                             </div>
                         </div>
                         <div class="control-group">
@@ -195,6 +205,9 @@
                             <label class="control-label">Description:</label>
                             <div class="controls">
                                 <spring:textarea path="description" cols="20" rows="5"/>
+                                <fieldset>
+                                    <spring:errors path="description" cssClass="error"/>
+                                </fieldset>
                             </div>
                         </div>
                         <div class="control-group">
@@ -221,9 +234,12 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">Image:</label>
+                            <label class="control-label">Image (1x1):</label>
                             <div class="controls">
                                 <spring:input path="img" type="text" placeholder="Put URL of image here" class="input-xlarge"/>
+                                <fieldset>
+                                    <spring:errors path="img" cssClass="error"/>
+                                </fieldset>
                             </div>
                         </div>
                         <hr>

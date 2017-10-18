@@ -37,8 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and().logout().logoutUrl("/j_spring_security_logout").logoutSuccessUrl("/clients/identification?logout")
-                .and().csrf()
-                .and().exceptionHandling().accessDeniedPage("/clients/identification");
+                .and().csrf().disable()
+                .exceptionHandling().accessDeniedPage("/clients/identification");
     }
 
     @Bean

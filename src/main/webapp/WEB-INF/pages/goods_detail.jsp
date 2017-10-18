@@ -1,4 +1,5 @@
 		<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+		<%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 		<!DOCTYPE html>
 		<html lang="en">
 		<head>
@@ -26,6 +27,37 @@
 			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 			<script src="/resources/themes/js/respond.min.js"></script>
 			<![endif]-->
+			<style>
+				.error {
+					padding: 15px;
+					margin-bottom: 20px;
+					border: 1px solid transparent;
+					border-radius: 4px;
+					color: #a94442;
+					background-color: #f2dede;
+					border-color: #ebccd1;
+				}
+
+				.msg {
+					padding: 15px;
+					margin-bottom: 20px;
+					border: 1px solid transparent;
+					border-radius: 4px;
+					color: #31708f;
+					background-color: #d9edf7;
+					border-color: #bce8f1;
+				}
+
+				#login-box {
+					width: 300px;
+					padding: 20px;
+					margin: 100px auto;
+					background: #fff;
+					-webkit-border-radius: 2px;
+					-moz-border-radius: 2px;
+					border: 1px solid #000;
+				}
+			</style>
 		</head>
 		<body>
 		<div id="top-bar" class="container">
@@ -38,10 +70,28 @@
 				<div class="span8">
 					<div class="account pull-right">
 						<ul class="user-menu">
-							<li><a href="${pageContext.request.contextPath}/clients/profile">My Account</a></li>
+							<c:url value="/j_spring_security_logout" var="logoutUrl" />
+							<script>
+                                function formSubmit() {
+                                    document.getElementById("logoutForm").submit();
+                                }
+							</script>
+							<li><a href="/clients/profile">My Account</a></li>
 							<li><a href="cart.html">Your Cart</a></li>
 							<li><a href="checkout.jsp">Checkout</a></li>
-							<li><a href="${pageContext.request.contextPath}/clients/profile">Login</a></li>
+							<c:if test="${client.role.name!=null}" >
+
+								<form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >
+
+									<input type="hidden" size="0"
+										   name="${_csrf.parameterName}"
+										   value="${_csrf.token}" />
+								</form>
+								<li><a href="javascript:formSubmit()">Logout</a></li>
+							</c:if>
+							<c:if test="${client.role.name==null}" >
+								<li><a href="${pageContext.request.contextPath}clients/identification">Login</a></li>
+							</c:if>
 						</ul>
 					</div>
 				</div>
@@ -76,48 +126,178 @@
 				<div class="row">						
 					<div class="span9">
 						<div class="row">
-							<div class="span4">
-								<a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="" src="${goods.img}"></a>
-								<ul class="thumbnails small">								
-									<li class="span1">
-										<a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 2"><img src="${goods.img}" alt=""></a>
-									</li>								
-									<li class="span1">
-										<a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 3"><img src="${goods.img}" alt=""></a>
-									</li>													
-									<li class="span1">
-										<a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 4"><img src="${goods.img}" alt=""></a>
-									</li>
-									<li class="span1">
-										<a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 5"><img src="${goods.img}" alt=""></a>
-									</li>
-								</ul>
+						<div class="span4">
+							<a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="" src="${goods.img}"></a>
+							<ul class="thumbnails small">
+								<li class="span1">
+									<a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 2"><img src="${goods.img}" alt=""></a>
+								</li>
+								<li class="span1">
+									<a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 3"><img src="${goods.img}" alt=""></a>
+								</li>
+								<li class="span1">
+									<a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 4"><img src="${goods.img}" alt=""></a>
+								</li>
+								<li class="span1">
+									<a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 5"><img src="${goods.img}" alt=""></a>
+								</li>
+							</ul>
+						</div>
+						<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
+							<div class="span5" id="user">
+								<c:if test="${not empty msg}">
+									<div class="msg">${msg}</div>
+								</c:if>
+								<spring:form action="/catalog/employee/edit" method="post" commandName="goods" class="form-stacked" >
+									<fieldset>
+										<div class="control-group">
+											<label class="control-label">Id:</label>
+											<div class="controls">
+												<spring:input path="id" readonly="true" type="text" placeholder="Enter name of goods" class="input-xlarge" />
+											</div>
+										</div><div class="control-group">
+											<label class="control-label">Name:</label>
+											<div class="controls">
+												<spring:input path="name" type="text" placeholder="Enter name of goods" class="input-xlarge" />
+												<spring:errors path="name" cssClass="error"/>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Price:</label>
+											<div class="controls">
+												<spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge"/>
+												<spring:errors path="price" cssClass="error"/>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Number Of Players:</label>
+											<div class="controls">
+												<spring:select path="numberOfPlayers" class="input-xlarge">
+													<c:forEach   begin = "1" end = "10"  varStatus="count">
+														<spring:option value="${count.index}">${count.index}</spring:option>
+													</c:forEach>
+												</spring:select>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Duration Of The Game:</label>
+											<div class="controls">
+												<spring:select path="duration" class="input-xlarge">
+													<c:forEach  begin = "1" end = "8"  varStatus="count">
+														<spring:option value="${count.index/2.0}">${count.index/2.0}</spring:option>
+													</c:forEach>
+												</spring:select>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Amount:</label>
+											<div class="controls">
+												<spring:input path="amount" type="text" placeholder="Enter the quantity of goods" class="input-xlarge"/>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Is Visible:</label>
+											<div class="controls">
+												<spring:select path="visible" class="input-xlarge">
+													<spring:option value="1">Yes</spring:option>
+													<spring:option value="0">No</spring:option>
+												</spring:select>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Description:</label>
+											<div class="controls">
+												<spring:textarea path="description" cols="20" rows="5"/>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Complexity Of Rules:</label>
+											<div class="controls">
+												<spring:select path="rule.name" class="input-xlarge">
+													<spring:option value="${'easy'}">Easy</spring:option>
+													<spring:option value="${'very easy'}">Very Easy</spring:option>
+													<spring:option value="${'medium'}">Medium</spring:option>
+													<spring:option value="${'hard'}">Hard</spring:option>
+													<spring:option value="${'very hard'}">Very Hard</spring:option>
+												</spring:select>
+
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Category Name:</label>
+											<div class="controls">
+												<spring:select path="category.name" class="input-xlarge">
+													<c:forEach var="categoryVar"  items="${listCategory}">
+														<spring:option value="${categoryVar.name}">${categoryVar.name}</spring:option>
+													</c:forEach>
+												</spring:select>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Image:</label>
+											<div class="controls">
+												<spring:input path="img" type="text" placeholder="Put URL of image here" class="input-xlarge"/>
+											</div>
+										</div>
+										<hr>
+										<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Edit goods"></div>
+									</fieldset>
+									<%--<input type="hidden"--%>
+										   <%--name="${_csrf.parameterName}"--%>
+										   <%--value="${_csrf.token}"/>--%>
+								</spring:form>
+								<form action="/catalog/employee/delete/${goods.id}">
+									<button type="submit" class="btn btn-inverse">Delete goods</button>
+								</form>
 							</div>
+						</div>
+						</c:if>
+						<c:if test="${client.role.name!='ROLE_EMPLOYEE'}" >
 							<div class="span5">
 								<address>
-									<el style="text-decoration: underline"><h4><strong>${goods.name}</strong></h4></el>
-
-									<h5><strong>Number of players:</strong></h5> <h5><span>${goods.numberOfPlayers}</span></h5><br>
-									<h5><strong>Duration of the game:</strong></h5> <h5><span>${goods.duration}</span></h5><br>
-									<h5><strong>Complexity of the rules:</strong></h5> <h5><span>${goods.rule.name}</span></h5><br>
-									<c:if test="${goods.amount==0}" >
-										<h5><strong>Availability:</strong><span>Out Of Stock</span></h5><br>
-									</c:if>
-									<c:if test="${goods.amount!=0}" >
-										<h5><strong>Availability:</strong></h5> <h5><span>Available</span></h5><br>
-									</c:if>
+									<el style="text-decoration: underline"><h3><strong>${goods.name}</strong></h3></el>
+									<table border="3" width="100%" cellpadding="3" cellspacing="2">
+									<tr>
+										<td><big><big><strong>Number of players:</strong></big></big></td>
+										<td><big><strong>${goods.numberOfPlayers}</strong></big></td>
+									</tr>
+									<tr>
+										<td><big><big><strong>Duration of the game:</strong></big></big></td>
+										<td><big><strong>${goods.duration}</strong></big></td>
+									</tr>
+									<tr>
+										<td><big><big><strong>Complexity of the rules:</strong></big></big></td>
+										<td><big><strong>${goods.rule.name}</strong></big></td>
+									</tr>
+									<tr>
+										<td><big><big><strong>Availability:</strong></big></big></td>
+										<c:if test="${goods.amount==0}" >
+										<td><big><strong>Out Of Stock</strong></big></td>
+										</c:if>
+										<c:if test="${goods.amount!=0}" >
+										<td><big><strong>Available</strong></big></td>
+										</c:if>
+									</tr>
+									 <%--<br>--%>
+									<%--<c:if test="${goods.amount==0}" >--%>
+										<%--<h5><strong>Availability:</strong><span>Out Of Stock</span></h5><br>--%>
+									<%--</c:if>--%>
+									<%--<c:if test="${goods.amount!=0}" >--%>
+										<%--<h5><strong>Availability:</strong></h5> <h5><span>Available</span></h5><br>--%>
+									<%--</c:if>--%>
+									</table>
 								</address>
 								<h4><strong>Price: ${goods.price} &#8381;</strong></h4>
 							</div>
 							<div class="span5">
 								<form class="form-inline">
-									<label class="checkbox">
-										<input type="checkbox" value=""> Option one is this and that
-									</label>
-									<br/>
-									<label class="checkbox">
-									  <input type="checkbox" value=""> Be sure to include why it's great
-									</label>
+									<%--<label class="checkbox">--%>
+										<%--<input type="checkbox" value=""> Option one is this and that--%>
+									<%--</label>--%>
+									<%--<br/>--%>
+									<%--<label class="checkbox">--%>
+									  <%--<input type="checkbox" value=""> Be sure to include why it's great--%>
+									<%--</label>--%>
 									<p>&nbsp;</p>
 									<label>Qty:</label>
 									<input type="text" class="span1" placeholder="1">
@@ -125,6 +305,7 @@
 								</form>
 							</div>							
 						</div>
+						</c:if>
 						<div class="row">
 							<div class="span9">
 								<ul class="nav nav-tabs" id="myTab">
@@ -198,6 +379,11 @@
 					</div>
 					<div class="span3 col">
 						<div class="block">
+							<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
+								<form action="/catalog/employee/add">
+									<button type="submit" class="btn btn-inverse">Add new Goods or Category</button>
+								</form>
+							</c:if>
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
 								<li
