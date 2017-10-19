@@ -106,6 +106,12 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         em.getTransaction().commit();
     }
 
+    @Override
+    public void deleteCategoryById(int id) {
+        em.getTransaction().begin();
+        em.remove(em.find(CategoryEntity.class, id));
+        em.getTransaction().commit();
+    }
 
     @Override
     public int getIdRuleByName(String name) {

@@ -349,7 +349,7 @@
 											<a href="/catalog/employee/edit/category/${categoryVar.id}" class="button flower"></a>
 										</div>
 										<div class="buttonHolder">
-											<a href="#" class="button cross"></a>
+											<a href="/catalog/employee/delete/category/${categoryVar.id}" class="button cross" onclick="return confirm('Are you sure?')"></a>
 										</div>
 									</c:if>
 

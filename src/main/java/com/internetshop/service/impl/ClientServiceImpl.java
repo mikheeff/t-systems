@@ -1,5 +1,6 @@
 package com.internetshop.service.impl;
 
+import com.internetshop.Exceptions.EmailExistException;
 import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.RoleEntity;
@@ -27,19 +28,17 @@ public class ClientServiceImpl implements ClientService {
     public List<ClientEntity> getAllClients(){ return clientRepository.getAll(); }
 
     @Override
-    public void addClient(Client client) {
+    public void addClient(Client client) throws EmailExistException {
+
+        if (clientRepository.isEmailExist(client.getEmail())){
+            throw new EmailExistException();
+        }
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         client.setPassword(bCryptPasswordEncoder.encode(client.getPassword()));
 
         this.clientRepository.addClient(convertClientToDAO(client));
 
-//        ClientEntity clientEntity = clientRepository.getUserByEmail(client.getEmail());
-//        clientAddressEntity.setId(clientEntity.getId());
-//        clientEntity.setClientAddressEntity(clientAddressEntity);
-//        clientAddressEntity.setClientEntity(clientEntity);
-//        clientRepository.addAddress(clientAddressEntity);
-//        clientRepository.updateUser(clientEntity);
     }
 
     @Override

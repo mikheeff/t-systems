@@ -24,6 +24,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public void addClient(ClientEntity clientEntity) {
+
         ClientAddressEntity clientAddressEntity = new ClientAddressEntity();
         em.getTransaction().begin();
         em.persist(clientAddressEntity);
@@ -58,7 +59,13 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
+    public boolean isEmailExist(String email) {
+       return em.createQuery("select count(*) from ClientEntity client where client.email = :email",Long.class).setParameter("email",email).getSingleResult()>0;
+    }
+
+    @Override
     public RoleEntity getRoleById(int id) {
         return em.createQuery("select roleEntity from RoleEntity roleEntity where id = :id", RoleEntity.class).setParameter("id",id).getSingleResult();
     }
+
 }

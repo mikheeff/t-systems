@@ -15,6 +15,6 @@ public interface ClientRepository {
     void updateUser(ClientEntity clientEntity);
     void addAddress(ClientAddressEntity clientAddressEntity);
     RoleEntity getRoleById(int id);
-
+    boolean isEmailExist(String email);
 
 }

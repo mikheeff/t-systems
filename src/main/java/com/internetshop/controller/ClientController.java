@@ -1,5 +1,6 @@
 package com.internetshop.controller;
 
+import com.internetshop.Exceptions.EmailExistException;
 import com.internetshop.model.Client;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
@@ -73,7 +74,13 @@ public class ClientController {
         if(bindingResult.hasErrors()) {
             return "redirect:/clients/identification?error1";
         }
-        this.clientService.addClient(client);
+        try {
+            this.clientService.addClient(client);
+        } catch (EmailExistException e) {
+            modelMap.put("newClient",client);
+            modelMap.put("regError","Email already exist!");
+            return "register";
+        }
         return "registr_success";
     }
 

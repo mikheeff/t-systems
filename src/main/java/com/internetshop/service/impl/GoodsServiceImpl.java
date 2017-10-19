@@ -161,6 +161,11 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public void deleteCategoryById(int id) {
+        goodsRepository.deleteCategoryById(id);
+    }
+
+    @Override
     public GoodsEntity convertGoodsToDAO(Goods goods) {
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setId(goodsRepository.getIdCategoryByName(goods.getCategory().getName()));

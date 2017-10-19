@@ -19,10 +19,11 @@ public interface GoodsRepository {
     long getAmountOfGoodsByCategoryName(String categoryName);
     int getRandomGoodsId();
     List<CategoryEntity> getAllCategories();
-    int getIdCategoryByName(String name) throws NoSuchCategoryException;
+    int getIdCategoryByName(String name);
     void addCategory(CategoryEntity categoryEntity);
     CategoryEntity getCategoryById(int id);
     void updateCategory(CategoryEntity categoryEntity);
+    void deleteCategoryById(int id);
     int getIdRuleByName(String name);
 
 }

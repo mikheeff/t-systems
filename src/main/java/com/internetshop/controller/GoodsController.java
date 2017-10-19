@@ -179,9 +179,14 @@ public class GoodsController {
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
-//        goodsService.getCategoryById(category.getId());
         modelMap.put("msg", "You've been edited category successfully.");
         return "goods";
+    }
+
+    @RequestMapping(value ="/employee/delete/category/{id}", method = RequestMethod.GET)
+    public String deleteCategory(@PathVariable(value = "id") int id) {
+        this.goodsService.deleteCategoryById(id);
+        return "redirect:/catalog";
     }
 
     public long getAmountOfPages(){

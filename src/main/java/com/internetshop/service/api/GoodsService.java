@@ -26,4 +26,5 @@ public interface GoodsService {
     Category getCategoryById(int id);
     void updateCategory(Category category);
     void addCategory(Category category);
+    void deleteCategoryById(int id);
 }
