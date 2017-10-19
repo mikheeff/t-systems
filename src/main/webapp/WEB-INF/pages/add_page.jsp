@@ -78,8 +78,6 @@
                         }
                     </script>
                     <li><a href="/clients/profile">My Account</a></li>
-                    <li><a href="cart.html">Your Cart</a></li>
-                    <li><a href="checkout.jsp">Checkout</a></li>
                     <c:if test="${client.role.name!=null}" >
 
                         <form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >
@@ -146,9 +144,6 @@
                         <hr>
                         <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Add new category"></div>
                     </fieldset>
-                    <input type="hidden"
-                           name="${_csrf.parameterName}"
-                           value="${_csrf.token}"/>
                 </spring:form>
 
             </div>
@@ -278,7 +273,6 @@
                     <li><a href="index.jsp">Homepage</a></li>
                     <li><a href="./about.html">About Us</a></li>
                     <li><a href="./contact.html">Contac Us</a></li>
-                    <li><a href="./cart.html">Your Cart</a></li>
                     <li><a href="./register.jsp">Login</a></li>
                 </ul>
             </div>
@@ -312,7 +306,7 @@
 <script>
     $(document).ready(function() {
         $('#checkout').click(function (e) {
-            document.location.href = "checkout.jsp";
+            document.location.href = "register.jsp";
         })
     });
 </script>

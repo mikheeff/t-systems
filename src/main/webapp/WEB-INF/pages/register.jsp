@@ -72,8 +72,12 @@
 					<div class="account pull-right">
 						<ul class="user-menu">
 							<li><a href="${pageContext.request.contextPath}/clients/profile">My Account</a></li>
-							<li><a href="cart.html">Your Cart</a></li>
-							<li><a href="checkout.jsp">Checkout</a></li>
+							<c:if test="${cartList==null}">
+								<li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
+							</c:if>
+							<c:if test="${cartList!=null}">
+								<li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
+							</c:if>
 							<li><a href="${pageContext.request.contextPath}/clients/profile">Login</a></li>
 						</ul>
 					</div>
@@ -158,7 +162,7 @@
 								<div class="control-group">
 									<label class="control-label">Name</label>
 									<div class="controls">
-										<spring:input path="name" type="text" placeholder="Enter your name" class="input-xlarge" pattern="^[\pL '-]+$"/>
+										<spring:input path="name" type="text" placeholder="Enter your name" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 										<spring:errors path="name" cssClass="error"/>
 									</div>
 								</div>
@@ -187,9 +191,6 @@
 								<hr>
 								<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Create new account"></div>
 							</fieldset>
-							<input type="hidden"
-								   name="${_csrf.parameterName}"
-								   value="${_csrf.token}"/>
 						</spring:form>
 					</div>				
 				</div>
@@ -202,7 +203,7 @@
 							<li><a href="index.jsp">Homepage</a></li>
 							<li><a href="./about.html">About Us</a></li>
 							<li><a href="./contact.html">Contac Us</a></li>
-							<li><a href="./cart.html">Your Cart</a></li>
+							<li><a href="/catalog/goods/cart">Your Cart</a></li>
 							<li><a href="./register.jsp">Login</a></li>
 						</ul>					
 					</div>

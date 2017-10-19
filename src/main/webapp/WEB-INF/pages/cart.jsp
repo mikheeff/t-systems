@@ -13,7 +13,7 @@
 		<link href="${pageContext.request.contextPath}/resources/themes/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 
 		<link href="${pageContext.request.contextPath}/resources/themes/css/bootstrappage.css" rel="stylesheet"/>
-		
+
 		<!-- global styles -->
 		<link href="${pageContext.request.contextPath}/resources/themes/css/flexslider.css" rel="stylesheet"/>
 		<link href="${pageContext.request.contextPath}/resources/themes/css/main.css" rel="stylesheet"/>
@@ -23,9 +23,9 @@
 		<script src="${pageContext.request.contextPath}/resources/themes/bootstrap/js/bootstrap.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/themes/js/superfish.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/themes/js/jquery.scrolltotop.js"></script>
-		<!--[if lt IE 9]>			
-			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-			<script src="/resources/themes/js/respond.min.js"></script>
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<script src="/resources/themes/js/respond.min.js"></script>
 		<![endif]-->
 		<style>
 			html, body{
@@ -39,7 +39,7 @@
 
 			.buttonHolder{
 				margin:23px auto;
-				width:500px;
+				width:23px;
 			}
 
 
@@ -186,16 +186,12 @@
                                 }
                                 //							</script>
 							<li><a href="${pageContext.request.contextPath}clients/profile">My Account</a></li>
-							<c:if test="${client.role.name=='ROLE_CLIENT'}">
-
-								<c:if test="${cartList==null}">
-								<li><a href="cart.jsp">Your Cart(0)</a></li>
-								</c:if>
-								<c:if test="${cartList!=null}">
-								<li><a href="cart.jsp">Your Cart(${cartList.size()})</a></li>
-								</c:if>
+							<c:if test="${cartList==null}">
+								<li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
 							</c:if>
-
+							<c:if test="${cartList!=null}">
+								<li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
+							</c:if>
 							<c:if test="${client.role.name!=null}" >
 
 								<form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >
@@ -207,7 +203,7 @@
 								<li><a href="javascript:formSubmit()">Logout</a></li>
 							</c:if>
 							<c:if test="${client.role.name==null}" >
-								<li><a href="${pageContext.request.contextPath}clients/identification">Login</a></li>
+								<li><a href="/clients/identification">Login</a></li>
 							</c:if>
 						</ul>
 					</div>
@@ -217,7 +213,7 @@
 		<div id="wrapper" class="container">
 			<section class="navbar main-menu">
 				<div class="navbar-inner main-menu">				
-					<a href="${pageContext.request.contextPath}/" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
+					<a href="index.jsp" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul>
 							<li><a href="${pageContext.request.contextPath}/catalog">Catalog</a>
@@ -234,122 +230,82 @@
 						</ul>
 					</nav>
 				</div>
-			</section>
+			</section>				
 			<section class="header_text sub">
-			<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="" >
-				<c:if test="${!categoryFilter}" >
-				<h3><span>ALL GAMES</span></h3>
-				</c:if>
-				<c:if test="${categoryFilter}" >
-					<h3><span>${categoryName.toUpperCase()}</span></h3>
-				</c:if>
+			<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="New products" >
+				<h4><span>Shopping Cart</span></h4>
 			</section>
-			<section class="main-content">
-				
-				<div class="row">						
-					<div class="span9">								
-						<ul class="thumbnails listing-products">
-							<c:forEach var="goodsVar" items="${listGoods}">
-							<li class="span3">
-								<div class="product-box">
-									<span class="sale_tag"></span>												
-									<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}" width="342" height="342"></a><br/>
-									<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}" class="title">${goodsVar.name}</a><br/>
-									<a href="#" class="category">${goodsVar.category.name}</a>
-									<p class="price">${goodsVar.price} &#8381;</p>
-								</div>
-							</li>
+			<section class="main-content">				
+				<div class="row">
+					<%--<spring:form action="/catalog/goods/cart/order" method="post" commandName="cartItem" class="form-inline">--%>
+					<div class="span9">					
+						<h4 class="title"><span class="text"><strong>Your</strong> Cart</span></h4>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th><big>Remove</big></th>
+									<th><big>Image</big></th>
+									<th><big>Product Name</big></th>
+									<th><big>Quantity</big></th>
+									<th><big>Unit Price</big></th>
+									<th><big>Total</big></th>
+								</tr>
+							</thead>
+							<tbody>
+							<c:forEach var="cartItem"  items="${cartList}">
+								<tr>
+									<td>
+										<div class="buttonHolder">
+										<a href="" class="button cross"></a>
+										</div>
+									</td>
+									<td><a href="${cartItem.goods.img}"><img alt="" height="100" width="100" src="${cartItem.goods.img}"></a></td>
+										<td><big>${cartItem.goods.name}</big></td>
+										<%--<spring:input path="cartItem" type="text" class="span1" placeholder="1" pattern="^[1-9]+$" title="Amount must be a integer and more then zero"/>--%>
+									<%--<td><input type="text" placeholder="1" class="input-mini"></td>--%>
+										<td><big>${cartItem.quantity}</big></td>
+										<td><big>${cartItem.goods.price}</big></td>
+										<td><big>${cartItem.goods.price*cartItem.quantity}</big></td>
+								</tr>
 							</c:forEach>
-
-						</ul>								
-						<hr>
-						<div class="pagination pagination-small pagination-centered">
-							<ul>
-								<c:if test="${!categoryFilter}" >
-
-									<c:if test="${currentPage>1}" >
-									<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage-1}">Prev</a></li>
-									</c:if>
-
-									<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
-										<li
-										<c:if test="${count.index==currentPage}" >
-											 class="active"
-										</c:if>
-										><a href="${pageContext.request.contextPath}/catalog/page/${i}">${i}</a></li>
-									</c:forEach>
-
-									<c:if test="${currentPage<amountOfPages}" >
-										<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage+1}">Next</a></li>
-									</c:if>
-
-								</c:if>
-
-								<c:if test="${categoryFilter}" >
-
-									<c:if test="${currentPage>1}" >
-									<li><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${currentPage-1}">Prev</a></li>
-									</c:if>
-
-									<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
-										<li
-										<c:if test="${count.index==currentPage}" >
-											 class="active"
-										</c:if>
-										><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${i}">${i}</a></li>
-									</c:forEach>
-
-									<c:if test="${currentPage<amountOfPages}" >
-										<li><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${currentPage+1}">Next</a></li>
-									</c:if>
-
-								</c:if>
-
-							</ul>
-						</div>
+								<tr>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+									<td><strong><big>${sum}</big></strong></td>
+								</tr>		  
+							</tbody>
+						</table>
+						<%--<h4>What would you like to do next?</h4>--%>
+						<%--<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>--%>
+						<%--<label class="radio">--%>
+							<%--<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">--%>
+							<%--Use Coupon Code--%>
+						<%--</label>--%>
+						<%--<label class="radio">--%>
+							<%--<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">--%>
+							<%--Estimate Shipping &amp; Taxes--%>
+						<%--</label>--%>
+						<%--<hr>--%>
+						<%--<p class="cart-total right">--%>
+							<%--<strong>Sub-Total</strong>:	$100.00<br>--%>
+							<%--<strong>Eco Tax (-2.00)</strong>: $2.00<br>--%>
+							<%--<strong>VAT (17.5%)</strong>: $17.50<br>--%>
+							<%--<strong>Total</strong>: $119.50<br>--%>
+						<%--</p>--%>
+						<hr/>
+						<p class="buttons center">				
+							<button class="btn btn-inverse large" type="button">Continue</button>
+						</p>
 					</div>
+					<%--</spring:form>--%>
 					<div class="span3 col">
 						<div class="block">
-							<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
-								<form action="/catalog/employee/add">
-									<button type="submit" class="btn btn-inverse">Add new Goods or Category</button>
-									<hr>
-								</form>
-
-								<c:if test="${not empty msg}">
-								<div class="msg">${msg}</div>
-								</c:if>
-
-								<c:if test="${editCatFlag==true}" >
-									<spring:form action="/catalog/employee/edit/category" method="post" commandName="category" class="form-stacked">
-										<fieldset>
-											<div class="control-group">
-												<label class="control-label">Id:</label>
-												<div class="controls">
-													<spring:input path="id" readonly="true" type="text" class="input-xlarge" id="categoryInput"/>
-												</div>
-											</div>
-											<div class="control-group">
-												<label class="control-label">Name:</label>
-												<div class="controls">
-													<spring:input path="name" type="text" placeholder="Enter name of new category" class="input-xlarge" id="categoryInput"/>
-													<spring:errors path="name" cssClass="error"/>
-												</div>
-											</div>
-											<div class="actions"><input tabindex="9" class="btn btn-inverse small" type="submit" value="Edit category"></div>
-											<hr>
-										</fieldset>
-									</spring:form>
-								</c:if>
-							</c:if>
-
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
-									<li
-									<c:if test="${!categoryFilter}" >
-									class="active"
-									</c:if>
-									><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
+								<li><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
 								<c:forEach var="categoryVar"  items="${listCategory}">
 
 									<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
@@ -362,9 +318,9 @@
 									</c:if>
 
 									<li
-									<c:if test="${categoryVar.name == categoryName}" >
-										class="active"
-									</c:if>
+											<c:if test="${categoryVar.name == categoryName}" >
+												class="active"
+											</c:if>
 									><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
 									</li>
 
@@ -372,7 +328,7 @@
 							</ul>
 							<br/>
 							<ul class="nav nav-list below">
-									<li class="nav-header">Filter</li>
+								<li class="nav-header">Filter</li>
 								<li><a href="goods.jsp">Adidas</a></li>
 								<li><a href="goods.jsp">Nike</a></li>
 								<li><a href="goods.jsp">Dunlop</a></li>
@@ -421,22 +377,9 @@
 								</div>
 							</div>
 						</div>
-						<div class="block">								
-							<h4 class="title"><strong>Best</strong> Seller</h4>								
-							<ul class="small-product">
-								<c:forEach var="goodsVar"  begin = "0" end = "2" items="${randomGoods}">
-									<li>
-										<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}" title="${goodsVar.name}">
-											<img src="${goodsVar.img}" alt="">
-										</a>
-										<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a>
-									</li>
-								</c:forEach>
-							</ul>
-						</div>
 					</div>
 				</div>
-			</section>
+			</section>			
 			<section id="footer-bar">
 				<div class="row">
 					<div class="span3">
@@ -445,7 +388,7 @@
 							<li><a href="index.jsp">Homepage</a></li>
 							<li><a href="./about.html">About Us</a></li>
 							<li><a href="./contact.html">Contac Us</a></li>
-							<li><a href="cart.jsp">Your Cart</a></li>
+							<li><a href="/catalog/goods/cart">Your Cart</a></li>
 							<li><a href="register.jsp">Login</a></li>
 						</ul>					
 					</div>
@@ -476,5 +419,12 @@
 			</section>
 		</div>
 		<script src="/resources/themes/js/common.js"></script>
+		<script>
+			$(document).ready(function() {
+				$('#checkout').click(function (e) {
+					document.location.href = "checkout.jsp";
+				})
+			});
+		</script>		
     </body>
 </html>

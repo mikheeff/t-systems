@@ -77,20 +77,21 @@
                                 }
 							</script>
 							<li><a href="/clients/profile">My Account</a></li>
-							<li><a href="cart.html">Your Cart</a></li>
-							<li><a href="checkout.jsp">Checkout</a></li>
+							<c:if test="${cartList==null}">
+								<li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
+							</c:if>
+							<c:if test="${cartList!=null}">
+								<li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
+							</c:if>
 							<c:if test="${client.role.name!=null}" >
 
 								<form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >
 
-									<input type="hidden" size="0"
-										   name="${_csrf.parameterName}"
-										   value="${_csrf.token}" />
 								</form>
 								<li><a href="javascript:formSubmit()">Logout</a></li>
 							</c:if>
 							<c:if test="${client.role.name==null}" >
-								<li><a href="${pageContext.request.contextPath}clients/identification">Login</a></li>
+								<li><a href="/clients/identification">Login</a></li>
 							</c:if>
 						</ul>
 					</div>
@@ -294,19 +295,25 @@
 								<h4><strong>Price: ${goods.price} &#8381;</strong></h4>
 							</div>
 							<div class="span5">
-								<form class="form-inline">
-									<%--<label class="checkbox">--%>
-										<%--<input type="checkbox" value=""> Option one is this and that--%>
-									<%--</label>--%>
-									<%--<br/>--%>
-									<%--<label class="checkbox">--%>
-									  <%--<input type="checkbox" value=""> Be sure to include why it's great--%>
-									<%--</label>--%>
+								<%--<form  class="form-inline">--%>
+									<%--<fieldset>--%>
+										<%--<div class="control-group">--%>
+											<%--<p>&nbsp;</p>--%>
+											<%--<label>Qty:</label>--%>
+											<%--<div class="controls">--%>
+												<%--<input path="quantity" type="text" placeholder="1" class="span1"/>--%>
+												<%--<spring:errors path="name" cssClass="error"/>--%>
+											<%--</div>--%>
+										<%--</div>--%>
+										<%--<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Add to cart"></div>--%>
+									<%--</fieldset>--%>
+								<%--</form>--%>
+								<spring:form action="/catalog/goods/cart/${goods.id}/add" method="post" commandName="cartItem" class="form-inline">
 									<p>&nbsp;</p>
 									<label>Qty:</label>
-									<input type="text" class="span1" placeholder="1">
+									<spring:input path="quantity" type="text" class="span1" placeholder="1" pattern="^[1-9]+$" title="Amount must be a integer and more then zero"/>
 									<button class="btn btn-inverse" type="submit">Add to cart</button>
-								</form>
+								</spring:form>
 							</div>							
 						</div>
 						</c:if>
@@ -478,7 +485,12 @@
 							<li><a href="index.jsp">Homepage</a></li>
 							<li><a href="./about.html">About Us</a></li>
 							<li><a href="./contact.html">Contac Us</a></li>
-							<li><a href="./cart.html">Your Cart</a></li>
+							<c:if test="${cartList==null}">
+								<li><a href="cart.jsp">Your Cart(0)</a></li>
+							</c:if>
+							<c:if test="${cartList!=null}">
+							<li><a href="cart.jsp">Your Cart(${cartList.size()})</a></li>
+							</c:if>
 							<li><a href="register.jsp">Login</a></li>
 						</ul>
 					</div>

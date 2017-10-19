@@ -54,7 +54,7 @@ public class ClientController {
         if (logout != null) {
             modelMap.put("msg", "You've been logged out successfully.");
         }
-
+//        modelMap.put("cartList",GoodsController.session.getAttribute("cartList")); todo должна ли корзина очищаться после логаута?
         return "register";
     }
 
@@ -72,7 +72,7 @@ public class ClientController {
     @RequestMapping(value = "/success", method = RequestMethod.POST)
     public String addClient(@ModelAttribute (value = "client")@Valid Client client, BindingResult bindingResult,ModelMap modelMap) {
         if(bindingResult.hasErrors()) {
-            return "redirect:/clients/identification?error1";
+            return "redirect:/clients/identification?regError";
         }
         try {
             this.clientService.addClient(client);

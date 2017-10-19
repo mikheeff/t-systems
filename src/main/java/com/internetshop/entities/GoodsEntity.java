@@ -1,6 +1,10 @@
 package com.internetshop.entities;
 
+import com.internetshop.model.CartItem;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "goods")
@@ -31,6 +35,16 @@ public class GoodsEntity {
     @ManyToOne
     @JoinColumn(name = "rule_id")
     private RuleEntity rule;
+
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "cart_item",joinColumns = {@JoinColumn(name = "order_id")},
+//            inverseJoinColumns = {@JoinColumn(name = "goods_id")})
+//    private Set<OrderEntity> orderEntities = new HashSet<>();
+
+//    @OneToMany(mappedBy = "goodsEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+//    private Set<CartItemEntity> cartItemEntities = new HashSet<>();
+
+
 
     public GoodsEntity() {
     }

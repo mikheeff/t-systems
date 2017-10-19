@@ -46,8 +46,17 @@
                         }
                         //							</script>
 					<li><a href="${pageContext.request.contextPath}clients/profile">My Account</a></li>
-					<li><a href="cart.html">Your Cart</a></li>
-					<li><a href="checkout.jsp">Checkout</a></li>
+
+					<c:if test="${client.role.name=='ROLE_CLIENT'}">
+					<c:if test="${cartList==null}">
+						<li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
+					</c:if>
+					<c:if test="${cartList!=null}">
+						<li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
+					</c:if>
+					</c:if>
+
+
 					<c:if test="${client.role.name!=null}" >
 
 						<form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >
@@ -90,7 +99,7 @@
 	<section class="header_text sub">
 		<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="" >
 				<h4><span>${client.name.toUpperCase()}, its your profile</span></h4>
-				<c:if test="${client.role.name!=ROLE_CLIENT}" >
+				<c:if test="${client.role.name!='ROLE_CLIENT'}" >
 					<br>
 					<h4><span>Your role is: ${client.role.name}</span></h4>
 				</c:if>
@@ -232,7 +241,7 @@
 							<li><a href="index.jsp">Homepage</a></li>
 							<li><a href="./about.html">About Us</a></li>
 							<li><a href="./contact.html">Contac Us</a></li>
-							<li><a href="./cart.html">Your Cart</a></li>
+							<li><a href="cart.jsp">Your Cart</a></li>
 							<li><a href="register.jsp">Login</a></li>
 						</ul>					
 					</div>

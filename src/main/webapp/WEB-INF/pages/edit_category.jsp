@@ -78,8 +78,6 @@
                         }
                     </script>
                     <li><a href="/clients/profile">My Account</a></li>
-                    <li><a href="cart.html">Your Cart</a></li>
-                    <li><a href="checkout.jsp">Checkout</a></li>
                     <c:if test="${client.role.name!=null}" >
 
                         <form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >
@@ -172,7 +170,7 @@
                     <li><a href="index.jsp">Homepage</a></li>
                     <li><a href="./about.html">About Us</a></li>
                     <li><a href="./contact.html">Contac Us</a></li>
-                    <li><a href="./cart.html">Your Cart</a></li>
+                    <li><a href="cart.jsp">Your Cart</a></li>
                     <li><a href="./register.jsp">Login</a></li>
                 </ul>
             </div>

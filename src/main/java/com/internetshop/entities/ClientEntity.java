@@ -2,6 +2,8 @@ package com.internetshop.entities;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "client")
@@ -24,6 +26,8 @@ public class ClientEntity {
     private String phone;
     @Column (name = "order_counter")
     private int orderCounter;
+
+
 
     @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)   //
     @JoinColumn(name = "home_address_id")

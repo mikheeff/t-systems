@@ -40,8 +40,12 @@
             <div class="account pull-right">
                 <ul class="user-menu">
                     <li><a href="${pageContext.request.contextPath}/clients/identification">My Account</a></li>
-                    <li><a href="cart.html">Your Cart</a></li>
-                    <li><a href="checkout.jsp">Checkout</a></li>
+                    <c:if test="${cartList==null}">
+                        <li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
+                    </c:if>
+                    <c:if test="${cartList!=null}">
+                        <li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
+                    </c:if>
                     <li><a href="${pageContext.request.contextPath}/clients/identification">Login</a></li>
                 </ul>
             </div>
@@ -88,7 +92,7 @@
                     <li><a href="index.jsp">Homepage</a></li>
                     <li><a href="./about.html">About Us</a></li>
                     <li><a href="./contact.html">Contac Us</a></li>
-                    <li><a href="./cart.html">Your Cart</a></li>
+                    <li><a href="cart.jsp">Your Cart</a></li>
                     <li><a href="register.jsp">Login</a></li>
                 </ul>
             </div>

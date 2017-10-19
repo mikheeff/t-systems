@@ -11,7 +11,7 @@ public class Client {
 
     @Size(max = 50,message = "Username must be less then 50 character long")
     @NotEmpty
-    @Pattern(regexp ="^[\\pL '-]+$",
+    @Pattern(regexp ="^[a-zA-Z0-9_]*$",
     message= "Username must be alphanumeric with no spaces")
     private String name;
     private String surname;

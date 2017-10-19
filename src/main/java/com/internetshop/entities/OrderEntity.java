@@ -6,6 +6,9 @@ import com.internetshop.model.Status;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "order")
 public class OrderEntity {
@@ -20,6 +23,7 @@ public class OrderEntity {
     @Column(name = "prim")
     private String comment;
 
+
     @ManyToOne
     @JoinColumn(name = "status_id")
     private StatusEntity status;
@@ -32,7 +36,10 @@ public class OrderEntity {
     @JoinColumn(name = "delivery_method_id")
     private DeliveryMethodEntity deliveryMethod;
 
-    OrderEntity(){
+    @OneToMany(mappedBy = "orderEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<CartItemEntity> cartItemEntities = new HashSet<>();
+
+    public OrderEntity(){
 
     }
 

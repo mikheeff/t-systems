@@ -2,6 +2,7 @@ package com.internetshop.controller;
 
 import com.internetshop.Exceptions.NoSuchCategoryException;
 import com.internetshop.Exceptions.NoSuchRulesException;
+import com.internetshop.model.CartItem;
 import com.internetshop.model.Category;
 import com.internetshop.model.Goods;
 import com.internetshop.service.api.GoodsService;
@@ -11,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,6 +26,10 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
+    @Autowired
+    public HttpSession session;
+
+
     private static final int amountOfGoodsOnPage = 9; //при вводе больше 9 едет картинки на первой странице??
     private static final int amountOfRandomGoodsOnPage = 6;
 
@@ -35,6 +41,7 @@ public class GoodsController {
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
+        modelMap.put("cartList",session.getAttribute("cartList"));
 
         return "goods";
     }
@@ -46,6 +53,7 @@ public class GoodsController {
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
+        modelMap.put("cartList",session.getAttribute("cartList"));
         return "goods";
     }
     @RequestMapping(value ="/{category}/page/{page}", method = RequestMethod.GET)
@@ -57,6 +65,7 @@ public class GoodsController {
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryName",categoryName);
         modelMap.put("categoryFilter",true);
+        modelMap.put("cartList",session.getAttribute("cartList"));
         return "goods";
     }
 
@@ -137,8 +146,37 @@ public class GoodsController {
         modelMap.put("goods", goodsService.getGoodsById(id));
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
-
+        CartItem cartItem = new CartItem();
+        cartItem.setQuantity(1);
+        modelMap.put("cartItem", cartItem);
+        modelMap.put("cartList",session.getAttribute("cartList"));
         return "goods_detail";
+    }
+    @RequestMapping(value = "/goods/cart/{id}/add", method = RequestMethod.POST)
+    public String addToCart(@PathVariable(value = "id") int id, CartItem cartItem){
+        if (session.getAttribute("cartList")==null){
+            List<CartItem> cartList = new ArrayList<>();
+            session.setAttribute("cartList",cartList);
+        }
+        List<CartItem> cartList = (ArrayList<CartItem>)session.getAttribute("cartList");
+        cartItem.setGoods(goodsService.getGoodsById(id));
+        cartList.add(cartItem);
+        session.setAttribute("cartList",cartList);
+        return "redirect:/catalog/goods/"+id;
+    }
+    @RequestMapping(value = "/goods/cart",method = RequestMethod.GET)
+    public String getCartItems(ModelMap modelMap){
+        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("categoryFilter",false);
+        modelMap.put("cartList",session.getAttribute("cartList"));
+        List<CartItem> cartList = (ArrayList<CartItem>)session.getAttribute("cartList");
+        float sum = 0;
+        for (int i = 0; i < cartList.size(); i++) {
+            sum = sum+cartList.get(i).getQuantity()*cartList.get(i).getGoods().getPrice();
+        }
+        modelMap.put("sum",sum);
+        return "cart";
     }
     @RequestMapping(value = "/employee/edit/category/{id}", method = RequestMethod.GET)
     public String editCategory(@PathVariable(value = "id") int id, ModelMap modelMap){
