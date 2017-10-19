@@ -4,7 +4,7 @@
 <html lang="en" >
 <head>
     <meta charset="utf-8">
-    <title>ADD PAGE</title>
+    <title>Edit Categories</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
@@ -121,7 +121,7 @@
     </section>
     <section class="header_text sub">
         <img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="Login or register" >
-        <h3><span>ADD GOODS OR CATEGORY</span></h3>
+        <h3><span>EDIT CATEGORIES</span></h3>
     </section>
     </section>
     <section class="main-content">
@@ -134,139 +134,33 @@
                 <c:if test="${not empty error2}">
                     <div class="error">${error2}</div>
                 </c:if>
-                <spring:form action="/catalog/employee/add/category" method="post" commandName="category" class="form-stacked">
+                <spring:form action="/catalog/employee/add/category" method="post" commandName="listCategory" class="form-stacked">
+                    <c:forEach var="categoryVar"  items="${listCategory}">
                     <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">Id:</label>
+                            <div class="controls">
+                                <spring:input path="categoryVar.id" readonly="true" type="text" placeholder="Enter name of new category" class="input-xlarge"/>
+                            </div>
+                        </div>
                         <div class="control-group">
                             <label class="control-label">Name:</label>
                             <div class="controls">
-                                <spring:input path="name" type="text" placeholder="Enter name of new category" class="input-xlarge"/>
+                                <spring:input path="categoryVar.name" type="text" placeholder="Enter name of new category" class="input-xlarge"/>
                                 <spring:errors path="name" cssClass="error"/>
                             </div>
                         </div>
-                        <hr>
-                        <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Add new category"></div>
-                    </fieldset>
-                    <input type="hidden"
-                           name="${_csrf.parameterName}"
-                           value="${_csrf.token}"/>
+                    </fieldset><br>
+                    </c:forEach>
+
+                    <hr>
+                    <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Add new category"></div>
                 </spring:form>
 
             </div>
             <div class="span7">
                 <h4 class="title"><span class="text"><strong>New Goods</strong> Form</span></h4>
-                <c:if test="${not empty error1}">
-                    <div class="error">${error1}</div>
-                </c:if>
-                <c:if test="${not empty msgG}">
-                    <div class="msg">${msgG}</div>
-                </c:if>
-                <spring:form action="/catalog/employee/add/goods" method="post" commandName="goods" class="form-stacked">
-                    <fieldset>
-                        <div class="control-group">
-                            <label class="control-label">Name:</label>
-                            <div class="controls">
-                                <spring:input path="name" type="text" placeholder="Enter name of goods" class="input-xlarge"/>
-                                <fieldset>
-                                <spring:errors path="name" cssClass="error"/>
-                                </fieldset>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Price:</label>
-                            <div class="controls">
-                                <spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge" pattern="\d+(\.\d{2})?" title="Price must be a number"/>
-                                <fieldset>
-                                <spring:errors path="price" cssClass="error"/>
-                                </fieldset>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Number Of Players:</label>
-                                <div class="controls">
-                                    <spring:select path="numberOfPlayers" class="input-xlarge">
-                                        <c:forEach   begin = "1" end = "10"  varStatus="count">
-                                            <spring:option value="${count.index}">${count.index}</spring:option>
-                                        </c:forEach>
-                                    </spring:select>
-                                </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Duration Of The Game:</label>
-                            <div class="controls">
-                                <spring:select path="duration" class="input-xlarge">
-                                    <c:forEach  begin = "1" end = "8"  varStatus="count">
-                                        <spring:option value="${count.index/2.0}">${count.index/2.0}</spring:option>
-                                    </c:forEach>
-                                </spring:select>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Amount:</label>
-                            <div class="controls">
-                                <spring:input path="amount" type="text" placeholder="Enter the quantity of goods" class="input-xlarge" pattern="^[ 0-9]+$" title="Amount must be a integer"/>
-                                <fieldset>
-                                    <spring:errors path="amount" cssClass="error"/>
-                                </fieldset>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Is Visible:</label>
-                            <div class="controls">
-                                <spring:select path="visible" class="input-xlarge">
-                                <spring:option value="1">Yes</spring:option>
-                                <spring:option value="0">No</spring:option>
-                                </spring:select>
-                                <%--<spring:input path="visible" type="text" placeholder="Show goods at the store?" class="input-xlarge"/>--%>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Description:</label>
-                            <div class="controls">
-                                <spring:textarea path="description" cols="20" rows="5"/>
-                                <fieldset>
-                                    <spring:errors path="description" cssClass="error"/>
-                                </fieldset>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Complexity Of Rules:</label>
-                            <div class="controls">
-                                <spring:select path="rule.name" class="input-xlarge">
-                                    <spring:option value="${'easy'}">Easy</spring:option>
-                                    <spring:option value="${'very easy'}">Very Easy</spring:option>
-                                    <spring:option value="${'medium'}">Medium</spring:option>
-                                    <spring:option value="${'hard'}">Hard</spring:option>
-                                    <spring:option value="${'very hard'}">Very Hard</spring:option>
-                                </spring:select>
 
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Category Name:</label>
-                            <div class="controls">
-                                <spring:select path="category.name" class="input-xlarge">
-                                    <c:forEach var="categoryVar"  items="${listCategory}">
-                                        <spring:option value="${categoryVar.name}">${categoryVar.name}</spring:option>
-                                    </c:forEach>
-                                </spring:select>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label">Image (1x1):</label>
-                            <div class="controls">
-                                <spring:input path="img" type="text" placeholder="Put URL of image here" class="input-xlarge"/>
-                                <fieldset>
-                                    <spring:errors path="img" cssClass="error"/>
-                                </fieldset>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Add new goods"></div>
-                    </fieldset>
-                    <input type="hidden"
-                           name="${_csrf.parameterName}"
-                           value="${_csrf.token}"/>
-                </spring:form>
             </div>
         </div>
     </section>

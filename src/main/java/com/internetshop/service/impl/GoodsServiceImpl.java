@@ -140,10 +140,24 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
+    public Category getCategoryById(int id) {
+        CategoryEntity categoryEntity = goodsRepository.getCategoryById(id);
+        Category category = new Category(categoryEntity.getId(),categoryEntity.getName());
+        return category;
+    }
+
+    @Override
     public void addCategory(Category category) {
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setName(category.getName());
         goodsRepository.addCategory(categoryEntity);
+    }
+
+    @Override
+    public void updateCategory(Category category) {
+        CategoryEntity categoryEntity = goodsRepository.getCategoryById(category.getId());
+        categoryEntity.setName(category.getName());
+        goodsRepository.updateCategory(categoryEntity);
     }
 
     @Override

@@ -140,6 +140,49 @@ public class GoodsController {
 
         return "goods_detail";
     }
+    @RequestMapping(value = "/employee/edit/category/{id}", method = RequestMethod.GET)
+    public String editCategory(@PathVariable(value = "id") int id, ModelMap modelMap){
+        boolean editCatFlag = true;
+        modelMap.put("editCatFlag",editCatFlag);
+        modelMap.put("currentPage",1);
+        modelMap.put("amountOfPages",getAmountOfPages());
+        modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
+        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("categoryFilter",false);
+        modelMap.put("category",goodsService.getCategoryById(id));
+        return "goods";
+    }
+
+    @RequestMapping(value ="/employee/edit/category", method = RequestMethod.POST)
+    public String editCategory(@ModelAttribute(value = "category")  @Valid Category category, BindingResult bindingResult,
+                            ModelMap modelMap) {
+        if(bindingResult.hasErrors()) {
+            boolean editCatFlag = true;
+            modelMap.put("editCatFlag",editCatFlag);
+            modelMap.put("category",category);
+            modelMap.put("currentPage",1);
+            modelMap.put("amountOfPages",getAmountOfPages());
+            modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
+            modelMap.put("randomGoods",getRandomGoods());
+            modelMap.put("listCategory",goodsService.getAllCategories());
+            modelMap.put("categoryFilter",false);
+            return "goods";
+        }
+
+
+        goodsService.updateCategory(category);
+
+        modelMap.put("currentPage",1);
+        modelMap.put("amountOfPages",getAmountOfPages());
+        modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
+        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("categoryFilter",false);
+//        goodsService.getCategoryById(category.getId());
+        modelMap.put("msg", "You've been edited category successfully.");
+        return "goods";
+    }
 
     public long getAmountOfPages(){
         if (goodsService.getAmountOfGoods()% amountOfGoodsOnPage ==0){

@@ -27,6 +27,146 @@
 			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 			<script src="/resources/themes/js/respond.min.js"></script>
 		<![endif]-->
+		<style>
+			html, body{
+				min-height:100%;
+			}
+
+			body{
+				background-image: -webkit-linear-gradient(top, #edecec, #cecbc9);
+				background-image: linear-gradient(top, #edecec, #cecbc9);
+			}
+
+			.buttonHolder{
+				margin:23px auto;
+				width:500px;
+			}
+
+
+			.button{
+				background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
+				background-image: linear-gradient(top, #f4f1ee, #fff);
+				border-radius: 50%;
+				box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgba(204,198,197,.5);
+				float:left;
+				height: 20px;
+				margin: 0 8px 8px 0;
+				position: relative;
+				width: 20px;
+				-webkit-transition: all .1s linear;
+				transition: all .1s linear;
+			}
+
+			.button:after{
+				color:#e9e6e4;
+				content: "";
+				display: block;
+				font-size: 15px;
+				height: 15px;
+				text-decoration: none;
+				text-shadow: 0px -1px 1px #bdb5b4, 1px 1px 1px white;
+				position: absolute;
+				width: 15px;
+			}
+
+
+			.heart:after{
+				content: "❤";
+				left: 6px;
+				top: 4px;
+			}
+
+			.flower:after{
+				content: "\270E";
+				left: 3px;
+				top: 0px;
+			}
+
+			.tick:after{
+				content: "✔";
+				left:6px;
+				top:4px;
+			}
+
+			.cross:after{
+				content: "\2716";
+				left: 3px;
+				top: 1px;
+			}
+
+			.button:hover{
+				background-image: -webkit-linear-gradient(top, #fff, #f4f1ee);
+				background-image: linear-gradient(top, #fff, #f4f1ee);
+				color:#0088cc;
+			}
+
+			.heart:hover:after{
+				color:#f94e66;
+				text-shadow:0px 0px 6px #f94e66;
+			}
+
+			.flower:hover:after{
+				color:#f99e4e;
+				text-shadow:0px 0px 6px #f99e4e;
+			}
+
+			.tick:hover:after{
+				color:#83d244;
+				text-shadow:0px 0px 6px #83d244;
+			}
+
+			.cross:hover:after{
+				color:#eb2f2f;
+				text-shadow:0px 0px 6px #eb2f2f;
+			}
+
+
+
+			.button:active{
+				background-image: -webkit-linear-gradient(top, #efedec, #f7f4f4);
+				background-image: linear-gradient(top, #efedec, #f7f4f4);
+				box-shadow: 0 3px 5px 0 rgba(0,0,0,.4), inset 0px -3px 1px 1px rgba(204,198,197,.5);
+			}
+
+			.button:active:after{
+				color:#dbd2d2;
+				text-shadow: 0px -1px 1px #bdb5b4, 0px 1px 1px white;
+			}
+
+			#categoryInput {
+				width: 200px; /* Ширина поля в пикселах */
+			}
+
+			.error {
+				padding: 15px;
+				margin-bottom: 20px;
+				border: 1px solid transparent;
+				border-radius: 4px;
+				color: #a94442;
+				background-color: #f2dede;
+				border-color: #ebccd1;
+			}
+
+			.msg {
+				padding: 15px;
+				margin-bottom: 20px;
+				border: 1px solid transparent;
+				border-radius: 4px;
+				color: #31708f;
+				background-color: #d9edf7;
+				border-color: #bce8f1;
+			}
+
+			#login-box {
+				width: 300px;
+				padding: 20px;
+				margin: 100px auto;
+				background: #fff;
+				-webkit-border-radius: 2px;
+				-moz-border-radius: 2px;
+				border: 1px solid #000;
+			}
+		</style>
 	</head>
     <body>		
 		<div id="top-bar" class="container">
@@ -165,11 +305,37 @@
 							<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
 								<form action="/catalog/employee/add">
 									<button type="submit" class="btn btn-inverse">Add new Goods or Category</button>
+									<hr>
 								</form>
+
+								<c:if test="${not empty msg}">
+								<div class="msg">${msg}</div>
+								</c:if>
+
+								<c:if test="${editCatFlag==true}" >
+									<spring:form action="/catalog/employee/edit/category" method="post" commandName="category" class="form-stacked">
+										<fieldset>
+											<div class="control-group">
+												<label class="control-label">Id:</label>
+												<div class="controls">
+													<spring:input path="id" readonly="true" type="text" class="input-xlarge" id="categoryInput"/>
+												</div>
+											</div>
+											<div class="control-group">
+												<label class="control-label">Name:</label>
+												<div class="controls">
+													<spring:input path="name" type="text" placeholder="Enter name of new category" class="input-xlarge" id="categoryInput"/>
+													<spring:errors path="name" cssClass="error"/>
+												</div>
+											</div>
+											<div class="actions"><input tabindex="9" class="btn btn-inverse small" type="submit" value="Edit category"></div>
+											<hr>
+										</fieldset>
+									</spring:form>
+								</c:if>
 							</c:if>
 
 							<ul class="nav nav-list">
-
 								<li class="nav-header">SUB CATEGORIES</li>
 									<li
 									<c:if test="${!categoryFilter}" >
@@ -177,11 +343,23 @@
 									</c:if>
 									><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
 								<c:forEach var="categoryVar"  items="${listCategory}">
+
+									<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
+										<div class="buttonHolder">
+											<a href="/catalog/employee/edit/category/${categoryVar.id}" class="button flower"></a>
+										</div>
+										<div class="buttonHolder">
+											<a href="#" class="button cross"></a>
+										</div>
+									</c:if>
+
 									<li
 									<c:if test="${categoryVar.name == categoryName}" >
 										class="active"
 									</c:if>
-									><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a></li>
+									><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
+									</li>
+
 								</c:forEach>
 							</ul>
 							<br/>

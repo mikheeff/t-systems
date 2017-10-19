@@ -21,6 +21,8 @@ public interface GoodsRepository {
     List<CategoryEntity> getAllCategories();
     int getIdCategoryByName(String name) throws NoSuchCategoryException;
     void addCategory(CategoryEntity categoryEntity);
+    CategoryEntity getCategoryById(int id);
+    void updateCategory(CategoryEntity categoryEntity);
     int getIdRuleByName(String name);
 
 }

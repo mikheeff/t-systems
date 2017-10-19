@@ -84,8 +84,19 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public int getIdCategoryByName(String name)  {
-        int id = em.createQuery("select categoryEntity.id from CategoryEntity categoryEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
-        return id;
+        return em.createQuery("select categoryEntity.id from CategoryEntity categoryEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
+    }
+
+    @Override
+    public CategoryEntity getCategoryById(int id) {
+        return em.find(CategoryEntity.class, id);
+    }
+
+    @Override
+    public void updateCategory(CategoryEntity categoryEntity) {
+        em.getTransaction().begin();
+        em.merge(categoryEntity);
+        em.getTransaction().commit();
     }
 
     @Override
@@ -95,9 +106,9 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         em.getTransaction().commit();
     }
 
+
     @Override
     public int getIdRuleByName(String name) {
-        int id = em.createQuery("select ruleEntity.id from RuleEntity ruleEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
-            return id;
+        return em.createQuery("select ruleEntity.id from RuleEntity ruleEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
     }
 }

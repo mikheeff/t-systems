@@ -23,5 +23,7 @@ public interface GoodsService {
     long getAmountOfGoods();
     long getAmountOfGoodsByCategoryName(String categoryName);
     List<Category> getAllCategories();
+    Category getCategoryById(int id);
+    void updateCategory(Category category);
     void addCategory(Category category);
 }
