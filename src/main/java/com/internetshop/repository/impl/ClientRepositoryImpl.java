@@ -68,4 +68,8 @@ public class ClientRepositoryImpl implements ClientRepository {
         return em.createQuery("select roleEntity from RoleEntity roleEntity where id = :id", RoleEntity.class).setParameter("id",id).getSingleResult();
     }
 
+    @Override
+    public ClientAddressEntity getAddressById(int id) {
+        return em.find(ClientAddressEntity.class, id);
+    }
 }

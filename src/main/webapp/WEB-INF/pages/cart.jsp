@@ -238,7 +238,10 @@
 			<section class="main-content">				
 				<div class="row">
 					<%--<spring:form action="/catalog/goods/cart/order" method="post" commandName="cartItem" class="form-inline">--%>
-					<div class="span9">					
+					<div class="span9">
+						<c:if test="${not empty error}">
+							<div class="error">${error}</div>
+						</c:if>
 						<h4 class="title"><span class="text"><strong>Your</strong> Cart</span></h4>
 						<table class="table table-striped">
 							<thead>
@@ -296,11 +299,22 @@
 							<%--<strong>Total</strong>: $119.50<br>--%>
 						<%--</p>--%>
 						<hr/>
-						<p class="buttons center">				
-							<button class="btn btn-inverse large" type="button">Continue</button>
-						</p>
+						<c:if test="${client!=null}">
+							<spring:form action="/catalog/profile/goods/cart/continue" method="get">
+									<span class="pull-right">
+										<button type="submit" class="btn btn-inverse">Continue</button>
+									</span>
+							</spring:form>
+						</c:if>
+						<c:if test="${client==null}">
+							<spring:form action="/catalog/goods/cart?error" method="get">
+									<span class="pull-right">
+										<button type="submit" class="btn btn-inverse">Continue</button>
+									</span>
+							</spring:form>
+						</c:if>
+
 					</div>
-					<%--</spring:form>--%>
 					<div class="span3 col">
 						<div class="block">
 							<ul class="nav nav-list">

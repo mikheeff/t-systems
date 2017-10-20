@@ -3,6 +3,7 @@ package com.internetshop.service.impl;
 import com.internetshop.Exceptions.EmailExistException;
 import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
+import com.internetshop.entities.OrderEntity;
 import com.internetshop.entities.RoleEntity;
 import com.internetshop.model.Client;
 import com.internetshop.model.ClientAddress;
@@ -13,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -37,7 +40,10 @@ public class ClientServiceImpl implements ClientService {
 
         client.setPassword(bCryptPasswordEncoder.encode(client.getPassword()));
 
-        this.clientRepository.addClient(convertClientToDAO(client));
+        ClientEntity clientEntity = convertClientToDAO(client);
+        Set<OrderEntity> orderEntitySet = new HashSet<>();
+        clientEntity.setOrderEntities(orderEntitySet);
+        this.clientRepository.addClient(clientEntity);
 
     }
 

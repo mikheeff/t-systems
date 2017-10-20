@@ -2,12 +2,8 @@ package com.internetshop.service.impl;
 
 import com.internetshop.Exceptions.NoSuchCategoryException;
 import com.internetshop.Exceptions.NoSuchRulesException;
-import com.internetshop.entities.CategoryEntity;
-import com.internetshop.entities.GoodsEntity;
-import com.internetshop.entities.RuleEntity;
-import com.internetshop.model.Category;
-import com.internetshop.model.Goods;
-import com.internetshop.model.Rule;
+import com.internetshop.entities.*;
+import com.internetshop.model.*;
 import com.internetshop.repository.api.GoodsRepository;
 import com.internetshop.service.api.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,6 +160,8 @@ public class GoodsServiceImpl implements GoodsService {
     public void deleteCategoryById(int id) {
         goodsRepository.deleteCategoryById(id);
     }
+
+
 
     @Override
     public GoodsEntity convertGoodsToDAO(Goods goods) {

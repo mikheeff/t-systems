@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "status")
+@Table(name = "order_status")
 public class StatusEntity {
     @Id
     @Column(name = "idstatus")

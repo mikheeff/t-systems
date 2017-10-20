@@ -2,6 +2,8 @@ package com.internetshop.model;
 
 import javax.persistence.Entity;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Order {
     private int id;
@@ -11,12 +13,15 @@ public class Order {
     private Status status;
     private PaymentType paymentType;
     private DeliveryMethod deliveryMethod;
+    private Set<CartItem> cartItems = new HashSet<>();
+    private Client client;
 
-    Order(){
+
+    public Order(){
 
     }
 
-    public Order(int id, Date date, int payStatus, String comment, Status status, PaymentType paymentType, DeliveryMethod deliveryMethod) {
+    public Order(int id, Date date, int payStatus, String comment, Status status, PaymentType paymentType, DeliveryMethod deliveryMethod, Set<CartItem> cartItems, Client client) {
         this.id = id;
         this.date = date;
         this.payStatus = payStatus;
@@ -24,6 +29,8 @@ public class Order {
         this.status = status;
         this.paymentType = paymentType;
         this.deliveryMethod = deliveryMethod;
+        this.cartItems = cartItems;
+        this.client = client;
     }
 
     public int getId() {
@@ -80,5 +87,21 @@ public class Order {
 
     public void setDeliveryMethod(DeliveryMethod deliveryMethod) {
         this.deliveryMethod = deliveryMethod;
+    }
+
+    public Set<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(Set<CartItem> cartItem) {
+        this.cartItems = cartItem;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 }

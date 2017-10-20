@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Catalog of games</title>
+    <title>Confirm Order</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
@@ -133,8 +133,8 @@
             text-shadow: 0px -1px 1px #bdb5b4, 0px 1px 1px white;
         }
 
-        #categoryInput {
-            width: 200px; /* Ширина поля в пикселах */
+        #orderInput {
+            width: 70px; /* Ширина поля в пикселах */
         }
 
         .error {
@@ -233,7 +233,7 @@
     </section>
     <section class="header_text sub">
         <img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="New products" >
-        <h4><span>Shopping Cart</span></h4>
+        <h4><span>Confirm Order</span></h4>
     </section>
     <section class="main-content">
         <div class="row">
@@ -244,55 +244,98 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                         <th><big>Client Name</big></th>
-                        <th><big>Image</big></th>
+                        <th><big>Client Surname</big></th>
+                        <th><big>Phone:</big></th>
+                        <th>&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><big>${client.name}</big></td>
+                            <td><big>${client.surname}</big></td>
+                            <td><big>${client.phone}</big></td>
+                            <td>&nbsp;</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
                         <th><big>Product Name</big></th>
                         <th><big>Quantity</big></th>
                         <th><big>Unit Price</big></th>
                         <th><big>Total</big></th>
+                        <th>&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="cartItem"  items="${cartList}">
+                    <c:forEach var="cartItem"  items="${cartList}" varStatus="count">
                         <tr>
-                            <td>
-                                <div class="buttonHolder">
-                                    <a href="" class="button cross"></a>
-                                </div>
-                            </td>
-                            <td><a href="${cartItem.goods.img}"><img alt="" height="100" width="100" src="${cartItem.goods.img}"></a></td>
+                            <th>${count.count}</th>
                             <td><big>${cartItem.goods.name}</big></td>
-                                <%--<spring:input path="cartItem" type="text" class="span1" placeholder="1" pattern="^[1-9]+$" title="Amount must be a integer and more then zero"/>--%>
-                                <%--<td><input type="text" placeholder="1" class="input-mini"></td>--%>
                             <td><big>${cartItem.quantity}</big></td>
                             <td><big>${cartItem.goods.price}</big></td>
                             <td><big>${cartItem.goods.price*cartItem.quantity}</big></td>
+                            <th>&nbsp;</th>
                         </tr>
                     </c:forEach>
+                    <spring:form action="/catalog/profile/goods/order/confirm" method="post" commandName="order" class="form-inline">
+                    </tbody>
+                </table>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th><big>Choose the delivery method</big></th>
+                            <th><big>Choose the payment type</big></th>
+                            <th><big>&nbsp;</big></th>
+                            <th><big>Additional information</big></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <spring:select path="deliveryMethod.name" class="input-xlarge" id ="orderInput">
+                                    <c:forEach var="methodVar"  items="${listDeliveryMethod}">
+                                        <spring:option value="${methodVar.name}">${methodVar.name}</spring:option>
+                                    </c:forEach>
+                                </spring:select>
+                            </td>
+                            <td>
+                                <spring:select path="paymentType.name" class="input-xlarge" id ="orderInput">
+                                    <c:forEach var="payTypeVar"  items="${listPaymentType}">
+                                        <spring:option value="${payTypeVar.name}">${payTypeVar.name}</spring:option>
+                                    </c:forEach>
+                                </spring:select>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td><spring:textarea path="comment" cols="30" rows="3"/></td>
+                        </tr>
                     <tr>
                         <td>&nbsp;</td>
+                        <td><big>Date: ${date}</big></td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td><strong><big>${sum}</big></strong></td>
+                        <td><strong><big><big>Total: ${sum}</big></big></strong></td>
                     </tr>
                     </tbody>
                 </table>
-
-                <spring:form action="/catalog/employee/add/category" method="post" commandName="category" class="form-stacked">
-                    <fieldset>
-                        <div class="control-group">
-                            <label class="control-label">Name:</label>
-                            <div class="controls">
-                                <spring:input path="name" type="text" placeholder="Enter name of new category" class="input-xlarge"/>
-                                <spring:errors path="name" cssClass="error"/>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Add new category"></div>
-                    </fieldset>
-                </spring:form>
+                <hr>
+                    <span class="pull-right">
+                        <button type="submit" class="btn btn-inverse">Confirm Order</button>
+                    </span>
+                    </spring:form>
+            </div>
                 <div class="span3 col">
                     <div class="block">
                         <ul class="nav nav-list">

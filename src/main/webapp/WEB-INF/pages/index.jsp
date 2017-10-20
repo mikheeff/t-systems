@@ -46,7 +46,7 @@
                                 }
 //							</script>
 							<li><a href="${pageContext.request.contextPath}/clients/profile">My Account</a></li>
-							<c:if test="${client.role.name=='ROLE_CLIENT'}">
+							<c:if test="${client.role.name!='ROLE_EMPLOYEE'}">
 
 							<c:if test="${cartList==null}">
 								<li><a href="/catalog/goods/cart">Your Cart(0)</a></li>

@@ -113,6 +113,8 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         em.getTransaction().commit();
     }
 
+
+
     @Override
     public int getIdRuleByName(String name) {
         return em.createQuery("select ruleEntity.id from RuleEntity ruleEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();

@@ -77,12 +77,15 @@
                                 }
 							</script>
 							<li><a href="/clients/profile">My Account</a></li>
+							<c:if test="${client.role.name!='ROLE_EMPLOYEE'}">
 							<c:if test="${cartList==null}">
 								<li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
 							</c:if>
 							<c:if test="${cartList!=null}">
 								<li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
 							</c:if>
+							</c:if>
+
 							<c:if test="${client.role.name!=null}" >
 
 								<form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >

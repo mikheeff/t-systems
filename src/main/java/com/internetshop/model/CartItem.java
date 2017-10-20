@@ -5,8 +5,6 @@ public class CartItem {
     private int id;
     private Goods goods;
     private int quantity;
-    private int deliveryIncluded;
-    private Client client;
 
 
     public CartItem() {
@@ -16,6 +14,7 @@ public class CartItem {
         this.goods = goods;
         this.quantity = quantity;
     }
+
 
     public Goods getGoods() {
         return goods;

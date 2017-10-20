@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "paymentType")
+@Table(name = "payment_type")
 public class PaymentTypeEntity {
     @Id
     @Column(name = "type_id")
@@ -17,13 +17,12 @@ public class PaymentTypeEntity {
     @OneToMany(mappedBy = "paymentType", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<OrderEntity> orderEntities = new HashSet<>();
 
-    PaymentTypeEntity(){
+    public PaymentTypeEntity(){
 
     }
 
-    public PaymentTypeEntity(String name, Set<OrderEntity> orderEntities) {
+    public PaymentTypeEntity(String name) {
         this.name = name;
-        this.orderEntities = orderEntities;
     }
 
     public int getId() {

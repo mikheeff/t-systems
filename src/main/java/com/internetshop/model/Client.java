@@ -5,6 +5,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Client {
     private int id;
@@ -36,6 +38,8 @@ public class Client {
     private int orderCounter;
     private Role role;
     private ClientAddress clientAddress;
+    private Set<Order> order = new HashSet<>();
+
 
 
     public Client() {
@@ -132,6 +136,14 @@ public class Client {
 
     public void setClientAddress(ClientAddress clientAddress) {
         this.clientAddress = clientAddress;
+    }
+
+    public Set<Order> getOrder() {
+        return order;
+    }
+
+    public void setOrder(Set<Order> order) {
+        this.order = order;
     }
 
     @Override

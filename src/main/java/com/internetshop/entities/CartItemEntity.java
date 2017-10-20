@@ -13,11 +13,11 @@ public class CartItemEntity {
     private int id;
     @Column(name = "quantity")
     private int quantity;
-    @Column(name = "delivery_included") //todo в ордер
-    private int deliveryIncluded;
+
     @ManyToOne
     @JoinColumn(name = "goods_id")
     private GoodsEntity goodsEntity;
+
     @ManyToOne
     @JoinColumn(name = "order_id")
     private OrderEntity orderEntity;
@@ -26,9 +26,9 @@ public class CartItemEntity {
 
     }
 
-    public CartItemEntity(int quantity, int deliveryIncluded, GoodsEntity goodsEntity, OrderEntity orderEntity) {
+
+    public CartItemEntity(int quantity, GoodsEntity goodsEntity, OrderEntity orderEntity) {
         this.quantity = quantity;
-        this.deliveryIncluded = deliveryIncluded;
         this.goodsEntity = goodsEntity;
         this.orderEntity = orderEntity;
     }
@@ -47,14 +47,6 @@ public class CartItemEntity {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public int getDeliveryIncluded() {
-        return deliveryIncluded;
-    }
-
-    public void setDeliveryIncluded(int deliveryIncluded) {
-        this.deliveryIncluded = deliveryIncluded;
     }
 
     public GoodsEntity getGoodsEntity() {

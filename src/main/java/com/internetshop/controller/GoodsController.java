@@ -2,22 +2,21 @@ package com.internetshop.controller;
 
 import com.internetshop.Exceptions.NoSuchCategoryException;
 import com.internetshop.Exceptions.NoSuchRulesException;
-import com.internetshop.model.CartItem;
-import com.internetshop.model.Category;
-import com.internetshop.model.Goods;
+import com.internetshop.model.*;
+import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
+import com.internetshop.service.api.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/catalog")
@@ -25,6 +24,10 @@ public class GoodsController {
 
     @Autowired
     private GoodsService goodsService;
+    @Autowired
+    private ClientService clientService;
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     public HttpSession session;
@@ -165,19 +168,45 @@ public class GoodsController {
         return "redirect:/catalog/goods/"+id;
     }
     @RequestMapping(value = "/goods/cart",method = RequestMethod.GET)
-    public String getCartItems(ModelMap modelMap){
+    public String getCartItems(ModelMap modelMap,
+                               @RequestParam(value = "error", required = false) String error){
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
-        modelMap.put("categoryFilter",false);
         modelMap.put("cartList",session.getAttribute("cartList"));
-        List<CartItem> cartList = (ArrayList<CartItem>)session.getAttribute("cartList");
-        float sum = 0;
-        for (int i = 0; i < cartList.size(); i++) {
-            sum = sum+cartList.get(i).getQuantity()*cartList.get(i).getGoods().getPrice();
+        modelMap.put("client",session.getAttribute("client"));
+        modelMap.put("sum",getSumOfOrder((ArrayList<CartItem>)session.getAttribute("cartList")));
+        if (error != null) {
+            modelMap.put("error", "To place an order please log in");
         }
-        modelMap.put("sum",sum);
         return "cart";
     }
+
+    @RequestMapping(value = "/profile/goods/cart/continue",method = RequestMethod.GET)
+    public String getOrder(ModelMap modelMap){
+        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("cartList",session.getAttribute("cartList"));
+        modelMap.put("sum",getSumOfOrder((ArrayList<CartItem>)session.getAttribute("cartList")));
+        modelMap.put("client",session.getAttribute("client"));
+        Date date = new Date();
+        SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd");
+        modelMap.put("date",formatForDateNow.format(date));
+        modelMap.put("order", new Order());
+        modelMap.put("listDeliveryMethod",orderService.getAllDeliveryMethods());
+        modelMap.put("listPaymentType",orderService.getAllPaymentTypes());
+        return "confirm_order";
+    }
+
+    @RequestMapping(value = "/profile/goods/order/confirm",method = RequestMethod.POST)
+    public String addOrder(ModelMap modelMap,Order order){
+        Set<CartItem> cartItemSet = new HashSet<>((ArrayList<CartItem>)session.getAttribute("cartList"));
+        order.setCartItems(cartItemSet);
+        order.setClient((Client)session.getAttribute("client"));
+        orderService.addOrder(order);
+        return "confirm_order";
+    }
+
+
     @RequestMapping(value = "/employee/edit/category/{id}", method = RequestMethod.GET)
     public String editCategory(@PathVariable(value = "id") int id, ModelMap modelMap){
         boolean editCatFlag = true;
@@ -254,5 +283,13 @@ public class GoodsController {
             goodsList.add(goodsService.getGoodsById(id));
         }
         return goodsList;
+    }
+
+    public float getSumOfOrder(List<CartItem> cartList){
+        float sum = 0;
+        for (int i = 0; i < cartList.size(); i++) {
+            sum = sum+cartList.get(i).getQuantity()*cartList.get(i).getGoods().getPrice();
+        }
+        return sum;
     }
 }

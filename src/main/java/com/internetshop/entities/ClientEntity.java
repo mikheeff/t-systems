@@ -27,7 +27,8 @@ public class ClientEntity {
     @Column (name = "order_counter")
     private int orderCounter;
 
-
+    @OneToMany(mappedBy = "clientEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<OrderEntity> orderEntities = new HashSet<>();
 
     @OneToOne(cascade = CascadeType.ALL,fetch=FetchType.LAZY)   //
     @JoinColumn(name = "home_address_id")
@@ -131,5 +132,13 @@ public class ClientEntity {
 
     public void setRoleEntity(RoleEntity roleEntity) {
         this.roleEntity = roleEntity;
+    }
+
+    public Set<OrderEntity> getOrderEntities() {
+        return orderEntities;
+    }
+
+    public void setOrderEntities(Set<OrderEntity> orderEntities) {
+        this.orderEntities = orderEntities;
     }
 }

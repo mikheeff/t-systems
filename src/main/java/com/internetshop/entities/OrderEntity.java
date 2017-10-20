@@ -23,6 +23,9 @@ public class OrderEntity {
     @Column(name = "prim")
     private String comment;
 
+    @ManyToOne
+    @JoinColumn(name = "id_client")
+    private ClientEntity clientEntity;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
@@ -43,13 +46,15 @@ public class OrderEntity {
 
     }
 
-    public OrderEntity(Date date, int payStatus, String comment, StatusEntity status, PaymentTypeEntity paymentType, DeliveryMethodEntity deliveryMethod) {
+    public OrderEntity(Date date, int payStatus, String comment, ClientEntity clientEntity, StatusEntity status, PaymentTypeEntity paymentType, DeliveryMethodEntity deliveryMethod, Set<CartItemEntity> cartItemEntities) {
         this.date = date;
         this.payStatus = payStatus;
         this.comment = comment;
+        this.clientEntity = clientEntity;
         this.status = status;
         this.paymentType = paymentType;
         this.deliveryMethod = deliveryMethod;
+        this.cartItemEntities = cartItemEntities;
     }
 
     public int getId() {
@@ -106,5 +111,22 @@ public class OrderEntity {
 
     public void setDeliveryMethod(DeliveryMethodEntity deliveryMethod) {
         this.deliveryMethod = deliveryMethod;
+    }
+
+
+    public Set<CartItemEntity> getCartItemEntities() {
+        return cartItemEntities;
+    }
+
+    public void setCartItemEntities(Set<CartItemEntity> cartItemEntities) {
+        this.cartItemEntities = cartItemEntities;
+    }
+
+    public ClientEntity getClientEntity() {
+        return clientEntity;
+    }
+
+    public void setClientEntity(ClientEntity clientEntity) {
+        this.clientEntity = clientEntity;
     }
 }

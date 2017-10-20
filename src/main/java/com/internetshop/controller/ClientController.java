@@ -54,7 +54,6 @@ public class ClientController {
         if (logout != null) {
             modelMap.put("msg", "You've been logged out successfully.");
         }
-//        modelMap.put("cartList",GoodsController.session.getAttribute("cartList")); todo должна ли корзина очищаться после логаута?
         return "register";
     }
 

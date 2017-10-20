@@ -4,7 +4,7 @@ public class PaymentType {
     private int id;
     private String name;
 
-    PaymentType(){
+    public PaymentType(){
 
     }
 
