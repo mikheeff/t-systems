@@ -2,6 +2,8 @@ package com.internetshop.repository.impl;
 
 import com.internetshop.entities.*;
 import com.internetshop.repository.api.OrderRepository;
+import com.sun.org.apache.xerces.internal.util.Status;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -24,6 +26,11 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<PaymentTypeEntity> getAllPaymentTypes() {
         return em.createQuery("select types from PaymentTypeEntity types", PaymentTypeEntity.class).getResultList();
+    }
+
+    @Override
+    public List<StatusEntity> getAllStatuses() {
+        return em.createQuery("select status from StatusEntity status", StatusEntity.class).getResultList();
     }
 
     @Override
@@ -62,6 +69,18 @@ public class OrderRepositoryImpl implements OrderRepository {
     public List<OrderEntity> getAllOrders() {
         return em.createQuery("select orderEntity from OrderEntity orderEntity", OrderEntity.class).getResultList();
     }
+
+    @Override
+    public OrderEntity getOrderById(int id) {
+        return em.find(OrderEntity.class, id);
+    }
+
+    @Override
+    public List<CartItemEntity> getAllCartItemsFromOrderByOrderId(int id) {
+        return em.createQuery("select cartItemEntity from CartItemEntity cartItemEntity where orderEntity.id = :id", CartItemEntity.class).setParameter("id",id).getResultList();
+    }
+
+
 
     //    @Override
 //    public OrderEntity getOrderByClientId(int id) {

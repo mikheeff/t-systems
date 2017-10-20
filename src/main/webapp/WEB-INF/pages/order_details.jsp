@@ -134,7 +134,7 @@
         }
 
         #orderInput {
-            width: 70px; /* Ширина поля в пикселах */
+            width: 150px; /* Ширина поля в пикселах */
         }
 
         .error {
@@ -233,7 +233,7 @@
     </section>
     <section class="header_text sub">
         <img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="New products" >
-        <h4><span>Confirm Order</span></h4>
+        <h4><span>Order Details</span></h4>
     </section>
     <section class="main-content">
         <div class="row">
@@ -255,10 +255,10 @@
                     <tbody>
                     <tr>
                         <td>&nbsp;</td>
-                        <td><big>${client.id}</big></td>
-                        <td><big>${client.name}</big></td>
-                        <td><big>${client.surname}</big></td>
-                        <td><big>${client.phone}</big></td>
+                        <td><big>${order.client.id}</big></td>
+                        <td><big>${order.client.name}</big></td>
+                        <td><big>${order.client.surname}</big></td>
+                        <td><big>${order.client.phone}</big></td>
                         <td>&nbsp;</td>
                     </tr>
                     </tbody>
@@ -275,7 +275,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="cartItem"  items="${cartList}" varStatus="count">
+                    <c:forEach var="cartItem"  items="${orderItemsList}" varStatus="count">
                         <tr>
                             <th>${count.count}</th>
                             <td><big>${cartItem.goods.name}</big></td>
@@ -291,18 +291,16 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>&nbsp;</th>
-                        <th>&nbsp;</th>
                         <th><big>Edit the delivery method</big></th>
                         <th><big>Edit the payment type</big></th>
                         <th><big>Edit order status</big></th>
                         <th><big>Additional information</big></th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
                         <td>
                             <spring:select path="deliveryMethod.name" class="input-xlarge" id ="orderInput">
                                 <c:forEach var="methodVar"  items="${listDeliveryMethod}">
@@ -320,15 +318,17 @@
                         <td>
                             <spring:select path="status.name" class="input-xlarge" id ="orderInput">
                                 <c:forEach var="statusVar"  items="${listStatus}">
-                                    <spring:option value="${status.name}">${status.name}</spring:option>
+                                    <spring:option value="${statusVar.name}">${statusVar.name}</spring:option>
                                 </c:forEach>
                             </spring:select>
                         </td>
+                        <td>&nbsp;</td>
                         <td><spring:textarea path="comment" cols="30" rows="3" readonly="true"/></td>
+                        <td>&nbsp;</td>
                     </tr>
                     <tr>
-                        <td>&nbsp;</td>
                         <td><big>Date: ${order.date}</big></td>
+                        <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
@@ -349,19 +349,19 @@
                         <li><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
                         <c:forEach var="categoryVar"  items="${listCategory}">
 
-                            <c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
-                                <div class="buttonHolder">
-                                    <a href="/catalog/employee/edit/category/${categoryVar.id}" class="button flower"></a>
-                                </div>
-                                <div class="buttonHolder">
-                                    <a href="/catalog/employee/delete/category/${categoryVar.id}" class="button cross" onclick="return confirm('Are you sure?')"></a>
-                                </div>
-                            </c:if>
+                            <%--<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >--%>
+                                <%--<div class="buttonHolder">--%>
+                                    <%--<a href="/catalog/employee/edit/category/${categoryVar.id}" class="button flower"></a>--%>
+                                <%--</div>--%>
+                                <%--<div class="buttonHolder">--%>
+                                    <%--<a href="/catalog/employee/delete/category/${categoryVar.id}" class="button cross" onclick="return confirm('Are you sure?')"></a>--%>
+                                <%--</div>--%>
+                            <%--</c:if>--%>
 
                             <li
-                                    <c:if test="${categoryVar.name == categoryName}" >
-                                        class="active"
-                                    </c:if>
+                                    <%--<c:if test="${categoryVar.name == categoryName}" >--%>
+                                        <%--class="active"--%>
+                                    <%--</c:if>--%>
                             ><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
                             </li>
 

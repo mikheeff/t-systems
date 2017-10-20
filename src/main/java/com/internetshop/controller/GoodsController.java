@@ -213,11 +213,17 @@ public class GoodsController {
         modelMap.put("listCategory",goodsService.getAllCategories());
         return "order_success";
     }
+
     @RequestMapping(value = "/profile/employee/details/order/{id}", method = RequestMethod.GET)
     public String getOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap){
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
-        modelMap.put("cartItemsList",orderService.getAllCartItemsFromOrderByOrderId(id));
+        modelMap.put("orderItemsList",orderService.getAllCartItemsFromOrderByOrderId(id));
+        modelMap.put("listDeliveryMethod",orderService.getAllDeliveryMethods());
+        modelMap.put("listPaymentType",orderService.getAllPaymentTypes());
+        modelMap.put("listStatus",orderService.getAllStatuses());
+        modelMap.put("sum",getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
+        modelMap.put("order", orderService.getOrderById(id));
         return "order_details";
     }
 

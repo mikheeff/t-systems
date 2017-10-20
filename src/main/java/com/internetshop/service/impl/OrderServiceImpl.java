@@ -53,6 +53,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Status> getAllStatuses() {
+        List<Status> statuses = new ArrayList<>();
+        for (StatusEntity statusEntity : orderRepository.getAllStatuses()) {
+            Status status = new Status(statusEntity.getId(), statusEntity.getName());
+            statuses.add(status);
+        }
+        return statuses;
+    }
+
+    @Override
     public int addOrder(Order order) {
         OrderEntity orderEntity = new OrderEntity();
         Date date = new Date();
@@ -117,16 +127,21 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<CartItem> getAllCartItemsFromOrderByOrderId(int id) {
         List<CartItem> cartItemList = new ArrayList<>();
-        for (CartItemEntity itemEntity : orderRepository.getAllCartItemsFromOrderByOrderId()){
+        for (CartItemEntity itemEntity : orderRepository.getAllCartItemsFromOrderByOrderId(id)){
             CartItem item = new CartItem();
             item.setQuantity(itemEntity.getQuantity());
             item.setGoods(goodsService.convertGoodsToDTO(itemEntity.getGoodsEntity()));
             item.setOrder(getOrderById(id));
+            cartItemList.add(item);
         }
-        return null;
+        return cartItemList;
     }
 
-
+    @Override
+    public Order getOrderById(int id) {
+        OrderEntity orderEntity = orderRepository.getOrderById(id);
+        return convertOrderToDTO(orderEntity);
+    }
 
     public Order convertOrderToDTO(OrderEntity orderEntity){
         Order order = new Order();
@@ -169,7 +184,7 @@ public class OrderServiceImpl implements OrderService {
 
     public ClientEntity convertClientToDAO(Client client, int id) {
         RoleEntity role = new RoleEntity();
-        role.setId(id);                                  // по умолчанию ставим роль юзера - 3(client)
+        role.setId(id);
         role.setName(clientRepository.getRoleById(id).getName());
         ClientEntity clientEntity = new ClientEntity();
         clientEntity.setId(client.getId());

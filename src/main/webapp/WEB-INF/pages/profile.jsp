@@ -312,7 +312,7 @@
 															</c:if>
 															<td><big>${clientOrder.status.name}</big></td>
 															<td><big>${clientOrder.comment}</big></td>
-															<td><a href=""><big>Details</big></a></td>
+															<td><a href="/catalog/profile/employee/details/order/${clientOrder.id}"><big>Details</big></a></td>
 														</tr>
 														<%--<hr>--%>
 														<%--<br>--%>

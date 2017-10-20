@@ -30,7 +30,6 @@ public interface GoodsService {
     void updateCategory(Category category);
     void addCategory(Category category);
     void deleteCategoryById(int id);
-    OrderEntity getOrderById(int id);
 
 
 }
