@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Confirm Order</title>
+    <title>Order Details</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
@@ -239,13 +239,13 @@
         <div class="row">
             <%--<spring:form action="/catalog/goods/cart/order" method="post" commandName="cartItem" class="form-inline">--%>
             <div class="span9">
-                <h4 class="title"><span class="text"><strong>Confirm</strong> Order</span></h4>
+                <h4 class="title"><span class="text"><strong>Order</strong> Details</span></h4>
 
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>&nbsp;</th>
-                        <th>&nbsp;</th>
+                        <th>Client ID:</th>
                         <th><big>Client Name</big></th>
                         <th><big>Client Surname</big></th>
                         <th><big>Phone:</big></th>
@@ -253,14 +253,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td><big>${client.name}</big></td>
-                            <td><big>${client.surname}</big></td>
-                            <td><big>${client.phone}</big></td>
-                            <td>&nbsp;</td>
-                        </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td><big>${client.id}</big></td>
+                        <td><big>${client.name}</big></td>
+                        <td><big>${client.surname}</big></td>
+                        <td><big>${client.phone}</big></td>
+                        <td>&nbsp;</td>
+                    </tr>
                     </tbody>
                 </table>
                 <table class="table table-striped">
@@ -275,7 +275,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="cartItem"  items="${cartItemsList}" varStatus="count">
+                    <c:forEach var="cartItem"  items="${cartList}" varStatus="count">
                         <tr>
                             <th>${count.count}</th>
                             <td><big>${cartItem.goods.name}</big></td>
@@ -288,41 +288,47 @@
                     <spring:form action="/catalog/profile/goods/order/confirm" method="post" commandName="order" class="form-inline">
                     </tbody>
                 </table>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                            <th><big>Choose the delivery method</big></th>
-                            <th><big>Choose the payment type</big></th>
-                            <th><big>&nbsp;</big></th>
-                            <th><big>Additional information</big></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td>
-                            <td>
-                                <spring:select path="deliveryMethod.name" class="input-xlarge" id ="orderInput">
-                                    <c:forEach var="methodVar"  items="${listDeliveryMethod}">
-                                        <spring:option value="${methodVar.name}">${methodVar.name}</spring:option>
-                                    </c:forEach>
-                                </spring:select>
-                            </td>
-                            <td>
-                                <spring:select path="paymentType.name" class="input-xlarge" id ="orderInput">
-                                    <c:forEach var="payTypeVar"  items="${listPaymentType}">
-                                        <spring:option value="${payTypeVar.name}">${payTypeVar.name}</spring:option>
-                                    </c:forEach>
-                                </spring:select>
-                            </td>
-                            <td>&nbsp;</td>
-                            <td><spring:textarea path="comment" cols="30" rows="3"/></td>
-                        </tr>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th><big>Edit the delivery method</big></th>
+                        <th><big>Edit the payment type</big></th>
+                        <th><big>Edit order status</big></th>
+                        <th><big>Additional information</big></th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     <tr>
                         <td>&nbsp;</td>
-                        <td><big>Date: ${date}</big></td>
+                        <td>&nbsp;</td>
+                        <td>
+                            <spring:select path="deliveryMethod.name" class="input-xlarge" id ="orderInput">
+                                <c:forEach var="methodVar"  items="${listDeliveryMethod}">
+                                    <spring:option value="${methodVar.name}">${methodVar.name}</spring:option>
+                                </c:forEach>
+                            </spring:select>
+                        </td>
+                        <td>
+                            <spring:select path="paymentType.name" class="input-xlarge" id ="orderInput">
+                                <c:forEach var="payTypeVar"  items="${listPaymentType}">
+                                    <spring:option value="${payTypeVar.name}">${payTypeVar.name}</spring:option>
+                                </c:forEach>
+                            </spring:select>
+                        </td>
+                        <td>
+                            <spring:select path="status.name" class="input-xlarge" id ="orderInput">
+                                <c:forEach var="statusVar"  items="${listStatus}">
+                                    <spring:option value="${status.name}">${status.name}</spring:option>
+                                </c:forEach>
+                            </spring:select>
+                        </td>
+                        <td><spring:textarea path="comment" cols="30" rows="3" readonly="true"/></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td><big>Date: ${order.date}</big></td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
@@ -331,89 +337,89 @@
                     </tbody>
                 </table>
                 <hr>
-                    <span class="pull-right">
+                <span class="pull-right">
                         <button type="submit" class="btn btn-inverse">Confirm Order</button>
                     </span>
-                    </spring:form>
+                </spring:form>
             </div>
-                <div class="span3 col">
-                    <div class="block">
-                        <ul class="nav nav-list">
-                            <li class="nav-header">SUB CATEGORIES</li>
-                            <li><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
-                            <c:forEach var="categoryVar"  items="${listCategory}">
+            <div class="span3 col">
+                <div class="block">
+                    <ul class="nav nav-list">
+                        <li class="nav-header">SUB CATEGORIES</li>
+                        <li><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
+                        <c:forEach var="categoryVar"  items="${listCategory}">
 
-                                <c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
-                                    <div class="buttonHolder">
-                                        <a href="/catalog/employee/edit/category/${categoryVar.id}" class="button flower"></a>
-                                    </div>
-                                    <div class="buttonHolder">
-                                        <a href="/catalog/employee/delete/category/${categoryVar.id}" class="button cross" onclick="return confirm('Are you sure?')"></a>
-                                    </div>
-                                </c:if>
+                            <c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
+                                <div class="buttonHolder">
+                                    <a href="/catalog/employee/edit/category/${categoryVar.id}" class="button flower"></a>
+                                </div>
+                                <div class="buttonHolder">
+                                    <a href="/catalog/employee/delete/category/${categoryVar.id}" class="button cross" onclick="return confirm('Are you sure?')"></a>
+                                </div>
+                            </c:if>
 
-                                <li
-                                        <c:if test="${categoryVar.name == categoryName}" >
-                                            class="active"
-                                        </c:if>
-                                ><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
-                                </li>
+                            <li
+                                    <c:if test="${categoryVar.name == categoryName}" >
+                                        class="active"
+                                    </c:if>
+                            ><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
+                            </li>
 
-                            </c:forEach>
-                        </ul>
-                        <br/>
-                        <ul class="nav nav-list below">
-                            <li class="nav-header">Filter</li>
-                            <li><a href="goods.jsp">Adidas</a></li>
-                            <li><a href="goods.jsp">Nike</a></li>
-                            <li><a href="goods.jsp">Dunlop</a></li>
-                            <li><a href="goods.jsp">Yamaha</a></li>
-                        </ul>
-                    </div>
-                    <div class="block">
-                        <h4 class="title">
-                            <span class="pull-left"><span class="text">Randomize</span></span>
-                            <span class="pull-right">
+                        </c:forEach>
+                    </ul>
+                    <br/>
+                    <ul class="nav nav-list below">
+                        <li class="nav-header">Filter</li>
+                        <li><a href="goods.jsp">Adidas</a></li>
+                        <li><a href="goods.jsp">Nike</a></li>
+                        <li><a href="goods.jsp">Dunlop</a></li>
+                        <li><a href="goods.jsp">Yamaha</a></li>
+                    </ul>
+                </div>
+                <div class="block">
+                    <h4 class="title">
+                        <span class="pull-left"><span class="text">Randomize</span></span>
+                        <span class="pull-right">
 									<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
 								</span>
-                        </h4>
-                        <div id="myCarousel" class="carousel slide">
-                            <div class="carousel-inner">
-                                <div class="active item">
-                                    <ul class="thumbnails listing-products">
-                                        <c:forEach var="goodsVar"  begin = "3" end = "3" items="${randomGoods}">
-                                            <li class="span3">
-                                                <div class="product-box">
-                                                    <span class="sale_tag"></span>
-                                                    <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
-                                                    <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
-                                                    <a href="#" class="category">${goodsVar.category.name}</a>
-                                                    <p class="price">${goodsVar.price} &#8381;</p>
-                                                </div>
-                                            </li>
-                                        </c:forEach>
-                                    </ul>
-                                </div>
-                                <div class="item">
-                                    <ul class="thumbnails listing-products">
-                                        <c:forEach var="goodsVar"  begin = "4" end = "4" items="${randomGoods}">
-                                            <li class="span3">
-                                                <div class="product-box">
-                                                    <span class="sale_tag"></span>
-                                                    <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
-                                                    <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
-                                                    <a href="#" class="category">${goodsVar.category.name}</a>
-                                                    <p class="price">${goodsVar.price} &#8381;</p>
-                                                </div>
-                                            </li>
-                                        </c:forEach>
-                                    </ul>
-                                </div>
+                    </h4>
+                    <div id="myCarousel" class="carousel slide">
+                        <div class="carousel-inner">
+                            <div class="active item">
+                                <ul class="thumbnails listing-products">
+                                    <c:forEach var="goodsVar"  begin = "3" end = "3" items="${randomGoods}">
+                                        <li class="span3">
+                                            <div class="product-box">
+                                                <span class="sale_tag"></span>
+                                                <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+                                                <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
+                                                <a href="#" class="category">${goodsVar.category.name}</a>
+                                                <p class="price">${goodsVar.price} &#8381;</p>
+                                            </div>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
+                            <div class="item">
+                                <ul class="thumbnails listing-products">
+                                    <c:forEach var="goodsVar"  begin = "4" end = "4" items="${randomGoods}">
+                                        <li class="span3">
+                                            <div class="product-box">
+                                                <span class="sale_tag"></span>
+                                                <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+                                                <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
+                                                <a href="#" class="category">${goodsVar.category.name}</a>
+                                                <p class="price">${goodsVar.price} &#8381;</p>
+                                            </div>
+                                        </li>
+                                    </c:forEach>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
     <section id="footer-bar">
         <div class="row">

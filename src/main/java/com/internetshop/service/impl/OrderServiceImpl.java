@@ -5,6 +5,7 @@ import com.internetshop.model.*;
 import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.repository.api.GoodsRepository;
 import com.internetshop.repository.api.OrderRepository;
+import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +18,18 @@ import java.util.*;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final GoodsService goodsService;
+    private final GoodsRepository goodsRepository;
     private final ClientRepository clientRepository;
+    private final GoodsService goodsService;
+    private final ClientService clientService;
 
-//    @Autowired
-//    public OrderServiceImpl(OrderRepository orderRepository) {
-//        this.orderRepository = orderRepository;
-//    }
-
-
-    public OrderServiceImpl(OrderRepository orderRepository, GoodsService goodsService, ClientRepository clientRepository) {
+    @Autowired
+    public OrderServiceImpl(OrderRepository orderRepository, GoodsRepository goodsRepository, ClientRepository clientRepository, GoodsService goodsService, ClientService clientService) {
         this.orderRepository = orderRepository;
-        this.goodsService = goodsService;
+        this.goodsRepository = goodsRepository;
         this.clientRepository = clientRepository;
+        this.goodsService = goodsService;
+        this.clientService = clientService;
     }
 
     @Override
@@ -53,11 +53,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addOrder(Order order) {
+    public int addOrder(Order order) {
         OrderEntity orderEntity = new OrderEntity();
         Date date = new Date();
         SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd");
-        orderEntity.setDate(date);
+        orderEntity.setDate(date.toString());
         orderEntity.setPayStatus(1);
         orderEntity.setComment(order.getComment());
 
@@ -84,21 +84,95 @@ public class OrderServiceImpl implements OrderService {
         for (CartItem item : cartItemSet) {
             CartItemEntity itemEntity = new CartItemEntity();
             itemEntity.setQuantity(item.getQuantity());
-            itemEntity.setGoodsEntity(goodsService.convertGoodsToDAO(item.getGoods()));
+//            itemEntity.setGoodsEntity(convertGoodsToDAO(item.getGoods()));
+            itemEntity.setGoodsEntity(goodsRepository.getGoodsById(item.getGoods().getId()));
             itemEntity.setOrderEntity(orderEntity);
+            cartItemEntitySet.add(itemEntity);
         }
         orderEntity.setClientEntity(convertClientToDAO(order.getClient(),order.getClient().getRole().getId()));
 
-        orderEntity.setCartItemEntities(cartItemEntitySet);
-        orderRepository.addOrder(orderEntity);
+//        orderEntity.setCartItemEntities();
+        return orderRepository.addOrder(orderEntity,cartItemEntitySet);
 
     }
 
-    public ClientEntity convertClientToDAO(Client client,int id) {
+    @Override
+    public List<Order> getAllOrdersByClientId(int id) {
+        List<Order> orderList = new ArrayList<>();
+        for(OrderEntity orderEntity : orderRepository.getAllOrdersByClientId(id)){
+            orderList.add(convertOrderToDTO(orderEntity));
+        }
+        return orderList;
+    }
+
+    @Override
+    public List<Order> getAllOrders() {
+        List<Order> orderList = new ArrayList<>();
+        for(OrderEntity orderEntity : orderRepository.getAllOrders()){
+            orderList.add(convertOrderToDTO(orderEntity));
+        }
+        return orderList;
+    }
+
+    @Override
+    public List<CartItem> getAllCartItemsFromOrderByOrderId(int id) {
+        List<CartItem> cartItemList = new ArrayList<>();
+        for (CartItemEntity itemEntity : orderRepository.getAllCartItemsFromOrderByOrderId()){
+            CartItem item = new CartItem();
+            item.setQuantity(itemEntity.getQuantity());
+            item.setGoods(goodsService.convertGoodsToDTO(itemEntity.getGoodsEntity()));
+            item.setOrder(getOrderById(id));
+        }
+        return null;
+    }
+
+
+
+    public Order convertOrderToDTO(OrderEntity orderEntity){
+        Order order = new Order();
+        order.setId(orderEntity.getId());
+        order.setDate(orderEntity.getDate());
+        order.setPayStatus(orderEntity.getPayStatus());
+        order.setComment(orderEntity.getComment());
+
+        PaymentType paymentType = new PaymentType();
+        paymentType.setId(orderEntity.getPaymentType().getId());
+        paymentType.setName(orderEntity.getPaymentType().getName());
+        order.setPaymentType(paymentType);
+
+        DeliveryMethod deliveryMethod = new DeliveryMethod();
+        deliveryMethod.setId(orderEntity.getDeliveryMethod().getId());
+        deliveryMethod.setName(orderEntity.getDeliveryMethod().getName());
+        order.setDeliveryMethod(deliveryMethod);
+
+        Status status = new Status();
+        status.setId(orderEntity.getStatus().getId());
+        status.setName(orderEntity.getStatus().getName());
+        order.setStatus(status);
+
+        Set<CartItem> cartItemSet = new HashSet<>();
+        Set<CartItemEntity> cartItemEntitySet = orderEntity.getCartItemEntities();
+
+        for (CartItemEntity itemEntity : cartItemEntitySet) {
+            CartItem item = new CartItem();
+            item.setQuantity(itemEntity.getQuantity());
+            item.setGoods(goodsService.getGoodsById(itemEntity.getGoodsEntity().getId()));
+            item.setOrder(order);
+            cartItemSet.add(item);
+        }
+        order.setCartItems(cartItemSet);
+
+        Client client = clientService.getClientById(orderEntity.getClientEntity().getId());
+        order.setClient(client);
+        return order;
+    }
+
+    public ClientEntity convertClientToDAO(Client client, int id) {
         RoleEntity role = new RoleEntity();
         role.setId(id);                                  // по умолчанию ставим роль юзера - 3(client)
         role.setName(clientRepository.getRoleById(id).getName());
         ClientEntity clientEntity = new ClientEntity();
+        clientEntity.setId(client.getId());
         clientEntity.setName(client.getName());
         clientEntity.setSurname(client.getSurname());
         clientEntity.setBirthdate(client.getBirthdate());
@@ -107,9 +181,43 @@ public class OrderServiceImpl implements OrderService {
         clientEntity.setPhone(client.getPhone());
         clientEntity.setOrderCounter(client.getOrderCounter());
         clientEntity.setRoleEntity(role);
-        clientEntity.setClientAddressEntity(clientRepository.getAddressById(client.getClientAddress().getId()));
+        ClientAddressEntity clientAddressEntity = new ClientAddressEntity(
+                client.getClientAddress().getCountry(),
+                client.getClientAddress().getCity(),
+                client.getClientAddress().getPostcode(),
+                client.getClientAddress().getStreet(),
+                client.getClientAddress().getHouse(),
+                client.getClientAddress().getFlat(),
+                client.getClientAddress().getAddition());
+        clientAddressEntity.setId(client.getClientAddress().getId());
+        clientEntity.setClientAddressEntity(clientAddressEntity);
         return clientEntity;
     }
+
+
+//    public GoodsEntity convertGoodsToDAO(Goods goods) {
+//        CategoryEntity categoryEntity = new CategoryEntity();
+//        categoryEntity.setId(goodsRepository.getIdCategoryByName(goods.getCategory().getName()));
+//        categoryEntity.setName(goods.getName());
+//
+//        RuleEntity ruleEntity = new RuleEntity();
+//        ruleEntity.setId(goodsRepository.getIdRuleByName(goods.getRule().getName()));
+//        ruleEntity.setName(goods.getName());
+//
+//        GoodsEntity goodsEntity = new GoodsEntity(
+//                goods.getName(),
+//                goods.getPrice(),
+//                goods.getNumberOfPlayers(),
+//                goods.getDuration(),
+//                goods.getAmount(),
+//                goods.getVisible(),
+//                goods.getDescription(),
+//                goods.getImg(),
+//                categoryEntity,
+//                ruleEntity);
+//        goodsEntity.setId(goods.getId());
+//        return goodsEntity;
+//    }
 
 
 

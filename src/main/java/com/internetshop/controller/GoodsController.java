@@ -172,9 +172,12 @@ public class GoodsController {
                                @RequestParam(value = "error", required = false) String error){
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
-        modelMap.put("cartList",session.getAttribute("cartList"));
+        ArrayList<CartItem> cartList = (ArrayList<CartItem>)session.getAttribute("cartList");
+        if (cartList!=null) {
+            modelMap.put("sum", getSumOfOrder(cartList));
+            modelMap.put("cartList", cartList);
+        }
         modelMap.put("client",session.getAttribute("client"));
-        modelMap.put("sum",getSumOfOrder((ArrayList<CartItem>)session.getAttribute("cartList")));
         if (error != null) {
             modelMap.put("error", "To place an order please log in");
         }
@@ -201,9 +204,21 @@ public class GoodsController {
     public String addOrder(ModelMap modelMap,Order order){
         Set<CartItem> cartItemSet = new HashSet<>((ArrayList<CartItem>)session.getAttribute("cartList"));
         order.setCartItems(cartItemSet);
-        order.setClient((Client)session.getAttribute("client"));
-        orderService.addOrder(order);
-        return "confirm_order";
+        Client client = (Client)session.getAttribute("client");
+        order.setClient(client);
+        int orderId = orderService.addOrder(order);
+//        client.getOrder().add(order);
+        modelMap.put("orderId",orderId);
+        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        return "order_success";
+    }
+    @RequestMapping(value = "/profile/employee/details/order/{id}", method = RequestMethod.GET)
+    public String getOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap){
+        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("cartItemsList",orderService.getAllCartItemsFromOrderByOrderId(id));
+        return "order_details";
     }
 
 

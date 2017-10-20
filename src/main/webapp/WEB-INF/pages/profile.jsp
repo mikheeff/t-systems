@@ -110,9 +110,9 @@
 						<div class="accordion" id="accordion2">
 							<div class="accordion-group">
 								<div class="accordion-heading">
-									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Account Details</a>
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Account Details</a>
 								</div>
-								<div id="collapseTwo" class="accordion-body collapse">
+								<div id="collapseOne" class="accordion-body collapse">
 									<div class="accordion-inner">
 										<spring:form action="edit" method="post" modelAttribute="client" class="form-stacked">
 										<div class="row-fluid">
@@ -228,7 +228,104 @@
 									</div>
 								</div>
 							</div>
+							<c:if test="${client.role.name=='ROLE_CLIENT'}">
+								<div class="accordion-group">
+									<div class="accordion-heading">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Orders History</a>
+									</div>
+									<div id="collapseTwo" class="accordion-body collapse">
+										<div class="accordion-inner">
 
+												<h4>Your Orders History</h4>
+												<c:if test="${clientOrdersList.size()!=0}">
+												<table class="table table-striped">
+													<thead>
+													<tr>
+														<th><big>Order ID:</big></th>
+														<th><big>Delivery Method</big></th>
+														<th><big>Payment Type</big></th>
+														<th><big>Pay Status</big></th>
+														<th><big>Order Status:</big></th>
+														<th><big>Order Details</big></th>
+													</tr>
+													</thead>
+													<c:forEach var="clientOrder"  items="${clientOrdersList}">
+													<tbody>
+													<tr>
+														<td><big>${clientOrder.id}</big></td>
+														<td><big>${clientOrder.deliveryMethod.name}</big></td>
+														<td><big>${clientOrder.paymentType.name}</big></td>
+														<c:if test="${clientOrder.payStatus==1}">
+														<td><big>paid</big></td>
+														</c:if>
+														<c:if test="${clientOrder.payStatus==0}">
+														<td><big>pending payment</big></td>
+														</c:if>
+														<td><big>${clientOrder.status.name}</big></td>
+														<td><a href="">Details</a></td>
+													</tr>
+													</tbody>
+														<%--<hr>--%>
+														<%--<br>--%>
+													</c:forEach>
+												</table>
+												</c:if>
+
+										</div>
+									</div>
+								</div>
+							</c:if>
+							<c:if test="${client.role.name!='ROLE_CLIENT'}">
+								<div class="accordion-group">
+									<div class="accordion-heading">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">Show All Orders</a>
+									</div>
+									<div id="collapseThree" class="accordion-body collapse">
+										<div class="accordion-inner">
+
+											<h4>All Orders</h4>
+											<c:if test="${clientOrdersList.size()!=0}">
+												<table class="table table-striped">
+													<thead>
+													<tr>
+														<th><big>Order ID:</big></th>
+														<th><big>Client ID:</big></th>
+														<th><big>Payment Type:</big></th>
+														<th><big>Pay Status:</big></th>
+														<th><big>Order Status:</big></th>
+														<th><big>Additional Information:</big></th>
+														<th><big>Order Details:</big></th>
+													</tr>
+													</thead>
+
+													<c:forEach var="clientOrder"  items="${clientOrdersList}">
+														<tbody>
+														<tr>
+															<td><big>${clientOrder.id}</big></td>
+															<td><big>${clientOrder.client.id}</big></td>
+															<td><big>${clientOrder.paymentType.name}</big></td>
+															<c:if test="${clientOrder.payStatus==1}">
+																<td><big>paid</big></td>
+															</c:if>
+															<c:if test="${clientOrder.payStatus==0}">
+																<td><big>pending payment</big></td>
+															</c:if>
+															<td><big>${clientOrder.status.name}</big></td>
+															<td><big>${clientOrder.comment}</big></td>
+															<td><a href=""><big>Details</big></a></td>
+														</tr>
+														<%--<hr>--%>
+														<%--<br>--%>
+													</tbody>
+													</c:forEach>
+
+												</table>
+											</c:if>
+
+										</div>
+									</div>
+								</div>
+							</c:if>
 						</div>				
 					</div>
 				</div>

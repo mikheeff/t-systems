@@ -14,4 +14,5 @@ public interface ClientService {
     Client getUserByEmail(String email);
     void updateUser(Client client);
     void addAddress();
+    Client getClientById(int id);
 }

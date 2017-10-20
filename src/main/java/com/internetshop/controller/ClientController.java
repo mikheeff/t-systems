@@ -4,6 +4,7 @@ import com.internetshop.Exceptions.EmailExistException;
 import com.internetshop.model.Client;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
+import com.internetshop.service.api.OrderService;
 import com.internetshop.service.impl.ClientServiceImpl;
 import com.internetshop.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class ClientController {
 
     @Autowired
     private GoodsService goodsService;
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private HttpSession session;
@@ -66,6 +69,12 @@ public class ClientController {
             return "redirect:/clients/identification";
         }
         modelMap.put("listCategory",goodsService.getAllCategories());
+        Client client = (Client)session.getAttribute("client");
+        if(client.getRole().getName().equals("ROLE_CLIENT")) {
+            modelMap.put("clientOrdersList", orderService.getAllOrdersByClientId(client.getId()));
+        } else {
+            modelMap.put("clientOrdersList", orderService.getAllOrders());
+        }
         return "profile";
     }
     @RequestMapping(value = "/success", method = RequestMethod.POST)

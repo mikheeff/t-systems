@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Order {
     private int id;
-    private Date date;
+    private String date;
     private int payStatus;
     private String comment;
     private Status status;
@@ -21,7 +21,7 @@ public class Order {
 
     }
 
-    public Order(int id, Date date, int payStatus, String comment, Status status, PaymentType paymentType, DeliveryMethod deliveryMethod, Set<CartItem> cartItems, Client client) {
+    public Order(int id, String date, int payStatus, String comment, Status status, PaymentType paymentType, DeliveryMethod deliveryMethod, Set<CartItem> cartItems, Client client) {
         this.id = id;
         this.date = date;
         this.payStatus = payStatus;
@@ -41,11 +41,11 @@ public class Order {
         this.id = id;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

@@ -3,6 +3,7 @@ package com.internetshop.service.api;
 import com.internetshop.Exceptions.NoSuchCategoryException;
 import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.entities.GoodsEntity;
+import com.internetshop.entities.OrderEntity;
 import com.internetshop.model.Category;
 import com.internetshop.model.DeliveryMethod;
 import com.internetshop.model.Goods;
@@ -29,6 +30,7 @@ public interface GoodsService {
     void updateCategory(Category category);
     void addCategory(Category category);
     void deleteCategoryById(int id);
+    OrderEntity getOrderById(int id);
 
 
 }

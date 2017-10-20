@@ -88,6 +88,38 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public Client getClientById(int id) {
+        Client client = new Client();
+        ClientEntity clientEntity = clientRepository.getUserById(id);
+        client.setId(clientEntity.getId());
+        client.setName(clientEntity.getName());
+        client.setBirthdate(clientEntity.getBirthdate());
+        client.setEmail(clientEntity.getEmail());
+        client.setPassword(clientEntity.getPassword());
+        client.setPhone(clientEntity.getPhone());
+        client.setOrderCounter(clientEntity.getOrderCounter());
+
+        Role role = new Role();
+        role.setId(clientEntity.getId());
+        role.setName(clientEntity.getName());
+        client.setRole(role);
+
+        ClientAddress clientAddress = new ClientAddress();
+        clientAddress.setId(clientEntity.getClientAddressEntity().getId());
+        clientAddress.setCountry(clientEntity.getClientAddressEntity().getCountry());
+        clientAddress.setCity(clientEntity.getClientAddressEntity().getCity());
+        clientAddress.setPostcode(clientEntity.getClientAddressEntity().getPostcode());
+        clientAddress.setStreet(clientEntity.getClientAddressEntity().getStreet());
+        clientAddress.setHouse(clientEntity.getClientAddressEntity().getHouse());
+        clientAddress.setFlat(clientEntity.getClientAddressEntity().getFlat());
+        clientAddress.setAddition(clientEntity.getClientAddressEntity().getAddition());
+        client.setClientAddress(clientAddress);
+
+
+        return client;
+    }
+
+    @Override
     public void updateUser(Client client) {
         ClientEntity clientEntity = clientRepository.getUserById(client.getId());
 

@@ -1,23 +1,18 @@
 package com.internetshop.entities;
 
-import com.internetshop.model.DeliveryMethod;
-import com.internetshop.model.PaymentType;
-import com.internetshop.model.Status;
-
 import javax.persistence.*;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "order")
+@Table(name = "`order`")
 public class OrderEntity {
     @Id
-    @Column(name = "idorder")
+    @Column(name = "id_order")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "date")
-    private Date date;
+    private String date;
     @Column(name = "pay_status")
     private int payStatus;
     @Column(name = "prim")
@@ -46,7 +41,7 @@ public class OrderEntity {
 
     }
 
-    public OrderEntity(Date date, int payStatus, String comment, ClientEntity clientEntity, StatusEntity status, PaymentTypeEntity paymentType, DeliveryMethodEntity deliveryMethod, Set<CartItemEntity> cartItemEntities) {
+    public OrderEntity(String date, int payStatus, String comment, ClientEntity clientEntity, StatusEntity status, PaymentTypeEntity paymentType, DeliveryMethodEntity deliveryMethod, Set<CartItemEntity> cartItemEntities) {
         this.date = date;
         this.payStatus = payStatus;
         this.comment = comment;
@@ -65,11 +60,11 @@ public class OrderEntity {
         this.id = id;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

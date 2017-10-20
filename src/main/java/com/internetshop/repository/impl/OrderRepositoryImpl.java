@@ -1,9 +1,6 @@
 package com.internetshop.repository.impl;
 
-import com.internetshop.entities.DeliveryMethodEntity;
-import com.internetshop.entities.OrderEntity;
-import com.internetshop.entities.PaymentTypeEntity;
-import com.internetshop.entities.StatusEntity;
+import com.internetshop.entities.*;
 import com.internetshop.repository.api.OrderRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class OrderRepositoryImpl implements OrderRepository {
@@ -40,13 +38,33 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public int getIdDeliveryMethodByName(String name) {
-        return em.createQuery("select DeliveryMethodEntity.id from DeliveryMethodEntity deliveryMethodEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
+        return em.createQuery("select deliveryMethodEntity.id from DeliveryMethodEntity deliveryMethodEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
     }
 
     @Override
-    public void addOrder(OrderEntity orderEntity) {
+    public int addOrder(OrderEntity orderEntity, Set<CartItemEntity> cartItemEntitySet) {
         em.getTransaction().begin();
         em.persist(orderEntity);
+        for (CartItemEntity item : cartItemEntitySet){
+            item.setOrderEntity(orderEntity);
+            em.persist(item);
+        }
         em.getTransaction().commit();
+        return em.createQuery("from OrderEntity orderEntity order by id DESC", OrderEntity.class).setMaxResults(1).getSingleResult().getId();
     }
+
+    @Override
+    public List<OrderEntity> getAllOrdersByClientId(int id) {
+        return em.createQuery("select orderEntity from OrderEntity orderEntity where clientEntity.id = :id", OrderEntity.class).setParameter("id",id).getResultList();
+    }
+
+    @Override
+    public List<OrderEntity> getAllOrders() {
+        return em.createQuery("select orderEntity from OrderEntity orderEntity", OrderEntity.class).getResultList();
+    }
+
+    //    @Override
+//    public OrderEntity getOrderByClientId(int id) {
+//        return em.createQuery("select orderEntity from OrderEntity orderEntity where clientEntity.id = :id", OrderEntity.class).setParameter("id",id).getSingleResult();
+//    }
 }

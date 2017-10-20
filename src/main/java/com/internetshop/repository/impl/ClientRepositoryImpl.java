@@ -70,6 +70,6 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public ClientAddressEntity getAddressById(int id) {
-        return em.find(ClientAddressEntity.class, id);
+        return em.createQuery("select clientAddressEntity from ClientAddressEntity clientAddressEntity where id = :id", ClientAddressEntity.class).setParameter("id",id).getSingleResult();
     }
 }
