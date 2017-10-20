@@ -275,7 +275,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="cartItem"  items="${cartItemsList}" varStatus="count">
+                    <c:forEach var="cartItem"  items="${cartList}" varStatus="count">
                         <tr>
                             <th>${count.count}</th>
                             <td><big>${cartItem.goods.name}</big></td>

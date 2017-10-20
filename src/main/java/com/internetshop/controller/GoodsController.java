@@ -2,6 +2,7 @@ package com.internetshop.controller;
 
 import com.internetshop.Exceptions.NoSuchCategoryException;
 import com.internetshop.Exceptions.NoSuchRulesException;
+import com.internetshop.entities.GoodsEntity;
 import com.internetshop.model.*;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.parser.Entity;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -182,6 +184,8 @@ public class GoodsController {
             modelMap.put("error", "To place an order please log in");
         }
         return "cart";
+
+
     }
 
     @RequestMapping(value = "/profile/goods/cart/continue",method = RequestMethod.GET)
@@ -226,6 +230,13 @@ public class GoodsController {
         modelMap.put("order", orderService.getOrderById(id));
         return "order_details";
     }
+
+
+    @RequestMapping(value = "/profile/employee/details/order/edit", method = RequestMethod.POST)
+    public String getOrderDetails(ModelMap modelMap) {
+        return null;
+    }
+
 
 
     @RequestMapping(value = "/employee/edit/category/{id}", method = RequestMethod.GET)
