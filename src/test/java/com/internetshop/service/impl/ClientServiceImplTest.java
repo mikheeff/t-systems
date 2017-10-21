@@ -36,7 +36,7 @@ public class ClientServiceImplTest {
     }
 
     @Test
-    public void getAllClientsHashPassword() throws Exception {
+    public void getAllClientsHashPassword() throws Exception { //
         when(clientRepository.isEmailExist(anyString())).thenReturn(false);
         when(clientRepository.getRoleById(anyInt())).thenReturn(new RoleEntity());
         Client client = new Client();
