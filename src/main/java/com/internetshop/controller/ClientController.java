@@ -1,6 +1,7 @@
 package com.internetshop.controller;
 
 import com.internetshop.Exceptions.EmailExistException;
+import com.internetshop.Exceptions.PasswordWrongException;
 import com.internetshop.model.Client;
 import com.internetshop.model.PasswordField;
 import com.internetshop.service.api.ClientService;
@@ -64,7 +65,10 @@ public class ClientController {
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String editClient(ModelMap modelMap, HttpServletRequest httpServletRequest,
-                             @RequestParam(value = "error", required = false) String error) {
+                             @RequestParam(value = "errorMatch", required = false) String errorMatch,
+                             @RequestParam(value = "msg", required = false) String msg,
+                             @RequestParam(value = "error", required = false) String error,
+                             @RequestParam(value = "errorInvalidPass", required = false) String errorInvalidPass) {
         session.setAttribute("client",clientService.getUserByEmail( httpServletRequest.getUserPrincipal().getName()));
         modelMap.put("client",session.getAttribute("client"));
         if(modelMap.get("client") == null) {
@@ -78,8 +82,17 @@ public class ClientController {
             modelMap.put("clientOrdersList", orderService.getAllOrders());
         }
 
+        if (errorMatch != null) {
+            modelMap.put("errorMatch", "Entered New passwords doesn't match!");
+        }
         if (error != null) {
-            modelMap.put("error", "Invalid password!");
+            modelMap.put("error", "Entered characters are not allowed!");
+        }
+        if (errorInvalidPass != null) {
+            modelMap.put("errorInvalidPass", "Password is not valid!");
+        }
+        if (msg != null) {
+            modelMap.put("msg", "You have been changed password successfully!");
         }
         modelMap.put("passwordField", new PasswordField());
         return "profile";
@@ -110,12 +123,25 @@ public class ClientController {
         return "redirect:/clients/profile";
     }
 
-    @RequestMapping(value = "/edit/password", method = RequestMethod.POST)
-    public String editPassword(@ModelAttribute (value = "passwordField") @Valid PasswordField passwordField,BindingResult bindingResult){
+    @RequestMapping(value = "/profile/edit/password", method = RequestMethod.POST)
+    public String changePassword(@ModelAttribute (value = "passwordField") @Valid PasswordField passwordField,BindingResult bindingResult){
         if(bindingResult.hasErrors()) {
             return "redirect:/clients/profile?error";
         }
-        return "redirect:/clients/profile";
+        Client client = (Client)session.getAttribute("client");
+        if (passwordField.getNewPasswordFirst().equals(passwordField.getNewPasswordSecond())) {
+            try {
+                clientService.changePassword(passwordField, client);
+            } catch (PasswordWrongException e) {
+                return "redirect:/clients/profile?errorInvalidPass";
+            }
+        }
+        else {
+            return "redirect:/clients/profile?errorMatch";
+        }
+        session.setAttribute("client",clientService.getClientById(client.getId()));
+        return "redirect:/clients/profile?msg";
+
     }
 
 }

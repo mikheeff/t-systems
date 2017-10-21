@@ -1,10 +1,12 @@
 package com.internetshop.service.api;
 
 import com.internetshop.Exceptions.EmailExistException;
+import com.internetshop.Exceptions.PasswordWrongException;
 import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.GoodsEntity;
 import com.internetshop.model.Client;
+import com.internetshop.model.PasswordField;
 
 import java.util.List;
 
@@ -15,4 +17,5 @@ public interface ClientService {
     void updateUser(Client client);
     void addAddress();
     Client getClientById(int id);
+    void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException;
 }

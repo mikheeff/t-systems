@@ -1,12 +1,14 @@
 package com.internetshop.service.impl;
 
 import com.internetshop.Exceptions.EmailExistException;
+import com.internetshop.Exceptions.PasswordWrongException;
 import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.OrderEntity;
 import com.internetshop.entities.RoleEntity;
 import com.internetshop.model.Client;
 import com.internetshop.model.ClientAddress;
+import com.internetshop.model.PasswordField;
 import com.internetshop.model.Role;
 import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.service.api.ClientService;
@@ -22,10 +24,12 @@ import java.util.Set;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.clientRepository = clientRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     public List<ClientEntity> getAllClients(){ return clientRepository.getAll(); }
@@ -36,7 +40,7 @@ public class ClientServiceImpl implements ClientService {
         if (clientRepository.isEmailExist(client.getEmail())){
             throw new EmailExistException();
         }
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
 
         client.setPassword(bCryptPasswordEncoder.encode(client.getPassword()));
 
@@ -49,6 +53,19 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void addAddress() {
+
+    }
+
+    @Override
+    public void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException {
+
+        if(bCryptPasswordEncoder.matches(passwordField.getPassword(),client.getPassword())==true){
+            ClientEntity clientEntity = clientRepository.getUserById(client.getId());
+            clientEntity.setPassword(bCryptPasswordEncoder.encode(passwordField.getNewPasswordFirst()));
+            clientRepository.updateUser(clientEntity);
+        } else {
+            throw new PasswordWrongException();
+        }
     }
 
     @Override

@@ -138,6 +138,15 @@
 			<c:if test="${not empty error}">
 				<div class="error">${error}</div>
 			</c:if>
+			<c:if test="${not empty errorMatch}">
+				<div class="error">${errorMatch}</div>
+			</c:if>
+			<c:if test="${not empty errorInvalidPass}">
+				<div class="error">${errorInvalidPass}</div>
+			</c:if>
+	<c:if test="${not empty msg}">
+				<div class="msg">${msg}</div>
+			</c:if>
 			<section class="main-content">
 				<div class="row">
 					<div class="span12">
@@ -254,7 +263,7 @@
 										<div class="row-fluid">
 											<div class="span6">
 												<h4>Set New Password</h4>
-												<spring:form action="password" method="post" modelAttribute="passwordField" class="form-stacked">
+												<spring:form action="/clients/profile/edit/password" method="post" modelAttribute="passwordField" class="form-stacked">
 													<fieldset>
 														<div class="control-group">
 															<label class="control-label">Old Password*</label>
@@ -270,12 +279,13 @@
 															</div>
 														</div>
 														<div class="control-group">
-															<label class="control-label">Old Password*</label>
+															<label class="control-label">Repeat New Password*</label>
 															<div class="controls">
 																<spring:input path="newPasswordSecond" type="password" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9]+$"/>
 															</div>
 														</div>
 													</fieldset>
+													<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Edit your password"></div>
 												</spring:form>
 											</div>
 
