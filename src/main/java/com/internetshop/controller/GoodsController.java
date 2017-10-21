@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.html.parser.Entity;
@@ -184,8 +184,13 @@ public class GoodsController {
             modelMap.put("error", "To place an order please log in");
         }
         return "cart";
+    }
 
-
+    @RequestMapping(value = "/goods/cart/delete/item/{index}", method = RequestMethod.GET)
+    public String deleteCartItem(@PathVariable(value = "index") int index){
+        ArrayList<CartItem> cartList = (ArrayList<CartItem>)session.getAttribute("cartList");
+        cartList.remove(index);
+        return "redirect:/catalog/goods/cart";
     }
 
     @RequestMapping(value = "/profile/goods/cart/continue",method = RequestMethod.GET)

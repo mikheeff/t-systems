@@ -36,7 +36,7 @@ public class ClientServiceImpl implements ClientService {
     public List<ClientEntity> getAllClients(){ return clientRepository.getAll(); }
 
     /**
-     * Add new client
+     * Adds new client
      * @param client new client model
      * @throws EmailExistException email already exists
      */
@@ -58,16 +58,8 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      *
-     */
-    @Override
-    public void addAddress() {
-
-    }
-
-    /**
-     * ch
      * @param passwordField
-     * @param client
+     * @param client,passwordField
      * @throws PasswordWrongException
      */
     @Override
@@ -82,16 +74,15 @@ public class ClientServiceImpl implements ClientService {
         }
     }
 
+    /**
+     * Gets client model by email
+     * @param email
+     * @return Client
+     */
     @Override
     public Client getUserByEmail(String email) {
         ClientEntity clientEntity = clientRepository.getUserByEmail(email);
         Role role = new Role(clientEntity.getRoleEntity().getId(),clientEntity.getRoleEntity().getName());
-
-//        if (clientEntity.getClientAddressEntity() == null) {                        //если адрес юзера ещё не проинициализирован
-//            ClientAddressEntity clientAddressEntity = new ClientAddressEntity();
-//            clientAddressEntity.setId(clientEntity.getId());
-//            clientEntity.setClientAddressEntity(clientAddressEntity);
-//        }
 
         ClientAddress clientAddress = new ClientAddress(
                 clientEntity.getClientAddressEntity().getId(),
@@ -118,6 +109,11 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
+    /**
+     * Get client model by ID
+     * @param id
+     * @return Client
+     */
     @Override
     public Client getClientById(int id) {
         Client client = new Client();
@@ -150,16 +146,15 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
+    /**
+     * Updates client model fields
+     * @param client
+     */
     @Override
     public void updateUser(Client client) {
         ClientEntity clientEntity = clientRepository.getUserById(client.getId());
 
-//        RoleEntity roleEntity = clientEntity.getRoleEntity();
-//        roleEntity.setId(client.getRole().getId());
-//        roleEntity.setName(client.getRole().getName());
-//
         ClientAddressEntity clientAddressEntity = clientEntity.getClientAddressEntity();
-//        clientAddressEntity.setId(client.getClientAddress().getId());
         clientAddressEntity.setCountry(client.getClientAddress().getCountry());
         clientAddressEntity.setCity(client.getClientAddress().getCity());
         clientAddressEntity.setPostcode(client.getClientAddress().getPostcode());
@@ -171,7 +166,7 @@ public class ClientServiceImpl implements ClientService {
             clientEntity.setName(client.getName());
         }
         clientEntity.setSurname(client.getSurname());
-//        clientEntity.setBirthdate(client.getBirthdate());  //todo как ввести дату??
+
         if(client.getEmail()!=null){
         clientEntity.setEmail(client.getEmail());
         }
@@ -185,9 +180,15 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.updateUser(clientEntity);
     }
 
+    /**
+     * Converts client model to client Entity
+     * @param client
+     * @return Client Entity
+     */
+
     public ClientEntity convertClientToDAO(Client client) {
         RoleEntity role = new RoleEntity();
-        role.setId(3);                                  // по умолчанию ставим роль юзера - 3(client)
+        role.setId(3);                                  // default role:ROLE_CLIENT - 3(client)
         role.setName(clientRepository.getRoleById(3).getName());
         ClientEntity clientEntity = new ClientEntity();
         clientEntity.setName(client.getName());

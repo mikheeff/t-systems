@@ -1,12 +1,26 @@
 package com.internetshop.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class ClientAddress {
     private int id;
+    @NotEmpty
     private String country;
+    @NotEmpty
+    @Size(max = 50)
     private String city;
     private int postcode;
+    @NotEmpty
+    @Size(max = 50)
     private String street;
+    @NotEmpty
+    @Size(max = 10)
     private String house;
+    @NotEmpty
+    @Size(max = 10)
     private String flat;
     private String addition;
 

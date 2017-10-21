@@ -185,7 +185,7 @@
                             document.getElementById("logoutForm").submit();
                         }
                         //							</script>
-                    <li><a href="${pageContext.request.contextPath}clients/profile">My Account</a></li>
+                    <li><a href="/clients/profile">My Account</a></li>
                     <c:if test="${cartList==null}">
                         <li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
                     </c:if>
@@ -364,13 +364,13 @@
                             </c:forEach>
                         </ul>
                         <br/>
-                        <ul class="nav nav-list below">
-                            <li class="nav-header">Filter</li>
-                            <li><a href="goods.jsp">Adidas</a></li>
-                            <li><a href="goods.jsp">Nike</a></li>
-                            <li><a href="goods.jsp">Dunlop</a></li>
-                            <li><a href="goods.jsp">Yamaha</a></li>
-                        </ul>
+                        <%--<ul class="nav nav-list below">--%>
+                            <%--<li class="nav-header">Filter</li>--%>
+                            <%--<li><a href="goods.jsp">Adidas</a></li>--%>
+                            <%--<li><a href="goods.jsp">Nike</a></li>--%>
+                            <%--<li><a href="goods.jsp">Dunlop</a></li>--%>
+                            <%--<li><a href="goods.jsp">Yamaha</a></li>--%>
+                        <%--</ul>--%>
                     </div>
                     <div class="block">
                         <h4 class="title">

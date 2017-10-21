@@ -57,7 +57,19 @@
                     <c:if test="${cartList!=null}">
                         <li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
                     </c:if>
-                    <li><a href="${pageContext.request.contextPath}/clients/identification">Login</a></li>
+                    <c:if test="${client.role.name!=null}" >
+
+                        <form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >
+
+                            <input type="hidden" size="0"
+                                   name="${_csrf.parameterName}"
+                                   value="${_csrf.token}" />
+                        </form>
+                        <li><a href="javascript:formSubmit()">Logout</a></li>
+                    </c:if>
+                    <c:if test="${client.role.name==null}" >
+                        <li><a href="/clients/identification">Login</a></li>
+                    </c:if>
                 </ul>
             </div>
         </div>
@@ -76,10 +88,10 @@
                             </c:forEach>
                         </ul>
                     </li>
-                    <li><a href="goods.jsp">Best Sellers</a>
-                    <li><a href="goods.jsp">How To Buy</a></li>
-                    <li><a href="goods.jsp">F.A.Q</a></li>
-                    <li><a href="goods.jsp">About us</a></li>
+                    <li><a href="#">Best Sellers</a>
+                    <li><a href="#">How To Buy</a></li>
+                    <li><a href="#">F.A.Q</a></li>
+                    <li><a href="#">About us</a></li>
                 </ul>
             </nav>
         </div>
@@ -119,13 +131,6 @@
                         </c:forEach>
                     </ul>
                     <br/>
-                    <ul class="nav nav-list below">
-                        <li class="nav-header">Filter</li>
-                        <li><a href="goods.jsp">Adidas</a></li>
-                        <li><a href="goods.jsp">Nike</a></li>
-                        <li><a href="goods.jsp">Dunlop</a></li>
-                        <li><a href="goods.jsp">Yamaha</a></li>
-                    </ul>
                 </div>
                 <div class="block">
                     <h4 class="title">
@@ -177,11 +182,11 @@
             <div class="span3">
                 <h4>Navigation</h4>
                 <ul class="nav">
-                    <li><a href="index.jsp">Homepage</a></li>
-                    <li><a href="./about.html">About Us</a></li>
-                    <li><a href="./contact.html">Contac Us</a></li>
-                    <li><a href="cart.jsp">Your Cart</a></li>
-                    <li><a href="register.jsp">Login</a></li>
+                    <li><a href="/">Homepage</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contac Us</a></li>
+                    <li><a href="#">Your Cart</a></li>
+                    <li><a href="#">Login</a></li>
                 </ul>
             </div>
             <div class="span4">

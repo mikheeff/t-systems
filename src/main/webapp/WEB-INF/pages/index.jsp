@@ -86,10 +86,10 @@
 									</c:forEach>
 								</ul>
 							</li>															
-							<li><a href="goods.jsp">Best Sellers</a>
-							<li><a href="goods.jsp">How To Buy</a></li>
-							<li><a href="goods.jsp">F.A.Q</a></li>
-							<li><a href="goods.jsp">About us</a></li>
+							<li><a href="${pageContext.request.contextPath}/catalog">Best Sellers</a>
+							<li><a href="${pageContext.request.contextPath}/catalog">How To Buy</a></li>
+							<li><a href="${pageContext.request.contextPath}/catalog">F.A.Q</a></li>
+							<li><a href="${pageContext.request.contextPath}/catalog">About us</a></li>
 						</ul>
 					</nav>
 				</div>
@@ -285,7 +285,7 @@
 					</div>
 					<div class="span5">
 						<p class="logo"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></p>
-						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. the  Lorem Ipsum has been the industry's standard dummy text ever since the you.</p>
+						<p>Site was made by Pavel Mikheev</p>
 						<br/>
 						<span class="social_icons">
 							<a class="facebook" href="#">Facebook</a>
@@ -297,7 +297,7 @@
 				</div>	
 			</section>
 			<section id="copyright">
-				<span>Copyright 2013 bootstrappage template  All right reserved.</span>
+				<span>Copyright 2017  All right reserved.</span>
 			</section>
 		</div>
 		<script src="/resources/themes/js/common.js"></script>

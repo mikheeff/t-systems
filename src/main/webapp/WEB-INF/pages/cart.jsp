@@ -185,7 +185,7 @@
                                     document.getElementById("logoutForm").submit();
                                 }
                                 //							</script>
-							<li><a href="${pageContext.request.contextPath}clients/profile">My Account</a></li>
+							<li><a href="/clients/profile">My Account</a></li>
 							<c:if test="${cartList==null}">
 								<li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
 							</c:if>
@@ -213,7 +213,7 @@
 		<div id="wrapper" class="container">
 			<section class="navbar main-menu">
 				<div class="navbar-inner main-menu">				
-					<a href="index.jsp" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
+					<a href="${pageContext.request.contextPath}/" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul>
 							<li><a href="${pageContext.request.contextPath}/catalog">Catalog</a>
@@ -223,10 +223,10 @@
 									</c:forEach>
 								</ul>
 							</li>
-							<li><a href="goods.jsp">Best Sellers</a>
-							<li><a href="goods.jsp">How To Buy</a></li>
-							<li><a href="goods.jsp">F.A.Q</a></li>
-							<li><a href="goods.jsp">About us</a></li>
+							<li><a href="#">Best Sellers</a>
+							<li><a href="#">How To Buy</a></li>
+							<li><a href="#">F.A.Q</a></li>
+							<li><a href="#">About us</a></li>
 						</ul>
 					</nav>
 				</div>
@@ -239,9 +239,10 @@
 				<div class="row">
 					<%--<spring:form action="/catalog/goods/cart/order" method="post" commandName="cartItem" class="form-inline">--%>
 					<div class="span9">
-						<c:if test="${not empty error}">
-							<div class="error">${error}</div>
-						</c:if>
+						<%--<c:if test="${not empty error}">--%>
+							<%--<div class="msg">To place an order please log in</div>--%>
+						<%--</c:if>--%>
+
 						<h4 class="title"><span class="text"><strong>Your</strong> Cart</span></h4>
 						<table class="table table-striped">
 							<thead>
@@ -255,11 +256,11 @@
 								</tr>
 							</thead>
 							<tbody>
-							<c:forEach var="cartItem"  items="${cartList}">
+							<c:forEach var="cartItem"  items="${cartList}" varStatus="count">
 								<tr>
 									<td>
 										<div class="buttonHolder">
-										<a href="" class="button cross"></a>
+										<a href="/catalog/goods/cart/delete/item/${count.index}" class="button cross"></a>
 										</div>
 									</td>
 									<td><a href="${cartItem.goods.img}"><img alt="" height="100" width="100" src="${cartItem.goods.img}"></a></td>
@@ -278,7 +279,7 @@
 									<td>&nbsp;</td>
 									<td>&nbsp;</td>
 									<td><strong><big>${sum}</big></strong></td>
-								</tr>		  
+								</tr>
 							</tbody>
 						</table>
 						<%--<h4>What would you like to do next?</h4>--%>
@@ -299,7 +300,7 @@
 							<%--<strong>Total</strong>: $119.50<br>--%>
 						<%--</p>--%>
 						<hr/>
-						<c:if test="${client!=null}">
+						<c:if test="${client!=null and cartList!=null and cartList.size()!=0}">
 							<spring:form action="/catalog/profile/goods/cart/continue" method="get">
 									<span class="pull-right">
 										<button type="submit" class="btn btn-inverse">Continue</button>
@@ -307,11 +308,7 @@
 							</spring:form>
 						</c:if>
 						<c:if test="${client==null}">
-							<spring:form action="/catalog/goods/cart?error" method="get">
-									<span class="pull-right">
-										<button type="submit" class="btn btn-inverse">Continue</button>
-									</span>
-							</spring:form>
+							<div class="msg">To place an order please log in</div>
 						</c:if>
 
 					</div>
@@ -322,32 +319,11 @@
 								<li><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
 								<c:forEach var="categoryVar"  items="${listCategory}">
 
-									<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
-										<div class="buttonHolder">
-											<a href="/catalog/employee/edit/category/${categoryVar.id}" class="button flower"></a>
-										</div>
-										<div class="buttonHolder">
-											<a href="/catalog/employee/delete/category/${categoryVar.id}" class="button cross" onclick="return confirm('Are you sure?')"></a>
-										</div>
-									</c:if>
-
-									<li
-											<c:if test="${categoryVar.name == categoryName}" >
-												class="active"
-											</c:if>
-									><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
-									</li>
+									<li><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a></li>
 
 								</c:forEach>
 							</ul>
 							<br/>
-							<ul class="nav nav-list below">
-								<li class="nav-header">Filter</li>
-								<li><a href="goods.jsp">Adidas</a></li>
-								<li><a href="goods.jsp">Nike</a></li>
-								<li><a href="goods.jsp">Dunlop</a></li>
-								<li><a href="goods.jsp">Yamaha</a></li>
-							</ul>
 						</div>
 						<div class="block">
 							<h4 class="title">
@@ -399,11 +375,11 @@
 					<div class="span3">
 						<h4>Navigation</h4>
 						<ul class="nav">
-							<li><a href="index.jsp">Homepage</a></li>
-							<li><a href="./about.html">About Us</a></li>
+							<li><a href="#">Homepage</a></li>
+							<li><a href="#">About Us</a></li>
 							<li><a href="./contact.html">Contac Us</a></li>
 							<li><a href="/catalog/goods/cart">Your Cart</a></li>
-							<li><a href="register.jsp">Login</a></li>
+							<li><a href="#">Login</a></li>
 						</ul>					
 					</div>
 					<div class="span4">

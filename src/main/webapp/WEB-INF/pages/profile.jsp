@@ -76,7 +76,7 @@
                             document.getElementById("logoutForm").submit();
                         }
                         //							</script>
-					<li><a href="${pageContext.request.contextPath}clients/profile">My Account</a></li>
+					<li><a href="/clients/profile">My Account</a></li>
 
 					<c:if test="${client.role.name!='ROLE_EMPLOYEE'}">
 					<c:if test="${cartList==null}">
@@ -227,7 +227,7 @@
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> Post Code:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.postcode" type="text" placeholder="" class="input-xlarge"/>
+															<spring:input path="clientAddress.postcode" type="text" placeholder="" class="input-xlarge" pattern="^[ 0-9]+$"/>
 														</div>
 													</div>
 													<div class="control-group">

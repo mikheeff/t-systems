@@ -15,7 +15,6 @@ public interface ClientService {
     void addClient(Client client) throws EmailExistException;
     Client getUserByEmail(String email);
     void updateUser(Client client);
-    void addAddress();
     Client getClientById(int id);
     void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException;
 }
