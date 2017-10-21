@@ -7,6 +7,8 @@ import com.internetshop.model.Client;
 import com.internetshop.model.Role;
 import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.service.api.ClientService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,6 +27,9 @@ import java.util.Set;
 
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService{
+
+    Logger logger = LoggerFactory.getLogger("com.shop");
+
     @Autowired
     private ClientRepository clientRepository;
 
@@ -34,6 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
         ClientEntity clientEntity = clientRepository.getUserByEmail(email);
 
         if (clientEntity == null) {
+            logger.error("client entity is null");
             throw new UsernameNotFoundException("User not found");
         }
         List<GrantedAuthority> authorities = buildUserAuthority(clientEntity.getRoleEntity());

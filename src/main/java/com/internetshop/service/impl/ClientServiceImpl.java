@@ -14,6 +14,7 @@ import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.service.api.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -24,25 +25,29 @@ import java.util.Set;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public ClientServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
         this.clientRepository = clientRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<ClientEntity> getAllClients(){ return clientRepository.getAll(); }
 
+    /**
+     * Add new client
+     * @param client new client model
+     * @throws EmailExistException email already exists
+     */
     @Override
     public void addClient(Client client) throws EmailExistException {
-
         if (clientRepository.isEmailExist(client.getEmail())){
             throw new EmailExistException();
         }
 
 
-        client.setPassword(bCryptPasswordEncoder.encode(client.getPassword()));
+        client.setPassword(passwordEncoder.encode(client.getPassword()));
 
         ClientEntity clientEntity = convertClientToDAO(client);
         Set<OrderEntity> orderEntitySet = new HashSet<>();
@@ -51,17 +56,26 @@ public class ClientServiceImpl implements ClientService {
 
     }
 
+    /**
+     *
+     */
     @Override
     public void addAddress() {
 
     }
 
+    /**
+     * ch
+     * @param passwordField
+     * @param client
+     * @throws PasswordWrongException
+     */
     @Override
     public void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException {
 
-        if(bCryptPasswordEncoder.matches(passwordField.getPassword(),client.getPassword())==true){
+        if(passwordEncoder.matches(passwordField.getPassword(),client.getPassword())){
             ClientEntity clientEntity = clientRepository.getUserById(client.getId());
-            clientEntity.setPassword(bCryptPasswordEncoder.encode(passwordField.getNewPasswordFirst()));
+            clientEntity.setPassword(passwordEncoder.encode(passwordField.getNewPasswordFirst()));
             clientRepository.updateUser(clientEntity);
         } else {
             throw new PasswordWrongException();

@@ -9,6 +9,8 @@ import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.OrderService;
 import com.internetshop.service.impl.ClientServiceImpl;
 import com.internetshop.service.impl.UserDetailsServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,6 +27,8 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/clients")
 public class ClientController {
+
+    Logger logger = LoggerFactory.getLogger("com.shop");
 
     @Autowired
     private ClientService clientService;
@@ -106,6 +110,7 @@ public class ClientController {
         try {
             this.clientService.addClient(client);
         } catch (EmailExistException e) {
+            logger.error("Error", e);
             modelMap.put("newClient",client);
             modelMap.put("regError","Email already exist!");
             return "register";
