@@ -2,6 +2,7 @@ package com.internetshop.controller;
 
 import com.internetshop.Exceptions.EmailExistException;
 import com.internetshop.model.Client;
+import com.internetshop.model.PasswordField;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.OrderService;
@@ -62,7 +63,8 @@ public class ClientController {
 
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public String editClient(ModelMap modelMap, HttpServletRequest httpServletRequest) {
+    public String editClient(ModelMap modelMap, HttpServletRequest httpServletRequest,
+                             @RequestParam(value = "error", required = false) String error) {
         session.setAttribute("client",clientService.getUserByEmail( httpServletRequest.getUserPrincipal().getName()));
         modelMap.put("client",session.getAttribute("client"));
         if(modelMap.get("client") == null) {
@@ -75,8 +77,14 @@ public class ClientController {
         } else {
             modelMap.put("clientOrdersList", orderService.getAllOrders());
         }
+
+        if (error != null) {
+            modelMap.put("error", "Invalid password!");
+        }
+        modelMap.put("passwordField", new PasswordField());
         return "profile";
     }
+
     @RequestMapping(value = "/success", method = RequestMethod.POST)
     public String addClient(@ModelAttribute (value = "client")@Valid Client client, BindingResult bindingResult,ModelMap modelMap) {
         if(bindingResult.hasErrors()) {
@@ -99,6 +107,14 @@ public class ClientController {
         }
         this.clientService.updateUser(client);
         session.setAttribute("client",clientService.getUserByEmail(client.getEmail()));
+        return "redirect:/clients/profile";
+    }
+
+    @RequestMapping(value = "/edit/password", method = RequestMethod.POST)
+    public String editPassword(@ModelAttribute (value = "passwordField") @Valid PasswordField passwordField,BindingResult bindingResult){
+        if(bindingResult.hasErrors()) {
+            return "redirect:/clients/profile?error";
+        }
         return "redirect:/clients/profile";
     }
 

@@ -27,6 +27,37 @@
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<script src="/resources/themes/js/respond.min.js"></script>
 	<![endif]-->
+	<style>
+		.error {
+			padding: 15px;
+			margin-bottom: 20px;
+			border: 1px solid transparent;
+			border-radius: 4px;
+			color: #a94442;
+			background-color: #f2dede;
+			border-color: #ebccd1;
+		}
+
+		.msg {
+			padding: 15px;
+			margin-bottom: 20px;
+			border: 1px solid transparent;
+			border-radius: 4px;
+			color: #31708f;
+			background-color: #d9edf7;
+			border-color: #bce8f1;
+		}
+
+		#login-box {
+			width: 300px;
+			padding: 20px;
+			margin: 100px auto;
+			background: #fff;
+			-webkit-border-radius: 2px;
+			-moz-border-radius: 2px;
+			border: 1px solid #000;
+		}
+	</style>
 </head>
 <body>
 <div id="top-bar" class="container">
@@ -104,6 +135,9 @@
 					<h4><span>Your role is: ${client.role.name}</span></h4>
 				</c:if>
 			</section>
+			<c:if test="${not empty error}">
+				<div class="error">${error}</div>
+			</c:if>
 			<section class="main-content">
 				<div class="row">
 					<div class="span12">
@@ -149,12 +183,7 @@
 																<spring:input path="email" type="text" placeholder="" class="input-xlarge"/>
 															</div>
 														</div>
-														<%--<div class="control-group">--%>
-															<%--<label class="control-label">Password*</label>--%>
-															<%--<div class="controls">--%>
-																<%--<spring:input path="password" type="password" placeholder="" class="input-xlarge"/>--%>
-															<%--</div>--%>
-														<%--</div>--%>
+
 														<div class="control-group">
 															<label class="control-label">Phone number</label>
 															<div class="controls">
@@ -217,14 +246,44 @@
 														</div>
 													</div>
 												</fieldset>
-												<hr>
 												<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Edit your profile"></div>
 											</div>
+										</div>
+											<hr>
+										</spring:form>
+										<div class="row-fluid">
+											<div class="span6">
+												<h4>Set New Password</h4>
+												<spring:form action="password" method="post" modelAttribute="passwordField" class="form-stacked">
+													<fieldset>
+														<div class="control-group">
+															<label class="control-label">Old Password*</label>
+															<div class="controls">
+																<spring:input path="password" type="password" placeholder="" class="input-xlarge" />
+															</div>
+														</div>
+														<hr>
+														<div class="control-group">
+															<label class="control-label">New Password*</label>
+															<div class="controls">
+																<spring:input path="newPasswordFirst" type="password" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9]+$"/>
+															</div>
+														</div>
+														<div class="control-group">
+															<label class="control-label">Old Password*</label>
+															<div class="controls">
+																<spring:input path="newPasswordSecond" type="password" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9]+$"/>
+															</div>
+														</div>
+													</fieldset>
+												</spring:form>
+											</div>
+
 										</div>
 											<%--<input type="hidden"--%>
 												   <%--name="${_csrf.parameterName}"--%>
 												   <%--value="${_csrf.token}"/>--%>
-										</spring:form>
+
 									</div>
 								</div>
 							</div>

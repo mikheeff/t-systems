@@ -54,10 +54,9 @@
 							<c:if test="${cartList!=null}">
 								<li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
 							</c:if>
-							<c:if test="${client.role.name!=null}" >
 
 							</c:if>
-
+							<c:if test="${client.role.name!=null}" >
 								<form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >
 
 									<input type="hidden" size="0"

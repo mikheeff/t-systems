@@ -219,7 +219,8 @@ public class GoodsController {
     }
 
     @RequestMapping(value = "/profile/employee/details/order/{id}", method = RequestMethod.GET)
-    public String getOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap){
+    public String getOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap,
+                                  @RequestParam(value = "msg", required = false) String msg){
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("orderItemsList",orderService.getAllCartItemsFromOrderByOrderId(id));
@@ -228,13 +229,19 @@ public class GoodsController {
         modelMap.put("listStatus",orderService.getAllStatuses());
         modelMap.put("sum",getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
         modelMap.put("order", orderService.getOrderById(id));
+        if (msg!=null){
+            modelMap.put("msg","Order has been successfully edited");
+        }
         return "order_details";
     }
 
 
-    @RequestMapping(value = "/profile/employee/details/order/edit", method = RequestMethod.POST)
-    public String getOrderDetails(ModelMap modelMap) {
-        return null;
+    @RequestMapping(value = "/profile/employee/details/order/edit/{id}", method = RequestMethod.POST)
+    public String updateOrderStatus(ModelMap modelMap, Order order,
+                                    @PathVariable(value = "id") int id) {
+        order.setId(id);
+        orderService.updateOrderStatus(order);
+        return "redirect:/catalog/profile/employee/details/order/"+order.getId()+"?msg";
     }
 
 

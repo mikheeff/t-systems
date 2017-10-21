@@ -185,7 +185,7 @@
                             document.getElementById("logoutForm").submit();
                         }
                         //							</script>
-                    <li><a href="${pageContext.request.contextPath}clients/profile">My Account</a></li>
+                    <li><a href="/clients/profile">My Account</a></li>
                     <c:if test="${cartList==null}">
                         <li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
                     </c:if>
@@ -285,7 +285,7 @@
                             <th>&nbsp;</th>
                         </tr>
                     </c:forEach>
-                    <spring:form action="/catalog/profile/goods/order/confirm" method="post" commandName="order" class="form-inline">
+                    <spring:form action="/catalog/profile/employee/details/order/edit/${order.id}" method="post" commandName="order" class="form-inline">
                     </tbody>
                 </table>
                 <table class="table table-striped">
@@ -294,8 +294,8 @@
                         <th><big>Edit the delivery method</big></th>
                         <th><big>Edit the payment type</big></th>
                         <th><big>Edit order status</big></th>
+                        <th>Pay status</th>
                         <th><big>Additional information</big></th>
-                        <th>&nbsp;</th>
                         <th>&nbsp;</th>
                     </tr>
                     </thead>
@@ -322,7 +322,12 @@
                                 </c:forEach>
                             </spring:select>
                         </td>
-                        <td>&nbsp;</td>
+                        <td>
+                            <spring:select path="PayStatus" class="input-xlarge" id ="orderInput">
+                                <spring:option value="0">Unpaid</spring:option>
+                                <spring:option value="1">Paid</spring:option>
+                            </spring:select>
+                        </td>
                         <td><spring:textarea path="comment" cols="30" rows="3" readonly="true"/></td>
                         <td>&nbsp;</td>
                     </tr>
@@ -331,14 +336,14 @@
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
-                        <td>&nbsp;</td>
                         <td><strong><big><big>Total: ${sum}</big></big></strong></td>
+                        <td>&nbsp;</td>
                     </tr>
                     </tbody>
                 </table>
                 <hr>
                 <span class="pull-right">
-                        <button type="submit" class="btn btn-inverse">Confirm Order</button>
+                        <button type="submit" class="btn btn-inverse">Edit Order</button>
                     </span>
                 </spring:form>
             </div>

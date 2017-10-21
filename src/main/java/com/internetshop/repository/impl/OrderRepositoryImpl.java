@@ -48,6 +48,25 @@ public class OrderRepositoryImpl implements OrderRepository {
         return em.createQuery("select deliveryMethodEntity.id from DeliveryMethodEntity deliveryMethodEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
     }
 
+    //
+    @Override
+    public PaymentTypeEntity getPaymentTypeByName(String name) {
+        return em.createQuery("select paymentTypeEntity from PaymentTypeEntity paymentTypeEntity where name = :name",PaymentTypeEntity.class).setParameter("name",name).getSingleResult();
+
+    }
+
+    @Override
+    public DeliveryMethodEntity getDeliveryMethodByName(String name) {
+        return em.createQuery("select deliveryMethodEntity from DeliveryMethodEntity deliveryMethodEntity where name = :name",DeliveryMethodEntity.class).setParameter("name",name).getSingleResult();
+    }
+
+    @Override
+    public StatusEntity getStatusByName(String name) {
+        return em.createQuery("select statusEntity from StatusEntity statusEntity where name = :name",StatusEntity.class).setParameter("name",name).getSingleResult();
+    }
+///
+
+
     @Override
     public int addOrder(OrderEntity orderEntity, Set<CartItemEntity> cartItemEntitySet) {
         em.getTransaction().begin();
@@ -73,6 +92,13 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public OrderEntity getOrderById(int id) {
         return em.find(OrderEntity.class, id);
+    }
+
+    @Override
+    public void updateOrder(OrderEntity orderEntity) {
+        em.getTransaction().begin();
+        em.merge(orderEntity);
+        em.getTransaction().commit();
     }
 
     @Override

@@ -240,7 +240,9 @@
             <%--<spring:form action="/catalog/goods/cart/order" method="post" commandName="cartItem" class="form-inline">--%>
             <div class="span9">
                 <h4 class="title"><span class="text"><strong>Confirm</strong> Order</span></h4>
-
+                <c:if test="${not empty msg}">
+                    <div class="msg">${msg}</div>
+                </c:if>
                 <table class="table table-striped">
                     <thead>
                     <tr>

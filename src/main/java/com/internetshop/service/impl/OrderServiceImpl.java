@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
         Date date = new Date();
         SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd");
         orderEntity.setDate(date.toString());
-        orderEntity.setPayStatus(1);
+        orderEntity.setPayStatus(0);
         orderEntity.setComment(order.getComment());
 
         StatusEntity statusEntity = new StatusEntity();
@@ -122,6 +122,26 @@ public class OrderServiceImpl implements OrderService {
             orderList.add(convertOrderToDTO(orderEntity));
         }
         return orderList;
+    }
+
+    @Override
+    public void updateOrderStatus(Order order) {
+        OrderEntity orderEntity = orderRepository.getOrderById(order.getId());
+
+        PaymentTypeEntity paymentTypeEntity = orderRepository.getPaymentTypeByName(order.getPaymentType().getName());
+        orderEntity.setPaymentType(paymentTypeEntity);
+
+        DeliveryMethodEntity deliveryMethodEntity = orderRepository.getDeliveryMethodByName(order.getDeliveryMethod().getName());
+        orderEntity.setDeliveryMethod(deliveryMethodEntity);
+
+        StatusEntity statusEntity = orderRepository.getStatusByName(order.getStatus().getName());
+        orderEntity.setStatus(statusEntity);
+
+        orderEntity.setPayStatus(order.getPayStatus());
+
+        orderRepository.updateOrder(orderEntity);
+
+
     }
 
     @Override
