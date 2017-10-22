@@ -185,7 +185,7 @@
                                     document.getElementById("logoutForm").submit();
                                 }
                                 //							</script>
-							<li><a href="${pageContext.request.contextPath}clients/profile">My Account</a></li>
+							<li><a href="/clients/profile">My Account</a></li>
 							<c:if test="${client.role.name!='ROLE_EMPLOYEE'}">
 
 								<c:if test="${cartList==null}">
@@ -207,7 +207,7 @@
 								<li><a href="javascript:formSubmit()">Logout</a></li>
 							</c:if>
 							<c:if test="${client.role.name==null}" >
-								<li><a href="${pageContext.request.contextPath}clients/identification">Login</a></li>
+								<li><a href="/clients/identification">Login</a></li>
 							</c:if>
 						</ul>
 					</div>

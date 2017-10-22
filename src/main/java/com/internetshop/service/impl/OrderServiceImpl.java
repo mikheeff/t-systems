@@ -8,6 +8,8 @@ import com.internetshop.repository.api.OrderRepository;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class OrderServiceImpl implements OrderService {
     private final ClientRepository clientRepository;
     private final GoodsService goodsService;
     private final ClientService clientService;
+    private static Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class.getName());
+
 
     @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, GoodsRepository goodsRepository, ClientRepository clientRepository, GoodsService goodsService, ClientService clientService) {
@@ -32,8 +36,13 @@ public class OrderServiceImpl implements OrderService {
         this.clientService = clientService;
     }
 
+    /**
+     * Gets all delivery methods from DB
+     * @return List of Delivery methods
+     */
     @Override
     public List<DeliveryMethod> getAllDeliveryMethods() {
+        logger.info("getAllDeliveryMethods");
         List<DeliveryMethod> deliveryMethods = new ArrayList<>();
         for (DeliveryMethodEntity deliveryMethodEntity : orderRepository.getAllDeliveryMethods()) {
             DeliveryMethod deliveryMethod = new DeliveryMethod(deliveryMethodEntity.getId(), deliveryMethodEntity.getName());
@@ -42,8 +51,12 @@ public class OrderServiceImpl implements OrderService {
         return deliveryMethods;
     }
 
+    /**
+     * Gets all payment types
+     */
     @Override
     public List<PaymentType> getAllPaymentTypes() {
+        logger.info("getAllPaymentTypes");
         List<PaymentType> paymentTypes = new ArrayList<>();
         for (PaymentTypeEntity paymentTypeEntity : orderRepository.getAllPaymentTypes()) {
             PaymentType paymentType = new PaymentType(paymentTypeEntity.getId(), paymentTypeEntity.getName());
@@ -52,8 +65,13 @@ public class OrderServiceImpl implements OrderService {
         return paymentTypes;
     }
 
+    /**
+     * Gets all Statuses
+     */
     @Override
     public List<Status> getAllStatuses() {
+        logger.info("getAllStatuses");
+
         List<Status> statuses = new ArrayList<>();
         for (StatusEntity statusEntity : orderRepository.getAllStatuses()) {
             Status status = new Status(statusEntity.getId(), statusEntity.getName());
@@ -62,17 +80,22 @@ public class OrderServiceImpl implements OrderService {
         return statuses;
     }
 
+    /**
+     * Converts order to DAO and send to repository
+     * @return id of the added order
+     */
     @Override
     public int addOrder(Order order) {
+        logger.info("addOrder");
+
         OrderEntity orderEntity = new OrderEntity();
         Date date = new Date();
-        SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd");
         orderEntity.setDate(date.toString());
         orderEntity.setPayStatus(0);
         orderEntity.setComment(order.getComment());
 
         StatusEntity statusEntity = new StatusEntity();
-        statusEntity.setId(1); //статус по умолчанию
+        statusEntity.setId(1); //status by default
         statusEntity.setName(orderRepository.getStatusById(1).getName());
         orderEntity.setStatus(statusEntity);
 
@@ -94,20 +117,24 @@ public class OrderServiceImpl implements OrderService {
         for (CartItem item : cartItemSet) {
             CartItemEntity itemEntity = new CartItemEntity();
             itemEntity.setQuantity(item.getQuantity());
-//            itemEntity.setGoodsEntity(convertGoodsToDAO(item.getGoods()));
             itemEntity.setGoodsEntity(goodsRepository.getGoodsById(item.getGoods().getId()));
             itemEntity.setOrderEntity(orderEntity);
             cartItemEntitySet.add(itemEntity);
         }
         orderEntity.setClientEntity(convertClientToDAO(order.getClient(),order.getClient().getRole().getId()));
 
-//        orderEntity.setCartItemEntities();
         return orderRepository.addOrder(orderEntity,cartItemEntitySet);
 
     }
 
+    /**
+     * Gets all orders of selected client
+     * @param id client id
+     * @return List of orders
+     */
     @Override
     public List<Order> getAllOrdersByClientId(int id) {
+        logger.info("getAllOrdersByClientId");
         List<Order> orderList = new ArrayList<>();
         for(OrderEntity orderEntity : orderRepository.getAllOrdersByClientId(id)){
             orderList.add(convertOrderToDTO(orderEntity));
@@ -115,8 +142,14 @@ public class OrderServiceImpl implements OrderService {
         return orderList;
     }
 
+    /**
+     * Gets all orders
+     * @return List of orders
+     */
     @Override
     public List<Order> getAllOrders() {
+        logger.info("getAllOrders");
+
         List<Order> orderList = new ArrayList<>();
         for(OrderEntity orderEntity : orderRepository.getAllOrders()){
             orderList.add(convertOrderToDTO(orderEntity));
@@ -124,8 +157,13 @@ public class OrderServiceImpl implements OrderService {
         return orderList;
     }
 
+    /**
+     * Edits order payment type, status ad delivery method
+     */
     @Override
     public void updateOrderStatus(Order order) {
+        logger.info("updateOrderStatus");
+
         OrderEntity orderEntity = orderRepository.getOrderById(order.getId());
 
         PaymentTypeEntity paymentTypeEntity = orderRepository.getPaymentTypeByName(order.getPaymentType().getName());
@@ -144,8 +182,14 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    /**
+     * Gets all cart items from order by order id
+     * @return List of cart items
+     */
     @Override
     public List<CartItem> getAllCartItemsFromOrderByOrderId(int id) {
+        logger.info("getAllCartItemsFromOrderByOrderId");
+
         List<CartItem> cartItemList = new ArrayList<>();
         for (CartItemEntity itemEntity : orderRepository.getAllCartItemsFromOrderByOrderId(id)){
             CartItem item = new CartItem();
@@ -157,13 +201,24 @@ public class OrderServiceImpl implements OrderService {
         return cartItemList;
     }
 
+    /**
+     * Gets order by it's id
+     * @return Order model
+     */
     @Override
     public Order getOrderById(int id) {
+        logger.info("getOrderById");
+
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         return convertOrderToDTO(orderEntity);
     }
 
+    /**
+     * convert Order Entity to Order Model
+     */
     public Order convertOrderToDTO(OrderEntity orderEntity){
+        logger.info("convertOrderToDTO");
+
         Order order = new Order();
         order.setId(orderEntity.getId());
         order.setDate(orderEntity.getDate());
@@ -202,7 +257,13 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    /**
+     * converts client model to entity
+     * @return client entity
+     */
     public ClientEntity convertClientToDAO(Client client, int id) {
+        logger.info("convertClientToDAO");
+
         RoleEntity role = new RoleEntity();
         role.setId(id);
         role.setName(clientRepository.getRoleById(id).getName());
@@ -228,32 +289,4 @@ public class OrderServiceImpl implements OrderService {
         clientEntity.setClientAddressEntity(clientAddressEntity);
         return clientEntity;
     }
-
-
-//    public GoodsEntity convertGoodsToDAO(Goods goods) {
-//        CategoryEntity categoryEntity = new CategoryEntity();
-//        categoryEntity.setId(goodsRepository.getIdCategoryByName(goods.getCategory().getName()));
-//        categoryEntity.setName(goods.getName());
-//
-//        RuleEntity ruleEntity = new RuleEntity();
-//        ruleEntity.setId(goodsRepository.getIdRuleByName(goods.getRule().getName()));
-//        ruleEntity.setName(goods.getName());
-//
-//        GoodsEntity goodsEntity = new GoodsEntity(
-//                goods.getName(),
-//                goods.getPrice(),
-//                goods.getNumberOfPlayers(),
-//                goods.getDuration(),
-//                goods.getAmount(),
-//                goods.getVisible(),
-//                goods.getDescription(),
-//                goods.getImg(),
-//                categoryEntity,
-//                ruleEntity);
-//        goodsEntity.setId(goods.getId());
-//        return goodsEntity;
-//    }
-
-
-
 }

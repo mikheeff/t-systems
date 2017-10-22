@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +29,7 @@ import java.util.Set;
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService{
 
-    Logger logger = LoggerFactory.getLogger("com.shop");
+    private static Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class.getName());
 
     @Autowired
     private ClientRepository clientRepository;
@@ -36,13 +37,17 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
-        ClientEntity clientEntity = clientRepository.getUserByEmail(email);
-
-        if (clientEntity == null) {
-            logger.error("client entity is null");
+        logger.info("loadUserByUsername with param:"+email);
+        ClientEntity clientEntity;
+        try {
+            clientEntity = clientRepository.getUserByEmail(email);
+        } catch (NoResultException e) {
+            logger.error("No client with entered email");
             throw new UsernameNotFoundException("User not found");
         }
+
         List<GrantedAuthority> authorities = buildUserAuthority(clientEntity.getRoleEntity());
+        logger.info("found user with email "+clientEntity.getEmail());
         return buildUserForAuthentication(clientEntity,authorities);
     }
 

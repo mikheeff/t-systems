@@ -1,6 +1,8 @@
 package com.internetshop.controller;
 
 import com.internetshop.service.api.GoodsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,8 +18,16 @@ public class HomeController {
     @Autowired
     private GoodsController goodsController;
 
+    private static Logger logger = LoggerFactory.getLogger(HomeController.class.getName());
+
+
+    /**
+     * Gets goods for homepage
+     * @return homepage
+     */
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
     public String main(ModelMap modelMap) {
+        logger.info("main");
         modelMap.put("randomGoods",goodsController.getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
         return "index";

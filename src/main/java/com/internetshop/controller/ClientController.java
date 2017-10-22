@@ -28,7 +28,8 @@ import javax.validation.Valid;
 @RequestMapping("/clients")
 public class ClientController {
 
-    Logger logger = LoggerFactory.getLogger("com.shop");
+    private static Logger logger = LoggerFactory.getLogger(ClientController.class.getName());
+
 
     @Autowired
     private ClientService clientService;
@@ -41,11 +42,15 @@ public class ClientController {
     @Autowired
     private HttpSession session;
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String getAllUsers(ModelMap modelMap) {
-        modelMap.put("listClient", clientService.getAllClients());
-        return "client_page";
-    }
+    /**
+     * Identifies user or create form for new client,
+     * handles errors with registration
+     *
+     * @param error message if wasn't found typed email
+     * @param logout message when user logged out
+     * @param regError message when registration params are invalid
+     * @return registration and login page
+     */
     @RequestMapping(value ="/identification",method = RequestMethod.GET)
     public String identifyUser(ModelMap modelMap,
                                @RequestParam(value = "error", required = false) String error,
@@ -57,15 +62,29 @@ public class ClientController {
         }
         if (regError != null) {
             modelMap.put("regError", "Invalid params!");
-//            modelMap.put(session.getAttribute()) //todo хорошо бы сделать, чтобы при невалидных параметрах ввёденные данные не терялись
         }
 
         if (logout != null) {
             modelMap.put("msg", "You've been logged out successfully.");
+            logger.info("user logged out");
         }
         return "register";
     }
 
+    /**
+     * Gets information for user's profile:
+     * information about user and orders history
+     * if user has employee role he will see all orders
+     * handles errors with editing profile
+     *
+     * @param httpServletRequest for getting user principal
+     * @param errorMatch message when typed passwords didn't match
+     * @param msg success when password has been changed
+     * @param error message when user added forbidden symbols
+     * @param errorInvalidPass message when user trying to change password
+     *                         but entered invalid password
+     * @return profile page
+     */
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String editClient(ModelMap modelMap, HttpServletRequest httpServletRequest,
@@ -73,9 +92,11 @@ public class ClientController {
                              @RequestParam(value = "msg", required = false) String msg,
                              @RequestParam(value = "error", required = false) String error,
                              @RequestParam(value = "errorInvalidPass", required = false) String errorInvalidPass) {
+        logger.info("editClient");
         session.setAttribute("client",clientService.getUserByEmail( httpServletRequest.getUserPrincipal().getName()));
         modelMap.put("client",session.getAttribute("client"));
         if(modelMap.get("client") == null) {
+            logger.info("client is null");
             return "redirect:/clients/identification";
         }
         modelMap.put("listCategory",goodsService.getAllCategories());
@@ -102,15 +123,23 @@ public class ClientController {
         return "profile";
     }
 
+    /**
+     * Handle errors with registration
+     * Send user information for registration to service
+     * @return success page
+     */
+
     @RequestMapping(value = "/success", method = RequestMethod.POST)
     public String addClient(@ModelAttribute (value = "client")@Valid Client client, BindingResult bindingResult,ModelMap modelMap) {
+        logger.info("addClient");
         if(bindingResult.hasErrors()) {
+            logger.warn("Entered data not valid");
             return "redirect:/clients/identification?regError";
         }
         try {
             this.clientService.addClient(client);
         } catch (EmailExistException e) {
-            logger.error("Error", e);
+            logger.error("Error email: "+e.getEnteredEmail(), e);
             modelMap.put("newClient",client);
             modelMap.put("regError","Email already exist!");
             return "register";
@@ -118,9 +147,16 @@ public class ClientController {
         return "registr_success";
     }
 
+    /**
+     * Gets clients information for editing
+     * @return profile page
+     */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editClient(@ModelAttribute (value = "client") @Valid Client client, BindingResult bindingResult) {
+        logger.info("editClient");
+
         if(bindingResult.hasErrors()) {
+            logger.warn("entered information not valid");
             return "redirect:/clients/profile";
         }
         this.clientService.updateUser(client);
@@ -128,9 +164,18 @@ public class ClientController {
         return "redirect:/clients/profile";
     }
 
+    /**
+     * Gets user's passwords new and old
+     * checks new password
+     * handle errors with changing password
+     * Send new password to service
+     * @return result message about changing password
+     */
     @RequestMapping(value = "/profile/edit/password", method = RequestMethod.POST)
     public String changePassword(@ModelAttribute (value = "passwordField") @Valid PasswordField passwordField,BindingResult bindingResult){
+        logger.info("changePassword");
         if(bindingResult.hasErrors()) {
+            logger.warn("Password validation failed");
             return "redirect:/clients/profile?error";
         }
         Client client = (Client)session.getAttribute("client");
@@ -138,10 +183,12 @@ public class ClientController {
             try {
                 clientService.changePassword(passwordField, client);
             } catch (PasswordWrongException e) {
+                logger.error("Error password",e);
                 return "redirect:/clients/profile?errorInvalidPass";
             }
         }
         else {
+            logger.warn("First and second password fields does't match");
             return "redirect:/clients/profile?errorMatch";
         }
         session.setAttribute("client",clientService.getClientById(client.getId()));

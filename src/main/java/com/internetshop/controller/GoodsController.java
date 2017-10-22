@@ -7,6 +7,8 @@ import com.internetshop.model.*;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,24 +26,35 @@ import java.util.*;
 @RequestMapping("/catalog")
 public class GoodsController {
 
-    @Autowired
-    private GoodsService goodsService;
-    @Autowired
-    private ClientService clientService;
-    @Autowired
-    private OrderService orderService;
+    private static Logger logger = LoggerFactory.getLogger(GoodsController.class.getName());
 
-    @Autowired
-    public HttpSession session;
+    private final GoodsService goodsService;
+    private final ClientService clientService;
+    private final OrderService orderService;
+
+    public final HttpSession session;
 
 
-    private static final int amountOfGoodsOnPage = 9; //при вводе больше 9 едет картинки на первой странице??
+    private static final int amountOfGoodsOnPage = 9;
     private static final int amountOfRandomGoodsOnPage = 6;
 
+    @Autowired
+    public GoodsController(GoodsService goodsService, ClientService clientService, OrderService orderService, HttpSession session) {
+        this.goodsService = goodsService;
+        this.clientService = clientService;
+        this.orderService = orderService;
+        this.session = session;
+    }
+
+    /**
+     * Gets goods for first page of goods catalog
+     * @return catalog page
+     */
     @RequestMapping(method = RequestMethod.GET)
-    public String getAllGoods(ModelMap modelMap) { // TODO: 11.10.2017 HttpSession session
+    public String getAllGoods(ModelMap modelMap) {
+        logger.info("getAllGoods");
         modelMap.put("currentPage",1);
-        modelMap.put("amountOfPages",getAmountOfPages());
+        modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
@@ -50,10 +63,16 @@ public class GoodsController {
 
         return "goods";
     }
+
+    /**
+     * Gets goods for selected page
+     * @return selected page of catalog
+     */
     @RequestMapping(value = "/page/{page}", method = RequestMethod.GET)
     public String getAllGoods(@PathVariable(value = "page") int page, ModelMap modelMap) {
+        logger.info("getAllGoods");
         modelMap.put("currentPage",page);
-        modelMap.put("amountOfPages",getAmountOfPages());
+        modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods", goodsService.getAllGoods(amountOfGoodsOnPage*(page-1),amountOfGoodsOnPage));
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
@@ -61,10 +80,16 @@ public class GoodsController {
         modelMap.put("cartList",session.getAttribute("cartList"));
         return "goods";
     }
+
+    /**
+     * Gets goods by selected category
+     * @return catalog page
+     */
     @RequestMapping(value ="/{category}/page/{page}", method = RequestMethod.GET)
     public String getAllGoodsByCategory(@PathVariable("category") String categoryName,@PathVariable(value = "page") int page, ModelMap modelMap) {
+        logger.info("getAllGoodsByCategory");
         modelMap.put("currentPage",page);
-        modelMap.put("amountOfPages",getAmountOfPages(categoryName));
+        modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoodsByCategoryName(categoryName)));
         modelMap.put("listGoods", goodsService.getAllGoodsByCategoryName(0,amountOfGoodsOnPage,categoryName));
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
@@ -74,19 +99,32 @@ public class GoodsController {
         return "goods";
     }
 
+    /**
+     * Puts empty objects of goods and category model
+     * to form for entering information
+     * @return page for adding
+     */
     @RequestMapping(value ="/employee/add", method = RequestMethod.GET)
     public String addGoods(ModelMap modelMap) {
+        logger.info("addGoods");
         modelMap.put("goods", new Goods());
         modelMap.put("category", new Category());
         modelMap.put("listCategory",goodsService.getAllCategories());
         return "add_page";
     }
+
+    /**
+     * Sends goods model to service for adding
+     * handle validation errors
+     * @return page for adding
+     */
     @RequestMapping(value ="/employee/add/goods", method = RequestMethod.POST)
     public String addGoods(@ModelAttribute (value = "goods") @Valid Goods goods,
                            BindingResult bindingResultGoods,
                            ModelMap modelMap) {
-
+        logger.info("addGoods");
         if(bindingResultGoods.hasErrors()) {
+            logger.warn("Goods validation failed");
             modelMap.put("error1", "Invalid params!");
             modelMap.put("goods",goods);
             modelMap.put("category",new Category());
@@ -102,10 +140,18 @@ public class GoodsController {
         modelMap.put("category", new Category());
         return "add_page";
     }
+
+    /**
+     * Sends category model to service for adding
+     * handle validation errors
+     * @return page for adding
+     */
     @RequestMapping(value = "/employee/add/category",method = RequestMethod.POST)
     public String addCategory( @ModelAttribute (value = "category")  @Valid Category category,
                                BindingResult bindingResult,ModelMap modelMap){
+        logger.info("addCategory");
         if(bindingResult.hasErrors()) {
+            logger.warn("Category validation failed");
             modelMap.put("error2", "Invalid params!");
             modelMap.put("goods",new Goods());
             modelMap.put("category",category);
@@ -122,16 +168,29 @@ public class GoodsController {
         return "add_page";
     }
 
+    /**
+     * Sends goods id which has to be deleted to service
+     * @return catalog page
+     */
+
     @RequestMapping(value ="/employee/delete/{id}", method = RequestMethod.GET)
     public String deleteGoods(@PathVariable(value = "id") int id) {
+        logger.info("deleteGoods");
         this.goodsService.deleteGoodsById(id);
         return "redirect:/catalog";
     }
 
+    /**
+     * Sends goods model to service for editing
+     * handle validation errors
+     * @return goods details page
+     */
     @RequestMapping(value ="/employee/edit", method = RequestMethod.POST)
     public String editGoods(@ModelAttribute(value = "goods")  @Valid Goods goods, BindingResult bindingResult,
                             ModelMap modelMap) {
+        logger.info("editGoods");
         if(bindingResult.hasErrors()) {
+            logger.warn("Goods validation failed");
             modelMap.put("error", "Invalid params!");
             modelMap.put("randomGoods",getRandomGoods());
             modelMap.put("goods",goods);
@@ -146,8 +205,13 @@ public class GoodsController {
         return "goods_detail";
     }
 
+    /**
+     * Gets goods by selected id
+     * @return goods detail page
+     */
     @RequestMapping(value ="/goods/{id}", method = RequestMethod.GET)
     public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap) {
+        logger.info("getGoodsById");
         modelMap.put("goods", goodsService.getGoodsById(id));
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
@@ -157,8 +221,14 @@ public class GoodsController {
         modelMap.put("cartList",session.getAttribute("cartList"));
         return "goods_detail";
     }
+
+    /**
+     * adds goodsItem model to session
+     * @return
+     */
     @RequestMapping(value = "/goods/cart/{id}/add", method = RequestMethod.POST)
     public String addToCart(@PathVariable(value = "id") int id, CartItem cartItem){
+        logger.info("getGoodsById");
         if (session.getAttribute("cartList")==null){
             List<CartItem> cartList = new ArrayList<>();
             session.setAttribute("cartList",cartList);
@@ -169,9 +239,16 @@ public class GoodsController {
         session.setAttribute("cartList",cartList);
         return "redirect:/catalog/goods/"+id;
     }
+
+    /**
+     * Gets items from cart
+     * handle errors
+     * @return cart page
+     */
     @RequestMapping(value = "/goods/cart",method = RequestMethod.GET)
     public String getCartItems(ModelMap modelMap,
                                @RequestParam(value = "error", required = false) String error){
+        logger.info("getCartItems");
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
         ArrayList<CartItem> cartList = (ArrayList<CartItem>)session.getAttribute("cartList");
@@ -186,15 +263,25 @@ public class GoodsController {
         return "cart";
     }
 
+    /**
+     * Deletes selected item from cart
+     * @return cart page
+     */
     @RequestMapping(value = "/goods/cart/delete/item/{index}", method = RequestMethod.GET)
     public String deleteCartItem(@PathVariable(value = "index") int index){
+        logger.info("deleteCartItem");
         ArrayList<CartItem> cartList = (ArrayList<CartItem>)session.getAttribute("cartList");
         cartList.remove(index);
         return "redirect:/catalog/goods/cart";
     }
 
+    /**
+     * Puts order details to model map
+     * @return confirm order page
+     */
     @RequestMapping(value = "/profile/goods/cart/continue",method = RequestMethod.GET)
     public String getOrder(ModelMap modelMap){
+        logger.info("getOrder");
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("cartList",session.getAttribute("cartList"));
@@ -209,23 +296,34 @@ public class GoodsController {
         return "confirm_order";
     }
 
+    /**
+     * Puts order details to order model and send it to service
+     * for adding
+     * @return order success page
+     */
+
     @RequestMapping(value = "/profile/goods/order/confirm",method = RequestMethod.POST)
     public String addOrder(ModelMap modelMap,Order order){
+        logger.info("addOrder");
         Set<CartItem> cartItemSet = new HashSet<>((ArrayList<CartItem>)session.getAttribute("cartList"));
         order.setCartItems(cartItemSet);
         Client client = (Client)session.getAttribute("client");
         order.setClient(client);
         int orderId = orderService.addOrder(order);
-//        client.getOrder().add(order);
         modelMap.put("orderId",orderId);
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
         return "order_success";
     }
 
+    /**
+     * Gets information for selected object
+     * @return order details page
+     */
     @RequestMapping(value = "/profile/employee/details/order/{id}", method = RequestMethod.GET)
     public String getOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap,
                                   @RequestParam(value = "msg", required = false) String msg){
+        logger.info("getOrderDetails");
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("orderItemsList",orderService.getAllCartItemsFromOrderByOrderId(id));
@@ -240,23 +338,31 @@ public class GoodsController {
         return "order_details";
     }
 
-
+    /**
+     * Edits order payment type, status ad delivery method
+     * @return order details page
+     */
     @RequestMapping(value = "/profile/employee/details/order/edit/{id}", method = RequestMethod.POST)
     public String updateOrderStatus(ModelMap modelMap, Order order,
                                     @PathVariable(value = "id") int id) {
+        logger.info("updateOrderStatus");
         order.setId(id);
         orderService.updateOrderStatus(order);
         return "redirect:/catalog/profile/employee/details/order/"+order.getId()+"?msg";
     }
 
 
-
+    /**
+     * Gets selected category for editing form
+     * @return catalog page
+     */
     @RequestMapping(value = "/employee/edit/category/{id}", method = RequestMethod.GET)
     public String editCategory(@PathVariable(value = "id") int id, ModelMap modelMap){
+        logger.info("editCategory");
         boolean editCatFlag = true;
         modelMap.put("editCatFlag",editCatFlag);
         modelMap.put("currentPage",1);
-        modelMap.put("amountOfPages",getAmountOfPages());
+        modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
@@ -265,15 +371,23 @@ public class GoodsController {
         return "goods";
     }
 
+    /**
+     * Edits selected category
+     * handle validation errors
+     * @return catalog page
+     */
     @RequestMapping(value ="/employee/edit/category", method = RequestMethod.POST)
     public String editCategory(@ModelAttribute(value = "category")  @Valid Category category, BindingResult bindingResult,
                             ModelMap modelMap) {
+        logger.info("editCategory");
+
         if(bindingResult.hasErrors()) {
             boolean editCatFlag = true;
+            logger.warn("category validation error");
             modelMap.put("editCatFlag",editCatFlag);
             modelMap.put("category",category);
             modelMap.put("currentPage",1);
-            modelMap.put("amountOfPages",getAmountOfPages());
+            modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
             modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
             modelMap.put("randomGoods",getRandomGoods());
             modelMap.put("listCategory",goodsService.getAllCategories());
@@ -285,7 +399,7 @@ public class GoodsController {
         goodsService.updateCategory(category);
 
         modelMap.put("currentPage",1);
-        modelMap.put("amountOfPages",getAmountOfPages());
+        modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
         modelMap.put("randomGoods",getRandomGoods());
         modelMap.put("listCategory",goodsService.getAllCategories());
@@ -294,32 +408,28 @@ public class GoodsController {
         return "goods";
     }
 
+    /**
+     * Deletes selected category
+     * @return catalog page
+     */
     @RequestMapping(value ="/employee/delete/category/{id}", method = RequestMethod.GET)
     public String deleteCategory(@PathVariable(value = "id") int id) {
+        logger.info("deleteCategory");
         this.goodsService.deleteCategoryById(id);
         return "redirect:/catalog";
     }
 
-    public long getAmountOfPages(){
-        if (goodsService.getAmountOfGoods()% amountOfGoodsOnPage ==0){
-            return goodsService.getAmountOfGoods()/ amountOfGoodsOnPage;
-        }
-        else {
-            return goodsService.getAmountOfGoods()/ amountOfGoodsOnPage +1;
-        }
-    }
-    public long getAmountOfPages(String categoryName){
-        if (goodsService.getAmountOfGoodsByCategoryName(categoryName)% amountOfGoodsOnPage ==0){
-            return goodsService.getAmountOfGoodsByCategoryName(categoryName)/ amountOfGoodsOnPage;
-        }
-        else {
-            return goodsService.getAmountOfGoodsByCategoryName(categoryName)/ amountOfGoodsOnPage +1;
-        }
-    }
+
+
+    /**
+     * Gets selected amount of different random goods
+     * @return goods list
+     */
 
     public List<Goods> getRandomGoods(){
+        logger.info("getRandomGoods");
         Set<Integer> randomGoodsIdSet = new HashSet<>();
-        while (randomGoodsIdSet.size()<amountOfRandomGoodsOnPage) { //todo а если количество товаров будет всегда меньше запрашиваемо числа случайных товаров?
+        while (randomGoodsIdSet.size()<amountOfRandomGoodsOnPage) {
             randomGoodsIdSet.add(goodsService.getRandomGoodsId());
         }
         List<Goods> goodsList = new ArrayList<>();
@@ -329,6 +439,24 @@ public class GoodsController {
         return goodsList;
     }
 
+    /**
+     * Evaluates amount of pages depending on the number of goods
+     * @return amount of pages
+     */
+    public long getAmountOfPages(long amountOfGoods){
+        if (amountOfGoods==0)
+            return 1;
+        if (amountOfGoods% amountOfGoodsOnPage ==0){
+            return amountOfGoods/ amountOfGoodsOnPage;
+        }
+        else {
+            return amountOfGoods/ amountOfGoodsOnPage +1;
+        }
+    }
+    /**
+     * Evaluates total cost of order
+     * @return total cost
+     */
     public float getSumOfOrder(List<CartItem> cartList){
         float sum = 0;
         for (int i = 0; i < cartList.size(); i++) {

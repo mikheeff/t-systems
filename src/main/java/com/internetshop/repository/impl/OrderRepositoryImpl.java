@@ -67,6 +67,11 @@ public class OrderRepositoryImpl implements OrderRepository {
 ///
 
 
+    /**
+     * Adds order to database
+     * @param cartItemEntitySet set of all items in order
+     * @return id of the added order
+     */
     @Override
     public int addOrder(OrderEntity orderEntity, Set<CartItemEntity> cartItemEntitySet) {
         em.getTransaction().begin();

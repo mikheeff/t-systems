@@ -2,6 +2,7 @@ package com.internetshop.service.impl;
 
 import com.internetshop.Exceptions.EmailExistException;
 import com.internetshop.Exceptions.PasswordWrongException;
+import com.internetshop.controller.HomeController;
 import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.OrderEntity;
@@ -12,6 +13,8 @@ import com.internetshop.model.PasswordField;
 import com.internetshop.model.Role;
 import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.service.api.ClientService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +29,8 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
     PasswordEncoder passwordEncoder;
+    private static Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class.getName());
+
 
     @Autowired
     public ClientServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
@@ -42,8 +47,9 @@ public class ClientServiceImpl implements ClientService {
      */
     @Override
     public void addClient(Client client) throws EmailExistException {
+        logger.info("addClient");
         if (clientRepository.isEmailExist(client.getEmail())){
-            throw new EmailExistException();
+            throw new EmailExistException(client.getEmail());
         }
 
 
@@ -57,15 +63,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     /**
-     *
-     * @param passwordField
-     * @param client,passwordField
+     * Changes user's password
      * @throws PasswordWrongException
      */
     @Override
     public void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException {
-
+        logger.info("changePassword");
         if(passwordEncoder.matches(passwordField.getPassword(),client.getPassword())){
+            logger.info("password matches = true");
             ClientEntity clientEntity = clientRepository.getUserById(client.getId());
             clientEntity.setPassword(passwordEncoder.encode(passwordField.getNewPasswordFirst()));
             clientRepository.updateUser(clientEntity);
@@ -76,11 +81,11 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Gets client model by email
-     * @param email
      * @return Client
      */
     @Override
     public Client getUserByEmail(String email) {
+        logger.info("getUserByEmail");
         ClientEntity clientEntity = clientRepository.getUserByEmail(email);
         Role role = new Role(clientEntity.getRoleEntity().getId(),clientEntity.getRoleEntity().getName());
 
@@ -111,11 +116,12 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Get client model by ID
-     * @param id
      * @return Client
      */
     @Override
     public Client getClientById(int id) {
+        logger.info("getClientById");
+
         Client client = new Client();
         ClientEntity clientEntity = clientRepository.getUserById(id);
         client.setId(clientEntity.getId());
@@ -152,6 +158,8 @@ public class ClientServiceImpl implements ClientService {
      */
     @Override
     public void updateUser(Client client) {
+        logger.info("updateUser");
+
         ClientEntity clientEntity = clientRepository.getUserById(client.getId());
 
         ClientAddressEntity clientAddressEntity = clientEntity.getClientAddressEntity();
@@ -182,11 +190,11 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Converts client model to client Entity
-     * @param client
      * @return Client Entity
      */
 
     public ClientEntity convertClientToDAO(Client client) {
+        logger.info("convertClientToDAO");
         RoleEntity role = new RoleEntity();
         role.setId(3);                                  // default role:ROLE_CLIENT - 3(client)
         role.setName(clientRepository.getRoleById(3).getName());
