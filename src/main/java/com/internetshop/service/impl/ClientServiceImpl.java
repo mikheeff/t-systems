@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,6 +46,7 @@ public class ClientServiceImpl implements ClientService {
      * @param client new client model
      * @throws EmailExistException email already exists
      */
+    @Transactional
     @Override
     public void addClient(Client client) throws EmailExistException {
         logger.info("addClient");
@@ -156,6 +158,7 @@ public class ClientServiceImpl implements ClientService {
      * Updates client model fields
      * @param client
      */
+    @Transactional
     @Override
     public void updateUser(Client client) {
         logger.info("updateUser");

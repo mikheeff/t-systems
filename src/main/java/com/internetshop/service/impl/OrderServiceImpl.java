@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -84,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
      * Converts order to DAO and send to repository
      * @return id of the added order
      */
+    @Transactional
     @Override
     public int addOrder(Order order) {
         logger.info("addOrder");
@@ -160,6 +162,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Edits order payment type, status ad delivery method
      */
+    @Transactional
     @Override
     public void updateOrderStatus(Order order) {
         logger.info("updateOrderStatus");

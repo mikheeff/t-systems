@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +77,7 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * Adds new goods
      */
+    @Transactional
     @Override
     public void addGoods(Goods goods) {
         logger.info("addGoods");
@@ -85,6 +87,7 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      *  Deletes Selected goods
      */
+    @Transactional
     @Override
     public void deleteGoodsById(int id) {
         logger.info("deleteGoodsById");
@@ -126,6 +129,7 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * Sets new information from Goods model to Entity
      */
+    @Transactional
     @Override
     public void updateGoods(Goods goods) {
         logger.info("updateGoods");
@@ -209,6 +213,7 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * Adds new category
      */
+    @Transactional
     @Override
     public void addCategory(Category category) {
         logger.info("addCategory");
@@ -221,6 +226,7 @@ public class GoodsServiceImpl implements GoodsService {
      * Updates information of category
      * @param category model
      */
+    @Transactional
     @Override
     public void updateCategory(Category category) {
         logger.info("updateCategory");
@@ -233,6 +239,7 @@ public class GoodsServiceImpl implements GoodsService {
      * Deletes category with selected id
      * @param id
      */
+    @Transactional
     @Override
     public void deleteCategoryById(int id) {
         logger.info("deleteCategoryById");
