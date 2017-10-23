@@ -4,6 +4,7 @@ import com.internetshop.Exceptions.NoSuchCategoryException;
 import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.entities.CategoryEntity;
 import com.internetshop.entities.GoodsEntity;
+import com.internetshop.entities.RuleEntity;
 import com.internetshop.repository.api.GoodsRepository;
 import org.springframework.stereotype.Repository;
 
@@ -118,5 +119,10 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     @Override
     public int getIdRuleByName(String name) {
         return em.createQuery("select ruleEntity.id from RuleEntity ruleEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
+    }
+
+    @Override
+    public RuleEntity getRuleByName(String name) {
+        return em.createQuery("select ruleEntity from RuleEntity ruleEntity where name = :name",RuleEntity.class).setParameter("name",name).getSingleResult();
     }
 }

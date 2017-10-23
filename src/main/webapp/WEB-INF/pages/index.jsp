@@ -130,7 +130,7 @@
 									<div class="carousel-inner">
 										<div class="active item">
 											<ul class="thumbnails">
-												<c:forEach var="goodsVar"  begin = "2" end = "5" items="${randomGoods}">
+												<c:forEach var="goodsVar"  begin = "0" end = "3" items="${randomGoods}">
 													<li class="span3">
 														<div class="product-box">
 															<span class="sale_tag"></span>
@@ -145,7 +145,7 @@
 										</div>
 										<div class="item">
 											<ul class="thumbnails">
-												<c:forEach var="goodsVar"  begin = "0" end = "3" items="${randomGoods}">
+												<c:forEach var="goodsVar"  begin = "3" end = "5" items="${randomGoods}">
 													<li class="span3">
 														<div class="product-box">
 															<span class="sale_tag"></span>

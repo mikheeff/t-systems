@@ -173,7 +173,7 @@
 										<div class="control-group">
 											<label class="control-label">Price:</label>
 											<div class="controls">
-												<spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge" pattern="\d+(\.\d{2})?"/>
+												<spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge" pattern="\d+(\.\d{1})?"/>
 												<spring:errors path="price" cssClass="error"/>
 											</div>
 										</div>

@@ -28,7 +28,7 @@ public class HomeController {
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
     public String main(ModelMap modelMap) {
         logger.info("main");
-        modelMap.put("randomGoods",goodsController.getRandomGoods());
+        modelMap.put("randomGoods",goodsController.getRandomGoods(6));
         modelMap.put("listCategory",goodsService.getAllCategories());
         return "index";
     }

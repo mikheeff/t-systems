@@ -2,10 +2,7 @@ package com.internetshop.repository.api;
 
 import com.internetshop.Exceptions.NoSuchCategoryException;
 import com.internetshop.Exceptions.NoSuchRulesException;
-import com.internetshop.entities.CategoryEntity;
-import com.internetshop.entities.DeliveryMethodEntity;
-import com.internetshop.entities.GoodsEntity;
-import com.internetshop.entities.PaymentTypeEntity;
+import com.internetshop.entities.*;
 import com.internetshop.model.DeliveryMethod;
 import com.internetshop.model.PaymentType;
 
@@ -29,6 +26,7 @@ public interface GoodsRepository {
     void updateCategory(CategoryEntity categoryEntity);
     void deleteCategoryById(int id);
     int getIdRuleByName(String name);
+    RuleEntity getRuleByName(String name);
 
 
 

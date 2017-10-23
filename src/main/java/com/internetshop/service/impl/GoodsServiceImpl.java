@@ -138,14 +138,10 @@ public class GoodsServiceImpl implements GoodsService {
         goodsEntity.setAmount(goods.getAmount());
         goodsEntity.setVisible(goods.getVisible());
         goodsEntity.setDescription(goods.getDescription());
+        goodsEntity.setImg(goods.getImg());
 
-        RuleEntity ruleEntity = goodsEntity.getRule();
-        ruleEntity.setId(goodsRepository.getIdRuleByName(goods.getRule().getName()));
-        ruleEntity.setName(goods.getRule().getName());
-
-        CategoryEntity categoryEntity = goodsEntity.getCategory();
-        categoryEntity.setId(goodsRepository.getIdCategoryByName(goods.getCategory().getName()));
-        categoryEntity.setName(goods.getCategory().getName());
+        RuleEntity ruleEntity = goodsRepository.getRuleByName(goods.getRule().getName());
+        CategoryEntity categoryEntity = goodsRepository.getCategoryById(goodsRepository.getIdCategoryByName(goods.getCategory().getName()));
 
         goodsEntity.setRule(ruleEntity);
         goodsEntity.setCategory(categoryEntity);

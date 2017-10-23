@@ -56,7 +56,7 @@ public class GoodsController {
         modelMap.put("currentPage",1);
         modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
         modelMap.put("cartList",session.getAttribute("cartList"));
@@ -74,7 +74,7 @@ public class GoodsController {
         modelMap.put("currentPage",page);
         modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods", goodsService.getAllGoods(amountOfGoodsOnPage*(page-1),amountOfGoodsOnPage));
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
         modelMap.put("cartList",session.getAttribute("cartList"));
@@ -91,7 +91,7 @@ public class GoodsController {
         modelMap.put("currentPage",page);
         modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoodsByCategoryName(categoryName)));
         modelMap.put("listGoods", goodsService.getAllGoodsByCategoryName(0,amountOfGoodsOnPage,categoryName));
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryName",categoryName);
         modelMap.put("categoryFilter",true);
@@ -192,14 +192,14 @@ public class GoodsController {
         if(bindingResult.hasErrors()) {
             logger.warn("Goods validation failed");
             modelMap.put("error", "Invalid params!");
-            modelMap.put("randomGoods",getRandomGoods());
+            modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
             modelMap.put("goods",goods);
             modelMap.put("listCategory",goodsService.getAllCategories());
             return "goods_detail";
         }
         this.goodsService.updateGoods(goods);
         modelMap.put("goods", goodsService.getGoodsById(goods.getId()));
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("msg", "You've been edited goods successfully.");
         return "goods_detail";
@@ -213,7 +213,7 @@ public class GoodsController {
     public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap) {
         logger.info("getGoodsById");
         modelMap.put("goods", goodsService.getGoodsById(id));
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         CartItem cartItem = new CartItem();
         cartItem.setQuantity(1);
@@ -249,7 +249,7 @@ public class GoodsController {
     public String getCartItems(ModelMap modelMap,
                                @RequestParam(value = "error", required = false) String error){
         logger.info("getCartItems");
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         ArrayList<CartItem> cartList = (ArrayList<CartItem>)session.getAttribute("cartList");
         if (cartList!=null) {
@@ -282,7 +282,7 @@ public class GoodsController {
     @RequestMapping(value = "/profile/goods/cart/continue",method = RequestMethod.GET)
     public String getOrder(ModelMap modelMap){
         logger.info("getOrder");
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("cartList",session.getAttribute("cartList"));
         modelMap.put("sum",getSumOfOrder((ArrayList<CartItem>)session.getAttribute("cartList")));
@@ -311,7 +311,7 @@ public class GoodsController {
         order.setClient(client);
         int orderId = orderService.addOrder(order);
         modelMap.put("orderId",orderId);
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         return "order_success";
     }
@@ -324,7 +324,7 @@ public class GoodsController {
     public String getOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap,
                                   @RequestParam(value = "msg", required = false) String msg){
         logger.info("getOrderDetails");
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("orderItemsList",orderService.getAllCartItemsFromOrderByOrderId(id));
         modelMap.put("listDeliveryMethod",orderService.getAllDeliveryMethods());
@@ -364,7 +364,7 @@ public class GoodsController {
         modelMap.put("currentPage",1);
         modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
         modelMap.put("category",goodsService.getCategoryById(id));
@@ -389,7 +389,7 @@ public class GoodsController {
             modelMap.put("currentPage",1);
             modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
             modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
-            modelMap.put("randomGoods",getRandomGoods());
+            modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
             modelMap.put("listCategory",goodsService.getAllCategories());
             modelMap.put("categoryFilter",false);
             return "goods";
@@ -401,7 +401,7 @@ public class GoodsController {
         modelMap.put("currentPage",1);
         modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods",goodsService.getAllGoods(0,amountOfGoodsOnPage));
-        modelMap.put("randomGoods",getRandomGoods());
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
         modelMap.put("msg", "You've been edited category successfully.");
@@ -426,7 +426,7 @@ public class GoodsController {
      * @return goods list
      */
 
-    public List<Goods> getRandomGoods(){
+    public List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage){
         logger.info("getRandomGoods");
         Set<Integer> randomGoodsIdSet = new HashSet<>();
         while (randomGoodsIdSet.size()<amountOfRandomGoodsOnPage) {

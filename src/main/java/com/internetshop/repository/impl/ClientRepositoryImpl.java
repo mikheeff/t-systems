@@ -15,6 +15,7 @@ import java.util.List;
 @Repository
 public class ClientRepositoryImpl implements ClientRepository {
 
+    @PersistenceUnit(unitName = "item-manager-pu")
     private EntityManager em = Persistence.createEntityManagerFactory("item-manager-pu").createEntityManager();
 
     public List<ClientEntity> getAll() {
@@ -54,7 +55,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     public void updateUser(ClientEntity clientEntity) {
         em.getTransaction().begin();
         em.merge(clientEntity);
-        em.flush();
+//        em.flush();
         em.getTransaction().commit();
     }
 
