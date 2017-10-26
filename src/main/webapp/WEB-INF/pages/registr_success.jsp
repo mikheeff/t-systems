@@ -91,7 +91,7 @@
                 <ul class="nav">
                     <li><a href="index.jsp">Homepage</a></li>
                     <li><a href="./about.html">About Us</a></li>
-                    <li><a href="./contact.html">Contac Us</a></li>
+                    <li><a href="contact.html">Contac Us</a></li>
                     <li><a href="cart.jsp">Your Cart</a></li>
                     <li><a href="register.jsp">Login</a></li>
                 </ul>
