@@ -237,8 +237,11 @@
 			</section>
 			<section class="header_text sub">
 			<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="" >
-				<c:if test="${!categoryFilter}" >
+				<c:if test="${!categoryFilter and !searchFlag}" >
 				<h3><span>ALL GAMES</span></h3>
+				</c:if>
+				<c:if test="${searchFlag}" >
+				<h3><span>SEARCH RESULTS WITH "${searchStr}"</span></h3>
 				</c:if>
 				<c:if test="${categoryFilter}" >
 					<h3><span>${categoryName.toUpperCase()}</span></h3>
@@ -265,7 +268,7 @@
 						<hr>
 						<div class="pagination pagination-small pagination-centered">
 							<ul>
-								<c:if test="${!categoryFilter}" >
+								<c:if test="${!categoryFilter and !searchFlag}" >
 
 									<c:if test="${currentPage>1}" >
 									<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage-1}">Prev</a></li>
@@ -301,6 +304,26 @@
 
 									<c:if test="${currentPage<amountOfPages}" >
 										<li><a href="${pageContext.request.contextPath}/catalog/${categoryName}/page/${currentPage+1}">Next</a></li>
+									</c:if>
+
+								</c:if>
+
+								<c:if test="${searchFlag}" >
+
+									<c:if test="${currentPage>1}" >
+									<li><a href="${pageContext.request.contextPath}/catalog/search/${searchStr}/page/${currentPage-1}">Prev</a></li>
+									</c:if>
+
+									<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
+										<li
+										<c:if test="${count.index==currentPage}" >
+											 class="active"
+										</c:if>
+										><a href="${pageContext.request.contextPath}/catalog/search/${searchStr}/page/${i}">${i}</a></li>
+									</c:forEach>
+
+									<c:if test="${currentPage<amountOfPages}" >
+										<li><a href="${pageContext.request.contextPath}/catalog/search/${searchStr}/page/${currentPage+1}">Next</a></li>
 									</c:if>
 
 								</c:if>
@@ -346,7 +369,7 @@
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
 									<li
-									<c:if test="${!categoryFilter}" >
+									<c:if test="${!categoryFilter and !searchFlag}" >
 									class="active"
 									</c:if>
 									><a href="${pageContext.request.contextPath}/catalog">All games</a></li>

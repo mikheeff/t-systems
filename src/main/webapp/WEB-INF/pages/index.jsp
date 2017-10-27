@@ -32,10 +32,11 @@
 		<div id="top-bar" class="container">
 			<div class="row">
 				<div class="span4">
-					<form method="POST" class="search_form">
-						<input type="text" class="input-block-level search-query" Placeholder="Search">
+					<form action="/catalog/search" method="POST" command class="search_form">
+						<input name="searchStr" type="text" class="input-block-level search-query" maxlength="15" Placeholder="Search">
 					</form>
 				</div>
+				<%--input-block-level search-query--%>
 				<div class="span8">
 					<div class="account pull-right">
 						<ul class="user-menu">

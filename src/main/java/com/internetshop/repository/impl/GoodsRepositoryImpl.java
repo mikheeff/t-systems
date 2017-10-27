@@ -35,6 +35,12 @@ public class GoodsRepositoryImpl implements GoodsRepository {
                 .setParameter("category", categoryName).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
     }
 
+    @Override
+    public List<GoodsEntity> getAllGoodsBySearch(String searchStr, int firstId, int maxResults) {
+        return em
+                .createQuery("select goods from GoodsEntity goods where goods.name LIKE CONCAT('%', :searchStr, '%')", GoodsEntity.class)
+                .setParameter("searchStr", searchStr).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
+    }
 
     @Override
     public void addGoods(GoodsEntity goodsEntity) {
@@ -70,6 +76,13 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     @Override
     public long getAmountOfGoodsByCategoryName(String categoryName) {
         return em.createQuery("select count(*) from GoodsEntity goods where category.name = :category",Long.class).setParameter("category", categoryName).getSingleResult();
+    }
+
+    @Override
+    public long getAmountOfGoodsBySearch(String searchStr) {
+        return em
+                .createQuery("select count(*) from GoodsEntity goods where goods.name LIKE CONCAT('%', :searchStr, '%')", Long.class)
+                .setParameter("searchStr", searchStr).getSingleResult();
     }
 
     @Override

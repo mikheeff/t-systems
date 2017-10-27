@@ -74,6 +74,15 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsList;
     }
 
+    @Override
+    public List<Goods> getAllGoodsBySearch(String searchStr, int firstId, int maxResults) {
+        List<Goods> goodsList = new ArrayList<>();
+        for (GoodsEntity goodsEntity : goodsRepository.getAllGoodsBySearch(searchStr, firstId,maxResults)) {
+            goodsList.add(convertGoodsToDTO(goodsEntity));
+        }
+        return goodsList;
+    }
+
     /**
      * Adds new goods
      */
@@ -182,6 +191,11 @@ public class GoodsServiceImpl implements GoodsService {
         logger.info("getAmountOfGoodsByCategoryName");
 
         return goodsRepository.getAmountOfGoodsByCategoryName(categoryName);
+    }
+
+    @Override
+    public long getAmountOfGoodsBySearch(String searchStr) {
+        return goodsRepository.getAmountOfGoodsBySearch(searchStr);
     }
 
     /**

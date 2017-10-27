@@ -6,12 +6,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="internet_shop" />
         <module name="internet_shop_test" />
         <module name="interntet_shop" />
         <module name="usersystem" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="internet_shop" target="1.8" />
       <module name="internet_shop_test" target="1.8" />
       <module name="interntet_shop" target="1.8" />
       <module name="usersystem" target="1.5" />

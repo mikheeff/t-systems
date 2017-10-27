@@ -16,6 +16,7 @@ public interface GoodsService {
     List<Goods> getAllGoods();
     List<Goods> getAllGoods(int firstId,int maxResults);
     List<Goods> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName);
+    List<Goods> getAllGoodsBySearch(String searchStr,int firstId, int maxResults);
     void addGoods(Goods goods);
     void deleteGoodsById(int id);
     Goods getGoodsById(int id);
@@ -25,6 +26,7 @@ public interface GoodsService {
     int getRandomGoodsId();
     long getAmountOfGoods();
     long getAmountOfGoodsByCategoryName(String categoryName);
+    long getAmountOfGoodsBySearch(String searchStr);
     List<Category> getAllCategories();
     Category getCategoryById(int id);
     void updateCategory(Category category);

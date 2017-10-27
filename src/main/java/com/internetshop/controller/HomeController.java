@@ -30,6 +30,8 @@ public class HomeController {
         logger.info("main");
         modelMap.put("randomGoods",goodsController.getRandomGoods(6));
         modelMap.put("listCategory",goodsService.getAllCategories());
+        String searchStr = "";
+        modelMap.put("search",searchStr);
         return "index";
     }
 

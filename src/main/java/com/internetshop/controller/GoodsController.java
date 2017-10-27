@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +62,27 @@ public class GoodsController {
         modelMap.put("categoryFilter",false);
         modelMap.put("cartList",session.getAttribute("cartList"));
 
+
+        return "goods";
+    }
+
+    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    public String getAllGoodsBySearch(String searchStr){
+        return "redirect:/catalog/search/"+searchStr+"/page/"+1;
+    }
+
+    @RequestMapping(value = "/search/{searchStr}/page/{page}", method = RequestMethod.GET)
+    public String getAllGoodsBySearch(@PathVariable(value = "searchStr")String searchStr,@PathVariable(value = "page") Integer page, ModelMap modelMap){
+        modelMap.put("searchStr",searchStr);
+        modelMap.put("currentPage",page);
+        List<Goods> listGoods = goodsService.getAllGoodsBySearch(searchStr, amountOfGoodsOnPage*(page-1),amountOfGoodsOnPage);
+        modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoodsBySearch(searchStr)));
+        modelMap.put("listGoods",listGoods);
+        modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
+        modelMap.put("listCategory",goodsService.getAllCategories());
+        modelMap.put("searchFlag",true);
+        modelMap.put("categoryFilter",false);
+        modelMap.put("cartList",session.getAttribute("cartList"));
         return "goods";
     }
 
@@ -90,7 +112,7 @@ public class GoodsController {
         logger.info("getAllGoodsByCategory");
         modelMap.put("currentPage",page);
         modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoodsByCategoryName(categoryName)));
-        modelMap.put("listGoods", goodsService.getAllGoodsByCategoryName(0,amountOfGoodsOnPage,categoryName));
+        modelMap.put("listGoods", goodsService.getAllGoodsByCategoryName(amountOfGoodsOnPage*(page-1),amountOfGoodsOnPage,categoryName));
         modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryName",categoryName);
