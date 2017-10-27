@@ -63,8 +63,8 @@
 <div id="top-bar" class="container">
 	<div class="row">
 		<div class="span4">
-			<form method="POST" class="search_form">
-				<input type="text" class="input-block-level search-query" Placeholder="Search">
+			<form action="/catalog/search" method="POST" command class="search_form">
+				<input name="searchStr" type="text" class="input-block-level search-query" maxlength="15" Placeholder="Search games">
 			</form>
 		</div>
 		<div class="span8">
@@ -161,6 +161,12 @@
 										<div class="row-fluid">
 											<div class="span6">
 												<h4>Your Personal Details</h4>
+												<c:if test="${not empty clientError}">
+													<div class="error">${clientError}</div>
+												</c:if>
+												<c:if test="${not empty msgClient}">
+													<div class="msg">${msgClient}</div>
+												</c:if>
 													<fieldset>
 														<div class="control-group">
 															<label class="control-label">Your ID</label>
@@ -171,32 +177,34 @@
 														<div class="control-group">
 															<label class="control-label">First Name*</label>
 															<div class="controls">
-																<spring:input path="name" type="text" placeholder="" class="input-xlarge"/>
+																<spring:input path="name" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
+																<spring:errors path="name" cssClass="error"/>
 															</div>
 														</div>
 														<div class="control-group">
 															<label class="control-label">Last Name</label>
 															<div class="controls">
-																<spring:input path="surname" type="text" placeholder="" class="input-xlarge"/>
+																<spring:input path="surname" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 															</div>
 														</div>
-														<%--<div class="control-group">--%>
-															<%--<label class="control-label">Birthday</label>--%>
-															<%--<div class="controls">--%>
-																<%--<spring:input path="birthdate" type="date" placeholder="" class="input-xlarge"/>--%>
-															<%--</div>--%>
-														<%--</div>--%>
+														<div class="control-group">
+															<label class="control-label">Birthday</label>
+															<div class="controls">
+																<spring:input path="birthdate" type="date" placeholder="" class="input-xlarge" min="1900-01-01" max="2017-01-01"/>
+															</div>
+														</div>
 														<div class="control-group">
 															<label class="control-label">Email Address*</label>
 															<div class="controls">
-																<spring:input path="email" type="text" placeholder="" class="input-xlarge"/>
+																<spring:input path="email" type="text" placeholder="" class="input-xlarge" pattern="^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$"/>
+																<spring:errors path="email" cssClass="error"/>
 															</div>
 														</div>
 
 														<div class="control-group">
 															<label class="control-label">Phone number</label>
 															<div class="controls">
-																<spring:input path="phone" type="text" placeholder="" class="input-xlarge"/>
+																<spring:input path="phone" type="text" placeholder="" class="input-xlarge" pattern="^\+[1-9][0-9]?[\s]*\(?\d{3}\)?[-\s]?\d{3}[-\s]?\d{2}[-\s]?\d{2}$"/>
 															</div>
 														</div>
 													</fieldset>
@@ -236,7 +244,7 @@
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> Region / State:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.city" type="text" placeholder="" class="input-xlarge"/>
+															<spring:input path="clientAddress.city" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 														</div>
 													</div>
 													<div class="control-group">
@@ -248,19 +256,19 @@
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> Street:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.street" type="text" placeholder="" class="input-xlarge"/>
+															<spring:input path="clientAddress.street" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> House:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.house" type="text" placeholder="" class="input-xlarge"/>
+															<spring:input path="clientAddress.house" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> Flat:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.flat" type="text" placeholder="" class="input-xlarge"/>
+															<spring:input path="clientAddress.flat" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 														</div>
 													</div>
 													<div class="control-group">
@@ -286,7 +294,7 @@
 																<spring:input path="password" type="password" placeholder="" class="input-xlarge" />
 															</div>
 														</div>
-														<hr>
+														<%--<hr>--%>
 														<div class="control-group">
 															<label class="control-label">New Password*</label>
 															<div class="controls">
@@ -374,10 +382,10 @@
 													<tr>
 														<th><big>Order ID:</big></th>
 														<th><big>Client ID:</big></th>
-														<th><big>Payment Type:</big></th>
+														<th><big>Phone number:</big></th>
 														<th><big>Pay Status:</big></th>
 														<th><big>Order Status:</big></th>
-														<th><big>Additional Information:</big></th>
+														<th><big>Date:</big></th>
 														<th><big>Order Details:</big></th>
 													</tr>
 													</thead>
@@ -387,7 +395,7 @@
 														<tr>
 															<td><big>${clientOrder.id}</big></td>
 															<td><big>${clientOrder.client.id}</big></td>
-															<td><big>${clientOrder.paymentType.name}</big></td>
+															<td><big>${clientOrder.client.phone}</big></td>
 															<c:if test="${clientOrder.payStatus==1}">
 																<td><big>paid</big></td>
 															</c:if>
@@ -395,7 +403,7 @@
 																<td><big>pending payment</big></td>
 															</c:if>
 															<td><big>${clientOrder.status.name}</big></td>
-															<td><big>${clientOrder.comment}</big></td>
+															<td><big>${clientOrder.date}</big></td>
 															<td><a href="/catalog/profile/employee/details/order/${clientOrder.id}"><big>Details</big></a></td>
 														</tr>
 														<%--<hr>--%>

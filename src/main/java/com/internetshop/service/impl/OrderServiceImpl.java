@@ -182,9 +182,20 @@ public class OrderServiceImpl implements OrderService {
 
         orderRepository.updateOrder(orderEntity);
 
+        if (order.getPayStatus()==1){
+            increaseSalesCounter(orderEntity);
+        }
 
     }
 
+    public void increaseSalesCounter(OrderEntity orderEntity){
+        for (CartItemEntity item : orderEntity.getCartItemEntities()) {
+            GoodsEntity goodsEntity = goodsRepository.getGoodsById(item.getGoodsEntity().getId());
+            goodsEntity.setSalesCounter(goodsEntity.getSalesCounter()+item.getQuantity());
+            goodsRepository.updateGoods(goodsEntity);
+        }
+
+    }
     /**
      * Gets all cart items from order by order id
      * @return List of cart items

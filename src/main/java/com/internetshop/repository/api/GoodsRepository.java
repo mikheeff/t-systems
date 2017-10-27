@@ -13,6 +13,7 @@ public interface GoodsRepository {
     List<GoodsEntity> getAll(int firstId, int maxResults);
     List<GoodsEntity> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName);
     List<GoodsEntity> getAllGoodsBySearch(String searchStr,int firstId, int maxResults);
+    List<GoodsEntity> getRelatedGoodsByCategoryName(int amount,String categoryName);
 
     void addGoods(GoodsEntity goodsEntity);
     void deleteGoodsById(int id);
@@ -30,7 +31,6 @@ public interface GoodsRepository {
     void deleteCategoryById(int id);
     int getIdRuleByName(String name);
     RuleEntity getRuleByName(String name);
-
-
+    List<GoodsEntity> getBestSellers(int amountOfBestSellers);
 
 }

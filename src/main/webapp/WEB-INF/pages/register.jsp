@@ -64,8 +64,8 @@
 		<div id="top-bar" class="container">
 			<div class="row">
 				<div class="span4">
-					<form method="POST" class="search_form">
-						<input type="text" class="input-block-level search-query" Placeholder="Search">
+					<form action="/catalog/search" method="POST" command class="search_form">
+						<input name="searchStr" type="text" class="input-block-level search-query" maxlength="15" Placeholder="Search games">
 					</form>
 				</div>
 				<div class="span8">
@@ -153,9 +153,7 @@
 						<c:if test="${not empty regError}">
 							<div class="error">${regError}</div>
 						</c:if>
-						<%--<c:if test="${not empty msg}">--%>
-							<%--<div class="msg">${msg}</div>--%>
-						<%--</c:if>--%>
+
 
 						<spring:form action="success" method="post" commandName="newClient" class="form-stacked">
 							<fieldset>

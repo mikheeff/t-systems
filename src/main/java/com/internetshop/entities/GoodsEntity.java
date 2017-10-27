@@ -29,20 +29,14 @@ public class GoodsEntity {
     private String description;
     @Column (name = "img")
     private String img;
+    @Column (name = "sales_counter")
+    private int salesCounter;
     @ManyToOne
     @JoinColumn(name = "id_category")
     private CategoryEntity category;
     @ManyToOne
     @JoinColumn(name = "rule_id")
     private RuleEntity rule;
-
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "cart_item",joinColumns = {@JoinColumn(name = "order_id")},
-//            inverseJoinColumns = {@JoinColumn(name = "goods_id")})
-//    private Set<OrderEntity> orderEntities = new HashSet<>();
-
-//    @OneToMany(mappedBy = "goodsEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-//    private Set<CartItemEntity> cartItemEntities = new HashSet<>();
 
 
 
@@ -58,6 +52,20 @@ public class GoodsEntity {
         this.visible = visible;
         this.description = description;
         this.img = img;
+        this.category = category;
+        this.rule = rule;
+    }
+
+    public GoodsEntity(String name, float price, String numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, CategoryEntity category, RuleEntity rule) {
+        this.name = name;
+        this.price = price;
+        this.numberOfPlayers = numberOfPlayers;
+        this.duration = duration;
+        this.amount = amount;
+        this.visible = visible;
+        this.description = description;
+        this.img = img;
+        this.salesCounter = salesCounter;
         this.category = category;
         this.rule = rule;
     }
@@ -148,5 +156,13 @@ public class GoodsEntity {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public int getSalesCounter() {
+        return salesCounter;
+    }
+
+    public void setSalesCounter(int salesCounter) {
+        this.salesCounter = salesCounter;
     }
 }

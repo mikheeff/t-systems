@@ -113,6 +113,7 @@ public class ClientServiceImpl implements ClientService {
                 role,
                 clientAddress);
 
+
         return client;
     }
 
@@ -177,7 +178,7 @@ public class ClientServiceImpl implements ClientService {
             clientEntity.setName(client.getName());
         }
         clientEntity.setSurname(client.getSurname());
-
+        clientEntity.setBirthdate(client.getBirthdate());
         if(client.getEmail()!=null){
         clientEntity.setEmail(client.getEmail());
         }

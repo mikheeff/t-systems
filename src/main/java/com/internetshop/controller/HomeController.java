@@ -32,6 +32,7 @@ public class HomeController {
         modelMap.put("listCategory",goodsService.getAllCategories());
         String searchStr = "";
         modelMap.put("search",searchStr);
+        modelMap.put("bestSellersList",goodsController.getBestSellers(8));
         return "index";
     }
 

@@ -63,8 +63,8 @@
 		<div id="top-bar" class="container">
 			<div class="row">
 				<div class="span4">
-					<form method="POST" class="search_form">
-						<input type="text" class="input-block-level search-query" Placeholder="Search">
+					<form action="/catalog/search" method="POST" command class="search_form">
+						<input name="searchStr" type="text" class="input-block-level search-query" maxlength="15" Placeholder="Search games">
 					</form>
 				</div>
 				<div class="span8">
@@ -314,7 +314,7 @@
 								<spring:form action="/catalog/goods/cart/${goods.id}/add" method="post" commandName="cartItem" class="form-inline">
 									<p>&nbsp;</p>
 									<label>Qty:</label>
-									<spring:input path="quantity" type="text" class="span1" placeholder="1" pattern="^[1-9]+$" title="Amount must be a integer and more then zero"/>
+									<spring:input path="quantity" type="text" class="span1" placeholder="1" pattern="^[1-9][0-9]*$" title="Amount must be a integer and more then zero"/>
 									<button class="btn btn-inverse" type="submit">Add to cart</button>
 								</spring:form>
 							</div>							
@@ -348,18 +348,18 @@
 								<br>
 								<h4 class="title">
 									<span class="pull-left"><span class="text"><strong>Related</strong> Products</span></span>
-									<span class="pull-right">
-										<a class="left button" href="#myCarousel-1" data-slide="prev"></a><a class="right button" href="#myCarousel-1" data-slide="next"></a>
-									</span>
+									<%--<span class="pull-right">--%>
+										<%--<a class="left button" href="#myCarousel-1" data-slide="prev"></a><a class="right button" href="#myCarousel-1" data-slide="next"></a>--%>
+									<%--</span>--%>
 								</h4>
 								<div id="myCarousel-1" class="carousel slide">
 									<div class="carousel-inner">
 										<div class="active item">
 											<ul class="thumbnails listing-products">
-												<c:forEach var="goodsVar"  begin = "0" end = "2" items="${randomGoods}">
+												<c:forEach var="goodsVar" begin="0" end="2" items="${relatedGoodsList}">
 												<li class="span3">
 													<div class="product-box">
-														<span class="sale_tag"></span>												
+														<span class="sale_tag"></span>
 														<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
 														<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
 														<a href="#" class="category">${goodsVar.category.name}</a>
@@ -370,22 +370,22 @@
 
 											</ul>
 										</div>
-										<div class="item">
-											<ul class="thumbnails listing-products">
-												<c:forEach var="goodsVar"  begin = "3" end = "5" items="${randomGoods}">
-													<li class="span3">
-														<div class="product-box">
-															<span class="sale_tag"></span>
-															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
-															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
-															<a href="#" class="category">${goodsVar.category.name}</a>
-															<p class="price">${goodsVar.price} &#8381;</p>
-														</div>
-													</li>
-												</c:forEach>
-
-											</ul>
-										</div>
+										<%--<div class="item">--%>
+											<%--<ul class="thumbnails listing-products">--%>
+												<%--<c:forEach var="goodsVar"  begin = "3" end = "5" items="${randomGoods}">--%>
+													<%--<li class="span3">--%>
+														<%--<div class="product-box">--%>
+															<%--<span class="sale_tag"></span>--%>
+															<%--<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>--%>
+															<%--<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>--%>
+															<%--<a href="#" class="category">${goodsVar.category.name}</a>--%>
+															<%--<p class="price">${goodsVar.price} &#8381;</p>--%>
+														<%--</div>--%>
+													<%--</li>--%>
+												<%--</c:forEach>--%>
+<%----%>
+											<%--</ul>--%>
+										<%--</div>--%>
 									</div>
 								</div>
 							</div>
@@ -400,11 +400,7 @@
 							</c:if>
 							<ul class="nav nav-list">
 								<li class="nav-header">SUB CATEGORIES</li>
-								<li
-										<c:if test="${!categoryFilter}" >
-											class="active"
-										</c:if>
-								><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
+								<li><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
 								<c:forEach var="categoryVar"  items="${listCategory}">
 									<li
 											<c:if test="${categoryVar.name == categoryName}" >
@@ -424,54 +420,47 @@
 							</h4>
 							<div id="myCarousel" class="carousel slide">
 								<div class="carousel-inner">
-									<div class="active item">
-										<ul class="thumbnails listing-products">
-											<c:forEach var="goodsVar"  begin = "3" end = "3" items="${randomGoods}">
-												<li class="span3">
-													<div class="product-box">
-														<span class="sale_tag"></span>
-														<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
-														<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
-														<a href="#" class="category">${goodsVar.category.name}</a>
-														<p class="price">${goodsVar.price} &#8381;</p>
-													</div>
-												</li>
-											</c:forEach>
-										</ul>
-									</div>
-									<div class="item">
-										<ul class="thumbnails listing-products">
-											<c:forEach var="goodsVar"  begin = "4" end = "4" items="${randomGoods}">
-												<li class="span3">
-													<div class="product-box">
-														<span class="sale_tag"></span>
-														<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
-														<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
-														<a href="#" class="category">${goodsVar.category.name}</a>
-														<p class="price">${goodsVar.price} &#8381;</p>
-													</div>
-												</li>
-											</c:forEach>
-										</ul>
-									</div>
+									<c:forEach var="goodsVar" items="${randomGoods}" varStatus="count">
+									<div class=
+										 <c:if test="${count.index==0}">
+												 "active item"
+									</c:if>
+									<c:if test="${count.index!=0}">
+										"item"
+									</c:if>
+									>
+									<ul class="thumbnails listing-products">
+										<li class="span3">
+											<div class="product-box">
+												<span class="sale_tag"></span>
+												<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+												<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
+												<a href="#" class="category">${goodsVar.category.name}</a>
+												<p class="price">${goodsVar.price} &#8381;</p>
+											</div>
+										</li>
+									</ul>
 								</div>
+								</c:forEach>
 							</div>
 						</div>
-						<div class="block">								
-							<h4 class="title"><strong>Best</strong> Seller</h4>								
+					</div>
+						<div class="block">
+							<h4 class="title"><strong>Best</strong> Seller</h4>
 							<ul class="small-product">
-								<c:forEach var="goodsVar"  begin = "0" end = "2" items="${randomGoods}">
+								<c:forEach var="goodsVar" items="${bestSellersList}">
 									<li>
 										<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}" title="${goodsVar.name}">
 											<img src="${goodsVar.img}" alt="">
 										</a>
-											<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a>
+										<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a>
 									</li>
 								</c:forEach>
 							</ul>
 						</div>
 					</div>
 				</div>
+
 			</section>
 			<section id="footer-bar">
 				<div class="row">

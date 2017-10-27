@@ -90,6 +90,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public void addGoods(Goods goods) {
         logger.info("addGoods");
+        goods.setSalesCounter(0); //When employee adds new goods its counter is 0
         this.goodsRepository.addGoods(convertGoodsToDAO(goods));
     }
 
@@ -130,6 +131,7 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsEntity.getVisible(),
                 goodsEntity.getDescription(),
                 goodsEntity.getImg(),
+                goodsEntity.getSalesCounter(),
                 category,
                 rule);
         return goods;
@@ -261,6 +263,27 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
 
+    @Override
+    public List<Goods> getBestSellers(int amountOfBestSellers) {
+        List<Goods> goodsBestSellersList = new ArrayList<>();
+        for (GoodsEntity goodsEntity : goodsRepository.getBestSellers(amountOfBestSellers)){
+            goodsBestSellersList.add(convertGoodsToDTO(goodsEntity));
+        }
+        return goodsBestSellersList;
+    }
+
+    @Override
+    public List<Goods> getRelatedGoods(int amount, Goods goods) {
+        List<Goods> relatedGoodsList = new ArrayList<>();
+
+        for(GoodsEntity goodsEntity : goodsRepository.getRelatedGoodsByCategoryName(amount,goods.getCategory().getName())){
+            if (goodsEntity.getId()!=goods.getId()) {
+                relatedGoodsList.add(convertGoodsToDTO(goodsEntity));
+            }
+        }
+        return relatedGoodsList;
+    }
+
     /**
      * converts goods to data access object
      * @return Goods Entity
@@ -309,6 +332,7 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsEntity.getVisible(),
                 goodsEntity.getDescription(),
                 goodsEntity.getImg(),
+                goodsEntity.getSalesCounter(),
                 category,
                 rule);
         return goods;

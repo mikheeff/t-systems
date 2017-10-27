@@ -91,7 +91,9 @@ public class ClientController {
                              @RequestParam(value = "errorMatch", required = false) String errorMatch,
                              @RequestParam(value = "msg", required = false) String msg,
                              @RequestParam(value = "error", required = false) String error,
-                             @RequestParam(value = "errorInvalidPass", required = false) String errorInvalidPass) {
+                             @RequestParam(value = "errorInvalidPass", required = false) String errorInvalidPass,
+                             @RequestParam(value = "clientError", required = false) String clientError,
+                             @RequestParam(value = "msgClient", required = false) String msgClient) {
         logger.info("editClient");
         session.setAttribute("client",clientService.getUserByEmail( httpServletRequest.getUserPrincipal().getName()));
         modelMap.put("client",session.getAttribute("client"));
@@ -116,8 +118,14 @@ public class ClientController {
         if (errorInvalidPass != null) {
             modelMap.put("errorInvalidPass", "Password is not valid!");
         }
+        if (clientError != null){
+            modelMap.put("clientError","Fields contain invalid characters");
+        }
         if (msg != null) {
             modelMap.put("msg", "You have been changed password successfully!");
+        }
+        if (msgClient != null) {
+            modelMap.put("msgClient", "Information has been changed successfully!");
         }
         modelMap.put("passwordField", new PasswordField());
         return "profile";
@@ -156,12 +164,12 @@ public class ClientController {
         logger.info("editClient");
 
         if(bindingResult.hasErrors()) {
-            logger.warn("entered information not valid");
-            return "redirect:/clients/profile";
+            logger.warn("Entered information not valid");
+            return "redirect:/clients/profile?clientError";
         }
         this.clientService.updateUser(client);
         session.setAttribute("client",clientService.getUserByEmail(client.getEmail()));
-        return "redirect:/clients/profile";
+        return "redirect:/clients/profile?msgClient";
     }
 
     /**

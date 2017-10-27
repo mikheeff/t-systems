@@ -37,7 +37,8 @@ public class GoodsController {
 
 
     private static final int amountOfGoodsOnPage = 9;
-    private static final int amountOfRandomGoodsOnPage = 6;
+    private static final int amountOfRandomGoodsOnPage = 2;
+    private static final int amountOfBestSellers = 3;
 
     @Autowired
     public GoodsController(GoodsService goodsService, ClientService clientService, OrderService orderService, HttpSession session) {
@@ -61,8 +62,9 @@ public class GoodsController {
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
         modelMap.put("cartList",session.getAttribute("cartList"));
-
-
+        String searchStr = "";
+        modelMap.put("search",searchStr);
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
         return "goods";
     }
 
@@ -83,6 +85,7 @@ public class GoodsController {
         modelMap.put("searchFlag",true);
         modelMap.put("categoryFilter",false);
         modelMap.put("cartList",session.getAttribute("cartList"));
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
         return "goods";
     }
 
@@ -94,12 +97,15 @@ public class GoodsController {
     public String getAllGoods(@PathVariable(value = "page") int page, ModelMap modelMap) {
         logger.info("getAllGoods");
         modelMap.put("currentPage",page);
+        String searchStr = "";
+        modelMap.put("search",searchStr);
         modelMap.put("amountOfPages",getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods", goodsService.getAllGoods(amountOfGoodsOnPage*(page-1),amountOfGoodsOnPage));
         modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
         modelMap.put("cartList",session.getAttribute("cartList"));
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
         return "goods";
     }
 
@@ -118,6 +124,9 @@ public class GoodsController {
         modelMap.put("categoryName",categoryName);
         modelMap.put("categoryFilter",true);
         modelMap.put("cartList",session.getAttribute("cartList"));
+        String searchStr = "";
+        modelMap.put("search",searchStr);
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
         return "goods";
     }
 
@@ -132,6 +141,8 @@ public class GoodsController {
         modelMap.put("goods", new Goods());
         modelMap.put("category", new Category());
         modelMap.put("listCategory",goodsService.getAllCategories());
+        String searchStr = "";
+        modelMap.put("search",searchStr);
         return "add_page";
     }
 
@@ -151,6 +162,8 @@ public class GoodsController {
             modelMap.put("goods",goods);
             modelMap.put("category",new Category());
             modelMap.put("listCategory",goodsService.getAllCategories());
+            String searchStr = "";
+            modelMap.put("search",searchStr);
             return "add_page";
         }
 
@@ -160,6 +173,8 @@ public class GoodsController {
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("goods", new Goods());
         modelMap.put("category", new Category());
+        String searchStr = "";
+        modelMap.put("search",searchStr);
         return "add_page";
     }
 
@@ -178,6 +193,8 @@ public class GoodsController {
             modelMap.put("goods",new Goods());
             modelMap.put("category",category);
             modelMap.put("listCategory",goodsService.getAllCategories());
+            String searchStr = "";
+            modelMap.put("search",searchStr);
             return "add_page";
         }
 
@@ -187,6 +204,8 @@ public class GoodsController {
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("goods", new Goods());
         modelMap.put("category", new Category());
+        String searchStr = "";
+        modelMap.put("search",searchStr);
         return "add_page";
     }
 
@@ -217,6 +236,11 @@ public class GoodsController {
             modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
             modelMap.put("goods",goods);
             modelMap.put("listCategory",goodsService.getAllCategories());
+            String searchStr = "";
+            modelMap.put("search",searchStr);
+            modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
+            List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4,goods);
+            modelMap.put("relatedGoodsList",relatedGoodsList);
             return "goods_detail";
         }
         this.goodsService.updateGoods(goods);
@@ -224,6 +248,11 @@ public class GoodsController {
         modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("msg", "You've been edited goods successfully.");
+        String searchStr = "";
+        modelMap.put("search",searchStr);
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
+        List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4,goods);  //If needs 3 goods set 4, because one of goods could be current goods
+        modelMap.put("relatedGoodsList",relatedGoodsList);
         return "goods_detail";
     }
 
@@ -234,13 +263,19 @@ public class GoodsController {
     @RequestMapping(value ="/goods/{id}", method = RequestMethod.GET)
     public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap) {
         logger.info("getGoodsById");
-        modelMap.put("goods", goodsService.getGoodsById(id));
+        Goods goods = goodsService.getGoodsById(id);
+        modelMap.put("goods", goods);
         modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
         CartItem cartItem = new CartItem();
         cartItem.setQuantity(1);
         modelMap.put("cartItem", cartItem);
         modelMap.put("cartList",session.getAttribute("cartList"));
+        String searchStr = "";
+        modelMap.put("search",searchStr);
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
+        List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4,goods);
+        modelMap.put("relatedGoodsList",relatedGoodsList);
         return "goods_detail";
     }
 
@@ -282,6 +317,10 @@ public class GoodsController {
         if (error != null) {
             modelMap.put("error", "To place an order please log in");
         }
+        String searchStr = "";
+        modelMap.put("search",searchStr);
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
+
         return "cart";
     }
 
@@ -315,6 +354,9 @@ public class GoodsController {
         modelMap.put("order", new Order());
         modelMap.put("listDeliveryMethod",orderService.getAllDeliveryMethods());
         modelMap.put("listPaymentType",orderService.getAllPaymentTypes());
+        String searchStr = "";
+        modelMap.put("search",searchStr);
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
         return "confirm_order";
     }
 
@@ -335,6 +377,9 @@ public class GoodsController {
         modelMap.put("orderId",orderId);
         modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory",goodsService.getAllCategories());
+        String searchStr = "";
+        modelMap.put("search",searchStr);
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
         return "order_success";
     }
 
@@ -347,6 +392,7 @@ public class GoodsController {
                                   @RequestParam(value = "msg", required = false) String msg){
         logger.info("getOrderDetails");
         modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("orderItemsList",orderService.getAllCartItemsFromOrderByOrderId(id));
         modelMap.put("listDeliveryMethod",orderService.getAllDeliveryMethods());
@@ -354,6 +400,8 @@ public class GoodsController {
         modelMap.put("listStatus",orderService.getAllStatuses());
         modelMap.put("sum",getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
         modelMap.put("order", orderService.getOrderById(id));
+        String searchStr = "";
+        modelMap.put("search",searchStr);
         if (msg!=null){
             modelMap.put("msg","Order has been successfully edited");
         }
@@ -390,6 +438,9 @@ public class GoodsController {
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
         modelMap.put("category",goodsService.getCategoryById(id));
+        String searchStr = "";
+        modelMap.put("search",searchStr);
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
         return "goods";
     }
 
@@ -414,6 +465,9 @@ public class GoodsController {
             modelMap.put("randomGoods",getRandomGoods(amountOfRandomGoodsOnPage));
             modelMap.put("listCategory",goodsService.getAllCategories());
             modelMap.put("categoryFilter",false);
+            String searchStr = "";
+            modelMap.put("search",searchStr);
+            modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
             return "goods";
         }
 
@@ -427,6 +481,9 @@ public class GoodsController {
         modelMap.put("listCategory",goodsService.getAllCategories());
         modelMap.put("categoryFilter",false);
         modelMap.put("msg", "You've been edited category successfully.");
+        String searchStr = "";
+        modelMap.put("search",searchStr);
+        modelMap.put("bestSellersList",getBestSellers(amountOfBestSellers));
         return "goods";
     }
 
@@ -459,6 +516,11 @@ public class GoodsController {
             goodsList.add(goodsService.getGoodsById(id));
         }
         return goodsList;
+    }
+
+    public List<Goods> getBestSellers(int amountOfBestSellers) {
+
+        return goodsService.getBestSellers(amountOfBestSellers);
     }
 
     /**

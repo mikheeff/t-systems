@@ -17,7 +17,7 @@ public class ClientEntity {
     @Column(name = "surname")
     private String surname;
     @Column (name = "birthdate")
-    private Date birthdate;
+    private String birthdate;
     @Column(name = "email")
     private String email;
     @Column(name = "password")
@@ -41,7 +41,7 @@ public class ClientEntity {
     public ClientEntity() {
     }
 
-    public ClientEntity(String name, String surname, Date birthdate, String email, String password, String phone, int orderCounter, ClientAddressEntity clientAddressEntity, RoleEntity roleEntity) {
+    public ClientEntity(String name, String surname, String birthdate, String email, String password, String phone, int orderCounter, Set<OrderEntity> orderEntities, ClientAddressEntity clientAddressEntity, RoleEntity roleEntity) {
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
@@ -49,6 +49,7 @@ public class ClientEntity {
         this.password = password;
         this.phone = phone;
         this.orderCounter = orderCounter;
+        this.orderEntities = orderEntities;
         this.clientAddressEntity = clientAddressEntity;
         this.roleEntity = roleEntity;
     }
@@ -77,11 +78,11 @@ public class ClientEntity {
         this.surname = surname;
     }
 
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 

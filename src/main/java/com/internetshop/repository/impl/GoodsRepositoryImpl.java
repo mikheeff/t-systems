@@ -36,6 +36,13 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     @Override
+    public List<GoodsEntity> getRelatedGoodsByCategoryName(int amount, String categoryName) {
+        return em
+                .createQuery("select goods from GoodsEntity goods where category.name = :category order by goods.salesCounter DESC", GoodsEntity.class)
+                .setParameter("category", categoryName).setMaxResults(amount).getResultList();
+    }
+
+    @Override
     public List<GoodsEntity> getAllGoodsBySearch(String searchStr, int firstId, int maxResults) {
         return em
                 .createQuery("select goods from GoodsEntity goods where goods.name LIKE CONCAT('%', :searchStr, '%')", GoodsEntity.class)
@@ -137,5 +144,10 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     @Override
     public RuleEntity getRuleByName(String name) {
         return em.createQuery("select ruleEntity from RuleEntity ruleEntity where name = :name",RuleEntity.class).setParameter("name",name).getSingleResult();
+    }
+
+    @Override
+    public List<GoodsEntity> getBestSellers(int amountOfBestSellers) {
+        return em.createQuery("select goods from GoodsEntity goods order by goods.salesCounter desc",GoodsEntity.class).setMaxResults(amountOfBestSellers).getResultList();
     }
 }

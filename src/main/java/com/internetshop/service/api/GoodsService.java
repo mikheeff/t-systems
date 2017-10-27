@@ -32,6 +32,8 @@ public interface GoodsService {
     void updateCategory(Category category);
     void addCategory(Category category);
     void deleteCategoryById(int id);
+    List<Goods> getBestSellers(int amountOfBestSellers);
+    List<Goods> getRelatedGoods(int amount,Goods goods);
 
 
 }

@@ -33,7 +33,7 @@
 			<div class="row">
 				<div class="span4">
 					<form action="/catalog/search" method="POST" command class="search_form">
-						<input name="searchStr" type="text" class="input-block-level search-query" maxlength="15" Placeholder="Search">
+						<input name="searchStr" type="text" class="input-block-level search-query" maxlength="15" Placeholder="Search games">
 					</form>
 				</div>
 				<%--input-block-level search-query--%>
@@ -122,7 +122,7 @@
 						<div class="row">
 							<div class="span12">
 								<h4 class="title">
-									<span class="pull-left"><span class="text"><span class="line">Feature <strong>Products</strong></span></span></span>
+									<span class="pull-left"><span class="text"><span class="line">Best of category <strong>For funny company</strong></span></span></span>
 									<span class="pull-right">
 										<a class="left button" href="#myCarousel" data-slide="prev"></a><a class="right button" href="#myCarousel" data-slide="next"></a>
 									</span>
@@ -131,7 +131,7 @@
 									<div class="carousel-inner">
 										<div class="active item">
 											<ul class="thumbnails">
-												<c:forEach var="goodsVar"  begin = "0" end = "3" items="${randomGoods}">
+												<c:forEach var="goodsVar"  begin = "0" end = "3" items="${bestSellersList}">
 													<li class="span3">
 														<div class="product-box">
 															<span class="sale_tag"></span>
@@ -146,7 +146,7 @@
 										</div>
 										<div class="item">
 											<ul class="thumbnails">
-												<c:forEach var="goodsVar"  begin = "3" end = "5" items="${randomGoods}">
+												<c:forEach var="goodsVar"  begin = "4" end = "7" items="${bestSellersList}">
 													<li class="span3">
 														<div class="product-box">
 															<span class="sale_tag"></span>

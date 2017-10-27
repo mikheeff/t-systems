@@ -17,7 +17,7 @@ public class Client {
     message= "Username must be alphanumeric with no spaces")
     private String name;
     private String surname;
-    private Date birthdate;
+    private String birthdate;
 
     @NotEmpty
     @Size(max = 50)
@@ -45,7 +45,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(int id, String name, String surname, Date birthdate, String email, String password, String phone, int orderCounter, Role role, ClientAddress clientAddress) {
+    public Client(int id, String name, String surname, String birthdate, String email, String password, String phone, int orderCounter, Role role, ClientAddress clientAddress) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -82,11 +82,11 @@ public class Client {
         this.surname = surname;
     }
 
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 

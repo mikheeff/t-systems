@@ -23,6 +23,7 @@ public class Goods {
     @Size(max = 1000,message = "Description must be less then 1000 character long")
     private String description;
     private String img;
+    private int salesCounter;
     private Category category;
     private Rule rule;
 
@@ -39,6 +40,21 @@ public class Goods {
         this.visible = visible;
         this.description = description;
         this.img = img;
+        this.category = category;
+        this.rule = rule;
+    }
+
+    public Goods(int id, String name, float price, String numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, Category category, Rule rule) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.numberOfPlayers = numberOfPlayers;
+        this.duration = duration;
+        this.amount = amount;
+        this.visible = visible;
+        this.description = description;
+        this.img = img;
+        this.salesCounter = salesCounter;
         this.category = category;
         this.rule = rule;
     }
@@ -129,5 +145,13 @@ public class Goods {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public int getSalesCounter() {
+        return salesCounter;
+    }
+
+    public void setSalesCounter(int salesCounter) {
+        this.salesCounter = salesCounter;
     }
 }
