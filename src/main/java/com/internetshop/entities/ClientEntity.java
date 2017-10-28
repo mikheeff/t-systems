@@ -26,6 +26,10 @@ public class ClientEntity {
     private String phone;
     @Column (name = "order_counter")
     private int orderCounter;
+    @Column (name = "is_confirm")
+    private int isConfirm;
+    @Column (name = "confirmation_id")
+    private String confirmationId;
 
     @OneToMany(mappedBy = "clientEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<OrderEntity> orderEntities = new HashSet<>();
@@ -141,5 +145,21 @@ public class ClientEntity {
 
     public void setOrderEntities(Set<OrderEntity> orderEntities) {
         this.orderEntities = orderEntities;
+    }
+
+    public int getIsConfirm() {
+        return isConfirm;
+    }
+
+    public void setIsConfirm(int isConfirm) {
+        this.isConfirm = isConfirm;
+    }
+
+    public String getConfirmationId() {
+        return confirmationId;
+    }
+
+    public void setConfirmationId(String confirmationId) {
+        this.confirmationId = confirmationId;
     }
 }

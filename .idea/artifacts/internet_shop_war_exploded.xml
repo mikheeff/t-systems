@@ -49,6 +49,11 @@
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.2.3" />
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.2.3" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.25" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-context-support:4.3.11.RELEASE" />
+          <element id="library" level="project" name="Maven: javax.mail:javax.mail-api:1.5.5" />
+          <element id="library" level="project" name="Maven: javax.mail:mail:1.4.7" />
+          <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
+          <element id="library" level="project" name="Maven: org.freemarker:freemarker:2.3.23" />
         </element>
       </element>
       <element id="directory" name="META-INF">

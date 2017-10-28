@@ -8,6 +8,11 @@
     <artifactId>interntet_shop</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+
+    <properties>
+        <spring.version>4.3.11.RELEASE</spring.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -146,19 +151,31 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.5.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
 
 
-        <!--<dependency>-->
-            <!--<groupId>org.springframework</groupId>-->
-            <!--<artifactId>spring-orm</artifactId>-->
-            <!--<version>4.0.3.RELEASE</version>-->
-        <!--</dependency>-->
-        <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
-        <!--<dependency>-->
-            <!--<groupId>commons-dbcp</groupId>-->
-            <!--<artifactId>commons-dbcp</artifactId>-->
-            <!--<version>1.2.2</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.23</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>

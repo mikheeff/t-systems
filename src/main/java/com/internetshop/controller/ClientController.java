@@ -38,6 +38,8 @@ public class ClientController {
     private GoodsService goodsService;
     @Autowired
     private OrderService orderService;
+//    @Autowired
+//    private EmailController emailController;
 
     @Autowired
     private HttpSession session;
@@ -58,7 +60,7 @@ public class ClientController {
                                @RequestParam(value = "regError", required = false) String regError) {
         modelMap.put("newClient", new Client());
         if (error != null) {
-            modelMap.put("error", "Invalid email or password!");
+            modelMap.put("error", "Invalid email or password or not confirmed account!");
         }
         if (regError != null) {
             modelMap.put("regError", "Invalid params!");
@@ -149,10 +151,11 @@ public class ClientController {
         } catch (EmailExistException e) {
             logger.error("Error email: "+e.getEnteredEmail(), e);
             modelMap.put("newClient",client);
-            modelMap.put("regError","Email already exist!");
+            modelMap.put("regError","Email already exists!");
             return "register";
         }
-        return "registr_success";
+        session.setAttribute("nonVerifiedClientEmail",client.getEmail());
+        return "redirect:/email/send";
     }
 
     /**

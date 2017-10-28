@@ -36,6 +36,8 @@ public class Client {
             "\\d{3}\\)?[-\\s]?\\d{3}[-\\s]?\\d{2}[-\\s]?\\d{2}$")
     private String phone;
     private int orderCounter;
+    private int isConfirm;
+    private String confirmationId;
     private Role role;
     private ClientAddress clientAddress;
     private Set<Order> order = new HashSet<>();
@@ -144,6 +146,22 @@ public class Client {
 
     public void setOrder(Set<Order> order) {
         this.order = order;
+    }
+
+    public int getIsConfirm() {
+        return isConfirm;
+    }
+
+    public void setIsConfirm(int isConfirm) {
+        this.isConfirm = isConfirm;
+    }
+
+    public String getConfirmationId() {
+        return confirmationId;
+    }
+
+    public void setConfirmationId(String confirmationId) {
+        this.confirmationId = confirmationId;
     }
 
     @Override

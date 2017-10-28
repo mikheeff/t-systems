@@ -75,12 +75,24 @@
     </section>
     <section class="header_text sub">
         <img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="" >
+        <c:if test="${regSuccess==true}">
         <h4><span>Congratulations, you have successfully registered!</span></h4>
     </section>
     <section class="main-content">
         <div class="row">
             <div class="span12">
                 <h5>Now, if you want to see your account, please log in</h5>
+        </c:if>
+
+         <c:if test="${regSuccess==false}">
+                <h4><span>Please, confirm an email</span></h4>
+    </section>
+    <section class="main-content">
+        <div class="row">
+            <div class="span12">
+                <h5>Check your mail, we've sent you a verification letter</h5>
+         </c:if>
+
             </div>
         </div>
     </section>

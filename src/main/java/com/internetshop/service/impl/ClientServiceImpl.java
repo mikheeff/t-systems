@@ -24,6 +24,7 @@ import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -58,6 +59,8 @@ public class ClientServiceImpl implements ClientService {
         client.setPassword(passwordEncoder.encode(client.getPassword()));
 
         ClientEntity clientEntity = convertClientToDAO(client);
+        clientEntity.setIsConfirm(0);
+        clientEntity.setConfirmationId(UUID.randomUUID().toString());
         Set<OrderEntity> orderEntitySet = new HashSet<>();
         clientEntity.setOrderEntities(orderEntitySet);
         this.clientRepository.addClient(clientEntity);
@@ -113,6 +116,8 @@ public class ClientServiceImpl implements ClientService {
                 role,
                 clientAddress);
 
+        client.setIsConfirm(clientEntity.getIsConfirm());
+        client.setConfirmationId(clientEntity.getConfirmationId());
 
         return client;
     }
@@ -134,6 +139,8 @@ public class ClientServiceImpl implements ClientService {
         client.setPassword(clientEntity.getPassword());
         client.setPhone(clientEntity.getPhone());
         client.setOrderCounter(clientEntity.getOrderCounter());
+        client.setIsConfirm(clientEntity.getIsConfirm());
+        client.setConfirmationId(clientEntity.getConfirmationId());
 
         Role role = new Role();
         role.setId(clientEntity.getId());
@@ -189,6 +196,19 @@ public class ClientServiceImpl implements ClientService {
             clientEntity.setPhone(client.getPhone());
         }
 
+        clientRepository.updateUser(clientEntity);
+    }
+
+    @Override
+    public boolean isIdContains(String email, String id) {
+        ClientEntity clientEntity = clientRepository.getUserByEmail(email);
+        return id.equals(clientEntity.getConfirmationId());
+    }
+
+    @Override
+    public void confirmClientEmail(String email) {
+        ClientEntity clientEntity = clientRepository.getUserByEmail(email);
+        clientEntity.setIsConfirm(1);
         clientRepository.updateUser(clientEntity);
     }
 

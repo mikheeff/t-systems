@@ -1,5 +1,6 @@
 package com.internetshop.service.impl;
 
+import com.internetshop.Exceptions.UserNotConfirmException;
 import com.internetshop.controller.ClientController;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.RoleEntity;
@@ -41,6 +42,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
         ClientEntity clientEntity;
         try {
             clientEntity = clientRepository.getUserByEmail(email);
+            if(clientEntity.getIsConfirm()==0){
+                throw new UsernameNotFoundException("User not confirm");
+            }
         } catch (NoResultException e) {
             logger.error("No client with entered email");
             throw new UsernameNotFoundException("User not found");
