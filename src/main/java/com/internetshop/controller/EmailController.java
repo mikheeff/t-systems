@@ -3,6 +3,7 @@ package com.internetshop.controller;
 import com.internetshop.model.Client;
 import com.internetshop.model.Mail;
 import com.internetshop.service.api.ClientService;
+import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -27,10 +28,18 @@ public class EmailController {
     ClientService clientService;
     @Autowired
     private HttpSession session;
+    @Autowired
+    GoodsController goodsController;
+    @Autowired
+    GoodsService goodsService;
 
     @RequestMapping(value = "/email/send", method = RequestMethod.GET)
     public String sendEmail(ModelMap modelMap){
-        Client client = clientService.getUserByEmail((String)session.getAttribute("nonVerifiedClientEmail"));
+        String email = (String)session.getAttribute("nonVerifiedClientEmail");
+        if (email==null) {
+            return "redirect:/";
+        }
+        Client client = clientService.getUserByEmail(email);
         Mail mail = new Mail();
         mail.setMailFrom("dice.gamesstore@gmail.com");
         mail.setMailTo(client.getEmail());
@@ -46,18 +55,21 @@ public class EmailController {
         mailService.sendEmail(mail);
 
 
-        modelMap.put("regSuccess",false);
+        modelMap.put("confirmation",true);
         return "registr_success";
     }
 
     @RequestMapping(value = "/confirm")
     public String confirmEmail( @RequestParam(value = "id", required = false) String id, ModelMap modelMap){
+
         String email = (String)session.getAttribute("nonVerifiedClientEmail");
-        if (clientService.isIdContains(email,id)){
+        if (email!=null && clientService.isIdContains(email,id)){
             clientService.confirmClientEmail(email);
             modelMap.put("regSuccess",true);
             return "registr_success";
         }
-        return "index";
+
+        modelMap.put("isSessionUnAvailable",true);
+        return "registr_success";
     }
 }

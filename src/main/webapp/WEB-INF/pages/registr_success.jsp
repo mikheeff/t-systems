@@ -82,19 +82,33 @@
         <div class="row">
             <div class="span12">
                 <h5>Now, if you want to see your account, please log in</h5>
+            </div>
+        </div>
         </c:if>
 
-         <c:if test="${regSuccess==false}">
+         <c:if test="${confirmation==true}">
                 <h4><span>Please, confirm an email</span></h4>
     </section>
     <section class="main-content">
         <div class="row">
             <div class="span12">
                 <h5>Check your mail, we've sent you a verification letter</h5>
-         </c:if>
-
             </div>
         </div>
+
+        </c:if>
+                <c:if test="${isSessionUnAvailable==true}">
+                <h4><span>Session is unavailable</span></h4>
+    </section>
+    <section class="main-content">
+        <div class="row">
+            <div class="span12">
+                <h5>To confirm an address enter it to the form below</h5>
+            </div>
+        </div>
+
+        </c:if>
+
     </section>
     <section id="footer-bar">
         <div class="row">
