@@ -16,7 +16,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 public class JmsProducer extends Thread implements AutoCloseable {
     private static String DEF_QUEUE = "test.in";
 
-    private final ActiveMQConnectionFactory _connectionFactory;
+    private final ActiveMQConnectionFactory _connectionFactory; //
     private Connection _connection = null;
     private Session _session = null;
     private Queue<String> _messagesQueue;
