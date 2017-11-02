@@ -1,8 +1,6 @@
 package com.internetshop.controller;
 
-import com.internetshop.Exceptions.NoSuchCategoryException;
-import com.internetshop.Exceptions.NoSuchRulesException;
-import com.internetshop.entities.GoodsEntity;
+import com.internetshop.jms.JmsProducer;
 import com.internetshop.model.*;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
@@ -11,15 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
-import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.parser.Entity;
 import javax.validation.Valid;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -36,6 +34,8 @@ public class GoodsController {
     public final HttpSession session;
 
 
+
+
     private static final int amountOfGoodsOnPage = 9;
     private static final int amountOfRandomGoodsOnPage = 2;
     private static final int amountOfBestSellers = 3;
@@ -46,6 +46,36 @@ public class GoodsController {
         this.clientService = clientService;
         this.orderService = orderService;
         this.session = session;
+    }
+
+    @RequestMapping(value = "/goodsAll", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Goods> getAll() {
+        return goodsService.getAllGoods();
+    }
+
+    @RequestMapping(value = "/send/message", method = RequestMethod.GET)
+//    @ResponseBody
+    public void sendMessage() {
+        String url = "tcp://localhost:61616"; // url коннектора брокера
+        try(JmsProducer producer = new JmsProducer(url))
+        {
+            producer.start();
+//            consumer.init();
+
+//            BufferedReader rdr = new BufferedReader(new InputStreamReader(System.in));
+            String line = "hello";
+//            while (!(line = rdr.readLine()).equalsIgnoreCase("stop")) // для выхода нужно набрать в консоли stop
+//            {
+                producer.send(line);
+            Thread.sleep(1000);
+//            }
+//            System.out.println("Bye!");
+        }
+        catch (Throwable e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
