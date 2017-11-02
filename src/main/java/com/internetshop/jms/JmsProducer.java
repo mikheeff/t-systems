@@ -4,13 +4,9 @@ import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
 
-import javax.jms.Connection;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageProducer;
-import javax.jms.Session;
+import javax.jms.*;
 
+import com.internetshop.model.SmallGoods;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 public class JmsProducer extends Thread implements AutoCloseable {
@@ -40,7 +36,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
         else
             _connectionFactory = new ActiveMQConnectionFactory(url);
 
-        _messagesQueue = new PriorityBlockingQueue<String>();
+        _messagesQueue = new PriorityBlockingQueue<>();
     }
 
     /**
@@ -82,7 +78,8 @@ public class JmsProducer extends Thread implements AutoCloseable {
                     String text = null;
                     while (_active && (text = _messagesQueue.poll()) != null)
                     {
-                        Message msg = _session.createTextMessage(text);
+                        ObjectMessage msg = _session.createObjectMessage();
+//                        msg.setObject(text);
                         msg.setObjectProperty("Created", (new Date()).toString());
                         producer.send(msg);
                         System.out.println("Message " + msg.getJMSMessageID() + " was sent");

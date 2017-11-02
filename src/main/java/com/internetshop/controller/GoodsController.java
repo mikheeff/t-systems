@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.jms.ObjectMessage;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.BufferedReader;
@@ -64,10 +65,15 @@ public class GoodsController {
 //            consumer.init();
 
 //            BufferedReader rdr = new BufferedReader(new InputStreamReader(System.in));
-            String line = "hello";
+//            String line = "hello";
 //            while (!(line = rdr.readLine()).equalsIgnoreCase("stop")) // для выхода нужно набрать в консоли stop
 //            {
-                producer.send(line);
+            SmallGoods smallGoods = new SmallGoods();
+            Goods goods = goodsService.getGoodsById(3);
+            smallGoods.setId(goods.getId());
+            smallGoods.setName(goods.getName());
+            smallGoods.setPrice(goods.getPrice());
+                producer.send("hello!");
             Thread.sleep(1000);
 //            }
 //            System.out.println("Bye!");
