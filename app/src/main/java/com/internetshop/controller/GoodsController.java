@@ -62,7 +62,7 @@ public class GoodsController {
             producer.start();
 //            consumer.init();
 
-//            BufferedReader rdr = new BufferedReader(new InputStreamReader(System.in));
+//            BufferedReader rdr = new BufferedReader(new InputStreamReader(System.in));..
 //            String line = "hello";
 //            while (!(line = rdr.readLine()).equalsIgnoreCase("stop")) // для выхода нужно набрать в консоли stop
 //            {
