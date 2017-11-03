@@ -5,7 +5,7 @@ import com.internetshop.model.*;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.OrderService;
-import com.tsystems.TestModel;
+import com.tsystems.SmallGoods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.jms.ObjectMessage;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -67,11 +64,11 @@ public class GoodsController {
 //            while (!(line = rdr.readLine()).equalsIgnoreCase("stop")) // для выхода нужно набрать в консоли stop
 //            {
             SmallGoods smallGoods = new SmallGoods();
-//            Goods goods = goodsService.getGoodsById(3);
-//            smallGoods.setId(goods.getId());
-//            smallGoods.setName(goods.getName());
-//            smallGoods.setPrice(goods.getPrice());
-            smallGoods.setId(1);
+            Goods goods = goodsService.getGoodsById(3);
+            smallGoods.setId(goods.getId());
+            smallGoods.setName(goods.getName());
+            smallGoods.setPrice(goods.getPrice());
+//            smallGoods.setId(1);
             producer.send(smallGoods);
 //            }
 //            System.out.println("Bye!");

@@ -1,4 +1,4 @@
-package com.internetshop.model;
+package com.tsystems;
 
 import java.io.Serializable;
 

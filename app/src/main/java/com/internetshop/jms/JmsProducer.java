@@ -6,7 +6,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 import javax.jms.*;
 
-import com.internetshop.model.SmallGoods;
+import com.tsystems.SmallGoods;
 import com.tsystems.TestModel;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
@@ -80,7 +80,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
                     while (_active && (text = _messagesQueue.poll()) != null)
                     {
                         ObjectMessage msg = _session.createObjectMessage();
-                        msg.setObject(new TestModel(5));
+                        msg.setObject(text);
                         msg.setObjectProperty("Created", (new Date()).toString());
                         producer.send(msg);
                         System.out.println("Message " + msg.getJMSMessageID() + " was sent");
