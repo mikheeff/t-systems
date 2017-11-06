@@ -47,31 +47,23 @@ public class GoodsController {
 
     @RequestMapping(value = "/goodsAll", method = RequestMethod.GET)
     @ResponseBody
-    public List<Goods> getAll() {
-        return goodsService.getAllGoods();
+    public List<SmallGoods> getAll() {
+        return goodsService.getAllSmallGoods();
+
     }
 
     @RequestMapping(value = "/send/message", method = RequestMethod.GET)
-//    @ResponseBody
     public void sendMessage() {
         String url = "tcp://localhost:61616"; // url коннектора брокера
         JmsProducer producer = new JmsProducer(url);
             producer.start();
-//            consumer.init();
-
-//            BufferedReader rdr = new BufferedReader(new InputStreamReader(System.in));..
-//            String line = "hello";
-//            while (!(line = rdr.readLine()).equalsIgnoreCase("stop")) // для выхода нужно набрать в консоли stop
-//            {
             SmallGoods smallGoods = new SmallGoods();
             Goods goods = goodsService.getGoodsById(3);
             smallGoods.setId(goods.getId());
             smallGoods.setName(goods.getName());
             smallGoods.setPrice(goods.getPrice());
-//            smallGoods.setId(1);
+            smallGoods.setImg(goods.getImg());
             producer.send(smallGoods);
-//            }
-//            System.out.println("Bye!");
     }
 
     /**

@@ -6,6 +6,7 @@ import com.internetshop.entities.*;
 import com.internetshop.model.*;
 import com.internetshop.repository.api.GoodsRepository;
 import com.internetshop.service.api.GoodsService;
+import com.tsystems.SmallGoods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,20 @@ public class GoodsServiceImpl implements GoodsService {
             goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
+    }
+
+    @Override
+    public List<SmallGoods> getAllSmallGoods() {
+        List<SmallGoods> smallGoodsList = new ArrayList<>();
+        for(GoodsEntity goodsEntity : goodsRepository.getAll()){
+            SmallGoods smallGoods = new SmallGoods();
+            smallGoods.setId(goodsEntity.getId());
+            smallGoods.setName(goodsEntity.getName());
+            smallGoods.setPrice(goodsEntity.getPrice());
+            smallGoods.setImg(goodsEntity.getImg());
+            smallGoodsList.add(smallGoods);
+        }
+        return smallGoodsList;
     }
 
     /**

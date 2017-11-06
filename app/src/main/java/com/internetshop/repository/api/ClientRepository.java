@@ -12,6 +12,7 @@ public interface ClientRepository {
     void addClient(ClientEntity clientEntity);
     ClientEntity getUserByEmail(String email);
     ClientEntity getUserById(int id);
+    String getEmailByConfirmationId(String id);
     void updateUser(ClientEntity clientEntity);
     void addAddress(ClientAddressEntity clientAddressEntity);
     RoleEntity getRoleById(int id);

@@ -162,6 +162,11 @@ public class ClientServiceImpl implements ClientService {
         return client;
     }
 
+    @Override
+    public String getEmailByConfirmationId(String id) {
+        return clientRepository.getEmailByConfirmationId(id);
+    }
+
     /**
      * Updates client model fields
      * @param client

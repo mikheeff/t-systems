@@ -1,5 +1,6 @@
 package com.internetshop.controller;
 
+import com.internetshop.config.AppConfig;
 import com.internetshop.model.Client;
 import com.internetshop.model.Mail;
 import com.internetshop.service.api.ClientService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +49,7 @@ public class EmailController {
 
         Map< String, Object > model = new HashMap<>();
         model.put("firstName", client.getName());
-        model.put("link","http://localhost:8081/confirm?id="+client.getConfirmationId());
+        model.put("link", AppConfig.HOST_URL+"/confirm?id="+client.getConfirmationId());
         model.put("location", "St.Petersburg, Russia");
         model.put("signature", "Dice Games shop");
         mail.setModel(model);
@@ -62,8 +64,15 @@ public class EmailController {
     @RequestMapping(value = "/confirm")
     public String confirmEmail( @RequestParam(value = "id", required = false) String id, ModelMap modelMap){
 
-        String email = (String)session.getAttribute("nonVerifiedClientEmail");
-        if (email!=null && clientService.isIdContains(email,id)){
+//        String email = (String)session.getAttribute("nonVerifiedClientEmail");
+        String email;
+        try {
+             email = clientService.getEmailByConfirmationId(id);
+        } catch (NoResultException e){
+            email = null;
+        }
+//        if (email!=null && clientService.isIdContains(email,id)){
+        if (email!=null){
             clientService.confirmClientEmail(email);
             modelMap.put("regSuccess",true);
             return "registr_success";

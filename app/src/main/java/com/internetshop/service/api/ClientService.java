@@ -16,6 +16,7 @@ public interface ClientService {
     Client getUserByEmail(String email);
     void updateUser(Client client);
     Client getClientById(int id);
+    String getEmailByConfirmationId(String id);
     void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException;
     boolean isIdContains(String email, String id);
     void confirmClientEmail(String email);

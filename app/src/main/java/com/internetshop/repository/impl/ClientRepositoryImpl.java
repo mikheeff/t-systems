@@ -50,6 +50,10 @@ public class ClientRepositoryImpl implements ClientRepository {
         return em.find(ClientEntity.class, id);
     }
 
+    @Override
+    public String getEmailByConfirmationId(String id) {
+        return em.createQuery("select client.email from ClientEntity client where confirmationId = :id", String.class).setParameter("id",id).getSingleResult();
+    }
 
     @Override
     public void updateUser(ClientEntity clientEntity) {

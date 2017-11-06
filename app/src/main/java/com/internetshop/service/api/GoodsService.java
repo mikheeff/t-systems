@@ -8,12 +8,14 @@ import com.internetshop.model.Category;
 import com.internetshop.model.DeliveryMethod;
 import com.internetshop.model.Goods;
 import com.internetshop.model.PaymentType;
+import com.tsystems.SmallGoods;
 
 import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 public interface GoodsService {
     List<Goods> getAllGoods();
+    List<SmallGoods> getAllSmallGoods();
     List<Goods> getAllGoods(int firstId,int maxResults);
     List<Goods> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName);
     List<Goods> getAllGoodsBySearch(String searchStr,int firstId, int maxResults);
