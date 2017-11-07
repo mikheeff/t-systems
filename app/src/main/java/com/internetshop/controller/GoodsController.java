@@ -1,5 +1,6 @@
 package com.internetshop.controller;
 
+import com.internetshop.config.AppConfig;
 import com.internetshop.jms.JmsProducer;
 import com.internetshop.model.*;
 import com.internetshop.service.api.ClientService;
@@ -54,16 +55,13 @@ public class GoodsController {
 
     @RequestMapping(value = "/send/message", method = RequestMethod.GET)
     public void sendMessage() {
-        String url = "tcp://localhost:61616"; // url коннектора брокера
-        JmsProducer producer = new JmsProducer(url);
-            producer.start();
-            SmallGoods smallGoods = new SmallGoods();
-            Goods goods = goodsService.getGoodsById(3);
-            smallGoods.setId(goods.getId());
-            smallGoods.setName(goods.getName());
-            smallGoods.setPrice(goods.getPrice());
-            smallGoods.setImg(goods.getImg());
-            producer.send(smallGoods);
+
+//            SmallGoods smallGoods = new SmallGoods();
+//            Goods goods = goodsService.getGoodsById(3);
+//            smallGoods.setId(goods.getId());
+//            smallGoods.setName(goods.getName());
+//            smallGoods.setPrice(goods.getPrice());
+//            smallGoods.setImg(goods.getImg());
     }
 
     /**

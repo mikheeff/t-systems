@@ -30,7 +30,7 @@ import javax.persistence.EntityManager;
 public class AppConfig{
 
     public final static String HOST_URL = "http://93.100.84.138";
-
+    public static final String ACTIVE_MQ_URL = "tcp://localhost:61616";
     @Bean
     public InternalResourceViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver

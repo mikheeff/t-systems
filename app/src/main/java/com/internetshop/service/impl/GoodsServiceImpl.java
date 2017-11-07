@@ -1,12 +1,12 @@
 package com.internetshop.service.impl;
 
-import com.internetshop.Exceptions.NoSuchCategoryException;
-import com.internetshop.Exceptions.NoSuchRulesException;
+import com.internetshop.config.AppConfig;
 import com.internetshop.entities.*;
+import com.internetshop.jms.JmsProducer;
 import com.internetshop.model.*;
 import com.internetshop.repository.api.GoodsRepository;
 import com.internetshop.service.api.GoodsService;
-import com.tsystems.SmallGoods;
+import com.tsystems.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,7 +106,21 @@ public class GoodsServiceImpl implements GoodsService {
     public void addGoods(Goods goods) {
         logger.info("addGoods");
         goods.setSalesCounter(0); //When employee adds new goods its counter is 0
-        this.goodsRepository.addGoods(convertGoodsToDAO(goods));
+        int idNewGoods = this.goodsRepository.addGoods(convertGoodsToDAO(goods));
+        goods.setId(idNewGoods);
+        createAddMessage(goods);
+
+    }
+
+    public void createAddMessage(Goods goods){
+        SmallGoods smallGoods = new SmallGoods();
+        smallGoods.setId(goods.getId());
+        smallGoods.setName(goods.getName());
+        smallGoods.setPrice(goods.getPrice());
+        smallGoods.setImg(goods.getImg());
+
+        Event event = new AddEvent(smallGoods);
+        sendMessage(event);
     }
 
     /**
@@ -117,6 +131,18 @@ public class GoodsServiceImpl implements GoodsService {
     public void deleteGoodsById(int id) {
         logger.info("deleteGoodsById");
         this.goodsRepository.deleteGoodsById(id);
+        createDeleteMessage(id);
+    }
+
+    public void createDeleteMessage(int id){
+        Event event = new DeleteEvent(id);
+        sendMessage(event);
+    }
+
+    public void sendMessage(Event event){
+        JmsProducer producer = new JmsProducer(AppConfig.ACTIVE_MQ_URL);
+        producer.start();
+        producer.send(event); //close??
     }
 
     /**
@@ -177,6 +203,18 @@ public class GoodsServiceImpl implements GoodsService {
         goodsEntity.setCategory(categoryEntity);
 
         this.goodsRepository.updateGoods(goodsEntity);
+
+        createUpdateMessage(goodsEntity);
+    }
+
+    public void createUpdateMessage(GoodsEntity goods){
+        SmallGoods smallGoods = new SmallGoods();
+        smallGoods.setId(goods.getId());
+        smallGoods.setName(goods.getName());
+        smallGoods.setPrice(goods.getPrice());
+        smallGoods.setImg(goods.getImg());
+        Event event = new UpdateEvent(smallGoods);
+        sendMessage(event);
     }
 
     /**

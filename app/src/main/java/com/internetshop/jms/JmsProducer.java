@@ -6,6 +6,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 import javax.jms.*;
 
+import com.tsystems.Event;
 import com.tsystems.SmallGoods;
 import com.tsystems.TestModel;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -16,7 +17,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
     private final ActiveMQConnectionFactory _connectionFactory; //
     private Connection _connection = null;
     private Session _session = null;
-    private Queue<SmallGoods> _messagesQueue;
+    private Queue<Event> _messagesQueue;
     private boolean _active = true;
 
     /**
@@ -56,7 +57,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
      * Метод отправки только лишь добавляет сообщение во внутреннюю очередь.
      * Самой отправки в брокер здесь не происходит, она делается в методе run.
      */
-    public void send(SmallGoods line)
+    public void send(Event line)
     {
         _messagesQueue.add(line);
     }
@@ -76,7 +77,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
             {
                 try
                 {
-                    SmallGoods text = null;
+                    Event text = null;
                     while (_active && (text = _messagesQueue.poll()) != null)
                     {
                         ObjectMessage msg = _session.createObjectMessage();

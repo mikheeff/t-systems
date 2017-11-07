@@ -50,10 +50,11 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     @Override
-    public void addGoods(GoodsEntity goodsEntity) {
+    public int addGoods(GoodsEntity goodsEntity) {
         em.getTransaction().begin();
         em.persist(goodsEntity);
         em.getTransaction().commit();
+        return em.createQuery("from GoodsEntity goodsEntity order by id DESC", GoodsEntity.class).setMaxResults(1).getSingleResult().getId();
     }
 
     @Override

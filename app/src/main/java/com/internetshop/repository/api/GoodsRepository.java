@@ -15,7 +15,7 @@ public interface GoodsRepository {
     List<GoodsEntity> getAllGoodsBySearch(String searchStr,int firstId, int maxResults);
     List<GoodsEntity> getRelatedGoodsByCategoryName(int amount,String categoryName);
 
-    void addGoods(GoodsEntity goodsEntity);
+    int addGoods(GoodsEntity goodsEntity);
     void deleteGoodsById(int id);
     GoodsEntity getGoodsById(int id);
     void updateGoods(GoodsEntity goodsEntity);
