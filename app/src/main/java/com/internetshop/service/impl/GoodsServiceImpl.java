@@ -118,6 +118,7 @@ public class GoodsServiceImpl implements GoodsService {
         smallGoods.setName(goods.getName());
         smallGoods.setPrice(goods.getPrice());
         smallGoods.setImg(goods.getImg());
+        smallGoods.setSalesCounter(goods.getSalesCounter());
 
         Event event = new AddEvent(smallGoods);
         sendMessage(event);
@@ -213,6 +214,7 @@ public class GoodsServiceImpl implements GoodsService {
         smallGoods.setName(goods.getName());
         smallGoods.setPrice(goods.getPrice());
         smallGoods.setImg(goods.getImg());
+        smallGoods.setSalesCounter(goods.getSalesCounter());
         Event event = new UpdateEvent(smallGoods);
         sendMessage(event);
     }

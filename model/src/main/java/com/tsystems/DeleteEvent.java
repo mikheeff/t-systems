@@ -1,12 +1,8 @@
 package com.tsystems;
 
-public class DeleteEvent extends Event{
+public class DeleteEvent extends Event {
 
-    public DeleteEvent(){
-
-    }
-
-    public DeleteEvent(Object property) {
+    public DeleteEvent(Integer property) {
         super(property);
     }
 
