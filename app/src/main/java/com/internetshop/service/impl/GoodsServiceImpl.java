@@ -21,6 +21,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     private final GoodsRepository goodsRepository;
     private static Logger logger = LoggerFactory.getLogger(GoodsServiceImpl.class.getName());
+    private static JmsProducer producer = new JmsProducer(AppConfig.ACTIVE_MQ_URL);
 
     @Autowired
     public GoodsServiceImpl(GoodsRepository goodsRepository) {
@@ -29,6 +30,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * Gets list of all goods
+     *
      * @return goodsList
      */
     @Override
@@ -44,12 +46,13 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<SmallGoods> getAllSmallGoods() {
         List<SmallGoods> smallGoodsList = new ArrayList<>();
-        for(GoodsEntity goodsEntity : goodsRepository.getAll()){
+        for (GoodsEntity goodsEntity : goodsRepository.getAll()) {
             SmallGoods smallGoods = new SmallGoods();
             smallGoods.setId(goodsEntity.getId());
             smallGoods.setName(goodsEntity.getName());
             smallGoods.setPrice(goodsEntity.getPrice());
             smallGoods.setImg(goodsEntity.getImg());
+            smallGoods.setSalesCounter(goodsEntity.getSalesCounter());
             smallGoodsList.add(smallGoods);
         }
         return smallGoodsList;
@@ -58,7 +61,8 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * Gets all goods that need for selected page
      * (pagination)
-     * @param firstId number of the first goods on page
+     *
+     * @param firstId    number of the first goods on page
      * @param maxResults number of the last goods on page
      * @return goodsList
      */
@@ -67,7 +71,7 @@ public class GoodsServiceImpl implements GoodsService {
         logger.info("getAllGoods ");
 
         List<Goods> goodsList = new ArrayList<>();
-        for (GoodsEntity goodsEntity : goodsRepository.getAll(firstId,maxResults)) {
+        for (GoodsEntity goodsEntity : goodsRepository.getAll(firstId, maxResults)) {
             goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
@@ -75,6 +79,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * Gets all goods by selected category (also with pagination)
+     *
      * @param categoryName name of selected category
      * @return goods List
      */
@@ -83,7 +88,7 @@ public class GoodsServiceImpl implements GoodsService {
         logger.info("getAllGoodsByCategoryName");
 
         List<Goods> goodsList = new ArrayList<>();
-        for (GoodsEntity goodsEntity : goodsRepository.getAllGoodsByCategoryName(firstId,maxResults,categoryName)) {
+        for (GoodsEntity goodsEntity : goodsRepository.getAllGoodsByCategoryName(firstId, maxResults, categoryName)) {
             goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
@@ -92,7 +97,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getAllGoodsBySearch(String searchStr, int firstId, int maxResults) {
         List<Goods> goodsList = new ArrayList<>();
-        for (GoodsEntity goodsEntity : goodsRepository.getAllGoodsBySearch(searchStr, firstId,maxResults)) {
+        for (GoodsEntity goodsEntity : goodsRepository.getAllGoodsBySearch(searchStr, firstId, maxResults)) {
             goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
@@ -112,7 +117,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     }
 
-    public void createAddMessage(Goods goods){
+    public void createAddMessage(Goods goods) {
         SmallGoods smallGoods = new SmallGoods();
         smallGoods.setId(goods.getId());
         smallGoods.setName(goods.getName());
@@ -125,7 +130,7 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
-     *  Deletes Selected goods
+     * Deletes Selected goods
      */
     @Transactional
     @Override
@@ -135,19 +140,22 @@ public class GoodsServiceImpl implements GoodsService {
         createDeleteMessage(id);
     }
 
-    public void createDeleteMessage(int id){
+    public void createDeleteMessage(int id) {
         Event event = new DeleteEvent(id);
         sendMessage(event);
     }
 
-    public void sendMessage(Event event){
-        JmsProducer producer = new JmsProducer(AppConfig.ACTIVE_MQ_URL);
-        producer.start();
+    public void sendMessage(Event event) {
+//        JmsProducer producer = new JmsProducer(AppConfig.ACTIVE_MQ_URL);
+        if (!producer.isAlive()) {
+            producer.start();
+        }
         producer.send(event); //close??
     }
 
     /**
      * Get goods by selected id
+     *
      * @return Goods model
      */
     @Override
@@ -208,7 +216,7 @@ public class GoodsServiceImpl implements GoodsService {
         createUpdateMessage(goodsEntity);
     }
 
-    public void createUpdateMessage(GoodsEntity goods){
+    public void createUpdateMessage(GoodsEntity goods) {
         SmallGoods smallGoods = new SmallGoods();
         smallGoods.setId(goods.getId());
         smallGoods.setName(goods.getName());
@@ -230,6 +238,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * gets amount of goods in DataBase
+     *
      * @return amount
      */
     @Override
@@ -241,6 +250,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * Gets amount of goods which have selected category
+     *
      * @return amount
      */
     @Override
@@ -262,7 +272,7 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Category> getAllCategories() {
         logger.info("getAllCategories");
         List<Category> categories = new ArrayList<>();
-        for (CategoryEntity categoryEntity  : goodsRepository.getAllCategories()) {
+        for (CategoryEntity categoryEntity : goodsRepository.getAllCategories()) {
             Category category = new Category(categoryEntity.getId(), categoryEntity.getName());
             categories.add(category);
         }
@@ -271,13 +281,14 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * Gets Category by selected id
+     *
      * @return Category model
      */
     @Override
     public Category getCategoryById(int id) {
         logger.info("getCategoryById");
         CategoryEntity categoryEntity = goodsRepository.getCategoryById(id);
-        Category category = new Category(categoryEntity.getId(),categoryEntity.getName());
+        Category category = new Category(categoryEntity.getId(), categoryEntity.getName());
         return category;
     }
 
@@ -295,6 +306,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * Updates information of category
+     *
      * @param category model
      */
     @Transactional
@@ -308,6 +320,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * Deletes category with selected id
+     *
      * @param id
      */
     @Transactional
@@ -321,7 +334,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getBestSellers(int amountOfBestSellers) {
         List<Goods> goodsBestSellersList = new ArrayList<>();
-        for (GoodsEntity goodsEntity : goodsRepository.getBestSellers(amountOfBestSellers)){
+        for (GoodsEntity goodsEntity : goodsRepository.getBestSellers(amountOfBestSellers)) {
             goodsBestSellersList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsBestSellersList;
@@ -331,8 +344,8 @@ public class GoodsServiceImpl implements GoodsService {
     public List<Goods> getRelatedGoods(int amount, Goods goods) {
         List<Goods> relatedGoodsList = new ArrayList<>();
 
-        for(GoodsEntity goodsEntity : goodsRepository.getRelatedGoodsByCategoryName(amount,goods.getCategory().getName())){
-            if (goodsEntity.getId()!=goods.getId()) {
+        for (GoodsEntity goodsEntity : goodsRepository.getRelatedGoodsByCategoryName(amount, goods.getCategory().getName())) {
+            if (goodsEntity.getId() != goods.getId()) {
                 relatedGoodsList.add(convertGoodsToDTO(goodsEntity));
             }
         }
@@ -341,6 +354,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * converts goods to data access object
+     *
      * @return Goods Entity
      */
     @Override
@@ -370,6 +384,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     /**
      * Converts goods to Data Tranfer Object
+     *
      * @return Goods model
      */
     @Override
