@@ -36,6 +36,7 @@ public interface GoodsService {
     void deleteCategoryById(int id);
     List<Goods> getBestSellers(int amountOfBestSellers);
     List<Goods> getRelatedGoods(int amount,Goods goods);
+    void createUpdateMessage(GoodsEntity goodsEntity);
 
 
 }

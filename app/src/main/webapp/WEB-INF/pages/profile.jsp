@@ -354,7 +354,7 @@
 														<td><big>pending payment</big></td>
 														</c:if>
 														<td><big>${clientOrder.status.name}</big></td>
-														<td><a href="">Details</a></td>
+														<td><a href="/catalog/profile/details/order/${clientOrder.id}"><big>Details</big></a></td>
 													</tr>
 													</tbody>
 														<%--<hr>--%>

@@ -146,7 +146,6 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     public void sendMessage(Event event) {
-//        JmsProducer producer = new JmsProducer(AppConfig.ACTIVE_MQ_URL);
         if (!producer.isAlive()) {
             producer.start();
         }

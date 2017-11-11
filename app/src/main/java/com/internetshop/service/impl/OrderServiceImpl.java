@@ -193,6 +193,7 @@ public class OrderServiceImpl implements OrderService {
             GoodsEntity goodsEntity = goodsRepository.getGoodsById(item.getGoodsEntity().getId());
             goodsEntity.setSalesCounter(goodsEntity.getSalesCounter()+item.getQuantity());
             goodsRepository.updateGoods(goodsEntity);
+            goodsService.createUpdateMessage(goodsEntity);
         }
 
     }

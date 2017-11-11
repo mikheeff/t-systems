@@ -241,7 +241,98 @@
     </section>
     <section class="main-content">
         <div class="row">
-            <%--<spring:form action="/catalog/goods/cart/order" method="post" commandName="cartItem" class="form-inline">--%>
+            <c:if test="${client.role.name=='ROLE_CLIENT'}">
+                <div class="span9">
+                    <h4 class="title"><span class="text"><strong>Order</strong> Details</span></h4>
+                    <table class="table table-striped" >
+                        <thead>
+                        <tr>
+                            <th><big><big>Order ID: ${order.id}</big></big></th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <%--<th>&nbsp;</th>--%>
+                        </tr>
+                        </thead>
+
+                    </table>
+                    <table class="table table-striped" border="2">
+                        <thead>
+                        <tr>
+                            <th><big>&#8470;</big></th>
+                            <th><big>Product Name</big></th>
+                            <th><big>Quantity</big></th>
+                            <th><big>Unit Price</big></th>
+                            <th><big>Unit Total</big></th>
+                            <%--<th>&nbsp;</th>--%>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="cartItem"  items="${orderItemsList}" varStatus="count">
+                            <tr>
+                                <th>${count.count}</th>
+                                <td><big>${cartItem.goods.name}</big></td>
+                                <td><big>${cartItem.quantity}</big></td>
+                                <td><big>${cartItem.goods.price} &#8381;</big></td>
+                                <td><big>${cartItem.goods.price*cartItem.quantity} &#8381;</big></td>
+                                <%--<th>&nbsp;</th>--%>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped" border="2">
+                        <thead>
+                        <tr>
+                            <th><big>Delivery method</big></th>
+                            <th><big>Payment type</big></th>
+                            <th><big>Order status</big></th>
+                            <th><big>Pay status</big></th>
+                            <th><big>Additional information</big></th>
+                            <%--<th>&nbsp;</th>--%>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td><big>${order.deliveryMethod.name}</big></td>
+                            <td><big>${order.paymentType.name}</big</td>
+                            <td><big>${order.status.name}</big</td>
+                            <td>
+
+                                <c:if test="${order.payStatus == 0}">
+                                    <big>Unpaid</big>
+                                </c:if>
+                                <c:if test="${order.payStatus == 1}">
+                                    <big>Paid</big>
+                                </c:if>
+                            </td>
+                            <td><textarea cols="20" rows="3" readonly="true">${order.comment}</textarea></td>
+                            <%--<td>&nbsp;</td>--%>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped" >
+                        <tbody>
+                        <tr>
+                            <td><big>Date: ${order.date}</big></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td><strong><big><big>Total: ${sum} &#8381;</big></big></strong></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                </div>
+            </c:if>
+
+            <c:if test="${client.role.name=='ROLE_EMPLOYEE'}">
+
+
             <div class="span9">
                 <h4 class="title"><span class="text"><strong>Order</strong> Details</span></h4>
 
@@ -249,7 +340,7 @@
                     <thead>
                     <tr>
                         <th>&nbsp;</th>
-                        <th>Client ID:</th>
+                        <th><big>Client ID:</big></th>
                         <th><big>Client Name</big></th>
                         <th><big>Client Surname</big></th>
                         <th><big>Phone:</big></th>
@@ -298,7 +389,7 @@
                         <th><big>Edit the delivery method</big></th>
                         <th><big>Edit the payment type</big></th>
                         <th><big>Edit order status</big></th>
-                        <th>Pay status</th>
+                        <th><big>Pay status</big></th>
                         <th><big>Additional information</big></th>
                         <th>&nbsp;</th>
                     </tr>
@@ -327,12 +418,15 @@
                             </spring:select>
                         </td>
                         <td>
-                            <spring:select path="PayStatus" class="input-xlarge" id ="orderInput">
-                                <spring:option value="0">Unpaid</spring:option>
-                                <spring:option value="1">Paid</spring:option>
-                            </spring:select>
+                            <c:if test="${order.payStatus == 0}">
+                                <big>Unpaid</big>
+                            </c:if>
+                            <c:if test="${order.payStatus == 1}">
+                                <big>Paid</big>
+                            </c:if>
+
                         </td>
-                        <td><spring:textarea path="comment" cols="30" rows="3" readonly="true"/></td>
+                        <td><spring:textarea path="comment" cols="25" rows="3" readonly="true"/></td>
                         <td>&nbsp;</td>
                     </tr>
                     <tr>
@@ -351,6 +445,7 @@
                     </span>
                 </spring:form>
             </div>
+            </c:if>
             <div class="span3 col">
                 <div class="block">
                     <ul class="nav nav-list">
@@ -358,20 +453,8 @@
                         <li><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
                         <c:forEach var="categoryVar"  items="${listCategory}">
 
-                            <%--<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >--%>
-                                <%--<div class="buttonHolder">--%>
-                                    <%--<a href="/catalog/employee/edit/category/${categoryVar.id}" class="button flower"></a>--%>
-                                <%--</div>--%>
-                                <%--<div class="buttonHolder">--%>
-                                    <%--<a href="/catalog/employee/delete/category/${categoryVar.id}" class="button cross" onclick="return confirm('Are you sure?')"></a>--%>
-                                <%--</div>--%>
-                            <%--</c:if>--%>
 
-                            <li
-                                    <%--<c:if test="${categoryVar.name == categoryName}" >--%>
-                                        <%--class="active"--%>
-                                    <%--</c:if>--%>
-                            ><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
+                            <li><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
                             </li>
 
                         </c:forEach>

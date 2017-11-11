@@ -1,7 +1,5 @@
 package com.internetshop.controller;
 
-import com.internetshop.config.AppConfig;
-import com.internetshop.jms.JmsProducer;
 import com.internetshop.model.*;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
@@ -436,6 +434,21 @@ public class GoodsController {
         if (msg != null) {
             modelMap.put("msg", "Order has been successfully edited");
         }
+        return "order_details";
+    }
+
+    @RequestMapping(value = "/profile/details/order/{id}", method = RequestMethod.GET)
+    public String getOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap){
+        modelMap.put("randomGoods", getRandomGoods(amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList", getBestSellers(amountOfBestSellers));
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("orderItemsList", orderService.getAllCartItemsFromOrderByOrderId(id));
+        modelMap.put("sum", getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
+        modelMap.put("order", orderService.getOrderById(id));
+        String searchStr = "";
+        modelMap.put("search", searchStr);
+        modelMap.put("client", session.getAttribute("client"));
+
         return "order_details";
     }
 
