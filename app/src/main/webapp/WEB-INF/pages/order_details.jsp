@@ -244,6 +244,9 @@
             <c:if test="${client.role.name=='ROLE_CLIENT'}">
                 <div class="span9">
                     <h4 class="title"><span class="text"><strong>Order</strong> Details</span></h4>
+                    <c:if test="${not empty msg}">
+                        <div class="msg">${msg}</div>
+                    </c:if>
                     <table class="table table-striped" >
                         <thead>
                         <tr>
@@ -271,7 +274,7 @@
                         <tbody>
                         <c:forEach var="cartItem"  items="${orderItemsList}" varStatus="count">
                             <tr>
-                                <th>${count.count}</th>
+                                <th><big>${count.count}</big></th>
                                 <td><big>${cartItem.goods.name}</big></td>
                                 <td><big>${cartItem.quantity}</big></td>
                                 <td><big>${cartItem.goods.price} &#8381;</big></td>
@@ -327,6 +330,16 @@
                         </tbody>
                     </table>
                     <hr>
+                    <c:if test="${order.paymentType.name=='card' and order.payStatus == 0}">
+
+                    <form action="/order/pay/${order.id}" method="get">
+                    <form action="/order/pay/${order.id}" method="get">
+                        <span class="pull-right">
+                            <button type="submit" class="btn btn-inverse">Pay an order</button>
+                        </span>
+                    </form>
+
+                    </c:if>
                 </div>
             </c:if>
 
@@ -380,7 +393,7 @@
                             <th>&nbsp;</th>
                         </tr>
                     </c:forEach>
-                    <spring:form action="/catalog/profile/employee/details/order/edit/${order.id}" method="post" commandName="order" class="form-inline">
+                    <spring:form action="/order/employee/edit/${order.id}" method="post" commandName="order" class="form-inline">
                     </tbody>
                 </table>
                 <table class="table table-striped">

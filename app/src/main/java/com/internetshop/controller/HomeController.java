@@ -15,8 +15,6 @@ public class HomeController {
 
     @Autowired
     private GoodsService goodsService;
-    @Autowired
-    private GoodsController goodsController;
 
     private static Logger logger = LoggerFactory.getLogger(HomeController.class.getName());
 
@@ -28,11 +26,11 @@ public class HomeController {
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
     public String main(ModelMap modelMap) {
         logger.info("main");
-        modelMap.put("randomGoods",goodsController.getRandomGoods(6));
+        modelMap.put("randomGoods",goodsService.getRandomGoods(6));
         modelMap.put("listCategory",goodsService.getAllCategories());
         String searchStr = "";
         modelMap.put("search",searchStr);
-        modelMap.put("bestSellersList",goodsController.getBestSellers(8));
+        modelMap.put("bestSellersList",goodsService.getBestSellers(8));
         return "index";
     }
 

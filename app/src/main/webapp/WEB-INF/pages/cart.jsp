@@ -237,11 +237,7 @@
 			</section>
 			<section class="main-content">				
 				<div class="row">
-					<%--<spring:form action="/catalog/goods/cart/order" method="post" commandName="cartItem" class="form-inline">--%>
 					<div class="span9">
-						<%--<c:if test="${not empty error}">--%>
-							<%--<div class="msg">To place an order please log in</div>--%>
-						<%--</c:if>--%>
 
 						<h4 class="title"><span class="text"><strong>Your</strong> Cart</span></h4>
 						<table class="table table-striped">
@@ -301,7 +297,7 @@
 						<%--</p>--%>
 						<hr/>
 						<c:if test="${client!=null and cartList!=null and cartList.size()!=0}">
-							<spring:form action="/catalog/profile/goods/cart/continue" method="get">
+							<spring:form action="/order/continue" method="get">
 									<span class="pull-right">
 										<button type="submit" class="btn btn-inverse">Continue</button>
 									</span>

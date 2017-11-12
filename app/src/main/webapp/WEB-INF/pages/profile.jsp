@@ -354,7 +354,7 @@
 														<td><big>pending payment</big></td>
 														</c:if>
 														<td><big>${clientOrder.status.name}</big></td>
-														<td><a href="/catalog/profile/details/order/${clientOrder.id}"><big>Details</big></a></td>
+														<td><a href="/order/details/${clientOrder.id}"><big>Details</big></a></td>
 													</tr>
 													</tbody>
 														<%--<hr>--%>
@@ -404,7 +404,7 @@
 															</c:if>
 															<td><big>${clientOrder.status.name}</big></td>
 															<td><big>${clientOrder.date}</big></td>
-															<td><a href="/catalog/profile/employee/details/order/${clientOrder.id}"><big>Details</big></a></td>
+															<td><a href="/order/employee/details/${clientOrder.id}"><big>Details</big></a></td>
 														</tr>
 														<%--<hr>--%>
 														<%--<br>--%>

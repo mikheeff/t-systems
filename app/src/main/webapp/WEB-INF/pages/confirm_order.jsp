@@ -237,7 +237,6 @@
     </section>
     <section class="main-content">
         <div class="row">
-            <%--<spring:form action="/catalog/goods/cart/order" method="post" commandName="cartItem" class="form-inline">--%>
             <div class="span9">
                 <h4 class="title"><span class="text"><strong>Confirm</strong> Order</span></h4>
                 <c:if test="${not empty msg}">
@@ -287,7 +286,7 @@
                             <th>&nbsp;</th>
                         </tr>
                     </c:forEach>
-                    <spring:form action="/catalog/profile/goods/order/confirm" method="post" commandName="order" class="form-inline">
+                    <spring:form action="/order/confirm" method="post" commandName="order" class="form-inline">
                     </tbody>
                 </table>
                     <table class="table table-striped">

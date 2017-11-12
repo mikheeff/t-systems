@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -352,13 +354,30 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
+     * Gets selected amount of different random goods
+     *
+     * @return goods list
+     */
+
+    public List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage) {
+        Set<Integer> randomGoodsIdSet = new HashSet<>();
+        while (randomGoodsIdSet.size() < amountOfRandomGoodsOnPage) {
+            randomGoodsIdSet.add(getRandomGoodsId());
+        }
+        List<Goods> goodsList = new ArrayList<>();
+        for (int id : randomGoodsIdSet) {
+            goodsList.add(getGoodsById(id));
+        }
+        return goodsList;
+    }
+
+    /**
      * converts goods to data access object
      *
      * @return Goods Entity
      */
     @Override
     public GoodsEntity convertGoodsToDAO(Goods goods) {
-        logger.info("convertGoodsToDAO");
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setId(goodsRepository.getIdCategoryByName(goods.getCategory().getName()));
         categoryEntity.setName(goods.getName());
@@ -388,7 +407,6 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public Goods convertGoodsToDTO(GoodsEntity goodsEntity) {
-        logger.info("convertGoodsToDTO");
         Category category = new Category(goodsEntity.getCategory().getId(), goodsEntity.getCategory().getName());
         Rule rule = new Rule(goodsEntity.getRule().getId(), goodsEntity.getRule().getName());
         Goods goods = new Goods(

@@ -15,6 +15,7 @@ public interface OrderService {
     List<CartItem> getAllCartItemsFromOrderByOrderId(int id);
     Order getOrderById(int id);
     void updateOrderStatus(Order order);
+    void setPayStatus(int id);
 
 
 }

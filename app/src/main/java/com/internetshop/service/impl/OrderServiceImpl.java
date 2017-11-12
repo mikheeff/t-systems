@@ -178,14 +178,21 @@ public class OrderServiceImpl implements OrderService {
         StatusEntity statusEntity = orderRepository.getStatusByName(order.getStatus().getName());
         orderEntity.setStatus(statusEntity);
 
-        orderEntity.setPayStatus(order.getPayStatus());
+//        orderEntity.setPayStatus(order.getPayStatus());
 
         orderRepository.updateOrder(orderEntity);
 
-        if (order.getPayStatus()==1){
-            increaseSalesCounter(orderEntity);
-        }
+//        if (order.getPayStatus()==1){
+//            increaseSalesCounter(orderEntity);
+//        }
 
+    }
+
+    public void setPayStatus(int id){
+        OrderEntity orderEntity = orderRepository.getOrderById(id);
+        orderEntity.setPayStatus(1);
+        orderRepository.updateOrder(orderEntity);
+        increaseSalesCounter(orderEntity);
     }
 
     public void increaseSalesCounter(OrderEntity orderEntity){

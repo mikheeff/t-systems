@@ -24,16 +24,20 @@ import java.util.Map;
 @RequestMapping("")
 public class EmailController {
 
-    @Autowired
-    MailService mailService;
-    @Autowired
-    ClientService clientService;
-    @Autowired
-    private HttpSession session;
-    @Autowired
-    GoodsController goodsController;
-    @Autowired
+    private final MailService mailService;
+    private final ClientService clientService;
+    public final HttpSession session;
+    private final GoodsController goodsController;
     GoodsService goodsService;
+
+    @Autowired
+    public EmailController(MailService mailService, ClientService clientService, HttpSession session, GoodsController goodsController, GoodsService goodsService) {
+        this.mailService = mailService;
+        this.clientService = clientService;
+        this.session = session;
+        this.goodsController = goodsController;
+        this.goodsService = goodsService;
+    }
 
     @RequestMapping(value = "/email/send", method = RequestMethod.GET)
     public String sendEmail(ModelMap modelMap){

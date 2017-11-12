@@ -37,6 +37,7 @@ public interface GoodsService {
     List<Goods> getBestSellers(int amountOfBestSellers);
     List<Goods> getRelatedGoods(int amount,Goods goods);
     void createUpdateMessage(GoodsEntity goodsEntity);
+    List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage);
 
 
 }

@@ -118,20 +118,7 @@
                         <li><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
                         <c:forEach var="categoryVar"  items="${listCategory}">
 
-                            <c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
-                                <div class="buttonHolder">
-                                    <a href="/catalog/employee/edit/category/${categoryVar.id}" class="button flower"></a>
-                                </div>
-                                <div class="buttonHolder">
-                                    <a href="/catalog/employee/delete/category/${categoryVar.id}" class="button cross" onclick="return confirm('Are you sure?')"></a>
-                                </div>
-                            </c:if>
-
-                            <li
-                                    <c:if test="${categoryVar.name == categoryName}" >
-                                        class="active"
-                                    </c:if>
-                            ><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
+                            <li><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
                             </li>
 
                         </c:forEach>
