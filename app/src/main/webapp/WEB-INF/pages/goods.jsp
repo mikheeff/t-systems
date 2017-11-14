@@ -334,7 +334,7 @@
 					<div class="span3 col">
 						<div class="block">
 							<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
-								<form action="/catalog/employee/add">
+								<form action="/employee/administration">
 									<button type="submit" class="btn btn-inverse">Add new Goods or Category</button>
 									<hr>
 								</form>

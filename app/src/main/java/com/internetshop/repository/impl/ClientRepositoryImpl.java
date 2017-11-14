@@ -2,6 +2,7 @@ package com.internetshop.repository.impl;
 
 import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
+import com.internetshop.entities.GoodsEntity;
 import com.internetshop.entities.RoleEntity;
 import com.internetshop.model.Client;
 import com.internetshop.repository.api.ClientRepository;
@@ -20,6 +21,11 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     public List<ClientEntity> getAll() {
         return em.createQuery("select c from ClientEntity c ", ClientEntity.class).getResultList();
+    }
+
+    @Override
+    public List<ClientEntity> getBestClientsList(int amountOfBestClients) {
+        return em.createQuery("select client from ClientEntity client order by client.orderCounter desc",ClientEntity.class).setMaxResults(amountOfBestClients).getResultList();
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ClientEntity {
     @Column (name = "phone")
     private String phone;
     @Column (name = "order_counter")
-    private int orderCounter;
+    private float orderCounter;
     @Column (name = "is_confirm")
     private int isConfirm;
     @Column (name = "confirmation_id")
@@ -45,7 +45,7 @@ public class ClientEntity {
     public ClientEntity() {
     }
 
-    public ClientEntity(String name, String surname, String birthdate, String email, String password, String phone, int orderCounter, Set<OrderEntity> orderEntities, ClientAddressEntity clientAddressEntity, RoleEntity roleEntity) {
+    public ClientEntity(String name, String surname, String birthdate, String email, String password, String phone, float orderCounter, Set<OrderEntity> orderEntities, ClientAddressEntity clientAddressEntity, RoleEntity roleEntity) {
         this.name = name;
         this.surname = surname;
         this.birthdate = birthdate;
@@ -114,11 +114,11 @@ public class ClientEntity {
         this.phone = phone;
     }
 
-    public int getOrderCounter() {
+    public float getOrderCounter() {
         return orderCounter;
     }
 
-    public void setOrderCounter(int orderCounter) {
+    public void setOrderCounter(float orderCounter) {
         this.orderCounter = orderCounter;
     }
 

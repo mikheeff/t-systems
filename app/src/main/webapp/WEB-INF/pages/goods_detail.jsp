@@ -343,52 +343,34 @@
 										</table>
 									</div>
 								</div>							
-							</div>						
-							<div class="span9">	
-								<br>
-								<h4 class="title">
-									<span class="pull-left"><span class="text"><strong>Related</strong> Products</span></span>
-									<%--<span class="pull-right">--%>
-										<%--<a class="left button" href="#myCarousel-1" data-slide="prev"></a><a class="right button" href="#myCarousel-1" data-slide="next"></a>--%>
-									<%--</span>--%>
-								</h4>
-								<div id="myCarousel-1" class="carousel slide">
-									<div class="carousel-inner">
-										<div class="active item">
-											<ul class="thumbnails listing-products">
-												<c:forEach var="goodsVar" begin="0" end="2" items="${relatedGoodsList}">
-												<li class="span3">
-													<div class="product-box">
-														<span class="sale_tag"></span>
-														<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
-														<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
-														<a href="#" class="category">${goodsVar.category.name}</a>
-														<p class="price">${goodsVar.price} &#8381;</p>
-													</div>
-												</li>
-												</c:forEach>
-
-											</ul>
+							</div>
+							<c:if test="${client.role.name!='ROLE_EMPLOYEE'}">
+								<div class="span9">
+									<br>
+									<h4 class="title">
+										<span class="pull-left"><span class="text"><strong>Related</strong> Products</span></span>
+									</h4>
+									<div id="myCarousel-1" class="carousel slide">
+										<div class="carousel-inner">
+											<div class="active item">
+												<ul class="thumbnails listing-products">
+													<c:forEach var="goodsVar" begin="0" end="2" items="${relatedGoodsList}">
+													<li class="span3">
+														<div class="product-box">
+															<span class="sale_tag"></span>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
+															<a href="#" class="category">${goodsVar.category.name}</a>
+															<p class="price">${goodsVar.price} &#8381;</p>
+														</div>
+													</li>
+													</c:forEach>
+												</ul>
+											</div>
 										</div>
-										<%--<div class="item">--%>
-											<%--<ul class="thumbnails listing-products">--%>
-												<%--<c:forEach var="goodsVar"  begin = "3" end = "5" items="${randomGoods}">--%>
-													<%--<li class="span3">--%>
-														<%--<div class="product-box">--%>
-															<%--<span class="sale_tag"></span>--%>
-															<%--<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>--%>
-															<%--<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>--%>
-															<%--<a href="#" class="category">${goodsVar.category.name}</a>--%>
-															<%--<p class="price">${goodsVar.price} &#8381;</p>--%>
-														<%--</div>--%>
-													<%--</li>--%>
-												<%--</c:forEach>--%>
-<%----%>
-											<%--</ul>--%>
-										<%--</div>--%>
 									</div>
 								</div>
-							</div>
+							</c:if>
 						</div>
 					</div>
 					<div class="span3 col">

@@ -21,10 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -42,6 +39,15 @@ public class ClientServiceImpl implements ClientService {
 
     public List<ClientEntity> getAllClients(){ return clientRepository.getAll(); }
 
+    @Override
+    public List<Client> getBestClientsList(int amountOfBestClients) {
+        List<Client> clientList = new ArrayList<>();
+        for(ClientEntity clientEntity : clientRepository.getBestClientsList(amountOfBestClients)){
+            clientList.add(convertClientToDTO(clientEntity));
+        }
+        return clientList;
+    }
+
     /**
      * Adds new client
      * @param client new client model
@@ -54,7 +60,10 @@ public class ClientServiceImpl implements ClientService {
         if (clientRepository.isEmailExist(client.getEmail())){
             throw new EmailExistException(client.getEmail());
         }
-
+        Role role = new Role();
+        role.setId(3);
+        role.setName(clientRepository.getRoleById(role.getId()).getName());
+        client.setRole(role);
 
         client.setPassword(passwordEncoder.encode(client.getPassword()));
 
@@ -223,10 +232,9 @@ public class ClientServiceImpl implements ClientService {
      */
 
     public ClientEntity convertClientToDAO(Client client) {
-        logger.info("convertClientToDAO");
         RoleEntity role = new RoleEntity();
-        role.setId(3);                                  // default role:ROLE_CLIENT - 3(client)
-        role.setName(clientRepository.getRoleById(3).getName());
+        role.setId(client.getRole().getId());
+        role.setName(client.getRole().getName());
         ClientEntity clientEntity = new ClientEntity();
         clientEntity.setName(client.getName());
         clientEntity.setEmail(client.getEmail());
@@ -234,6 +242,20 @@ public class ClientServiceImpl implements ClientService {
         clientEntity.setPhone(client.getPhone());
         clientEntity.setRoleEntity(role);
         return clientEntity;
+    }
+
+    public Client convertClientToDTO(ClientEntity clientEntity){
+        Role role = new Role(clientEntity.getId(),clientEntity.getName());
+        Client client = new Client();
+        client.setId(clientEntity.getId());
+        client.setName(clientEntity.getName());
+        client.setBirthdate(clientEntity.getBirthdate());
+        client.setEmail(clientEntity.getEmail());
+        client.setPhone(clientEntity.getPhone());
+        client.setOrderCounter(clientEntity.getOrderCounter());
+        client.setIsConfirm(clientEntity.getIsConfirm());
+        client.setRole(role);
+        return client;
     }
 
 

@@ -35,7 +35,7 @@ public class Client {
     @Pattern(regexp="^\\+[1-9][0-9]?[\\s]*\\(?" +
             "\\d{3}\\)?[-\\s]?\\d{3}[-\\s]?\\d{2}[-\\s]?\\d{2}$")
     private String phone;
-    private int orderCounter;
+    private float orderCounter;
     private int isConfirm;
     private String confirmationId;
     private Role role;
@@ -47,7 +47,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(int id, String name, String surname, String birthdate, String email, String password, String phone, int orderCounter, Role role, ClientAddress clientAddress) {
+    public Client(int id, String name, String surname, String birthdate, String email, String password, String phone, float orderCounter, Role role, ClientAddress clientAddress) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -116,11 +116,11 @@ public class Client {
         this.phone = phone;
     }
 
-    public int getOrderCounter() {
+    public float getOrderCounter() {
         return orderCounter;
     }
 
-    public void setOrderCounter(int orderCounter) {
+    public void setOrderCounter(float orderCounter) {
         this.orderCounter = orderCounter;
     }
 

@@ -105,12 +105,7 @@ public class ClientController {
         }
         modelMap.put("listCategory",goodsService.getAllCategories());
         Client client = (Client)session.getAttribute("client");
-        if(client.getRole().getName().equals("ROLE_CLIENT")) {
-            modelMap.put("clientOrdersList", orderService.getAllOrdersByClientId(client.getId()));
-        } else {
-            modelMap.put("clientOrdersList", orderService.getAllOrders());
-        }
-
+        modelMap.put("clientOrdersList", orderService.getAllOrdersByClientId(client.getId()));
         if (errorMatch != null) {
             modelMap.put("errorMatch", "Entered New passwords doesn't match!");
         }
@@ -130,7 +125,7 @@ public class ClientController {
             modelMap.put("msgClient", "Information has been changed successfully!");
         }
         modelMap.put("passwordField", new PasswordField());
-        modelMap.put("flag",false);
+        modelMap.put("hide",false);
         return "profile";
     }
 

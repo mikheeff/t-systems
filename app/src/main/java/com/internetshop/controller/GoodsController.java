@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -136,22 +135,7 @@ public class GoodsController {
         return "goods";
     }
 
-    /**
-     * Puts empty objects of goods and category model
-     * to form for entering information
-     *
-     * @return page for adding
-     */
-    @RequestMapping(value = "/employee/add", method = RequestMethod.GET)
-    public String addGoods(ModelMap modelMap) {
-        logger.info("addGoods");
-        modelMap.put("goods", new Goods());
-        modelMap.put("category", new Category());
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        String searchStr = "";
-        modelMap.put("search", searchStr);
-        return "add_page";
-    }
+
 
     /**
      * Sends goods model to service for adding
@@ -172,7 +156,7 @@ public class GoodsController {
             modelMap.put("listCategory", goodsService.getAllCategories());
             String searchStr = "";
             modelMap.put("search", searchStr);
-            return "add_page";
+            return "employee_admin";
         }
 
         this.goodsService.addGoods(goods);
@@ -183,7 +167,7 @@ public class GoodsController {
         modelMap.put("category", new Category());
         String searchStr = "";
         modelMap.put("search", searchStr);
-        return "add_page";
+        return "employee_admin";
     }
 
     /**
@@ -204,7 +188,7 @@ public class GoodsController {
             modelMap.put("listCategory", goodsService.getAllCategories());
             String searchStr = "";
             modelMap.put("search", searchStr);
-            return "add_page";
+            return "employee_admin";
         }
 
         this.goodsService.addCategory(category);
@@ -215,7 +199,7 @@ public class GoodsController {
         modelMap.put("category", new Category());
         String searchStr = "";
         modelMap.put("search", searchStr);
-        return "add_page";
+        return "employee_admin";
     }
 
     /**

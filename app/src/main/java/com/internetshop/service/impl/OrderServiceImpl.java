@@ -1,5 +1,7 @@
 package com.internetshop.service.impl;
 
+import com.internetshop.controller.GoodsController;
+import com.internetshop.controller.OrderController;
 import com.internetshop.entities.*;
 import com.internetshop.model.*;
 import com.internetshop.repository.api.ClientRepository;
@@ -179,9 +181,21 @@ public class OrderServiceImpl implements OrderService {
         DeliveryMethodEntity deliveryMethodEntity = orderRepository.getDeliveryMethodByName(order.getDeliveryMethod().getName());
         orderEntity.setDeliveryMethod(deliveryMethodEntity);
 
-        StatusEntity statusEntity = orderRepository.getStatusByName(order.getStatus().getName());
-        orderEntity.setStatus(statusEntity);
-
+        if(!orderEntity.getStatus().getName().equals(order.getStatus().getName())){
+            if (orderEntity.getStatus().getName().equals("closed")){
+                decreaseSalesCounter(orderEntity);
+                ClientEntity clientEntity = orderEntity.getClientEntity();
+                clientEntity.setOrderCounter(clientEntity.getOrderCounter()-OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
+            }
+            StatusEntity statusEntity = orderRepository.getStatusByName(order.getStatus().getName());
+            orderEntity.setStatus(statusEntity);
+            if (order.getStatus().getName().equals("closed")){
+                setPayStatus(order.getId());
+                increaseSalesCounter(orderEntity);
+                ClientEntity clientEntity = orderEntity.getClientEntity();
+                clientEntity.setOrderCounter(clientEntity.getOrderCounter()+ OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
+            }
+        }
 
         orderRepository.updateOrder(orderEntity);
 
@@ -192,7 +206,6 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         orderEntity.setPayStatus(1);
         orderRepository.updateOrder(orderEntity);
-        increaseSalesCounter(orderEntity);
     }
 
     public void increaseSalesCounter(OrderEntity orderEntity){
@@ -203,6 +216,14 @@ public class OrderServiceImpl implements OrderService {
             goodsService.createUpdateMessage(goodsEntity);
         }
 
+    }
+    public void decreaseSalesCounter(OrderEntity orderEntity){
+        for (CartItemEntity item : orderEntity.getCartItemEntities()) {
+            GoodsEntity goodsEntity = goodsRepository.getGoodsById(item.getGoodsEntity().getId());
+            goodsEntity.setSalesCounter(goodsEntity.getSalesCounter()-item.getQuantity());
+            goodsRepository.updateGoods(goodsEntity);
+            goodsService.createUpdateMessage(goodsEntity);
+        }
     }
     /**
      * Gets all cart items from order by order id

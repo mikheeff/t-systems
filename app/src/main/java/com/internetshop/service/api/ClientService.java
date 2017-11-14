@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface ClientService {
     List<ClientEntity> getAllClients();
+    List<Client> getBestClientsList(int amountOfBestClients);
     void addClient(Client client) throws EmailExistException;
     Client getUserByEmail(String email);
     void updateUser(Client client);

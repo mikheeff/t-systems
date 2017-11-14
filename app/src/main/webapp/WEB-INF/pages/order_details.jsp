@@ -350,6 +350,7 @@
                 <c:if test="${not empty msg}">
                     <div class="msg">${msg}</div>
                 </c:if>
+                    <div id="not-closed" class="error" style="display: none">Order cannot be closed before being paid</div>
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -375,7 +376,7 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>&nbsp;</th>
+                        <th><big>&#8470;</big></th>
                         <th><big>Product Name</big></th>
                         <th><big>Quantity</big></th>
                         <th><big>Unit Price</big></th>
@@ -425,11 +426,16 @@
                             </spring:select>
                         </td>
                         <td>
+                            <%--<c:if test="${order.status.name=='closed'}">--%>
+                                <%--<span class="label label-success">Closed</span>--%>
+                            <%--</c:if>--%>
+                            <%--<c:if test="${order.status.name!='closed'}">--%>
                             <spring:select path="status.name" class="input-xlarge" id ="orderInput">
                                 <c:forEach var="statusVar"  items="${listStatus}">
                                     <spring:option value="${statusVar.name}">${statusVar.name}</spring:option>
                                 </c:forEach>
                             </spring:select>
+                            <%--</c:if>--%>
                         </td>
                         <td>
                             <c:if test="${order.payStatus == 0}">
@@ -454,9 +460,10 @@
                     </tbody>
                 </table>
                 <hr>
-                <span class="pull-right">
-                        <button type="submit" class="btn btn-inverse">Edit Order</button>
-                    </span>
+                         <span class="pull-right">
+                            <button type="submit" class="btn btn-inverse">Edit Order</button>
+                         </span>
+
                 </spring:form>
             </div>
             </c:if>
@@ -564,12 +571,19 @@
     </section>
 </div>
 <script src="/resources/themes/js/common.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
 <script>
     $(document).ready(function() {
         $('#checkout').click(function (e) {
-            document.location.href = "checkout.jsp";
+            document.location.href = "register.jsp";
         })
     });
 </script>
+<script type="text/javascript" >
+    function showStuff(id) {
+            document.getElementById(id).style.display = 'block';
+    }
+</script>
+
 </body>
 </html>
