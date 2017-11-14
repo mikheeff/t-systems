@@ -86,12 +86,12 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public List<OrderEntity> getAllOrdersByClientId(int id) {
-        return em.createQuery("select orderEntity from OrderEntity orderEntity where clientEntity.id = :id", OrderEntity.class).setParameter("id",id).getResultList();
+        return em.createQuery("select orderEntity from OrderEntity orderEntity where clientEntity.id = :id order by date desc ", OrderEntity.class).setParameter("id",id).getResultList();
     }
 
     @Override
     public List<OrderEntity> getAllOrders() {
-        return em.createQuery("select orderEntity from OrderEntity orderEntity", OrderEntity.class).getResultList();
+        return em.createQuery("select orderEntity from OrderEntity orderEntity order by date DESC ", OrderEntity.class).getResultList();
     }
 
     @Override

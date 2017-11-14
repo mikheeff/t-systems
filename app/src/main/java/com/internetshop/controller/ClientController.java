@@ -130,6 +130,7 @@ public class ClientController {
             modelMap.put("msgClient", "Information has been changed successfully!");
         }
         modelMap.put("passwordField", new PasswordField());
+        modelMap.put("flag",false);
         return "profile";
     }
 

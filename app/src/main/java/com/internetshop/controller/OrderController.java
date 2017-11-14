@@ -148,7 +148,7 @@ public class OrderController {
         logger.info("updateOrderStatus");
         order.setId(id);
         orderService.updateOrderStatus(order);
-        return "redirect:/employee/details/" + order.getId() + "?msg";
+        return "redirect:/order/employee/details/" + order.getId() + "?msg";
     }
     @RequestMapping(value = "/pay/{id}", method = RequestMethod.GET)
     public String payOrder(@PathVariable(value = "id") int orderId, ModelMap modelMap){

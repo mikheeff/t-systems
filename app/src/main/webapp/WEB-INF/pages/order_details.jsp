@@ -345,10 +345,11 @@
 
             <c:if test="${client.role.name=='ROLE_EMPLOYEE'}">
 
-
             <div class="span9">
                 <h4 class="title"><span class="text"><strong>Order</strong> Details</span></h4>
-
+                <c:if test="${not empty msg}">
+                    <div class="msg">${msg}</div>
+                </c:if>
                 <table class="table table-striped">
                     <thead>
                     <tr>

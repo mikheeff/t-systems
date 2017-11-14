@@ -9,7 +9,7 @@
 	<meta name="description" content="">
 	<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
 	<!-- bootstrap -->
-	<link href="${pageContext.request.contextPath}/resources/themes/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/resources/themes/bootstrap/css/bootstrap.css" rel="stylesheet">
 	<link href="${pageContext.request.contextPath}/resources/themes/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 
 	<link href="${pageContext.request.contextPath}/resources/themes/css/bootstrappage.css" rel="stylesheet"/>
@@ -26,6 +26,7 @@
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<script src="/resources/themes/js/respond.min.js"></script>
+
 	<![endif]-->
 	<style>
 		.error {
@@ -58,6 +59,7 @@
 			border: 1px solid #000;
 		}
 	</style>
+
 </head>
 <body>
 <div id="top-bar" class="container">
@@ -338,6 +340,7 @@
 														<th><big>Payment Type</big></th>
 														<th><big>Pay Status</big></th>
 														<th><big>Order Status:</big></th>
+														<th><big>Date:</big></th>
 														<th><big>Order Details</big></th>
 													</tr>
 													</thead>
@@ -348,12 +351,27 @@
 														<td><big>${clientOrder.deliveryMethod.name}</big></td>
 														<td><big>${clientOrder.paymentType.name}</big></td>
 														<c:if test="${clientOrder.payStatus==1}">
-														<td><big>paid</big></td>
+														<td><big>Paid</big></td>
 														</c:if>
 														<c:if test="${clientOrder.payStatus==0}">
-														<td><big>pending payment</big></td>
+														<td><big>Pending payment</big></td>
 														</c:if>
-														<td><big>${clientOrder.status.name}</big></td>
+														<td>
+															<c:if test="${clientOrder.status.name=='canceled'}">
+																<span class="label label-danger">Canceled</span>
+															</c:if>
+															<c:if test="${clientOrder.status.name=='awaiting shipment'}">
+																<span class="label label-default">Awaiting Shipment</span>
+															</c:if>
+															<c:if test="${clientOrder.status.name=='shipped'}">
+																<span class="label label-info">Shipped</span>
+															</c:if>
+															<c:if test="${clientOrder.status.name=='closed'}">
+																<span class="label label-success">Closed</span>
+															</c:if>
+															<%--<big>${clientOrder.status.name}</big>--%>
+														</td>
+														<td><big>${clientOrder.date}</big></td>
 														<td><a href="/order/details/${clientOrder.id}"><big>Details</big></a></td>
 													</tr>
 													</tbody>
@@ -376,7 +394,14 @@
 										<div class="accordion-inner">
 
 											<h4>All Orders</h4>
+											<%--<label class="checkbox">--%>
+												<%--<input type="checkbox" id="hide"> Hide closed orders--%>
+											<%--</label>--%>
+											<input type="submit" id="hide">
+											<div id="msg"></div>
+											<%--<form id="all-orders" action="" method="GET"></form>--%>
 											<c:if test="${clientOrdersList.size()!=0}">
+
 												<table class="table table-striped">
 													<thead>
 													<tr>
@@ -397,12 +422,28 @@
 															<td><big>${clientOrder.client.id}</big></td>
 															<td><big>${clientOrder.client.phone}</big></td>
 															<c:if test="${clientOrder.payStatus==1}">
-																<td><big>paid</big></td>
+																<td><big>Paid</big></td>
 															</c:if>
 															<c:if test="${clientOrder.payStatus==0}">
-																<td><big>pending payment</big></td>
+																<td><big>Pending payment</big></td>
 															</c:if>
-															<td><big>${clientOrder.status.name}</big></td>
+															<td>
+																<c:if test="${clientOrder.status.name=='canceled'}">
+																	<span class="label label-danger">Canceled</span>
+																</c:if>
+																<c:if test="${clientOrder.status.name=='awaiting shipment'}">
+																	<span class="label label-default">Awaiting Shipment</span>
+																</c:if>
+																<c:if test="${clientOrder.status.name=='shipped'}">
+																	<span class="label label-info">Shipped</span>
+																</c:if>
+																<c:if test="${clientOrder.status.name=='closed'}">
+																	<span class="label label-success">Closed</span>
+																</c:if>
+																<%--<c:if test="${clientOrder.status.name=='closed'}">--%>
+																	<%--<big>${clientOrder.status.name}</big>--%>
+																<%--</c:if>--%>
+															</td>
 															<td><big>${clientOrder.date}</big></td>
 															<td><a href="/order/employee/details/${clientOrder.id}"><big>Details</big></a></td>
 														</tr>
@@ -461,5 +502,16 @@
 			</section>
 		</div>
 		<script src="/resources/themes/js/common.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
+		<script type="text/javascript" >
+			$(document).ready(function() {
+				$('#hide').click(function() {
+					$.post("welcome.jsp",function(data) {
+						$("#msg").html(data);
+					});
+				});
+			});
+		</script>
     </body>
 </html>

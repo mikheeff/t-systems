@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -91,8 +92,11 @@ public class OrderServiceImpl implements OrderService {
         logger.info("addOrder");
 
         OrderEntity orderEntity = new OrderEntity();
+
         Date date = new Date();
-        orderEntity.setDate(date.toString());
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.ENGLISH);
+
+        orderEntity.setDate(format.format(date));
         orderEntity.setPayStatus(0);
         orderEntity.setComment(order.getComment());
 
@@ -178,13 +182,9 @@ public class OrderServiceImpl implements OrderService {
         StatusEntity statusEntity = orderRepository.getStatusByName(order.getStatus().getName());
         orderEntity.setStatus(statusEntity);
 
-//        orderEntity.setPayStatus(order.getPayStatus());
 
         orderRepository.updateOrder(orderEntity);
 
-//        if (order.getPayStatus()==1){
-//            increaseSalesCounter(orderEntity);
-//        }
 
     }
 
