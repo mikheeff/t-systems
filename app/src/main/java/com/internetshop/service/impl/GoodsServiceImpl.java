@@ -147,7 +147,7 @@ public class GoodsServiceImpl implements GoodsService {
         sendMessage(event);
     }
 
-    public void sendMessage(Event event) {
+    public void sendMessage(Event event){
         if (!producer.isAlive()) {
             producer.start();
         }

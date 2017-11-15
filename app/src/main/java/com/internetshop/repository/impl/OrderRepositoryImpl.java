@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import java.util.List;
-import java.util.Set;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Repository
 public class OrderRepositoryImpl implements OrderRepository {
@@ -114,6 +115,27 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public long getAmountOfClosedOrdersByClientId(int id) {
-        return em.createQuery("select count(*) from OrderEntity orderM where status.name = :status", Long.class).setParameter("status","closed").getSingleResult();
+        return em.createQuery("select count(*) from OrderEntity orderM where status.name = :status and clientEntity.id = :id", Long.class).setParameter("status","closed").setParameter("id",id).getSingleResult();
+    }
+    public List<Integer> getAllClosedOrdersIdsByDayOfMonth(int day){
+        Calendar calendar = new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        format.setTimeZone(calendar.getTimeZone());
+
+        calendar.roll(Calendar.DAY_OF_MONTH,(-1)*(calendar.get(Calendar.DAY_OF_MONTH)-day));
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+
+        String dateStart = format.format(calendar.getTime());
+
+        calendar.set(Calendar.MILLISECOND, 999);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        String dateEnd = format.format(calendar.getTime());
+
+        return em.createQuery("select orderM.id from OrderEntity orderM where status.name = :status and date between :dateStart and :dateEnd",Integer.class).setParameter("status","closed").setParameter("dateStart",dateStart).setParameter("dateEnd",dateEnd).getResultList();
     }
 }

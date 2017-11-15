@@ -136,7 +136,6 @@ public class GoodsController {
     }
 
 
-
     /**
      * Sends goods model to service for adding
      * handle validation errors
@@ -225,29 +224,29 @@ public class GoodsController {
     public String editGoods(@ModelAttribute(value = "goods") @Valid Goods goods, BindingResult bindingResult,
                             ModelMap modelMap) {
         logger.info("editGoods");
+
+        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        String searchStr = "";
+        modelMap.put("search", searchStr);
+        List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4, goods);  //If needs 3 goods set 4, because one of goods could be current goods
+        modelMap.put("relatedGoodsList", relatedGoodsList);
+
         if (bindingResult.hasErrors()) {
             logger.warn("Goods validation failed");
             modelMap.put("error", "Invalid params!");
-            modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
             modelMap.put("goods", goods);
-            modelMap.put("listCategory", goodsService.getAllCategories());
-            String searchStr = "";
-            modelMap.put("search", searchStr);
-            modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
-            List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4, goods);
-            modelMap.put("relatedGoodsList", relatedGoodsList);
             return "goods_detail";
         }
-        this.goodsService.updateGoods(goods);
+        try {
+            this.goodsService.updateGoods(goods);
+        } catch (IllegalThreadStateException e) {
+            modelMap.put("error", "Lost connection with MQ Server");
+            return "500";
+        }
         modelMap.put("goods", goodsService.getGoodsById(goods.getId()));
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("msg", "You've been edited goods successfully.");
-        String searchStr = "";
-        modelMap.put("search", searchStr);
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
-        List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4, goods);  //If needs 3 goods set 4, because one of goods could be current goods
-        modelMap.put("relatedGoodsList", relatedGoodsList);
         return "goods_detail";
     }
 
@@ -336,8 +335,6 @@ public class GoodsController {
     }
 
 
-
-
     /**
      * Gets selected category for editing form
      *
@@ -371,37 +368,24 @@ public class GoodsController {
     public String editCategory(@ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult,
                                ModelMap modelMap) {
         logger.info("editCategory");
-
+        modelMap.put("currentPage", 1);
+        modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoods()));
+        modelMap.put("categoryFilter", false);
+        modelMap.put("listGoods", goodsService.getAllGoods(0, amountOfGoodsOnPage));
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
+        String searchStr = "";
+        modelMap.put("search", searchStr);
+        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
         if (bindingResult.hasErrors()) {
             boolean editCatFlag = true;
             logger.warn("category validation error");
             modelMap.put("editCatFlag", editCatFlag);
             modelMap.put("category", category);
-            modelMap.put("currentPage", 1);
-            modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoods()));
-            modelMap.put("listGoods", goodsService.getAllGoods(0, amountOfGoodsOnPage));
-            modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-            modelMap.put("listCategory", goodsService.getAllCategories());
-            modelMap.put("categoryFilter", false);
-            String searchStr = "";
-            modelMap.put("search", searchStr);
-            modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
             return "goods";
         }
-
-
         goodsService.updateCategory(category);
-
-        modelMap.put("currentPage", 1);
-        modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoods()));
-        modelMap.put("listGoods", goodsService.getAllGoods(0, amountOfGoodsOnPage));
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("categoryFilter", false);
         modelMap.put("msg", "You've been edited category successfully.");
-        String searchStr = "";
-        modelMap.put("search", searchStr);
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
         return "goods";
     }
 

@@ -119,7 +119,10 @@
     <section class="main-content">
         <div class="row">
             <div class="span9">
-                <div class="error"><span><big>Error 404: Page not found</big></span></div>
+                <c:if test="${not empty error}">
+                    <div class="error">${error}</div>
+                </c:if>
+                <%--<div class="error"><span><big>Error 404: Page not found</big></span></div>--%>
             </div>
             <div class="span3 col">
                 <div class="block">

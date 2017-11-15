@@ -42,6 +42,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Gets all delivery methods from DB
+     *
      * @return List of Delivery methods
      */
     @Override
@@ -86,6 +87,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Converts order to DAO and send to repository
+     *
      * @return id of the added order
      */
     @Transactional
@@ -96,7 +98,7 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntity = new OrderEntity();
 
         Date date = new Date();
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.ENGLISH);
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
         orderEntity.setDate(format.format(date));
         orderEntity.setPayStatus(0);
@@ -129,14 +131,15 @@ public class OrderServiceImpl implements OrderService {
             itemEntity.setOrderEntity(orderEntity);
             cartItemEntitySet.add(itemEntity);
         }
-        orderEntity.setClientEntity(convertClientToDAO(order.getClient(),order.getClient().getRole().getId()));
+        orderEntity.setClientEntity(convertClientToDAO(order.getClient(), order.getClient().getRole().getId()));
 
-        return orderRepository.addOrder(orderEntity,cartItemEntitySet);
+        return orderRepository.addOrder(orderEntity, cartItemEntitySet);
 
     }
 
     /**
      * Gets all orders of selected client
+     *
      * @param id client id
      * @return List of orders
      */
@@ -144,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> getAllOrdersByClientId(int id) {
         logger.info("getAllOrdersByClientId");
         List<Order> orderList = new ArrayList<>();
-        for(OrderEntity orderEntity : orderRepository.getAllOrdersByClientId(id)){
+        for (OrderEntity orderEntity : orderRepository.getAllOrdersByClientId(id)) {
             orderList.add(convertOrderToDTO(orderEntity));
         }
         return orderList;
@@ -152,6 +155,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Gets all orders
+     *
      * @return List of orders
      */
     @Override
@@ -159,7 +163,7 @@ public class OrderServiceImpl implements OrderService {
         logger.info("getAllOrders");
 
         List<Order> orderList = new ArrayList<>();
-        for(OrderEntity orderEntity : orderRepository.getAllOrders()){
+        for (OrderEntity orderEntity : orderRepository.getAllOrders()) {
             orderList.add(convertOrderToDTO(orderEntity));
         }
         return orderList;
@@ -181,20 +185,20 @@ public class OrderServiceImpl implements OrderService {
         DeliveryMethodEntity deliveryMethodEntity = orderRepository.getDeliveryMethodByName(order.getDeliveryMethod().getName());
         orderEntity.setDeliveryMethod(deliveryMethodEntity);
 
-        if(!orderEntity.getStatus().getName().equals(order.getStatus().getName())){
-            if (orderEntity.getStatus().getName().equals("closed")){
+        if (!orderEntity.getStatus().getName().equals(order.getStatus().getName())) {
+            if (orderEntity.getStatus().getName().equals("closed")) {
                 decreaseSalesCounter(orderEntity);
                 ClientEntity clientEntity = orderEntity.getClientEntity();
-                clientEntity.setOrderCounter(clientEntity.getOrderCounter()-OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
+                clientEntity.setOrderCounter(clientEntity.getOrderCounter() - OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
                 clientRepository.updateUser(clientEntity);
             }
             StatusEntity statusEntity = orderRepository.getStatusByName(order.getStatus().getName());
             orderEntity.setStatus(statusEntity);
-            if (order.getStatus().getName().equals("closed")){
+            if (order.getStatus().getName().equals("closed")) {
                 setPayStatus(order.getId());
                 increaseSalesCounter(orderEntity);
                 ClientEntity clientEntity = orderEntity.getClientEntity();
-                clientEntity.setOrderCounter(clientEntity.getOrderCounter()+ OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
+                clientEntity.setOrderCounter(clientEntity.getOrderCounter() + OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
                 clientRepository.updateUser(clientEntity);
             }
         }
@@ -204,31 +208,34 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
-    public void setPayStatus(int id){
+    public void setPayStatus(int id) {
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         orderEntity.setPayStatus(1);
         orderRepository.updateOrder(orderEntity);
     }
 
-    public void increaseSalesCounter(OrderEntity orderEntity){
+    public void increaseSalesCounter(OrderEntity orderEntity) {
         for (CartItemEntity item : orderEntity.getCartItemEntities()) {
             GoodsEntity goodsEntity = goodsRepository.getGoodsById(item.getGoodsEntity().getId());
-            goodsEntity.setSalesCounter(goodsEntity.getSalesCounter()+item.getQuantity());
+            goodsEntity.setSalesCounter(goodsEntity.getSalesCounter() + item.getQuantity());
             goodsRepository.updateGoods(goodsEntity);
             goodsService.createUpdateMessage(goodsEntity);
         }
 
     }
-    public void decreaseSalesCounter(OrderEntity orderEntity){
+
+    public void decreaseSalesCounter(OrderEntity orderEntity) {
         for (CartItemEntity item : orderEntity.getCartItemEntities()) {
             GoodsEntity goodsEntity = goodsRepository.getGoodsById(item.getGoodsEntity().getId());
-            goodsEntity.setSalesCounter(goodsEntity.getSalesCounter()-item.getQuantity());
+            goodsEntity.setSalesCounter(goodsEntity.getSalesCounter() - item.getQuantity());
             goodsRepository.updateGoods(goodsEntity);
             goodsService.createUpdateMessage(goodsEntity);
         }
     }
+
     /**
      * Gets all cart items from order by order id
+     *
      * @return List of cart items
      */
     @Override
@@ -236,7 +243,7 @@ public class OrderServiceImpl implements OrderService {
         logger.info("getAllCartItemsFromOrderByOrderId");
 
         List<CartItem> cartItemList = new ArrayList<>();
-        for (CartItemEntity itemEntity : orderRepository.getAllCartItemsFromOrderByOrderId(id)){
+        for (CartItemEntity itemEntity : orderRepository.getAllCartItemsFromOrderByOrderId(id)) {
             CartItem item = new CartItem();
             item.setQuantity(itemEntity.getQuantity());
             item.setGoods(goodsService.convertGoodsToDTO(itemEntity.getGoodsEntity()));
@@ -248,6 +255,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Gets order by it's id
+     *
      * @return Order model
      */
     @Override
@@ -263,10 +271,27 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getAmountOfClosedOrdersByClientId(id);
     }
 
+    @Override
+    public List<Float> getListOfRevenueForEachDayOfCurrentMonth() {
+        Calendar calendar = Calendar.getInstance();
+        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        List<Float> resultList = new ArrayList<>();
+
+        for (int day = 1; day <= currentDay; day++) {
+            resultList.add(0.0f);
+            for (int id : orderRepository.getAllClosedOrdersIdsByDayOfMonth(day)) {
+                for ( CartItemEntity item : orderRepository.getAllCartItemsFromOrderByOrderId(id)){
+                    resultList.set(day-1,resultList.get(day-1)+item.getQuantity()*item.getGoodsEntity().getPrice());
+                }
+            }
+        }
+        return resultList;
+    }
     /**
      * convert Order Entity to Order Model
      */
-    public Order convertOrderToDTO(OrderEntity orderEntity){
+    public Order convertOrderToDTO(OrderEntity orderEntity) {
         logger.info("convertOrderToDTO");
 
         Order order = new Order();
@@ -307,8 +332,11 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+
+
     /**
      * converts client model to entity
+     *
      * @return client entity
      */
     public ClientEntity convertClientToDAO(Client client, int id) {

@@ -22,4 +22,5 @@ public interface OrderRepository {
     List<CartItemEntity> getAllCartItemsFromOrderByOrderId(int id);
     void updateOrder(OrderEntity orderEntity);
     long getAmountOfClosedOrdersByClientId(int id);
+    List<Integer> getAllClosedOrdersIdsByDayOfMonth(int day);
 }

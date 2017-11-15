@@ -144,10 +144,18 @@ public class OrderController {
      * @return order details page
      */
     @RequestMapping(value = "/employee/edit/{id}", method = RequestMethod.POST)
-    public String updateOrderStatus(Order order, @PathVariable(value = "id") int id) {
+    public String updateOrderStatus(Order order, @PathVariable(value = "id") int id,ModelMap modelMap) {
         logger.info("updateOrderStatus");
         order.setId(id);
-        orderService.updateOrderStatus(order);
+        try {
+            orderService.updateOrderStatus(order);
+        } catch (IllegalThreadStateException e){
+            modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
+            modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+            modelMap.put("listCategory", goodsService.getAllCategories());
+            modelMap.put("error","Lost connection with MQ Server");
+            return "500";
+        }
         return "redirect:/order/employee/details/" + order.getId() + "?msg";
     }
     @RequestMapping(value = "/pay/{id}", method = RequestMethod.GET)

@@ -15,6 +15,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,11 +68,17 @@ public class HomeController {
         modelMap.put("bestSellersList", goodsService.getBestSellers(10));
         List<Client> bestClientsList = clientService.getBestClientsList(10);
         modelMap.put("bestClientsList", bestClientsList);
-        Map amountOfOrders = new HashMap();
-        for (Client client : bestClientsList){
-            amountOfOrders.put(""+client.getId(),orderService.getAmountOfClosedOrdersByClientId(client.getId()));
+        List<Long> amountOfOrders = new ArrayList<>();
+        for (Client client : bestClientsList) {
+            amountOfOrders.add(orderService.getAmountOfClosedOrdersByClientId(client.getId()));
         }
-
+        modelMap.put("amountOfOrders",amountOfOrders);
+        List<Float> revenueList = orderService.getListOfRevenueForEachDayOfCurrentMonth();
+        int currentDayOfMonth = revenueList.size();
+        modelMap.put("currentDayOfMonth",currentDayOfMonth);
+        Float[] dataArray = new Float[currentDayOfMonth];
+        dataArray = revenueList.toArray(dataArray);
+        modelMap.put("dataArray",dataArray);
         return "employee_admin";
     }
 
