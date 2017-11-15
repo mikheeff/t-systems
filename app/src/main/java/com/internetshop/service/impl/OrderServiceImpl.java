@@ -186,6 +186,7 @@ public class OrderServiceImpl implements OrderService {
                 decreaseSalesCounter(orderEntity);
                 ClientEntity clientEntity = orderEntity.getClientEntity();
                 clientEntity.setOrderCounter(clientEntity.getOrderCounter()-OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
+                clientRepository.updateUser(clientEntity);
             }
             StatusEntity statusEntity = orderRepository.getStatusByName(order.getStatus().getName());
             orderEntity.setStatus(statusEntity);
@@ -194,6 +195,7 @@ public class OrderServiceImpl implements OrderService {
                 increaseSalesCounter(orderEntity);
                 ClientEntity clientEntity = orderEntity.getClientEntity();
                 clientEntity.setOrderCounter(clientEntity.getOrderCounter()+ OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
+                clientRepository.updateUser(clientEntity);
             }
         }
 
@@ -254,6 +256,11 @@ public class OrderServiceImpl implements OrderService {
 
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         return convertOrderToDTO(orderEntity);
+    }
+
+    @Override
+    public long getAmountOfClosedOrdersByClientId(int id) {
+        return orderRepository.getAmountOfClosedOrdersByClientId(id);
     }
 
     /**

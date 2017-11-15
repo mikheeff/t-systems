@@ -21,4 +21,5 @@ public interface OrderRepository {
     OrderEntity getOrderById(int id);
     List<CartItemEntity> getAllCartItemsFromOrderByOrderId(int id);
     void updateOrder(OrderEntity orderEntity);
+    long getAmountOfClosedOrdersByClientId(int id);
 }

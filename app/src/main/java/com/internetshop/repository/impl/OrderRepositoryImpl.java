@@ -112,9 +112,8 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
 
-
-    //    @Override
-//    public OrderEntity getOrderByClientId(int id) {
-//        return em.createQuery("select orderEntity from OrderEntity orderEntity where clientEntity.id = :id", OrderEntity.class).setParameter("id",id).getSingleResult();
-//    }
+    @Override
+    public long getAmountOfClosedOrdersByClientId(int id) {
+        return em.createQuery("select count(*) from OrderEntity orderM where status.name = :status", Long.class).setParameter("status","closed").getSingleResult();
+    }
 }

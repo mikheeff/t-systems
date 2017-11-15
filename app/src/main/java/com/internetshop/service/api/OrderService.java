@@ -16,6 +16,7 @@ public interface OrderService {
     Order getOrderById(int id);
     void updateOrderStatus(Order order);
     void setPayStatus(int id);
+    long getAmountOfClosedOrdersByClientId(int id);
 
 
 }
