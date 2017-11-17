@@ -449,6 +449,19 @@
                                         <hr>
                                         <h4 class="title"><span class="text"><strong>Monthly </strong>revenue</span>
                                         </h4>
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <th><big>Monthly Revenue: ${monthlyRevenue} &#8381;</big></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th><strong><big>Day Revenue: ${todayMoney} &#8381;</big></strong></th>
+                                            </tr>
+                                            </tbody>
+
+                                        </table>
                                         <div id="chart_div"></div>
                                     </div>
                                 </div>
@@ -548,7 +561,7 @@
                 title: 'Days'
             },
             vAxis: {
-                title: 'Revenue'
+                title: 'Revenue &#8381;'
             }
         };
 

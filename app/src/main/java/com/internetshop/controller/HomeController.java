@@ -79,6 +79,12 @@ public class HomeController {
         Float[] dataArray = new Float[currentDayOfMonth];
         dataArray = revenueList.toArray(dataArray);
         modelMap.put("dataArray",dataArray);
+        float monthlyRevenue = 0;
+        for (float dayMoney : revenueList){
+            monthlyRevenue = monthlyRevenue + dayMoney;
+        }
+        modelMap.put("monthlyRevenue",monthlyRevenue);
+        modelMap.put("todayMoney",revenueList.get(revenueList.size()-1));
         return "employee_admin";
     }
 
