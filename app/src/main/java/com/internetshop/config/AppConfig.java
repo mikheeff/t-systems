@@ -19,6 +19,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -31,6 +35,7 @@ import javax.sql.DataSource;
 
 @EnableWebMvc
 @Configuration
+@EnableTransactionManagement
 @ComponentScan({ "com.internetshop.*" })
 @Import({ SecurityConfig.class })
 
@@ -78,6 +83,20 @@ public class AppConfig{
         FreeMarkerConfigurationFactoryBean fmConfigFactoryBean = new FreeMarkerConfigurationFactoryBean();
         fmConfigFactoryBean.setTemplateLoaderPath("/WEB-INF/email-templates/");
         return fmConfigFactoryBean;
+    }
+
+    @Bean
+    public LocalEntityManagerFactoryBean geEntityManagerFactoryBean() {
+        LocalEntityManagerFactoryBean factoryBean = new LocalEntityManagerFactoryBean();
+        factoryBean.setPersistenceUnitName("item-manager-pu");
+        return factoryBean;
+    }
+
+    @Bean
+    public JpaTransactionManager geJpaTransactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(geEntityManagerFactoryBean().getObject());
+        return transactionManager;
     }
 
 

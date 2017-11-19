@@ -250,7 +250,7 @@
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> Region / State:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.city" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
+															<spring:input path="clientAddress.city" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$"/>
 														</div>
 													</div>
 													<div class="control-group">

@@ -16,8 +16,10 @@ import java.util.List;
 @Repository
 public class ClientRepositoryImpl implements ClientRepository {
 
-    @PersistenceUnit(unitName = "item-manager-pu")
-    private EntityManager em = Persistence.createEntityManagerFactory("item-manager-pu").createEntityManager();
+//    @PersistenceUnit(unitName = "item-manager-pu")
+//    private EntityManager em = Persistence.createEntityManagerFactory("item-manager-pu").createEntityManager();
+    @PersistenceContext
+    private EntityManager em;
 
     public List<ClientEntity> getAll() {
         return em.createQuery("select c from ClientEntity c ", ClientEntity.class).getResultList();
@@ -32,18 +34,18 @@ public class ClientRepositoryImpl implements ClientRepository {
     public void addClient(ClientEntity clientEntity) {
 
         ClientAddressEntity clientAddressEntity = new ClientAddressEntity();
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.persist(clientAddressEntity);
         clientEntity.setClientAddressEntity(clientAddressEntity);
         em.persist(clientEntity);
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
     }
 
     @Override
     public void addAddress(ClientAddressEntity clientAddressEntity) {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.persist(clientAddressEntity);
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
     }
 
     @Override
@@ -63,10 +65,10 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public void updateUser(ClientEntity clientEntity) {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.merge(clientEntity);
 //        em.flush();
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
     }
 
     @Override

@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +35,7 @@ public class GoodsServiceImpl implements GoodsService {
      *
      * @return goodsList
      */
+    @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoods() {
         logger.info("getAllGoods without pagination");
@@ -44,7 +45,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsList;
     }
-
+    @Transactional(readOnly = true)
     @Override
     public List<SmallGoods> getAllSmallGoods() {
         List<SmallGoods> smallGoodsList = new ArrayList<>();
@@ -68,6 +69,7 @@ public class GoodsServiceImpl implements GoodsService {
      * @param maxResults number of the last goods on page
      * @return goodsList
      */
+    @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoods(int firstId, int maxResults) {
         logger.info("getAllGoods ");
@@ -85,6 +87,7 @@ public class GoodsServiceImpl implements GoodsService {
      * @param categoryName name of selected category
      * @return goods List
      */
+    @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName) {
         logger.info("getAllGoodsByCategoryName");
@@ -95,7 +98,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsList;
     }
-
+    @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoodsBySearch(String searchStr, int firstId, int maxResults) {
         List<Goods> goodsList = new ArrayList<>();
@@ -159,6 +162,7 @@ public class GoodsServiceImpl implements GoodsService {
      *
      * @return Goods model
      */
+    @Transactional(readOnly = true)
     @Override
     public Goods getGoodsById(int id) {
         logger.info("getGoodsById");
@@ -231,6 +235,7 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * Gets one random goods id
      */
+    @Transactional(readOnly = true)
     @Override
     public int getRandomGoodsId() {
         logger.info("getRandomGoodsId");
@@ -242,6 +247,7 @@ public class GoodsServiceImpl implements GoodsService {
      *
      * @return amount
      */
+    @Transactional(readOnly = true)
     @Override
     public long getAmountOfGoods() {
         logger.info("getAmountOfGoods");
@@ -254,13 +260,14 @@ public class GoodsServiceImpl implements GoodsService {
      *
      * @return amount
      */
+    @Transactional(readOnly = true)
     @Override
     public long getAmountOfGoodsByCategoryName(String categoryName) {
         logger.info("getAmountOfGoodsByCategoryName");
 
         return goodsRepository.getAmountOfGoodsByCategoryName(categoryName);
     }
-
+    @Transactional(readOnly = true)
     @Override
     public long getAmountOfGoodsBySearch(String searchStr) {
         return goodsRepository.getAmountOfGoodsBySearch(searchStr);
@@ -269,6 +276,7 @@ public class GoodsServiceImpl implements GoodsService {
     /**
      * Gets list of all categories
      */
+    @Transactional(readOnly = true)
     @Override
     public List<Category> getAllCategories() {
         logger.info("getAllCategories");
@@ -285,6 +293,7 @@ public class GoodsServiceImpl implements GoodsService {
      *
      * @return Category model
      */
+    @Transactional(readOnly = true)
     @Override
     public Category getCategoryById(int id) {
         logger.info("getCategoryById");
@@ -331,7 +340,7 @@ public class GoodsServiceImpl implements GoodsService {
         goodsRepository.deleteCategoryById(id);
     }
 
-
+    @Transactional(readOnly = true)
     @Override
     public List<Goods> getBestSellers(int amountOfBestSellers) {
         List<Goods> goodsBestSellersList = new ArrayList<>();
@@ -340,7 +349,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsBestSellersList;
     }
-
+    @Transactional(readOnly = true)
     @Override
     public List<Goods> getRelatedGoods(int amount, Goods goods) {
         List<Goods> relatedGoodsList = new ArrayList<>();
@@ -358,7 +367,7 @@ public class GoodsServiceImpl implements GoodsService {
      *
      * @return goods list
      */
-
+    @Transactional(readOnly = true)
     public List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage) {
         Set<Integer> randomGoodsIdSet = new HashSet<>();
         while (randomGoodsIdSet.size() < amountOfRandomGoodsOnPage) {

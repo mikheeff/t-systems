@@ -14,9 +14,11 @@ import java.util.List;
 @Repository
 public class GoodsRepositoryImpl implements GoodsRepository {
 
-    @PersistenceUnit(unitName = "item-manager-pu")
-    private EntityManager em = Persistence.createEntityManagerFactory("item-manager-pu").createEntityManager();
+//    @PersistenceUnit(unitName = "item-manager-pu")
+//    private EntityManager em = Persistence.createEntityManagerFactory("item-manager-pu").createEntityManager();
 
+    @PersistenceContext
+    private EntityManager em;
 
 
     public List<GoodsEntity> getAll() {
@@ -51,17 +53,17 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public int addGoods(GoodsEntity goodsEntity) {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.persist(goodsEntity);
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
         return em.createQuery("from GoodsEntity goodsEntity order by id DESC", GoodsEntity.class).setMaxResults(1).getSingleResult().getId();
     }
 
     @Override
     public void deleteGoodsById(int id) {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.remove(em.find(GoodsEntity.class, id));
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
     }
 
     @Override
@@ -71,9 +73,9 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public void updateGoods(GoodsEntity goodsEntity) {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.merge(goodsEntity);
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
     }
 
     @Override
@@ -116,23 +118,23 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public void updateCategory(CategoryEntity categoryEntity) {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.merge(categoryEntity);
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
     }
 
     @Override
     public void addCategory(CategoryEntity categoryEntity) {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.persist(categoryEntity);
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
     }
 
     @Override
     public void deleteCategoryById(int id) {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.remove(em.find(CategoryEntity.class, id));
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
     }
 
 

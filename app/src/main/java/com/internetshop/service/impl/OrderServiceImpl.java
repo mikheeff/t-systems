@@ -16,8 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -49,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @return List of Delivery methods
      */
+    @Transactional(readOnly = true)
     @Override
     public List<DeliveryMethod> getAllDeliveryMethods() {
         logger.info("getAllDeliveryMethods");
@@ -63,6 +64,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Gets all payment types
      */
+    @Transactional(readOnly = true)
     @Override
     public List<PaymentType> getAllPaymentTypes() {
         logger.info("getAllPaymentTypes");
@@ -77,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Gets all Statuses
      */
+    @Transactional(readOnly = true)
     @Override
     public List<Status> getAllStatuses() {
         logger.info("getAllStatuses");
@@ -147,6 +150,7 @@ public class OrderServiceImpl implements OrderService {
      * @param id client id
      * @return List of orders
      */
+    @Transactional(readOnly = true)
     @Override
     public List<Order> getAllOrdersByClientId(int id) {
         logger.info("getAllOrdersByClientId");
@@ -162,6 +166,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @return List of orders
      */
+    @Transactional(readOnly = true)
     @Override
     public List<Order> getAllOrders() {
         logger.info("getAllOrders");
@@ -235,13 +240,13 @@ public class OrderServiceImpl implements OrderService {
 
 
     }
-
+    @Transactional
     public void setPayStatus(int id) {
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         orderEntity.setPayStatus(1);
         orderRepository.updateOrder(orderEntity);
     }
-
+    @Transactional
     public void increaseSalesCounter(OrderEntity orderEntity) {
         for (CartItemEntity item : orderEntity.getCartItemEntities()) {
             GoodsEntity goodsEntity = goodsRepository.getGoodsById(item.getGoodsEntity().getId());
@@ -251,7 +256,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
     }
-
+    @Transactional
     public void decreaseSalesCounter(OrderEntity orderEntity) {
         for (CartItemEntity item : orderEntity.getCartItemEntities()) {
             GoodsEntity goodsEntity = goodsRepository.getGoodsById(item.getGoodsEntity().getId());
@@ -266,6 +271,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @return List of cart items
      */
+    @Transactional(readOnly = true)
     @Override
     public List<CartItem> getAllCartItemsFromOrderByOrderId(int id) {
         logger.info("getAllCartItemsFromOrderByOrderId");
@@ -286,6 +292,7 @@ public class OrderServiceImpl implements OrderService {
      *
      * @return Order model
      */
+    @Transactional(readOnly = true)
     @Override
     public Order getOrderById(int id) {
         logger.info("getOrderById");
@@ -293,12 +300,12 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         return convertOrderToDTO(orderEntity);
     }
-
+    @Transactional(readOnly = true)
     @Override
     public long getAmountOfClosedOrdersByClientId(int id) {
         return orderRepository.getAmountOfClosedOrdersByClientId(id);
     }
-
+    @Transactional(readOnly = true)
     @Override
     public List<Float> getListOfRevenueForEachDayOfCurrentMonth() {
         Calendar calendar = Calendar.getInstance();

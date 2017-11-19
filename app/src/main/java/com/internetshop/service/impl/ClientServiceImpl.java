@@ -21,8 +21,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -39,8 +39,10 @@ public class ClientServiceImpl implements ClientService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional(readOnly = true)
     public List<ClientEntity> getAllClients(){ return clientRepository.getAll(); }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Client> getBestClientsList(int amountOfBestClients) {
         List<Client> clientList = new ArrayList<>();
@@ -82,6 +84,7 @@ public class ClientServiceImpl implements ClientService {
      * Changes user's password
      * @throws PasswordWrongException
      */
+    @Transactional
     @Override
     public void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException {
         logger.info("changePassword");
@@ -99,6 +102,7 @@ public class ClientServiceImpl implements ClientService {
      * Gets client model by email
      * @return Client
      */
+    @Transactional(readOnly = true)
     @Override
     public Client getUserByEmail(String email) {
         logger.info("getUserByEmail");
@@ -137,6 +141,7 @@ public class ClientServiceImpl implements ClientService {
      * Get client model by ID
      * @return Client
      */
+    @Transactional(readOnly = true)
     @Override
     public Client getClientById(int id) {
         logger.info("getClientById");
@@ -173,7 +178,7 @@ public class ClientServiceImpl implements ClientService {
 
         return client;
     }
-
+    @Transactional(readOnly = true)
     @Override
     public String getEmailByConfirmationId(String id) {
         return clientRepository.getEmailByConfirmationId(id);
@@ -216,12 +221,13 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.updateUser(clientEntity);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean isIdContains(String email, String id) {
         ClientEntity clientEntity = clientRepository.getUserByEmail(email);
         return id.equals(clientEntity.getConfirmationId());
     }
-
+    @Transactional
     @Override
     public void confirmClientEmail(String email) {
         ClientEntity clientEntity = clientRepository.getUserByEmail(email);

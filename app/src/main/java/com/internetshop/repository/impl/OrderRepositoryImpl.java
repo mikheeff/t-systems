@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,8 +17,10 @@ import java.util.*;
 @Repository
 public class OrderRepositoryImpl implements OrderRepository {
 
-    @PersistenceUnit(unitName = "item-manager-pu")
-    private EntityManager em = Persistence.createEntityManagerFactory("item-manager-pu").createEntityManager();
+//    @PersistenceUnit(unitName = "item-manager-pu")
+//    private EntityManager em = Persistence.createEntityManagerFactory("item-manager-pu").createEntityManager();
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public List<DeliveryMethodEntity> getAllDeliveryMethods() {
@@ -75,13 +78,13 @@ public class OrderRepositoryImpl implements OrderRepository {
      */
     @Override
     public int addOrder(OrderEntity orderEntity, Set<CartItemEntity> cartItemEntitySet) {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.persist(orderEntity);
         for (CartItemEntity item : cartItemEntitySet){
             item.setOrderEntity(orderEntity);
             em.persist(item);
         }
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
         return em.createQuery("from OrderEntity orderEntity order by id DESC", OrderEntity.class).setMaxResults(1).getSingleResult().getId();
     }
 
@@ -102,9 +105,9 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public void updateOrder(OrderEntity orderEntity) {
-        em.getTransaction().begin();
+//        em.getTransaction().begin();
         em.merge(orderEntity);
-        em.getTransaction().commit();
+//        em.getTransaction().commit();
     }
 
     @Override

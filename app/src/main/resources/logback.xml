@@ -2,7 +2,6 @@
 <configuration>
 
     <property name="DEV_HOME" value="c:/logs" />
-
     <appender name="FILE-AUDIT"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${DEV_HOME}/debug.log</file>
@@ -32,6 +31,9 @@
     <logger name="org.hibernate">
         <level value="error"/>
     </logger>
+
+    <logger name="org.springframework.transaction" level="debug"/>
+
 
     <root level="info">
         <appender-ref ref="FILE-AUDIT" />
