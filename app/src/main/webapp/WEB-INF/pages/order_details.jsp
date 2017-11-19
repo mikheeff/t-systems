@@ -350,14 +350,14 @@
                 <c:if test="${not empty msg}">
                     <div class="msg">${msg}</div>
                 </c:if>
-                    <div id="not-closed" class="error" style="display: none">Order cannot be closed before being paid</div>
+                    <%--<div id="not-closed" class="error" style="display: none">Order cannot be closed before being paid</div>--%>
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>&nbsp;</th>
-                        <th><big>Client ID:</big></th>
+                        <th><big>Client ID</big></th>
                         <th><big>Client Name</big></th>
-                        <th><big>Client Surname</big></th>
+                        <th><big>Client Email</big></th>
                         <th><big>Phone:</big></th>
                         <th>&nbsp;</th>
                     </tr>
@@ -367,7 +367,7 @@
                         <td>&nbsp;</td>
                         <td><big>${order.client.id}</big></td>
                         <td><big>${order.client.name}</big></td>
-                        <td><big>${order.client.surname}</big></td>
+                        <td><big>${order.client.email}</big></td>
                         <td><big>${order.client.phone}</big></td>
                         <td>&nbsp;</td>
                     </tr>

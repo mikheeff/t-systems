@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -79,13 +80,9 @@ public class OrderController {
         Client client = (Client) session.getAttribute("client");
         order.setClient(client);
         int orderId = orderService.addOrder(order);
-        modelMap.put("orderId", orderId);
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        String searchStr = "";
-        modelMap.put("search", searchStr);
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
-        return "order_success";
+//        modelMap.put("orderId", orderId);
+
+        return "redirect:/send/order/"+orderId;
     }
 
     /**
@@ -116,7 +113,10 @@ public class OrderController {
 
     @RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
     public String getClientOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap,
-                                  @RequestParam(value = "msg", required = false) String msg) {
+                                        @RequestParam(value = "msg", required = false) String msg, HttpServletRequest httpServletRequest) {
+        if (session.getAttribute("client") == null){
+            session.setAttribute("client",clientService.getUserByEmail( httpServletRequest.getUserPrincipal().getName()));
+        }
         modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
         modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
         modelMap.put("listCategory", goodsService.getAllCategories());
@@ -124,7 +124,12 @@ public class OrderController {
         modelMap.put("sum", getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
         Client client = (Client) session.getAttribute("client");
         modelMap.put("client", client);
-        Order order = orderService.getOrderById(id);
+        Order order;
+        try {
+             order = orderService.getOrderById(id);
+        } catch (NullPointerException e){
+            return "404";
+        }
         if (order.getClient().getId()!=client.getId()){
             return "404";
         }

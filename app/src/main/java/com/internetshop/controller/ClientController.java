@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/clients")
@@ -57,7 +58,8 @@ public class ClientController {
     public String identifyUser(ModelMap modelMap,
                                @RequestParam(value = "error", required = false) String error,
                                @RequestParam(value = "logout", required = false) String logout,
-                               @RequestParam(value = "regError", required = false) String regError) {
+                               @RequestParam(value = "regError", required = false) String regError,
+                               Principal principal) {
         modelMap.put("newClient", new Client());
         if (error != null) {
             modelMap.put("error", "Invalid email or password or not confirmed account!");
@@ -69,6 +71,9 @@ public class ClientController {
         if (logout != null) {
             modelMap.put("msg", "You've been logged out successfully.");
             logger.info("user logged out");
+        }
+        if (principal != null){
+//            Client client
         }
         return "register";
     }
@@ -158,7 +163,7 @@ public class ClientController {
      * Gets clients information for editing
      * @return profile page
      */
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    @RequestMapping(value = "/profile/edit", method = RequestMethod.POST)
     public String editClient(@ModelAttribute (value = "client") @Valid Client client, BindingResult bindingResult) {
         logger.info("editClient");
 

@@ -163,7 +163,7 @@
 								</div>
 								<div id="collapseOne" class="accordion-body collapse">
 									<div class="accordion-inner">
-										<spring:form action="edit" method="post" modelAttribute="client" class="form-stacked">
+										<spring:form action="/clients/profile/edit" method="post" modelAttribute="client" class="form-stacked">
 										<div class="row-fluid">
 											<div class="span6">
 												<h4>Your Personal Details</h4>

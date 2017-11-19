@@ -1,5 +1,6 @@
 package com.internetshop.service.impl;
 
+import com.internetshop.config.AppConfig;
 import com.internetshop.controller.GoodsController;
 import com.internetshop.controller.OrderController;
 import com.internetshop.entities.*;
@@ -9,6 +10,7 @@ import com.internetshop.repository.api.GoodsRepository;
 import com.internetshop.repository.api.OrderRepository;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
+import com.internetshop.service.api.MailService;
 import com.internetshop.service.api.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,16 +30,18 @@ public class OrderServiceImpl implements OrderService {
     private final ClientRepository clientRepository;
     private final GoodsService goodsService;
     private final ClientService clientService;
+    private final MailService mailService;
     private static Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class.getName());
 
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, GoodsRepository goodsRepository, ClientRepository clientRepository, GoodsService goodsService, ClientService clientService) {
+    public OrderServiceImpl(OrderRepository orderRepository, GoodsRepository goodsRepository, ClientRepository clientRepository, GoodsService goodsService, ClientService clientService, MailService mailService) {
         this.orderRepository = orderRepository;
         this.goodsRepository = goodsRepository;
         this.clientRepository = clientRepository;
         this.goodsService = goodsService;
         this.clientService = clientService;
+        this.mailService = mailService;
     }
 
     /**
@@ -201,9 +205,33 @@ public class OrderServiceImpl implements OrderService {
                 clientEntity.setOrderCounter(clientEntity.getOrderCounter() + OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
                 clientRepository.updateUser(clientEntity);
             }
+            if ((orderEntity.getStatus().getName().equals("shipped") && orderEntity.getDeliveryMethod().getName().equals("pickup"))||(orderEntity.getStatus().getName().equals("canceled"))){
+                Mail mail = new Mail();
+                mail.setMailFrom(AppConfig.MAIL_FROM);
+                ClientEntity client = orderEntity.getClientEntity();
+                mail.setMailTo(client.getEmail());
+                mail.setMailSubject("Dice Games, new order");
+
+                Map< String, Object > model = new HashMap<>();
+                model.put("firstName", client.getName());
+                model.put("location", AppConfig.MAIL_LOCATION);
+                model.put("signature", AppConfig.MAIL_SIGNATURE);
+                model.put("msg", "your order status is "+"\""+orderEntity.getStatus().getName()+"\"");
+                model.put("order",order);
+                model.put("link", AppConfig.HOST_URL+"/order/details/"+orderEntity.getId());
+                mail.setModel(model);
+
+                mailService.sendEmail(mail,"order.txt");
+                if (client.getPhone()!=null) {
+                    mailService.sendSMS("Dear, "+client.getName()+
+                            " , your order status is "+
+                            orderEntity.getStatus().getName()+". Order ID: "+orderEntity.getId(),
+                            client.getPhone());
+                }
+            }
         }
 
-        orderRepository.updateOrder(orderEntity);
+            orderRepository.updateOrder(orderEntity);
 
 
     }

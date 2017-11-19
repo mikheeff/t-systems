@@ -61,6 +61,7 @@
 		</style>
 	</head>
 	<body>
+
 		<div id="top-bar" class="container">
 			<div class="row">
 				<div class="span4">
@@ -146,6 +147,8 @@
 								   <%--name="${_csrf.parameterName}"--%>
 								   <%--value="${_csrf.token}"/>--%>
 						</form>
+
+
 					</div>
 					<div class="span7">					
 						<h4 class="title"><span class="text"><strong>Register</strong> Form</span></h4>

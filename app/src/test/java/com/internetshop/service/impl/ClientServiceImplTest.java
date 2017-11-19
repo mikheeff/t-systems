@@ -31,7 +31,7 @@ public class ClientServiceImplTest {
         clientRepository = mock(ClientRepository.class);
         client = mock(Client.class);
         passwordEncoder = spy(BCryptPasswordEncoder.class);
-        clientService = new ClientServiceImpl(clientRepository, passwordEncoder);
+//        clientService = new ClientServiceImpl(clientRepository, passwordEncoder);
     }
 
     @Test(expected = EmailExistException.class)

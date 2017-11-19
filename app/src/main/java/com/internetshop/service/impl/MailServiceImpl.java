@@ -1,7 +1,14 @@
 package com.internetshop.service.impl;
 
+import com.internetshop.config.AppConfig;
 import com.internetshop.model.Mail;
 import com.internetshop.service.api.MailService;
+import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.TwilioRestException;
+import com.twilio.sdk.resource.factory.MessageFactory;
+import com.twilio.sdk.resource.instance.Message;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -14,6 +21,8 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import freemarker.template.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service("mailService")
@@ -24,7 +33,7 @@ public class MailServiceImpl implements MailService {
     @Autowired
     Configuration fmConfiguration;
 
-    public void sendEmail(Mail mail) {
+    public void sendEmail(Mail mail, String template) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
         try {
@@ -34,7 +43,7 @@ public class MailServiceImpl implements MailService {
             mimeMessageHelper.setSubject(mail.getMailSubject());
             mimeMessageHelper.setFrom(mail.getMailFrom());
             mimeMessageHelper.setTo(mail.getMailTo());
-            mail.setMailContent(getContentFromTemplate(mail.getModel()));
+            mail.setMailContent(getContentFromTemplate(mail.getModel(),template));
             mimeMessageHelper.setText(mail.getMailContent(), true);
 
             mailSender.send(mimeMessageHelper.getMimeMessage());
@@ -43,15 +52,34 @@ public class MailServiceImpl implements MailService {
         }
     }
 
-    public String getContentFromTemplate(Map<String, Object> model) {
+    public String getContentFromTemplate(Map<String, Object> model,String template) {
         StringBuffer content = new StringBuffer();
 
         try {
             content.append(FreeMarkerTemplateUtils
-                    .processTemplateIntoString(fmConfiguration.getTemplate("email-template.txt"), model));
+                    .processTemplateIntoString(fmConfiguration.getTemplate(template), model));
         } catch (Exception e) {
             e.printStackTrace();
         }
         return content.toString();
+    }
+
+    public void sendSMS(String msg,String number) {
+        try {
+            TwilioRestClient client = new TwilioRestClient(AppConfig.ACCOUNT_SID, AppConfig.AUTH_TOKEN);
+
+            // Build a filter for the MessageList
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("Body", msg));
+            params.add(new BasicNameValuePair("To", number)); //Add real number here
+            params.add(new BasicNameValuePair("From", AppConfig.TWILIO_NUMBER));
+
+            MessageFactory messageFactory = client.getAccount().getMessageFactory();
+            Message message = messageFactory.create(params);
+            System.out.println(message.getSid());
+        }
+        catch (TwilioRestException e) {
+            System.out.println(e.getErrorMessage());
+        }
     }
 }

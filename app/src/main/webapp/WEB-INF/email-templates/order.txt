@@ -1,0 +1,17 @@
+<html>
+
+<head></head>
+
+<body>
+    <img src="https://image.ibb.co/hHDOrR/logo.png">
+    <p>Dear ${firstName},</p>
+    <p>${msg} </p>
+    <p>For more details follow the link</p>
+    <p>${link}</p>
+
+
+    <p>${signature}</p>
+    <p>${location}</p>
+</body>
+
+</html>

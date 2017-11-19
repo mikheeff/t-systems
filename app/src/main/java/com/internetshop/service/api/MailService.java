@@ -4,5 +4,6 @@ package com.internetshop.service.api;
 import com.internetshop.model.Mail;
 
 public interface MailService {
-    public void sendEmail(Mail mail);
+    void sendEmail(Mail mail, String template);
+    void sendSMS(String msg,String number);
 }

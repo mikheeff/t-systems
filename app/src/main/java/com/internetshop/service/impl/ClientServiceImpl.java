@@ -16,6 +16,8 @@ import com.internetshop.service.api.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
+    public ClientServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder){
         this.clientRepository = clientRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -152,8 +154,9 @@ public class ClientServiceImpl implements ClientService {
         client.setConfirmationId(clientEntity.getConfirmationId());
 
         Role role = new Role();
-        role.setId(clientEntity.getId());
-        role.setName(clientEntity.getName());
+
+        role.setId(clientEntity.getRoleEntity().getId());
+        role.setName(clientEntity.getRoleEntity().getName());
         client.setRole(role);
 
         ClientAddress clientAddress = new ClientAddress();
@@ -257,6 +260,4 @@ public class ClientServiceImpl implements ClientService {
         client.setRole(role);
         return client;
     }
-
-
 }
