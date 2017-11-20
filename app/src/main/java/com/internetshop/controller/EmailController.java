@@ -43,7 +43,7 @@ public class EmailController {
     }
 
     @RequestMapping(value = "/email/send", method = RequestMethod.GET)
-    public String sendEmail(ModelMap modelMap){
+    public String sendEmailConfirm(ModelMap modelMap){
         String email = (String)session.getAttribute("nonVerifiedClientEmail");
         if (email==null) {
             return "redirect:/";
@@ -71,14 +71,12 @@ public class EmailController {
     @RequestMapping(value = "/confirm")
     public String confirmEmail( @RequestParam(value = "id", required = false) String id, ModelMap modelMap){
 
-//        String email = (String)session.getAttribute("nonVerifiedClientEmail");
         String email;
         try {
              email = clientService.getEmailByConfirmationId(id);
         } catch (NoResultException e){
             email = null;
         }
-//        if (email!=null && clientService.isIdContains(email,id)){
         if (email!=null){
             clientService.confirmClientEmail(email);
             modelMap.put("regSuccess",true);
@@ -86,6 +84,12 @@ public class EmailController {
         }
 
         modelMap.put("isSessionUnAvailable",true);
+        return "registr_success";
+    }
+
+    @RequestMapping(value = "/send/recover/{email}", method = RequestMethod.GET)
+    public String recoverEmail( @PathVariable(value = "email") String email, ModelMap modelMap){
+        clientService.recoverConfirmationIdAndSendEmail(email);
         return "registr_success";
     }
 
@@ -116,6 +120,7 @@ public class EmailController {
         String searchStr = "";
         modelMap.put("search", searchStr);
         modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        modelMap.put("orderId",id);
         return "order_success";
     }
 }

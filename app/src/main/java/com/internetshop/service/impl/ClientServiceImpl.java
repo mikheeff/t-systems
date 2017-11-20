@@ -2,15 +2,13 @@ package com.internetshop.service.impl;
 
 import com.internetshop.Exceptions.EmailExistException;
 import com.internetshop.Exceptions.PasswordWrongException;
+import com.internetshop.config.AppConfig;
 import com.internetshop.controller.HomeController;
 import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.OrderEntity;
 import com.internetshop.entities.RoleEntity;
-import com.internetshop.model.Client;
-import com.internetshop.model.ClientAddress;
-import com.internetshop.model.PasswordField;
-import com.internetshop.model.Role;
+import com.internetshop.model.*;
 import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.service.api.ClientService;
 import org.slf4j.Logger;
@@ -233,6 +231,28 @@ public class ClientServiceImpl implements ClientService {
         ClientEntity clientEntity = clientRepository.getUserByEmail(email);
         clientEntity.setIsConfirm(1);
         clientRepository.updateUser(clientEntity);
+    }
+
+    @Transactional
+    @Override
+    public void recoverConfirmationIdAndSendEmail(String email) {
+        ClientEntity client = clientRepository.getUserByEmail(email); //todo 1)user not found
+        String confirmationId = UUID.randomUUID().toString();          //2)send mail
+        client.setConfirmationId(confirmationId);
+        clientRepository.updateUser(client);
+
+        Mail mail = new Mail();
+        mail.setMailFrom(AppConfig.MAIL_FROM);
+        mail.setMailTo(client.getEmail());
+        mail.setMailSubject("Dice Games, new order");
+
+        Map< String, Object > model = new HashMap<>();
+        model.put("firstName", client.getName());
+        model.put("location", AppConfig.MAIL_LOCATION);
+        model.put("signature", AppConfig.MAIL_SIGNATURE);
+        model.put("msg", "your order with ID:"+id+" is accepted for processing");
+        model.put("link", AppConfig.HOST_URL+"/order/details/"+id);
+        mail.setModel(model);
     }
 
     /**
