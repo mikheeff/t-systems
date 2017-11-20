@@ -1,10 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="utf-8">
-    <title>Success</title>
+    <title>Recover Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
@@ -27,19 +27,41 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <script src="/resources/themes/js/respond.min.js"></script>
     <![endif]-->
+
     <style>
-    .msg {
-    padding: 15px;
-    margin-bottom: 20px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    color: #31708f;
-    background-color: #d9edf7;
-    border-color: #bce8f1;
-    }
+        .error {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+
+        .msg {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: #31708f;
+            background-color: #d9edf7;
+            border-color: #bce8f1;
+        }
+
+        #login-box {
+            width: 300px;
+            padding: 20px;
+            margin: 100px auto;
+            background: #fff;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border: 1px solid #000;
+        }
     </style>
 </head>
 <body>
+
 <div id="top-bar" class="container">
     <div class="row">
         <div class="span4">
@@ -50,32 +72,14 @@
         <div class="span8">
             <div class="account pull-right">
                 <ul class="user-menu">
-                    <c:url value="/j_spring_security_logout" var="logoutUrl" />
-                    <script>
-                        function formSubmit() {
-                            document.getElementById("logoutForm").submit();
-                        }
-                    </script>
-                    <li><a href="/clients/profile">My Account</a></li>
-                    <c:if test="${client.role.name!='ROLE_EMPLOYEE'}">
-                        <c:if test="${cartList==null}">
-                            <li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
-                        </c:if>
-                        <c:if test="${cartList!=null}">
-                            <li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
-                        </c:if>
+                    <li><a href="${pageContext.request.contextPath}/clients/profile">My Account</a></li>
+                    <c:if test="${cartList==null}">
+                        <li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
                     </c:if>
-
-                    <c:if test="${client.role.name!=null}" >
-
-                        <form action="${logoutUrl}" method="post" id="logoutForm" style="display: inline;" >
-
-                        </form>
-                        <li><a href="javascript:formSubmit()">Logout</a></li>
+                    <c:if test="${cartList!=null}">
+                        <li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
                     </c:if>
-                    <c:if test="${client.role.name==null}" >
-                        <li><a href="/clients/identification">Login</a></li>
-                    </c:if>
+                    <li><a href="${pageContext.request.contextPath}/clients/profile">Login</a></li>
                 </ul>
             </div>
         </div>
@@ -94,24 +98,57 @@
                             </c:forEach>
                         </ul>
                     </li>
-                    <li><a href="#">Best Sellers</a>
-                    <li><a href="#">How To Buy</a></li>
-                    <li><a href="#">F.A.Q</a></li>
-                    <li><a href="#">About us</a></li>
+                    <li><a href="goods.jsp">Best Sellers</a>
+                    <li><a href="goods.jsp">How To Buy</a></li>
+                    <li><a href="goods.jsp">F.A.Q</a></li>
+                    <li><a href="goods.jsp">About us</a></li>
                 </ul>
             </nav>
         </div>
     </section>
     <section class="header_text sub">
-        <img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="" >
-        <h4></h4>
+        <img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="Login or register" >
+        <h4><span>RECOVER PASSWORD OR CONFIRM EMAIL</span></h4>
+    </section>
     </section>
     <section class="main-content">
         <div class="row">
-            <div class="span9">
-                <div class="msg"><span><big>Dear customer, your order with ID: ${orderId} is accepted for processing. In the near future an operator will contact you.</big></span></div>
+            <div class="span5" th:fragment="content">
+                <h4 class="title"><span class="text"><strong>Set New</strong> Password</span></h4>
+                <c:if test="${not empty error}">
+                    <div class="error">${error}</div>
+                </c:if>
+                <c:if test="${not empty msg}">
+                    <div class="msg">${msg}</div>
+                </c:if>
+                <spring:form action="/recover/password" method="post" modelAttribute="passwordField" class="form-stacked">
+                    <fieldset>
+                        <div class="control-group">
+                            <label class="control-label">Old Password*</label>
+                            <div class="controls">
+                                <spring:input path="password" type="password" placeholder="" class="input-xlarge" />
+                            </div>
+                        </div>
+                            <%--<hr>--%>
+                        <div class="control-group">
+                            <label class="control-label">New Password*</label>
+                            <div class="controls">
+                                <spring:input path="newPasswordFirst" type="password" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9]+$"/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Repeat New Password*</label>
+                            <div class="controls">
+                                <spring:input path="newPasswordSecond" type="password" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9]+$"/>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Edit your password"></div>
+                </spring:form>
             </div>
-            <div class="span3 col">
+            <div class="span7">
+            </div>
+            <div class="span3 col pull-right">
                 <div class="block">
                     <ul class="nav nav-list">
                         <li class="nav-header">SUB CATEGORIES</li>
@@ -179,11 +216,11 @@
             <div class="span3">
                 <h4>Navigation</h4>
                 <ul class="nav">
-                    <li><a href="/">Homepage</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contac Us</a></li>
-                    <li><a href="#">Your Cart</a></li>
-                    <li><a href="#">Login</a></li>
+                    <li><a href="index.jsp">Homepage</a></li>
+                    <li><a href="./about.html">About Us</a></li>
+                    <li><a href="./contact.html">Contac Us</a></li>
+                    <li><a href="/catalog/goods/cart">Your Cart</a></li>
+                    <li><a href="./register.jsp">Login</a></li>
                 </ul>
             </div>
             <div class="span4">
@@ -213,5 +250,12 @@
     </section>
 </div>
 <script src="/resources/themes/js/common.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#checkout').click(function (e) {
+            document.location.href = "checkout.jsp";
+        })
+    });
+</script>
 </body>
 </html>

@@ -350,7 +350,6 @@
                 <c:if test="${not empty msg}">
                     <div class="msg">${msg}</div>
                 </c:if>
-                    <%--<div id="not-closed" class="error" style="display: none">Order cannot be closed before being paid</div>--%>
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -426,16 +425,11 @@
                             </spring:select>
                         </td>
                         <td>
-                            <%--<c:if test="${order.status.name=='closed'}">--%>
-                                <%--<span class="label label-success">Closed</span>--%>
-                            <%--</c:if>--%>
-                            <%--<c:if test="${order.status.name!='closed'}">--%>
                             <spring:select path="status.name" class="input-xlarge" id ="orderInput">
                                 <c:forEach var="statusVar"  items="${listStatus}">
                                     <spring:option value="${statusVar.name}">${statusVar.name}</spring:option>
                                 </c:forEach>
                             </spring:select>
-                            <%--</c:if>--%>
                         </td>
                         <td>
                             <c:if test="${order.payStatus == 0}">

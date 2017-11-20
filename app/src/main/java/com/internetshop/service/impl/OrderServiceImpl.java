@@ -211,22 +211,15 @@ public class OrderServiceImpl implements OrderService {
                 clientRepository.updateUser(clientEntity);
             }
             if ((orderEntity.getStatus().getName().equals("shipped") && orderEntity.getDeliveryMethod().getName().equals("pickup"))||(orderEntity.getStatus().getName().equals("canceled"))){
-                Mail mail = new Mail();
-                mail.setMailFrom(AppConfig.MAIL_FROM);
                 ClientEntity client = orderEntity.getClientEntity();
-                mail.setMailTo(client.getEmail());
-                mail.setMailSubject("Dice Games, new order");
+                Client client1 = clientService.convertClientToDTO(client);
 
-                Map< String, Object > model = new HashMap<>();
-                model.put("firstName", client.getName());
-                model.put("location", AppConfig.MAIL_LOCATION);
-                model.put("signature", AppConfig.MAIL_SIGNATURE);
-                model.put("msg", "your order status is "+"\""+orderEntity.getStatus().getName()+"\"");
-                model.put("order",order);
-                model.put("link", AppConfig.HOST_URL+"/order/details/"+orderEntity.getId());
-                mail.setModel(model);
+                mailService.sendEmail(client1,
+                        "your order status is "+"\""+orderEntity.getStatus().getName()+"\"",
+                        AppConfig.HOST_URL+"/order/details/"+orderEntity.getId(),
+                        "Dice Games, New order",
+                        "order.txt");
 
-                mailService.sendEmail(mail,"order.txt");
                 if (client.getPhone()!=null) {
                     mailService.sendSMS("Dear, "+client.getName()+
                             " , your order status is "+

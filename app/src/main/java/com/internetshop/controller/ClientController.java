@@ -58,9 +58,9 @@ public class ClientController {
     public String identifyUser(ModelMap modelMap,
                                @RequestParam(value = "error", required = false) String error,
                                @RequestParam(value = "logout", required = false) String logout,
-                               @RequestParam(value = "regError", required = false) String regError,
-                               Principal principal) {
+                               @RequestParam(value = "regError", required = false) String regError) {
         modelMap.put("newClient", new Client());
+        modelMap.put("listCategory", goodsService.getAllCategories());
         if (error != null) {
             modelMap.put("error", "Invalid email or password or not confirmed account!");
         }
@@ -71,9 +71,6 @@ public class ClientController {
         if (logout != null) {
             modelMap.put("msg", "You've been logged out successfully.");
             logger.info("user logged out");
-        }
-        if (principal != null){
-//            Client client
         }
         return "register";
     }
@@ -203,7 +200,7 @@ public class ClientController {
             logger.warn("First and second password fields does't match");
             return "redirect:/clients/profile?errorMatch";
         }
-        session.setAttribute("client",clientService.getClientById(client.getId()));
+//        session.setAttribute("client",clientService.getClientById(client.getId()));
         return "redirect:/clients/profile?msg";
 
     }

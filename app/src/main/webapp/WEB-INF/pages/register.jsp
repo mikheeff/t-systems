@@ -108,7 +108,7 @@
 		</section>
 		<section class="header_text sub">
 			<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="Login or register" >
-			<h3><span>LOGIN OR REGISTER</span></h3>
+			<h4><span>LOGIN OR REGISTER</span></h4>
 		</section>
 	</section>
 			<section class="main-content">				
@@ -140,7 +140,7 @@
 								<div class="control-group">
 									<input tabindex="3" class="btn btn-inverse large" type="submit" value="Sign into your account">
 									<hr>
-									<p class="reset">Recover your <a tabindex="4" href="#" title="Recover your username or password">username or password</a></p>
+									<p class="reset">Recover your <a tabindex="4" href="/send/recover" title="Recover your password or confirm account">password or confirm account</a></p>
 								</div>
 							</fieldset>
 							<%--<input type="hidden"--%>

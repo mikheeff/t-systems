@@ -59,8 +59,6 @@ public class OrderController {
         modelMap.put("order", new Order());
         modelMap.put("listDeliveryMethod", orderService.getAllDeliveryMethods());
         modelMap.put("listPaymentType", orderService.getAllPaymentTypes());
-        String searchStr = "";
-        modelMap.put("search", searchStr);
         modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
         return "confirm_order";
     }
@@ -103,8 +101,6 @@ public class OrderController {
         modelMap.put("listStatus", orderService.getAllStatuses());
         modelMap.put("sum", getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
         modelMap.put("order", orderService.getOrderById(id));
-        String searchStr = "";
-        modelMap.put("search", searchStr);
         if (msg != null) {
             modelMap.put("msg", "Order has been successfully edited");
         }
@@ -134,8 +130,6 @@ public class OrderController {
             return "404";
         }
         modelMap.put("order", order);
-        String searchStr = "";
-        modelMap.put("search", searchStr);
         if (msg != null) {
             modelMap.put("msg", "Order has been successfully paid!");
         }

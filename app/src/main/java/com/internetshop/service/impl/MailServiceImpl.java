@@ -1,6 +1,7 @@
 package com.internetshop.service.impl;
 
 import com.internetshop.config.AppConfig;
+import com.internetshop.model.Client;
 import com.internetshop.model.Mail;
 import com.internetshop.service.api.MailService;
 import com.twilio.sdk.TwilioRestClient;
@@ -22,6 +23,7 @@ import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 import freemarker.template.Configuration;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +34,24 @@ public class MailServiceImpl implements MailService {
 
     @Autowired
     Configuration fmConfiguration;
+
+    @Override
+    public void sendEmail(Client client, String mailMsg, String link, String subject, String template) {
+        Mail mail = new Mail();
+        mail.setMailFrom(AppConfig.MAIL_FROM);
+        mail.setMailTo(client.getEmail());
+        mail.setMailSubject(subject);
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("firstName", client.getName());
+        model.put("location", AppConfig.MAIL_LOCATION);
+        model.put("signature", AppConfig.MAIL_SIGNATURE);
+        model.put("mailMsg", mailMsg);
+        model.put("link", link);
+        mail.setModel(model);
+
+        sendEmail(mail, template);
+    }
 
     public void sendEmail(Mail mail, String template) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();

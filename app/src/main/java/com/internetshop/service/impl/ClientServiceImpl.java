@@ -11,11 +11,13 @@ import com.internetshop.entities.RoleEntity;
 import com.internetshop.model.*;
 import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.service.api.ClientService;
+import com.internetshop.service.api.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,14 +29,17 @@ import java.util.*;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    private final MailService mailService;
+
     PasswordEncoder passwordEncoder;
     private static Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class.getName());
 
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder){
+    public ClientServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder,MailService mailService){
         this.clientRepository = clientRepository;
         this.passwordEncoder = passwordEncoder;
+        this.mailService = mailService;
     }
 
     @Transactional(readOnly = true)
@@ -232,27 +237,38 @@ public class ClientServiceImpl implements ClientService {
         clientEntity.setIsConfirm(1);
         clientRepository.updateUser(clientEntity);
     }
+    @Transactional
+    @Override
+    public String resetConfirmationId(String email) {
+        ClientEntity client = clientRepository.getUserByEmail(email);
+        String confirmationId = UUID.randomUUID().toString();
+        client.setConfirmationId(confirmationId);
+        clientRepository.updateUser(client);
+        return confirmationId;
+    }
+
+
 
     @Transactional
     @Override
-    public void recoverConfirmationIdAndSendEmail(String email) {
-        ClientEntity client = clientRepository.getUserByEmail(email); //todo 1)user not found
-        String confirmationId = UUID.randomUUID().toString();          //2)send mail
-        client.setConfirmationId(confirmationId);
-        clientRepository.updateUser(client);
+    public void recoverConfirmationIdAndSendEmail(String email) throws UsernameNotFoundException {
+        String confirmationId = resetConfirmationId(email);
+        ClientEntity client = clientRepository.getUserByEmail(email);
 
         Mail mail = new Mail();
         mail.setMailFrom(AppConfig.MAIL_FROM);
         mail.setMailTo(client.getEmail());
-        mail.setMailSubject("Dice Games, new order");
+        mail.setMailSubject("Dice Games. Recover Password");
 
         Map< String, Object > model = new HashMap<>();
+
         model.put("firstName", client.getName());
         model.put("location", AppConfig.MAIL_LOCATION);
         model.put("signature", AppConfig.MAIL_SIGNATURE);
-        model.put("msg", "your order with ID:"+id+" is accepted for processing");
-        model.put("link", AppConfig.HOST_URL+"/order/details/"+id);
+        model.put("mailMsg", "To recover your password follow the link below");
+        model.put("link", AppConfig.HOST_URL+"/recover/password?id="+confirmationId);
         mail.setModel(model);
+        mailService.sendEmail(mail,"email-template.txt");
     }
 
     /**

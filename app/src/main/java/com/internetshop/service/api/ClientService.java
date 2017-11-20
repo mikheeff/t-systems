@@ -7,6 +7,7 @@ import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.GoodsEntity;
 import com.internetshop.model.Client;
 import com.internetshop.model.PasswordField;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 
@@ -21,5 +22,7 @@ public interface ClientService {
     void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException;
     boolean isIdContains(String email, String id);
     void confirmClientEmail(String email);
-    void recoverConfirmationIdAndSendEmail(String email);
+    void recoverConfirmationIdAndSendEmail(String email) throws UsernameNotFoundException;
+    String resetConfirmationId(String email);
+    Client convertClientToDTO(ClientEntity clientEntity);
 }

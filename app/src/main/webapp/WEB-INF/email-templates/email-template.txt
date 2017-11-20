@@ -5,7 +5,7 @@
 <body>
     <img src="https://image.ibb.co/hHDOrR/logo.png">
     <p>Dear ${firstName},</p>
-    <p>To confirm your Email, please follow the link </p>
+    <p>${mailMsg}</p>
     <p>${link}</p>
     <p>${signature}</p>
     <p>${location}</p>

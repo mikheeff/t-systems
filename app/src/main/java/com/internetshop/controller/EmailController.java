@@ -1,25 +1,25 @@
 package com.internetshop.controller;
 
+import com.internetshop.Exceptions.PasswordWrongException;
 import com.internetshop.config.AppConfig;
 import com.internetshop.model.Client;
 import com.internetshop.model.Mail;
 import com.internetshop.model.Order;
+import com.internetshop.model.PasswordField;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.MailService;
 import com.internetshop.service.api.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,84 +43,159 @@ public class EmailController {
     }
 
     @RequestMapping(value = "/email/send", method = RequestMethod.GET)
-    public String sendEmailConfirm(ModelMap modelMap){
-        String email = (String)session.getAttribute("nonVerifiedClientEmail");
-        if (email==null) {
+    public String sendEmailConfirm(ModelMap modelMap) {
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        String email = (String) session.getAttribute("nonVerifiedClientEmail");
+        if (email == null) {
             return "redirect:/";
         }
         Client client = clientService.getUserByEmail(email);
-        Mail mail = new Mail();
-        mail.setMailFrom(AppConfig.MAIL_FROM);
-        mail.setMailTo(client.getEmail());
-        mail.setMailSubject("Dice Games, Email Verification");
-
-        Map< String, Object > model = new HashMap<>();
-        model.put("firstName", client.getName());
-        model.put("link", AppConfig.HOST_URL+"/confirm?id="+client.getConfirmationId());
-        model.put("location", AppConfig.MAIL_LOCATION);
-        model.put("signature", AppConfig.MAIL_SIGNATURE);
-        mail.setModel(model);
-
-        mailService.sendEmail(mail,"email-template.txt");
+        mailService.sendEmail(client,
+                "To confirm your Email, please follow the link ",
+                AppConfig.HOST_URL + "/confirm?id=" + client.getConfirmationId(),
+                "Dice Games, Email Verification",
+                "email-template.txt");
 
 
-        modelMap.put("confirmation",true);
-        return "registr_success";
+        modelMap.put("msg", "Please, confirm an email." +
+                " Check your mail, we've sent you a verification letter");
+        return "message";
     }
+
+    @RequestMapping(value = "/email/send", method = RequestMethod.POST)
+    public String resendEmailConfirm(String email,ModelMap modelMap) {
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        Client client = clientService.getUserByEmail(email);
+        if (client.getIsConfirm()==1){
+            modelMap.put("error","Account is confirmed");
+            return "recover_page";
+        }
+        session.setAttribute("nonVerifiedClientEmail",email);
+        return "redirect:/email/send";
+    }
+
 
     @RequestMapping(value = "/confirm")
-    public String confirmEmail( @RequestParam(value = "id", required = false) String id, ModelMap modelMap){
-
+    public String confirmEmail(@RequestParam(value = "id", required = false) String id, ModelMap modelMap) {
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
         String email;
         try {
-             email = clientService.getEmailByConfirmationId(id);
-        } catch (NoResultException e){
+            email = clientService.getEmailByConfirmationId(id);
+            clientService.resetConfirmationId(email);
+        } catch (NoResultException e) {
             email = null;
         }
-        if (email!=null){
+        if (email != null) {
             clientService.confirmClientEmail(email);
-            modelMap.put("regSuccess",true);
-            return "registr_success";
+            modelMap.put("msg", "Congratulations, you have successfully confirmed your email! " +
+                    "Now, if you want to see your account, please log in");
+            return "message";
         }
 
-        modelMap.put("isSessionUnAvailable",true);
-        return "registr_success";
+        modelMap.put("msg", "Session is unavailable, please go to recover page to resend confirmation letter...");
+        return "message";
     }
 
-    @RequestMapping(value = "/send/recover/{email}", method = RequestMethod.GET)
-    public String recoverEmail( @PathVariable(value = "email") String email, ModelMap modelMap){
-        clientService.recoverConfirmationIdAndSendEmail(email);
-        return "registr_success";
+    @RequestMapping(value = "/send/recover", method = RequestMethod.GET)
+    public String recoverMail(ModelMap modelMap) {
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        return "recover_page";
     }
+
+    @RequestMapping(value = "/send/recover", method = RequestMethod.POST)
+    public String recoverMail(String email, ModelMap modelMap) {
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        try {
+            clientService.recoverConfirmationIdAndSendEmail(email);
+        } catch (NoResultException e) {
+            modelMap.put("error", "User with such email not found");
+            return "recover_page";
+        }
+        modelMap.put("msg", "To recover the password, follow the instructions in the email that was sent to you...");
+        return "message";
+    }
+
+    @RequestMapping(value = "/recover/password", method = RequestMethod.GET)
+    public String recoverPassword(@RequestParam(value = "id", required = false) String id, ModelMap modelMap) {
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        String email;
+        try {
+            email = clientService.getEmailByConfirmationId(id);
+            clientService.resetConfirmationId(email);
+        } catch (NoResultException e) {
+            email = null;
+        }
+        if (email != null) {
+            session.setAttribute("emailForRecovery", email);
+            modelMap.put("passwordField", new PasswordField());
+            return "recover_password";
+        }
+
+        modelMap.put("msg", "Session is unavailable, please go to recover page to resend mail...");
+        return "message";
+    }
+
+    @RequestMapping(value = "/recover/password", method = RequestMethod.POST)
+    public String recoverPassword(@ModelAttribute(value = "passwordField") @Valid PasswordField passwordField, BindingResult bindingResult, ModelMap modelMap) {
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        if (bindingResult.hasErrors()) {
+            modelMap.put("passwordField", new PasswordField());
+            modelMap.put("error", "Entered characters are not allowed!");
+            return "recover_password";
+        }
+        String email = (String) session.getAttribute("emailForRecovery");
+        Client client = clientService.getUserByEmail(email);
+        if (passwordField.getNewPasswordFirst().equals(passwordField.getNewPasswordSecond())) {
+            try {
+                clientService.changePassword(passwordField, client);
+            } catch (PasswordWrongException e) {
+                modelMap.put("passwordField", new PasswordField());
+                modelMap.put("error", "Password is not valid!");
+                return "recover_password";
+            }
+        } else {
+            modelMap.put("passwordField", new PasswordField());
+            modelMap.put("error", "Entered New passwords doesn't match!");
+            return "recover_password";
+        }
+        modelMap.put("msg", "Password has been successfully changed");
+        return "message";
+    }
+
 
     @RequestMapping(value = "/send/order/{id}", method = RequestMethod.GET)
-    public String sendOrder(ModelMap modelMap,
-                            @PathVariable(value = "id") int id){
+    public String sendOrderMail(ModelMap modelMap,
+                                @PathVariable(value = "id") int id) {
         Order order = orderService.getOrderById(id);
-        Mail mail = new Mail();
-        mail.setMailFrom(AppConfig.MAIL_FROM);
         Client client = order.getClient();
-        mail.setMailTo(client.getEmail());
-        mail.setMailSubject("Dice Games, new order");
 
-        Map< String, Object > model = new HashMap<>();
-        model.put("firstName", client.getName());
-        model.put("location", AppConfig.MAIL_LOCATION);
-        model.put("signature", AppConfig.MAIL_SIGNATURE);
-        model.put("msg", "your order with ID:"+id+" is accepted for processing");
-        model.put("link", AppConfig.HOST_URL+"/order/details/"+id);
-        mail.setModel(model);
+        mailService.sendEmail(client,
+                "your order with ID:" + id + " is accepted for processing",
+                AppConfig.HOST_URL + "/order/details/" + id,
+                "Dice Games, new order",
+                "order.txt");
 
-        mailService.sendEmail(mail,"order.txt");
-        if (client.getPhone()!=null) {
+        if (client.getPhone() != null) {
             mailService.sendSMS("Your order ID: " + id + " DiceGames.com", client.getPhone());
         }
         modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
         modelMap.put("listCategory", goodsService.getAllCategories());
-        String searchStr = "";
-        modelMap.put("search", searchStr);
         modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
-        modelMap.put("orderId",id);
-        return "order_success";
+        modelMap.put("msg", "Dear customer, your order with ID: " + id + " is accepted for processing. In the near future an operator will contact you.");
+        return "message";
     }
 }
