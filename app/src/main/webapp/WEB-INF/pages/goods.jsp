@@ -165,6 +165,10 @@
 				-moz-border-radius: 2px;
 				border: 1px solid #000;
 			}
+
+			#filterInput {
+				width: 200px; /* Ширина поля в пикселах */
+			}
 		</style>
 	</head>
     <ctio>
@@ -219,7 +223,7 @@
 					<a href="${pageContext.request.contextPath}/" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul>
-							<li><a href="${pageContext.request.contextPath}/catalog">Catalog</a>
+							<li><a href="${pageContext.request.contextPath}/catalog/page/${1}">Catalog</a>
 								<ul>
 									<c:forEach var="categoryVar"  items="${listCategory}">
 										<li><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a></li>
@@ -249,7 +253,7 @@
 			<section class="main-content">
 				
 				<div class="row">						
-					<div class="span9">								
+					<div class="span9">
 						<ul class="thumbnails listing-products">
 							<c:forEach var="goodsVar" items="${listGoods}">
 							<li class="span3">
@@ -391,6 +395,64 @@
 									</li>
 
 								</c:forEach>
+								<hr>
+								<h5>If necessary, specify conditions</h5>
+								<spring:form action="/catalog/filter/page/${1}" method="post" commandName="catalogQuery" class="form-stacked" >
+								<fieldset>
+									<div class="control-group">
+										<label class="control-label"><span class="required"></span> Amount Of Players:</label>
+										<div class="controls">
+											<spring:select path="numberOfPlayers" class="input-xlarge" id="filterInput">
+												<spring:option value="${null}">---Please Select---</spring:option>
+												<c:forEach   begin = "1" end = "10"  varStatus="count">
+													<spring:option value="${count.index}">${count.index}</spring:option>
+												</c:forEach>
+											</spring:select>
+										</div>
+										<label class="control-label"><span class="required"></span> Duration:</label>
+										<div class="controls">
+											<spring:select path="duration" class="input-xlarge" id="filterInput">
+												<spring:option value="${null}">---Please Select---</spring:option>
+												<c:forEach  begin = "1" end = "8"  varStatus="count">
+													<spring:option value="${count.index/2.0}">${count.index/2.0}</spring:option>
+												</c:forEach>
+											</spring:select>
+										</div>
+										<label class="control-label"><span class="required"></span> Price:</label>
+										<div class="controls">
+											<spring:select path="price" class="input-xlarge" id="filterInput">
+												<spring:option value="${null}">---Please Select---</spring:option>
+												<c:forEach  begin = "1" end = "5"  varStatus="count">
+													<spring:option value="${count.index*500}">less then ${count.index*500}</spring:option>
+												</c:forEach>
+												<spring:option value="3001">more then 3000</spring:option>
+											</spring:select>
+										</div>
+										<label class="control-label"><span class="required"></span> Rules:</label>
+										<div class="controls">
+											<spring:select path="rules" class="input-xlarge" id="filterInput">
+												<spring:option value="${null}">---Please Select---</spring:option>
+												<spring:option value="easy">Easy</spring:option>
+												<spring:option value="very easy">Very Easy</spring:option>
+												<spring:option value="medium">Medium</spring:option>
+												<spring:option value="hard">Hard</spring:option>
+												<spring:option value="very hard">Very Hard</spring:option>
+											</spring:select>
+										</div>
+										<label class="control-label"><span class="required"></span> Sorting:</label>
+										<div class="controls">
+											<spring:select path="sort" class="input-xlarge" id="filterInput">
+												<spring:option value="${null}">---Please Select---</spring:option>
+												<spring:option value="PRICE">By Price</spring:option>
+												<spring:option value="ALPHABET">By Alphabet</spring:option>
+												<spring:option value="RATING">By Rating</spring:option>
+												<spring:option value="DATE">By Date</spring:option>
+											</spring:select>
+										</div>
+									</div>
+									<div class="actions"><input tabindex="9" class="btn btn-inverse small" type="submit" value="Edit goods"></div>
+								</fieldset>
+								</spring:form>
 							</ul>
 							<br/>
 						</div>

@@ -5,6 +5,7 @@ import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.entities.CategoryEntity;
 import com.internetshop.entities.GoodsEntity;
 import com.internetshop.entities.RuleEntity;
+import com.internetshop.model.CatalogQuery;
 import com.internetshop.repository.api.GoodsRepository;
 import org.springframework.stereotype.Repository;
 
@@ -50,6 +51,42 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     @Override
+    public List<GoodsEntity> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults) {
+        boolean isFirst = true;
+        String query = "select goods from GoodsEntity goods where ";
+        if (catalogQuery.getNumberOfPlayers() != null) {
+            query = query + "numberOfPlayers <= :numberOfPlayers ";
+            isFirst = false;
+        }
+        if (catalogQuery.getDuration() != null) {
+            if (isFirst == false) {
+                query = query + "and ";
+            }
+            query = query + "duration <= :duration ";
+            isFirst = false;
+        }
+        if (catalogQuery.getPrice() != null){
+            if (isFirst == false) {
+                query = query + "and ";
+            }
+            query = query + "price <= :price";
+            isFirst = false;
+        }
+        TypedQuery<GoodsEntity> typedQuery = em.createQuery(query,GoodsEntity.class);
+        if (catalogQuery.getNumberOfPlayers() != null) {
+            typedQuery.setParameter("numberOfPlayers", catalogQuery.getNumberOfPlayers());
+        }
+        if (catalogQuery.getDuration() != null) {
+            typedQuery.setParameter("duration", catalogQuery.getDuration());
+        }
+        if (catalogQuery.getPrice() != null){
+            typedQuery.setParameter("price", catalogQuery.getPrice());
+        }
+        typedQuery.setFirstResult(firstId).setMaxResults(maxResults);
+        return typedQuery.getResultList();
+    }
+
+    @Override
     public int addGoods(GoodsEntity goodsEntity) {
         em.persist(goodsEntity);
         return em.createQuery("from GoodsEntity goodsEntity order by id DESC", GoodsEntity.class).setMaxResults(1).getSingleResult().getId();
@@ -72,12 +109,12 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public long getAmountOfGoods() {
-        return em.createQuery("select count(*) FROM GoodsEntity goods",Long.class).getSingleResult();
+        return em.createQuery("select count(*) FROM GoodsEntity goods", Long.class).getSingleResult();
     }
 
     @Override
     public long getAmountOfGoodsByCategoryName(String categoryName) {
-        return em.createQuery("select count(*) from GoodsEntity goods where category.name = :category",Long.class).setParameter("category", categoryName).getSingleResult();
+        return em.createQuery("select count(*) from GoodsEntity goods where category.name = :category", Long.class).setParameter("category", categoryName).getSingleResult();
     }
 
     @Override
@@ -89,7 +126,7 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public int getRandomGoodsId() {
-        return em.createQuery("select goods.id from GoodsEntity goods order by rand()",Integer.class).setMaxResults(1).getSingleResult();
+        return em.createQuery("select goods.id from GoodsEntity goods order by rand()", Integer.class).setMaxResults(1).getSingleResult();
     }
 
     @Override
@@ -99,8 +136,8 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     @Override
-    public int getIdCategoryByName(String name)  {
-        return em.createQuery("select categoryEntity.id from CategoryEntity categoryEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
+    public int getIdCategoryByName(String name) {
+        return em.createQuery("select categoryEntity.id from CategoryEntity categoryEntity where name = :name", Integer.class).setParameter("name", name).getSingleResult();
     }
 
     @Override
@@ -125,16 +162,16 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public int getIdRuleByName(String name) {
-        return em.createQuery("select ruleEntity.id from RuleEntity ruleEntity where name = :name",Integer.class).setParameter("name",name).getSingleResult();
+        return em.createQuery("select ruleEntity.id from RuleEntity ruleEntity where name = :name", Integer.class).setParameter("name", name).getSingleResult();
     }
 
     @Override
     public RuleEntity getRuleByName(String name) {
-        return em.createQuery("select ruleEntity from RuleEntity ruleEntity where name = :name",RuleEntity.class).setParameter("name",name).getSingleResult();
+        return em.createQuery("select ruleEntity from RuleEntity ruleEntity where name = :name", RuleEntity.class).setParameter("name", name).getSingleResult();
     }
 
     @Override
     public List<GoodsEntity> getBestSellers(int amountOfBestSellers) {
-        return em.createQuery("select goods from GoodsEntity goods order by goods.salesCounter desc",GoodsEntity.class).setMaxResults(amountOfBestSellers).getResultList();
+        return em.createQuery("select goods from GoodsEntity goods order by goods.salesCounter desc", GoodsEntity.class).setMaxResults(amountOfBestSellers).getResultList();
     }
 }

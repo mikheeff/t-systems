@@ -3,6 +3,7 @@ package com.internetshop.repository.api;
 import com.internetshop.Exceptions.NoSuchCategoryException;
 import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.entities.*;
+import com.internetshop.model.CatalogQuery;
 import com.internetshop.model.DeliveryMethod;
 import com.internetshop.model.PaymentType;
 
@@ -14,6 +15,7 @@ public interface GoodsRepository {
     List<GoodsEntity> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName);
     List<GoodsEntity> getAllGoodsBySearch(String searchStr,int firstId, int maxResults);
     List<GoodsEntity> getRelatedGoodsByCategoryName(int amount,String categoryName);
+    List<GoodsEntity> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults);
 
     int addGoods(GoodsEntity goodsEntity);
     void deleteGoodsById(int id);

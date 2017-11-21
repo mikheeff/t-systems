@@ -106,7 +106,7 @@
 					<a href="${pageContext.request.contextPath}/" class="logo pull-left"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></a>
 					<nav id="menu" class="pull-right">
 						<ul>
-							<li><a href="${pageContext.request.contextPath}/catalog">Catalog</a>
+							<li><a href="${pageContext.request.contextPath}/catalog/page/${1}">Catalog</a>
 								<ul>
 									<c:forEach var="categoryVar"  items="${listCategory}">
 										<li><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a></li>

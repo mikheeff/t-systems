@@ -51,45 +51,6 @@ public class GoodsController {
 
 
     /**
-     * Gets goods for first page of goods catalog
-     *
-     * @return catalog page
-     */
-    @RequestMapping(method = RequestMethod.GET)
-    public String getAllGoods(ModelMap modelMap) {
-        logger.info("getAllGoods");
-        modelMap.put("currentPage", 1);
-        modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoods()));
-        modelMap.put("listGoods", goodsService.getAllGoods(0, amountOfGoodsOnPage));
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("categoryFilter", false);
-        modelMap.put("cartList", session.getAttribute("cartList"));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
-        return "goods";
-    }
-
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String getAllGoodsBySearch(String searchStr) {
-        return "redirect:/catalog/search/" + searchStr + "/page/" + 1;
-    }
-
-    @RequestMapping(value = "/search/{searchStr}/page/{page}", method = RequestMethod.GET)
-    public String getAllGoodsBySearch(@PathVariable(value = "searchStr") String searchStr, @PathVariable(value = "page") Integer page, ModelMap modelMap) {
-        modelMap.put("currentPage", page);
-        List<Goods> listGoods = goodsService.getAllGoodsBySearch(searchStr, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
-        modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoodsBySearch(searchStr)));
-        modelMap.put("listGoods", listGoods);
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("searchFlag", true);
-        modelMap.put("categoryFilter", false);
-        modelMap.put("cartList", session.getAttribute("cartList"));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
-        return "goods";
-    }
-
-    /**
      * Gets goods for selected page
      *
      * @return selected page of catalog
@@ -105,6 +66,7 @@ public class GoodsController {
         modelMap.put("categoryFilter", false);
         modelMap.put("cartList", session.getAttribute("cartList"));
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
+        modelMap.put("catalogQuery",new CatalogQuery());
         return "goods";
     }
 
@@ -128,6 +90,44 @@ public class GoodsController {
         return "goods";
     }
 
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public String getAllGoodsBySearch(String searchStr) {
+        return "redirect:/catalog/search/" + searchStr + "/page/" + 1;
+    }
+
+    @RequestMapping(value = "/search/{searchStr}/page/{page}", method = RequestMethod.GET)
+    public String getAllGoodsBySearch(@PathVariable(value = "searchStr") String searchStr, @PathVariable(value = "page") Integer page, ModelMap modelMap) {
+        List<Goods> listGoods = goodsService.getAllGoodsBySearch(searchStr, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
+        modelMap.put("currentPage", page);
+        modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoodsBySearch(searchStr)));
+        modelMap.put("listGoods", listGoods);
+        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("searchFlag", true);
+        modelMap.put("categoryFilter", false);
+        modelMap.put("cartList", session.getAttribute("cartList"));
+        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
+        return "goods";
+    }
+    @RequestMapping(value = "/filter/page/{page}", method = RequestMethod.POST)
+    public String getAllGoodsByFilter(@PathVariable(value = "page") int page, ModelMap modelMap, @ModelAttribute(value = "catalogQuery") CatalogQuery catalogQuery){
+        if (catalogQuery.getRules().equals("")){
+            catalogQuery.setRules(null);
+        }
+        if (catalogQuery.getSort().equals("")) {
+            catalogQuery.setSort(null);
+        }
+        List<Goods> listGoods = goodsService.getAllGoodsByFilter(catalogQuery, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
+        modelMap.put("currentPage", page);
+        modelMap.put("amountOfPages", getAmountOfPages(listGoods.size())); //todo все товары?
+        modelMap.put("listGoods",listGoods);
+        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
+        modelMap.put("listCategory", goodsService.getAllCategories());
+        modelMap.put("cartList", session.getAttribute("cartList"));
+        modelMap.put("catalogQuery",catalogQuery);
+        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
+        return "goods";
+    }
 
     /**
      * Sends goods model to service for adding

@@ -15,7 +15,7 @@ public class Goods {
     private String name;
     @NotNull(message = "Price must not be empty")
     private float price;
-    private String numberOfPlayers;
+    private int numberOfPlayers;
     private float duration;
     @NotNull(message = "Amount must not be empty")
     private int amount;
@@ -30,7 +30,7 @@ public class Goods {
     public Goods() {
     }
 
-    public Goods(int id, String name, float price, String numberOfPlayers, float duration, int amount, int visible, String description, String img, Category category, Rule rule) {
+    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, Category category, Rule rule) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -44,7 +44,7 @@ public class Goods {
         this.rule = rule;
     }
 
-    public Goods(int id, String name, float price, String numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, Category category, Rule rule) {
+    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, Category category, Rule rule) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -91,11 +91,11 @@ public class Goods {
         this.price = price;
     }
 
-    public String getNumberOfPlayers() {
+    public int getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
-    public void setNumberOfPlayers(String numberOfPlayers) {
+    public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
     }
 
