@@ -24,7 +24,6 @@
     <script src="${pageContext.request.contextPath}/resources/themes/js/jquery-1.7.2.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/themes/bootstrap/js/bootstrap.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/themes/js/superfish.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/themes/js/jquery.scrolltotop.js"></script>
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <script src="/resources/themes/js/respond.min.js"></script>

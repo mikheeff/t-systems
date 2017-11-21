@@ -21,7 +21,7 @@
 		<script src="${pageContext.request.contextPath}/resources/themes/js/jquery-1.7.2.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/themes/bootstrap/js/bootstrap.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/themes/js/superfish.js"></script>
-		<script src="${pageContext.request.contextPath}/resources/themes/js/jquery.scrolltotop.js"></script>
+
 		<!--[if lt IE 9]>			
 			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 			<script src="/resources/themes/js/respond.min.js"></script>
@@ -320,5 +320,11 @@
 				});
 			});
 		</script>
+		<!-- BEGIN JIVOSITE CODE {literal} -->
+		<script type='text/javascript'>
+            (function(){ var widget_id = 'MM4OLoDIT1';var d=document;var w=window;function l(){
+                var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+		</script>
+		<!-- {/literal} END JIVOSITE CODE -->
     </body>
 </html>
