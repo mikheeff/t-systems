@@ -52,11 +52,20 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public List<GoodsEntity> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults) {
-        String query = "select goods from GoodsEntity goods where ";
-        query = query + buildFilterQueryString(catalogQuery, query);
+        String query = "select goods from GoodsEntity goods ";
+        query = buildFilterQueryString(catalogQuery, query);
         if(catalogQuery.getSort() != null) {
             query = query + "order by ";
             if (catalogQuery.getSort().equals("PRICE")){
+                query = query + "goods.price";
+            }
+            if (catalogQuery.getSort().equals("ALPHABET")){
+                query = query + "goods.price";
+            }
+            if (catalogQuery.getSort().equals("RATING")){
+                query = query + "goods.price";
+            }
+            if (catalogQuery.getSort().equals("DATE")){
                 query = query + "goods.price";
             }
         }
@@ -80,7 +89,7 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public long getAmountOfGoodsByFilter(CatalogQuery catalogQuery) {
-        String query = "select count(*) from GoodsEntity goods where ";
+        String query = "select count(*) from GoodsEntity goods ";
 
         TypedQuery<Long> typedQuery = em.createQuery(buildFilterQueryString(catalogQuery, query), Long.class);
         if (catalogQuery.getNumberOfPlayers() != null) {
@@ -107,6 +116,8 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         if (catalogQuery.getDuration() != null) {
             if (!isFirst) {
                 query = query + "and ";
+            } else {
+                query = query + "where ";
             }
             query = query + "duration <= :duration ";
             isFirst = false;
@@ -114,6 +125,8 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         if (catalogQuery.getPrice() != null) {
             if (!isFirst) {
                 query = query + "and ";
+            } else {
+                query = query + "where ";
             }
             query = query + "price <= :price ";
             isFirst = false;
@@ -121,6 +134,8 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         if (catalogQuery.getRules() != null) {
             if (!isFirst) {
                 query = query + "and ";
+            } else {
+                query = query + "where ";
             }
             query = query + "rule.name = :name ";
             isFirst = false;

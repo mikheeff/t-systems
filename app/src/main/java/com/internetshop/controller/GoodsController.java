@@ -105,20 +105,28 @@ public class GoodsController {
         modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("searchFlag", true);
-        modelMap.put("categoryFilter", false);
+//        modelMap.put("categoryFilter", false);
         modelMap.put("cartList", session.getAttribute("cartList"));
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
         modelMap.put("catalogQuery",new CatalogQuery());
         return "goods";
     }
     @RequestMapping(value = "/filter/page/{page}", method = RequestMethod.POST)
-    public String getAllGoodsByFilter(@PathVariable(value = "page") int page, ModelMap modelMap, @ModelAttribute(value = "catalogQuery") CatalogQuery catalogQuery){
+    public String getAllGoodsByFilter(@PathVariable(value = "page") int page,@ModelAttribute(value = "catalogQuery") CatalogQuery catalogQuery, ModelMap modelMap){
         if (catalogQuery.getRules().equals("")){
             catalogQuery.setRules(null);
         }
         if (catalogQuery.getSort().equals("")) {
             catalogQuery.setSort(null);
         }
+        session.setAttribute("catalogQuery",catalogQuery);
+
+        return "redirect:/catalog/filter/page/"+page;
+    }
+
+    @RequestMapping(value = "/filter/page/{page}", method = RequestMethod.GET)
+    public String getAllGoodsByFilter(@PathVariable(value = "page") int page, ModelMap modelMap) {
+        CatalogQuery catalogQuery = (CatalogQuery)session.getAttribute("catalogQuery");
         List<Goods> listGoods = goodsService.getAllGoodsByFilter(catalogQuery, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
         modelMap.put("currentPage", page);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoodsByFilter(catalogQuery)));
@@ -128,6 +136,7 @@ public class GoodsController {
         modelMap.put("cartList", session.getAttribute("cartList"));
         modelMap.put("catalogQuery",catalogQuery);
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
+        modelMap.put("isFilter",true);
         return "goods";
     }
 

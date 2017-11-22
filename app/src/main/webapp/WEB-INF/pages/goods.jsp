@@ -187,7 +187,10 @@
                                 function formSubmit() {
                                     document.getElementById("logoutForm").submit();
                                 }
-                                //							</script>
+							</script>
+							<c:if test="${client.role.name=='ROLE_EMPLOYEE'}">
+								<li><a href="/employee/administration">Administration</a></li>
+							</c:if>
 							<li><a href="/clients/profile">My Account</a></li>
 							<c:if test="${client.role.name!='ROLE_EMPLOYEE'}">
 
@@ -240,7 +243,7 @@
 			</section>
 			<section class="header_text sub">
 			<img class="pageBanner" src="/resources/themes/images/pageBanner.png" alt="" >
-				<c:if test="${!categoryFilter and !searchFlag}" >
+				<c:if test="${!categoryFilter and !searchFlag and !isFilter}" >
 				<h3><span>ALL GAMES</span></h3>
 				</c:if>
 				<c:if test="${searchFlag}" >
@@ -248,6 +251,9 @@
 				</c:if>
 				<c:if test="${categoryFilter}" >
 					<h3><span>${categoryName.toUpperCase()}</span></h3>
+				</c:if>
+				<c:if test="${isFilter}" >
+					<h3><span>GOODS WITH REQUEST PARAMS</span></h3>
 				</c:if>
 			</section>
 			<section class="main-content">
@@ -271,7 +277,7 @@
 						<hr>
 						<div class="pagination pagination-small pagination-centered">
 							<ul>
-								<c:if test="${!categoryFilter and !searchFlag}" >
+								<c:if test="${!categoryFilter and !searchFlag and !isFilter}" >
 
 									<c:if test="${currentPage>1}" >
 									<li><a href="${pageContext.request.contextPath}/catalog/page/${currentPage-1}">Prev</a></li>
@@ -331,6 +337,27 @@
 
 								</c:if>
 
+								<c:if test="${isFilter}" >
+
+									<c:if test="${currentPage>1}" >
+									<li><a href="/catalog/filter/page/${currentPage-1}">Prev</a></li>
+									</c:if>
+
+									<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
+										<li
+										<c:if test="${count.index==currentPage}" >
+											 class="active"
+										</c:if>
+										><a href="/catalog/filter/page/${i}">${i}</a></li>
+									</c:forEach>
+
+									<c:if test="${currentPage<amountOfPages}" >
+										<li><a href="/catalog/filter/page/${currentPage+1}">Next</a></li>
+									</c:if>
+									<%--<spring:form action="/catalog/filter/page/${currentPage+1}"  method="post" commandName="catalogQuery" class="form-stacked" >--%>
+									<%--</spring:form>--%>
+								</c:if>
+
 							</ul>
 						</div>
 					</div>
@@ -375,7 +402,7 @@
 									<c:if test="${!categoryFilter and !searchFlag}" >
 									class="active"
 									</c:if>
-									><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
+									><a href="${pageContext.request.contextPath}/catalog/page/${1}">All games</a></li>
 								<c:forEach var="categoryVar"  items="${listCategory}">
 
 									<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
@@ -397,7 +424,7 @@
 								</c:forEach>
 								<hr>
 								<h5>If necessary, specify conditions</h5>
-								<spring:form action="/catalog/filter/page/${1}" method="post" commandName="catalogQuery" class="form-stacked" >
+								<spring:form action="/catalog/filter/page/${1}"  method="post" commandName="catalogQuery" class="form-stacked" >
 								<fieldset>
 									<div class="control-group">
 										<label class="control-label"><span class="required"></span> Amount Of Players:</label>
@@ -450,7 +477,7 @@
 											</spring:select>
 										</div>
 									</div>
-									<div class="actions"><input tabindex="9" class="btn btn-inverse small" type="submit" value="Edit goods"></div>
+									<div class="actions"><input tabindex="9" class="btn btn-inverse small pull-left" type="submit" value="Filter"></div>
 								</fieldset>
 								</spring:form>
 							</ul>
@@ -545,5 +572,9 @@
 			</section>
 		</div>
 		<script src="/resources/themes/js/common.js"></script>
+		<%--<script>--%>
+            <%--function formSubmit() {--%>
+                <%--document.getElementById("filterForm").submit();--%>
+            <%--}--%>
     </body>
 </html>

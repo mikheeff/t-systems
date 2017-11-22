@@ -54,7 +54,10 @@
                         function formSubmit() {
                             document.getElementById("logoutForm").submit();
                         }
-                        //							</script>
+                    </script>
+                    <c:if test="${client.role.name=='ROLE_EMPLOYEE'}">
+                        <li><a href="/employee/administration">Administration</a></li>
+                    </c:if>
                     <li><a href="/clients/profile">My Account</a></li>
                     <c:if test="${client.role.name!='ROLE_EMPLOYEE'}">
 
@@ -122,7 +125,7 @@
                 <div class="block">
                     <ul class="nav nav-list">
                         <li class="nav-header">SUB CATEGORIES</li>
-                        <li><a href="${pageContext.request.contextPath}/catalog">All games</a></li>
+                        <li><a href="${pageContext.request.contextPath}/catalog/page/${1}">All games</a></li>
                         <c:forEach var="categoryVar"  items="${listCategory}">
 
                             <li><a href="${pageContext.request.contextPath}/catalog/${categoryVar.name}/page/${1}">${categoryVar.name}</a>
