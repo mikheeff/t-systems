@@ -27,6 +27,7 @@ public interface GoodsService {
     long getAmountOfGoods();
     long getAmountOfGoodsByCategoryName(String categoryName);
     long getAmountOfGoodsBySearch(String searchStr);
+    long getAmountOfGoodsByFilter(CatalogQuery catalogQuery);
     List<Category> getAllCategories();
     Category getCategoryById(int id);
     void updateCategory(Category category);

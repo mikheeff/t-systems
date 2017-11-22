@@ -221,8 +221,8 @@
 											<label class="control-label">Complexity Of Rules:</label>
 											<div class="controls">
 												<spring:select path="rule.name" class="input-xlarge">
-													<spring:option value="${'easy'}">Easy</spring:option>
 													<spring:option value="${'very easy'}">Very Easy</spring:option>
+													<spring:option value="${'easy'}">Easy</spring:option>
 													<spring:option value="${'medium'}">Medium</spring:option>
 													<spring:option value="${'hard'}">Hard</spring:option>
 													<spring:option value="${'very hard'}">Very Hard</spring:option>

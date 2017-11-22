@@ -87,6 +87,7 @@ public class GoodsController {
         modelMap.put("categoryFilter", true);
         modelMap.put("cartList", session.getAttribute("cartList"));
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
+        modelMap.put("catalogQuery",new CatalogQuery());
         return "goods";
     }
 
@@ -107,6 +108,7 @@ public class GoodsController {
         modelMap.put("categoryFilter", false);
         modelMap.put("cartList", session.getAttribute("cartList"));
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
+        modelMap.put("catalogQuery",new CatalogQuery());
         return "goods";
     }
     @RequestMapping(value = "/filter/page/{page}", method = RequestMethod.POST)
@@ -119,7 +121,7 @@ public class GoodsController {
         }
         List<Goods> listGoods = goodsService.getAllGoodsByFilter(catalogQuery, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
         modelMap.put("currentPage", page);
-        modelMap.put("amountOfPages", getAmountOfPages(listGoods.size())); //todo все товары?
+        modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoodsByFilter(catalogQuery)));
         modelMap.put("listGoods",listGoods);
         modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory", goodsService.getAllCategories());

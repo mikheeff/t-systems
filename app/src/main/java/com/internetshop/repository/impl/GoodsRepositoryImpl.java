@@ -52,38 +52,81 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public List<GoodsEntity> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults) {
-        boolean isFirst = true;
         String query = "select goods from GoodsEntity goods where ";
-        if (catalogQuery.getNumberOfPlayers() != null) {
-            query = query + "numberOfPlayers <= :numberOfPlayers ";
-            isFirst = false;
-        }
-        if (catalogQuery.getDuration() != null) {
-            if (isFirst == false) {
-                query = query + "and ";
+        query = query + buildFilterQueryString(catalogQuery, query);
+        if(catalogQuery.getSort() != null) {
+            query = query + "order by ";
+            if (catalogQuery.getSort().equals("PRICE")){
+                query = query + "goods.price";
             }
-            query = query + "duration <= :duration ";
-            isFirst = false;
         }
-        if (catalogQuery.getPrice() != null){
-            if (isFirst == false) {
-                query = query + "and ";
-            }
-            query = query + "price <= :price";
-            isFirst = false;
-        }
-        TypedQuery<GoodsEntity> typedQuery = em.createQuery(query,GoodsEntity.class);
+        TypedQuery<GoodsEntity> typedQuery = em.createQuery(query, GoodsEntity.class);
         if (catalogQuery.getNumberOfPlayers() != null) {
             typedQuery.setParameter("numberOfPlayers", catalogQuery.getNumberOfPlayers());
         }
         if (catalogQuery.getDuration() != null) {
             typedQuery.setParameter("duration", catalogQuery.getDuration());
         }
-        if (catalogQuery.getPrice() != null){
+        if (catalogQuery.getPrice() != null) {
             typedQuery.setParameter("price", catalogQuery.getPrice());
         }
+        if (catalogQuery.getRules() != null) {
+            typedQuery.setParameter("name", catalogQuery.getRules());
+        }
+
         typedQuery.setFirstResult(firstId).setMaxResults(maxResults);
         return typedQuery.getResultList();
+    }
+
+    @Override
+    public long getAmountOfGoodsByFilter(CatalogQuery catalogQuery) {
+        String query = "select count(*) from GoodsEntity goods where ";
+
+        TypedQuery<Long> typedQuery = em.createQuery(buildFilterQueryString(catalogQuery, query), Long.class);
+        if (catalogQuery.getNumberOfPlayers() != null) {
+            typedQuery.setParameter("numberOfPlayers", catalogQuery.getNumberOfPlayers());
+        }
+        if (catalogQuery.getDuration() != null) {
+            typedQuery.setParameter("duration", catalogQuery.getDuration());
+        }
+        if (catalogQuery.getPrice() != null) {
+            typedQuery.setParameter("price", catalogQuery.getPrice());
+        }
+        if (catalogQuery.getRules() != null) {
+            typedQuery.setParameter("name", catalogQuery.getRules());
+        }
+        return typedQuery.getSingleResult();
+    }
+
+    private String buildFilterQueryString(CatalogQuery catalogQuery, String query) {
+        boolean isFirst = true;
+        if (catalogQuery.getNumberOfPlayers() != null) {
+            query = query + "numberOfPlayers <= :numberOfPlayers ";
+            isFirst = false;
+        }
+        if (catalogQuery.getDuration() != null) {
+            if (!isFirst) {
+                query = query + "and ";
+            }
+            query = query + "duration <= :duration ";
+            isFirst = false;
+        }
+        if (catalogQuery.getPrice() != null) {
+            if (!isFirst) {
+                query = query + "and ";
+            }
+            query = query + "price <= :price ";
+            isFirst = false;
+        }
+        if (catalogQuery.getRules() != null) {
+            if (!isFirst) {
+                query = query + "and ";
+            }
+            query = query + "rule.name = :name ";
+            isFirst = false;
+        }
+//        em.createQuery("select goods from GoodsEntity goods where rule.name =:",GoodsEntity.class);
+        return query;
     }
 
     @Override

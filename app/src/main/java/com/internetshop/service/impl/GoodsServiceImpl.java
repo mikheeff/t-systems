@@ -282,6 +282,11 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsRepository.getAmountOfGoodsBySearch(searchStr);
     }
 
+    @Override
+    public long getAmountOfGoodsByFilter(CatalogQuery catalogQuery) {
+        return goodsRepository.getAmountOfGoodsByFilter(catalogQuery);
+    }
+
     /**
      * Gets list of all categories
      */

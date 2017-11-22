@@ -24,6 +24,7 @@ public interface GoodsRepository {
     long getAmountOfGoods();
     long getAmountOfGoodsByCategoryName(String categoryName);
     long getAmountOfGoodsBySearch(String searchStr);
+    long getAmountOfGoodsByFilter(CatalogQuery catalogQuery);
     int getRandomGoodsId();
     List<CategoryEntity> getAllCategories();
     int getIdCategoryByName(String name);

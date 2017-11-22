@@ -459,7 +459,6 @@
                                                 <th><strong><big>Day Revenue: ${todayMoney} &#8381;</big></strong></th>
                                             </tr>
                                             </tbody>
-
                                         </table>
                                         <div id="chart_div"></div>
                                     </div>

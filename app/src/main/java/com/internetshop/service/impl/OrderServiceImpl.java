@@ -293,11 +293,13 @@ public class OrderServiceImpl implements OrderService {
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         return convertOrderToDTO(orderEntity);
     }
+
     @Transactional(readOnly = true)
     @Override
     public long getAmountOfClosedOrdersByClientId(int id) {
         return orderRepository.getAmountOfClosedOrdersByClientId(id);
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<Float> getListOfRevenueForEachDayOfCurrentMonth() {
