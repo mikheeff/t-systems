@@ -17,6 +17,11 @@ public interface GoodsService {
     List<Goods> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName);
     List<Goods> getAllGoodsBySearch(String searchStr,int firstId, int maxResults);
     List<Goods> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults);
+    List<Goods> getBestSellers(int amountOfBestSellers);
+    List<Goods> getRelatedGoods(int amount,Goods goods);
+    List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage);
+    List<Goods> getNewGoods(int amountOfNewGoodsOnPage);
+    List<Goods> getBestSellersByCategory(Category category, int amount);
     void addGoods(Goods goods);
     void deleteGoodsById(int id);
     Goods getGoodsById(int id);
@@ -32,11 +37,7 @@ public interface GoodsService {
     void updateCategory(Category category);
     void addCategory(Category category);
     void deleteCategoryById(int id);
-    List<Goods> getBestSellers(int amountOfBestSellers);
-    List<Goods> getRelatedGoods(int amount,Goods goods);
     void createUpdateMessage(GoodsEntity goodsEntity);
-    List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage);
-    List<Goods> getNewGoods(int amountOfNewGoodsOnPage);
     boolean isCartContainsGoods(List<CartItem> cartList, int id);
 
 

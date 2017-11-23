@@ -56,6 +56,11 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     @Override
+    public List<GoodsEntity> getBestSellersByCategoryName(String name, int amount) {
+        return em.createQuery("select goods from GoodsEntity goods where category.name =:name order by goods.salesCounter desc", GoodsEntity.class).setParameter("name",name).setMaxResults(amount).getResultList();
+    }
+
+    @Override
     public List<GoodsEntity> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<GoodsEntity> criteria = builder.createQuery(GoodsEntity.class);

@@ -38,6 +38,7 @@ public class HomeController {
     private ClientService clientService;
 
     public static final int amountOfGoodsOnHomePage = 8;
+    public static final int amountOfBestSellersOnPage = 4;
 
 
     private static Logger logger = LoggerFactory.getLogger(HomeController.class.getName());
@@ -63,6 +64,15 @@ public class HomeController {
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfGoodsOnHomePage));
         modelMap.put("newGoodsList", goodsService.getNewGoods(amountOfGoodsOnHomePage));
         return "index";
+    }
+    @RequestMapping(value = "bestsellers", method = RequestMethod.GET)
+    public String getBestSellersPage(ModelMap modelMap){
+        List<Category> categoryList = goodsService.getAllCategories();
+        modelMap.put("listCategory", categoryList);
+        for (Category category : categoryList) {
+            modelMap.put("bestSellersOf"+category.getId(),goodsService.getBestSellersByCategory(category,amountOfBestSellersOnPage));
+        }
+        return "best_sellers";
     }
 
 

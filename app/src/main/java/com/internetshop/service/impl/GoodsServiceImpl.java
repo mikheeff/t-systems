@@ -116,6 +116,15 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsList;
     }
 
+    @Override
+    public List<Goods> getBestSellersByCategory(Category category, int amount) {
+        List<Goods> goodsList = new ArrayList<>();
+        for (GoodsEntity goodsEntity : goodsRepository.getBestSellersByCategoryName(category.getName(),amount)){
+            goodsList.add(convertGoodsToDTO(goodsEntity));
+        }
+        return goodsList;
+    }
+
     /**
      * Adds new goods
      */

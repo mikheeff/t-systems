@@ -117,7 +117,7 @@
                             </c:forEach>
                         </ul>
                     </li>
-                    <li><a href="goods.jsp">Best Sellers</a>
+                    <li><a href="${pageContext.request.contextPath}/bestsellers">Best Sellers</a>
                     <li><a href="goods.jsp">How To Buy</a></li>
                     <li><a href="goods.jsp">F.A.Q</a></li>
                     <li><a href="goods.jsp">About us</a></li>
@@ -562,7 +562,7 @@
                 title: 'Days'
             },
             vAxis: {
-                title: 'Revenue &#8381;'
+                title: 'Revenue'
             }
         };
 

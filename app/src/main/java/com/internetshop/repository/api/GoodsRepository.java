@@ -15,6 +15,7 @@ public interface GoodsRepository {
     List<GoodsEntity> getBestSellers(int amountOfBestSellers);
     List<GoodsEntity> getRandomGoods(int amountOfRandomGoodsOnPage);
     List<GoodsEntity> getNewGoods(int amountOfNewGoodsOnPage);
+    List<GoodsEntity> getBestSellersByCategoryName(String name, int amount);
 
     int addGoods(GoodsEntity goodsEntity);
     void deleteGoodsById(int id);

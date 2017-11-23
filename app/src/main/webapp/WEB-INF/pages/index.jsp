@@ -90,7 +90,7 @@
 									</c:forEach>
 								</ul>
 							</li>															
-							<li><a href="${pageContext.request.contextPath}/catalog">Best Sellers</a>
+							<li><a href="${pageContext.request.contextPath}/bestsellers">Best Sellers</a>
 							<li><a href="${pageContext.request.contextPath}/catalog">How To Buy</a></li>
 							<li><a href="${pageContext.request.contextPath}/catalog">F.A.Q</a></li>
 							<li><a href="${pageContext.request.contextPath}/catalog">About us</a></li>

@@ -154,7 +154,7 @@
 									</c:forEach>
 								</ul>
 							</li>
-							<li><a href="#">Best Sellers</a>
+							<li><a href="${pageContext.request.contextPath}/bestsellers">Best Sellers</a>
 							<li><a href="#">How To Buy</a></li>
 							<li><a href="#">F.A.Q</a></li>
 							<li><a href="#">About us</a></li>
