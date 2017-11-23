@@ -19,7 +19,43 @@
 			<link href="${pageContext.request.contextPath}/resources/themes/css/main.css" rel="stylesheet"/>
 
 			<!-- scripts -->
+
 			<script src="${pageContext.request.contextPath}/resources/themes/js/jquery-1.7.2.min.js"></script>
+			<script src="${pageContext.request.contextPath}/resources/themes/js/jquery.fancybox.js"></script>
+			<script type="text/javascript">
+                $(document).ready(function (){
+                    $('#cart_form').submit(function () {
+//                    $('#btnCart').click(function () {
+                        if ($('#btnCart').attr("value") != 'In cart' ){
+                        var quantity = $('#quantity').val();
+                        var id = ${goods.id};
+                            $.ajax({
+                                type: 'GET',
+                                url: "/catalog/goods/cart/" + id + "/add/" + quantity,
+                                dataType: 'json',
+                                success: function (size) {
+                                    $('#my_cart_new').html(size);
+                                    $('#btnCart').prop('value', 'In cart').prop('class', 'btn');
+//                                    $('#my_cart').style.display('none')
+                                    document.getElementById("my_cart").style.display = 'none';
+                                    document.getElementById("my_cart_li").style.display = 'block';
+                                    document.getElementById("my_cart_li").style.display = 'inline';
+                                    document.getElementById("quantity").style.display = 'none';
+                                    document.getElementById("qty").style.display = 'none';
+
+                                }
+                            });
+                        } else {
+							redirectToCart();
+                        }
+                    });
+                });
+			</script>
+			<script>
+                function redirectToCart() {
+                    window.location.href = '/catalog/goods/cart';
+                }
+			</script>
 			<script src="${pageContext.request.contextPath}/resources/themes/bootstrap/js/bootstrap.min.js"></script>
 			<script src="${pageContext.request.contextPath}/resources/themes/js/superfish.js"></script>
 			<!--[if lt IE 9]>
@@ -81,11 +117,13 @@
 							<li><a href="/clients/profile">My Account</a></li>
 							<c:if test="${client.role.name!='ROLE_EMPLOYEE'}">
 							<c:if test="${cartList==null}">
-								<li><a href="/catalog/goods/cart">Your Cart(0)</a></li>
+								<li id="my_cart"><a href="/catalog/goods/cart">Your Cart(0)</a></li>
 							</c:if>
 							<c:if test="${cartList!=null}">
-								<li><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
+								<li id="my_cart"><a href="/catalog/goods/cart">Your Cart(${cartList.size()})</a></li>
+								<%--<li><a href="/catalog/goods/cart">Your Cart(<span id="my_cart">${cartList.size()})</span></a></li>--%>
 							</c:if>
+								<li id="my_cart_li" style="display: none; "><a href="/catalog/goods/cart">Your Cart(<span id="my_cart_new"></span>)</a></li>
 							</c:if>
 
 							<c:if test="${client.role.name!=null}" >
@@ -307,26 +345,18 @@
 								</address>
 								<h4><strong>Price: ${goods.price} &#8381;</strong></h4>
 							</div>
-							<div class="span5">
-								<%--<form  class="form-inline">--%>
-									<%--<fieldset>--%>
-										<%--<div class="control-group">--%>
-											<%--<p>&nbsp;</p>--%>
-											<%--<label>Qty:</label>--%>
-											<%--<div class="controls">--%>
-												<%--<input path="quantity" type="text" placeholder="1" class="span1"/>--%>
-												<%--<spring:errors path="name" cssClass="error"/>--%>
-											<%--</div>--%>
-										<%--</div>--%>
-										<%--<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Add to cart"></div>--%>
-									<%--</fieldset>--%>
-								<%--</form>--%>
-								<spring:form action="/catalog/goods/cart/${goods.id}/add" method="post" commandName="cartItem" class="form-inline">
+							<div class="span5" >
+								<form id="cart_form" class="form-inline" action="javascript:void(0);">
+									<c:if test="${!isCartContainsGoods}">
 									<p>&nbsp;</p>
-									<label>Qty:</label>
-									<spring:input path="quantity" type="text" class="span1" placeholder="1" pattern="^[1-9][0-9]*$" title="Amount must be a integer and more then zero"/>
-									<button class="btn btn-inverse" type="submit">Add to cart</button>
-								</spring:form>
+									<label id="qty">Qty:</label>
+									<input path="quantity" id="quantity" type="text" class="span1" value="1" pattern="^[1-9][0-9]*$" title="Amount must be a integer and more then zero"/>
+										<input class="btn btn-inverse" id="btnCart" type="submit"  value="Add to cart">
+									</c:if>
+									<c:if test="${isCartContainsGoods}">
+										<button class="btn" onclick="redirectToCart()">In cart</button>
+									</c:if>
+								</form>
 							</div>							
 						</div>
 						</c:if>
@@ -517,5 +547,6 @@
                 });								
 			});
 		</script>
+
     </body>
 </html>

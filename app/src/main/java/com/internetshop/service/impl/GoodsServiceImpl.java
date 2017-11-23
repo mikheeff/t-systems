@@ -399,6 +399,16 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsList;
     }
 
+    @Override
+    public boolean isCartContainsGoods(List<CartItem> cartList, int id) {
+        for (CartItem item : cartList){
+            if (item.getGoods().getId() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * converts goods to data access object
      *

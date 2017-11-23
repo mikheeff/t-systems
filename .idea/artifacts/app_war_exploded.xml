@@ -70,6 +70,7 @@
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.3" />
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.3" />
           <element id="library" level="project" name="Maven: io.jsonwebtoken:jjwt:0.4" />
+          <element id="library" level="project" name="Maven: org.webjars:jquery:2.1.4" />
         </element>
       </element>
       <element id="directory" name="META-INF">

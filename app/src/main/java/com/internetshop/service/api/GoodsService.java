@@ -37,6 +37,7 @@ public interface GoodsService {
     List<Goods> getRelatedGoods(int amount,Goods goods);
     void createUpdateMessage(GoodsEntity goodsEntity);
     List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage);
+    boolean isCartContainsGoods(List<CartItem> cartList, int id);
 
 
 }

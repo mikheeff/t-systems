@@ -260,30 +260,52 @@ public class GoodsController {
         CartItem cartItem = new CartItem();
         cartItem.setQuantity(1);
         modelMap.put("cartItem", cartItem);
-        modelMap.put("cartList", session.getAttribute("cartList"));
+        ArrayList<CartItem> cartList = (ArrayList<CartItem>) session.getAttribute("cartList");
+        if (cartList != null) {
+            modelMap.put("isCartContainsGoods", goodsService.isCartContainsGoods(cartList, id));
+        }
+        modelMap.put("cartList", cartList);
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
         List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4, goods);
         modelMap.put("relatedGoodsList", relatedGoodsList);
         return "goods_detail";
     }
 
+//    @ResponseBody
+//    @RequestMapping(value = "goods/addToCart")
+//    protected  addToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        response.setContentType("text/plain");
+//        String quantity = request.getParameter("quantity");
+//        String id = request.getParameter("id");
+//        PrintWriter out = response.getWriter();
+//        out.print("2");
+//    }
+
     /**
      * adds goodsItem model to session
      *
      * @return
      */
-    @RequestMapping(value = "/goods/cart/{id}/add", method = RequestMethod.POST)
-    public String addToCart(@PathVariable(value = "id") int id, CartItem cartItem) {
-        logger.info("getGoodsById");
+    @ResponseBody
+    @RequestMapping(value = "/goods/cart/{id}/add/{quantity}", method = RequestMethod.GET)
+    public String addToCart(@PathVariable(value = "id") int id, @PathVariable(value = "quantity") int quantity) {
         if (session.getAttribute("cartList") == null) {
             List<CartItem> cartList = new ArrayList<>();
             session.setAttribute("cartList", cartList);
         }
+
         List<CartItem> cartList = (ArrayList<CartItem>) session.getAttribute("cartList");
+        if (goodsService.isCartContainsGoods(cartList, id)) {
+            return "redirect:/catalog/goods/cart";
+        }
+        CartItem cartItem = new CartItem();
         cartItem.setGoods(goodsService.getGoodsById(id));
+        cartItem.setQuantity(quantity);
         cartList.add(cartItem);
-        session.setAttribute("cartList", cartList);
-        return "redirect:/catalog/goods/" + id;
+
+
+        return cartList.size() + "";
+
     }
 
     /**
