@@ -37,6 +37,8 @@ public class HomeController {
     private OrderService orderService;
     private ClientService clientService;
 
+    public static final int amountOfGoodsOnHomePage = 8;
+
 
     private static Logger logger = LoggerFactory.getLogger(HomeController.class.getName());
 
@@ -56,23 +58,19 @@ public class HomeController {
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
     public String main(ModelMap modelMap) {
         logger.info("main");
-        modelMap.put("randomGoods", goodsService.getRandomGoods(6));
+        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfGoodsOnHomePage));
         modelMap.put("listCategory", goodsService.getAllCategories());
-        String searchStr = "";
-        modelMap.put("search", searchStr);
-        modelMap.put("bestSellersList", goodsService.getBestSellers(8));
+        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfGoodsOnHomePage));
+        modelMap.put("newGoodsList", goodsService.getNewGoods(amountOfGoodsOnHomePage));
         return "index";
     }
 
 
     @RequestMapping(value = "employee/administration", method = RequestMethod.GET)
     public String getAdminPage(ModelMap modelMap) {
-        logger.info("addGoods");
         modelMap.put("goods", new Goods());
         modelMap.put("category", new Category());
         modelMap.put("listCategory", goodsService.getAllCategories());
-        String searchStr = "";
-        modelMap.put("search", searchStr);
         modelMap.put("clientOrdersList", orderService.getAllOrders());
         modelMap.put("bestSellersList", goodsService.getBestSellers(10));
         List<Client> bestClientsList = clientService.getBestClientsList(10);

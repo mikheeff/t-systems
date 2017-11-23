@@ -23,7 +23,6 @@ public interface GoodsService {
     void updateGoods(Goods goods);
     GoodsEntity convertGoodsToDAO(Goods goods);
     Goods convertGoodsToDTO(GoodsEntity goodsEntity);
-    int getRandomGoodsId();
     long getAmountOfGoods();
     long getAmountOfGoodsByCategoryName(String categoryName);
     long getAmountOfGoodsBySearch(String searchStr);
@@ -37,7 +36,9 @@ public interface GoodsService {
     List<Goods> getRelatedGoods(int amount,Goods goods);
     void createUpdateMessage(GoodsEntity goodsEntity);
     List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage);
+    List<Goods> getNewGoods(int amountOfNewGoodsOnPage);
     boolean isCartContainsGoods(List<CartItem> cartList, int id);
+
 
 
 }

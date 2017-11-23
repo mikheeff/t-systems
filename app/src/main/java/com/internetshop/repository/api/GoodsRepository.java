@@ -1,11 +1,7 @@
 package com.internetshop.repository.api;
 
-import com.internetshop.Exceptions.NoSuchCategoryException;
-import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.entities.*;
 import com.internetshop.model.CatalogQuery;
-import com.internetshop.model.DeliveryMethod;
-import com.internetshop.model.PaymentType;
 
 import java.util.List;
 
@@ -16,6 +12,9 @@ public interface GoodsRepository {
     List<GoodsEntity> getAllGoodsBySearch(String searchStr,int firstId, int maxResults);
     List<GoodsEntity> getRelatedGoodsByCategoryName(int amount,String categoryName);
     List<GoodsEntity> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults);
+    List<GoodsEntity> getBestSellers(int amountOfBestSellers);
+    List<GoodsEntity> getRandomGoods(int amountOfRandomGoodsOnPage);
+    List<GoodsEntity> getNewGoods(int amountOfNewGoodsOnPage);
 
     int addGoods(GoodsEntity goodsEntity);
     void deleteGoodsById(int id);
@@ -25,7 +24,6 @@ public interface GoodsRepository {
     long getAmountOfGoodsByCategoryName(String categoryName);
     long getAmountOfGoodsBySearch(String searchStr);
     long getAmountOfGoodsByFilter(CatalogQuery catalogQuery);
-    int getRandomGoodsId();
     List<CategoryEntity> getAllCategories();
     int getIdCategoryByName(String name);
     void addCategory(CategoryEntity categoryEntity);
@@ -34,6 +32,5 @@ public interface GoodsRepository {
     void deleteCategoryById(int id);
     int getIdRuleByName(String name);
     RuleEntity getRuleByName(String name);
-    List<GoodsEntity> getBestSellers(int amountOfBestSellers);
 
 }

@@ -246,15 +246,6 @@ public class GoodsServiceImpl implements GoodsService {
         sendMessage(event);
     }
 
-    /**
-     * Gets one random goods id
-     */
-    @Transactional(readOnly = true)
-    @Override
-    public int getRandomGoodsId() {
-        logger.info("getRandomGoodsId");
-        return goodsRepository.getRandomGoodsId();
-    }
 
     /**
      * gets amount of goods in DataBase
@@ -388,13 +379,9 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Transactional(readOnly = true)
     public List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage) {
-        Set<Integer> randomGoodsIdSet = new HashSet<>();
-        while (randomGoodsIdSet.size() < amountOfRandomGoodsOnPage) {
-            randomGoodsIdSet.add(getRandomGoodsId());
-        }
         List<Goods> goodsList = new ArrayList<>();
-        for (int id : randomGoodsIdSet) {
-            goodsList.add(getGoodsById(id));
+        for(GoodsEntity goodsEntity : goodsRepository.getRandomGoods(amountOfRandomGoodsOnPage)){
+            goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
     }
@@ -407,6 +394,15 @@ public class GoodsServiceImpl implements GoodsService {
             }
         }
         return false;
+    }
+
+    @Override
+    public List<Goods> getNewGoods(int amountOfNewGoodsOnPage) {
+        List<Goods> goodsList = new ArrayList<>();
+        for(GoodsEntity goodsEntity : goodsRepository.getNewGoods(amountOfNewGoodsOnPage)){
+            goodsList.add(convertGoodsToDTO(goodsEntity));
+        }
+        return goodsList;
     }
 
     /**

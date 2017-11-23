@@ -151,8 +151,13 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     @Override
-    public int getRandomGoodsId() {
-        return em.createQuery("select goods.id from GoodsEntity goods order by rand()", Integer.class).setMaxResults(1).getSingleResult();
+    public List<GoodsEntity> getRandomGoods(int amountOfGoodsOnPage) {
+        return em.createQuery("select goods from GoodsEntity goods order by rand()", GoodsEntity.class).setMaxResults(amountOfGoodsOnPage).getResultList();
+    }
+
+    @Override
+    public List<GoodsEntity> getNewGoods(int amountOfNewGoodsOnPage) {
+        return em.createQuery("select goods from GoodsEntity goods order by date desc", GoodsEntity.class).setMaxResults(amountOfNewGoodsOnPage).getResultList();
     }
 
     @Override
