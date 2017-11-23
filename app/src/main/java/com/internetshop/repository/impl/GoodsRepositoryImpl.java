@@ -10,6 +10,9 @@ import com.internetshop.repository.api.GoodsRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
@@ -52,96 +55,58 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public List<GoodsEntity> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults) {
-        String query = "select goods from GoodsEntity goods ";
-        query = buildFilterQueryString(catalogQuery, query);
-        if(catalogQuery.getSort() != null) {
-            query = query + "order by ";
-            if (catalogQuery.getSort().equals("PRICE")){
-                query = query + "goods.price";
-            }
-            if (catalogQuery.getSort().equals("ALPHABET")){
-                query = query + "goods.price";
-            }
-            if (catalogQuery.getSort().equals("RATING")){
-                query = query + "goods.price";
-            }
-            if (catalogQuery.getSort().equals("DATE")){
-                query = query + "goods.price";
-            }
-        }
-        TypedQuery<GoodsEntity> typedQuery = em.createQuery(query, GoodsEntity.class);
-        if (catalogQuery.getNumberOfPlayers() != null) {
-            typedQuery.setParameter("numberOfPlayers", catalogQuery.getNumberOfPlayers());
-        }
-        if (catalogQuery.getDuration() != null) {
-            typedQuery.setParameter("duration", catalogQuery.getDuration());
-        }
-        if (catalogQuery.getPrice() != null) {
-            typedQuery.setParameter("price", catalogQuery.getPrice());
-        }
-        if (catalogQuery.getRules() != null) {
-            typedQuery.setParameter("name", catalogQuery.getRules());
-        }
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<GoodsEntity> criteria = builder.createQuery(GoodsEntity.class);
+        Root<GoodsEntity> goodsRoot = criteria.from(GoodsEntity.class);
 
-        typedQuery.setFirstResult(firstId).setMaxResults(maxResults);
-        return typedQuery.getResultList();
+        criteria = buildFilterQueryString(catalogQuery, builder, criteria, goodsRoot);
+        if (catalogQuery.getSort() != null) {
+            if (catalogQuery.getSort().equals("PRICE")) {
+                criteria.orderBy(builder.asc(goodsRoot.get("price")));
+            }
+            if (catalogQuery.getSort().equals("ALPHABET")) {
+                criteria.orderBy(builder.asc(goodsRoot.get("name")));
+            }
+            if (catalogQuery.getSort().equals("RATING")) {
+                criteria.orderBy(builder.asc(goodsRoot.get("price")));
+            }
+            if (catalogQuery.getSort().equals("DATE")) {
+                criteria.orderBy(builder.asc(goodsRoot.get("price")));
+            }
+        }
+        List<GoodsEntity> list = em.createQuery(criteria).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
+        return list;
     }
 
     @Override
     public long getAmountOfGoodsByFilter(CatalogQuery catalogQuery) {
-        String query = "select count(*) from GoodsEntity goods ";
-
-        TypedQuery<Long> typedQuery = em.createQuery(buildFilterQueryString(catalogQuery, query), Long.class);
-        if (catalogQuery.getNumberOfPlayers() != null) {
-            typedQuery.setParameter("numberOfPlayers", catalogQuery.getNumberOfPlayers());
-        }
-        if (catalogQuery.getDuration() != null) {
-            typedQuery.setParameter("duration", catalogQuery.getDuration());
-        }
-        if (catalogQuery.getPrice() != null) {
-            typedQuery.setParameter("price", catalogQuery.getPrice());
-        }
-        if (catalogQuery.getRules() != null) {
-            typedQuery.setParameter("name", catalogQuery.getRules());
-        }
-        return typedQuery.getSingleResult();
+        CriteriaBuilder builder = em.getCriteriaBuilder();
+        CriteriaQuery<Long> criteria = builder.createQuery(Long.class);
+        Root<GoodsEntity> goodsRoot = criteria.from(GoodsEntity.class);
+        criteria = buildFilterQueryString(catalogQuery, builder, criteria, goodsRoot);
+        return em.createQuery(criteria.select(builder.count(goodsRoot))).getSingleResult();
     }
 
-    private String buildFilterQueryString(CatalogQuery catalogQuery, String query) {
-        boolean isFirst = true;
+    private CriteriaQuery buildFilterQueryString(CatalogQuery catalogQuery, CriteriaBuilder builder, CriteriaQuery criteria, Root<GoodsEntity> goodsRoot) {
+        criteria.select(goodsRoot);
         if (catalogQuery.getNumberOfPlayers() != null) {
-            query = query + "numberOfPlayers <= :numberOfPlayers ";
-            isFirst = false;
+            criteria.where(builder.lessThanOrEqualTo(goodsRoot.get("numberOfPlayers"), catalogQuery.getNumberOfPlayers()));
         }
         if (catalogQuery.getDuration() != null) {
-            if (!isFirst) {
-                query = query + "and ";
-            } else {
-                query = query + "where ";
-            }
-            query = query + "duration <= :duration ";
-            isFirst = false;
+            criteria.where(builder.lessThanOrEqualTo(goodsRoot.get("duration"), catalogQuery.getDuration()));
         }
         if (catalogQuery.getPrice() != null) {
-            if (!isFirst) {
-                query = query + "and ";
+            if (catalogQuery.getPrice() <= 3000) {
+                criteria.where(builder.lessThanOrEqualTo(goodsRoot.get("price"), catalogQuery.getPrice()));
             } else {
-                query = query + "where ";
+                criteria.where(builder.greaterThanOrEqualTo(goodsRoot.get("price"), catalogQuery.getPrice()));
             }
-            query = query + "price <= :price ";
-            isFirst = false;
         }
         if (catalogQuery.getRules() != null) {
-            if (!isFirst) {
-                query = query + "and ";
-            } else {
-                query = query + "where ";
-            }
-            query = query + "rule.name = :name ";
-            isFirst = false;
+            criteria.where(builder.equal(goodsRoot.get("rule").get("name"), catalogQuery.getRules()));
         }
-//        em.createQuery("select goods from GoodsEntity goods where rule.name =:",GoodsEntity.class);
-        return query;
+
+        return criteria;
     }
 
     @Override

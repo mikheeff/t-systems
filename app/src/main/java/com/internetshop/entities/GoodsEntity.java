@@ -31,6 +31,8 @@ public class GoodsEntity {
     private String img;
     @Column (name = "sales_counter")
     private int salesCounter;
+    @Column (name = "rating")
+    private int rating;
     @ManyToOne
     @JoinColumn(name = "id_category")
     private CategoryEntity category;
@@ -56,7 +58,7 @@ public class GoodsEntity {
         this.rule = rule;
     }
 
-    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, CategoryEntity category, RuleEntity rule) {
+    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, int rating, CategoryEntity category, RuleEntity rule) {
         this.name = name;
         this.price = price;
         this.numberOfPlayers = numberOfPlayers;
@@ -66,6 +68,7 @@ public class GoodsEntity {
         this.description = description;
         this.img = img;
         this.salesCounter = salesCounter;
+        this.rating = rating;
         this.category = category;
         this.rule = rule;
     }
@@ -164,5 +167,13 @@ public class GoodsEntity {
 
     public void setSalesCounter(int salesCounter) {
         this.salesCounter = salesCounter;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

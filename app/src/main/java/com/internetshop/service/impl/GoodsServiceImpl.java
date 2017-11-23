@@ -196,6 +196,7 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsEntity.getDescription(),
                 goodsEntity.getImg(),
                 goodsEntity.getSalesCounter(),
+                goodsEntity.getRating(),
                 category,
                 rule);
         return goods;
@@ -443,6 +444,7 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsEntity.getDescription(),
                 goodsEntity.getImg(),
                 goodsEntity.getSalesCounter(),
+                goodsEntity.getRating(),
                 category,
                 rule);
         return goods;

@@ -20,12 +20,14 @@ public class Goods {
     @NotNull(message = "Amount must not be empty")
     private int amount;
     private int visible;
-    @Size(max = 1000,message = "Description must be less then 1000 character long")
+    @Size(max = 5000,message = "Description must be less then 1000 character long")
     private String description;
     private String img;
     private int salesCounter;
+    private int rating;
     private Category category;
     private Rule rule;
+
 
     public Goods() {
     }
@@ -44,7 +46,7 @@ public class Goods {
         this.rule = rule;
     }
 
-    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, Category category, Rule rule) {
+    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, int rating, Category category, Rule rule) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -55,6 +57,7 @@ public class Goods {
         this.description = description;
         this.img = img;
         this.salesCounter = salesCounter;
+        this.rating = rating;
         this.category = category;
         this.rule = rule;
     }
@@ -153,5 +156,13 @@ public class Goods {
 
     public void setSalesCounter(int salesCounter) {
         this.salesCounter = salesCounter;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

@@ -197,10 +197,10 @@
                                                         />
                                                         <span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
                                                     </div>
-                                                    <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png">
+                                                    <img class="img-responsive pull-right" src="/resources/themes/images/creditIcons.png" alt="">
                                                 </div>
                                                 <div class="display-td"  >
-                                                    <img class="img-responsive pull-right" src="http://static1.businessinsider.com/image/57fd4b7b4046dd36318b4e99-480/when-to-use-credit-2016lead.png" width="200" >
+                                                    <img class="img-responsive pull-right" src="/resources/themes/images/credit.png" width="200" >
                                                 </div>
                                             </div>
                                         </div>

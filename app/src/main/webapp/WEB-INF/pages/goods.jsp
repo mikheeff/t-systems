@@ -233,7 +233,7 @@
 									</c:forEach>
 								</ul>
 							</li>
-							<li><a href="#">Best Sellers</a>
+							<li><a href="#">Best Sellers</a></li>
 							<li><a href="#">How To Buy</a></li>
 							<li><a href="#">F.A.Q</a></li>
 							<li><a href="#">About us</a></li>
@@ -261,18 +261,17 @@
 				<div class="row">						
 					<div class="span9">
 						<ul class="thumbnails listing-products">
-							<c:forEach var="goodsVar" items="${listGoods}">
-							<li class="span3">
+							<c:forEach var="goodsVar" begin="0" end="8" items="${listGoods}">
+							<li class="span3" >
 								<div class="product-box">
 									<span class="sale_tag"></span>												
-									<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}" width="342" height="342"></a><br/>
+									<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}" style="height: 270px; width: 270px;" ></a><br/>
 									<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}" class="title">${goodsVar.name}</a><br/>
 									<a href="#" class="category">${goodsVar.category.name}</a>
 									<p class="price">${goodsVar.price} &#8381;</p>
 								</div>
 							</li>
 							</c:forEach>
-
 						</ul>								
 						<hr>
 						<div class="pagination pagination-small pagination-centered">
@@ -449,9 +448,10 @@
 										<div class="controls">
 											<spring:select path="price" class="input-xlarge" id="filterInput">
 												<spring:option value="${null}">---Please Select---</spring:option>
-												<c:forEach  begin = "1" end = "5"  varStatus="count">
+												<c:forEach  begin = "1" end = "4"  varStatus="count">
 													<spring:option value="${count.index*500}">less then ${count.index*500}</spring:option>
 												</c:forEach>
+												<spring:option value="3000">less then 3000</spring:option>
 												<spring:option value="3001">more then 3000</spring:option>
 											</spring:select>
 										</div>
@@ -478,6 +478,11 @@
 										</div>
 									</div>
 									<div class="actions"><input tabindex="9" class="btn btn-inverse small pull-left" type="submit" value="Filter"></div>
+									<form action="/catalog/page/${1}" class="form-inline" method="get">
+										<span class="pull-right">
+											<button class="btn pull-right" type="submit">Reset</button>
+										</span>
+									</form>
 								</fieldset>
 								</spring:form>
 							</ul>

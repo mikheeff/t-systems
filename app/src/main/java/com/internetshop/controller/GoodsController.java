@@ -66,7 +66,7 @@ public class GoodsController {
         modelMap.put("categoryFilter", false);
         modelMap.put("cartList", session.getAttribute("cartList"));
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
-        modelMap.put("catalogQuery",new CatalogQuery());
+        modelMap.put("catalogQuery", new CatalogQuery());
         return "goods";
     }
 
@@ -87,7 +87,7 @@ public class GoodsController {
         modelMap.put("categoryFilter", true);
         modelMap.put("cartList", session.getAttribute("cartList"));
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
-        modelMap.put("catalogQuery",new CatalogQuery());
+        modelMap.put("catalogQuery", new CatalogQuery());
         return "goods";
     }
 
@@ -108,35 +108,36 @@ public class GoodsController {
 //        modelMap.put("categoryFilter", false);
         modelMap.put("cartList", session.getAttribute("cartList"));
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
-        modelMap.put("catalogQuery",new CatalogQuery());
+        modelMap.put("catalogQuery", new CatalogQuery());
         return "goods";
     }
+
     @RequestMapping(value = "/filter/page/{page}", method = RequestMethod.POST)
-    public String getAllGoodsByFilter(@PathVariable(value = "page") int page,@ModelAttribute(value = "catalogQuery") CatalogQuery catalogQuery, ModelMap modelMap){
-        if (catalogQuery.getRules().equals("")){
+    public String getAllGoodsByFilter(@PathVariable(value = "page") int page, @ModelAttribute(value = "catalogQuery") CatalogQuery catalogQuery, ModelMap modelMap) {
+        if (catalogQuery.getRules().equals("")) {
             catalogQuery.setRules(null);
         }
         if (catalogQuery.getSort().equals("")) {
             catalogQuery.setSort(null);
         }
-        session.setAttribute("catalogQuery",catalogQuery);
+        session.setAttribute("catalogQuery", catalogQuery);
 
-        return "redirect:/catalog/filter/page/"+page;
+        return "redirect:/catalog/filter/page/" + page;
     }
 
     @RequestMapping(value = "/filter/page/{page}", method = RequestMethod.GET)
     public String getAllGoodsByFilter(@PathVariable(value = "page") int page, ModelMap modelMap) {
-        CatalogQuery catalogQuery = (CatalogQuery)session.getAttribute("catalogQuery");
+        CatalogQuery catalogQuery = (CatalogQuery) session.getAttribute("catalogQuery");
         List<Goods> listGoods = goodsService.getAllGoodsByFilter(catalogQuery, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
         modelMap.put("currentPage", page);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoodsByFilter(catalogQuery)));
-        modelMap.put("listGoods",listGoods);
+        modelMap.put("listGoods", listGoods);
         modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
         modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("cartList", session.getAttribute("cartList"));
-        modelMap.put("catalogQuery",catalogQuery);
+        modelMap.put("catalogQuery", catalogQuery);
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
-        modelMap.put("isFilter",true);
+        modelMap.put("isFilter", true);
         return "goods";
     }
 
@@ -207,7 +208,7 @@ public class GoodsController {
     public String deleteGoods(@PathVariable(value = "id") int id) {
         logger.info("deleteGoods");
         this.goodsService.deleteGoodsById(id);
-        return "redirect:/catalog";
+        return "redirect:/catalog/page/1";
     }
 
     /**
@@ -384,7 +385,7 @@ public class GoodsController {
     public String deleteCategory(@PathVariable(value = "id") int id) {
         logger.info("deleteCategory");
         this.goodsService.deleteCategoryById(id);
-        return "redirect:/catalog";
+        return "redirect:/catalog/page/1";
     }
 
 
