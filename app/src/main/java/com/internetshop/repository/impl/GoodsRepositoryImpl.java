@@ -12,7 +12,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -71,7 +73,7 @@ public class GoodsRepositoryImpl implements GoodsRepository {
                 criteria.orderBy(builder.asc(goodsRoot.get("price")));
             }
             if (catalogQuery.getSort().equals("DATE")) {
-                criteria.orderBy(builder.asc(goodsRoot.get("price")));
+                criteria.orderBy(builder.desc(goodsRoot.get("date")));
             }
         }
         List<GoodsEntity> list = em.createQuery(criteria).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
@@ -89,24 +91,25 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     private CriteriaQuery buildFilterQueryString(CatalogQuery catalogQuery, CriteriaBuilder builder, CriteriaQuery criteria, Root<GoodsEntity> goodsRoot) {
         criteria.select(goodsRoot);
+        final List<Predicate> predicates = new ArrayList<>();
+
         if (catalogQuery.getNumberOfPlayers() != null) {
-            criteria.where(builder.lessThanOrEqualTo(goodsRoot.get("numberOfPlayers"), catalogQuery.getNumberOfPlayers()));
+            predicates.add(builder.lessThanOrEqualTo(goodsRoot.get("numberOfPlayers"), catalogQuery.getNumberOfPlayers()));
         }
         if (catalogQuery.getDuration() != null) {
-            criteria.where(builder.lessThanOrEqualTo(goodsRoot.get("duration"), catalogQuery.getDuration()));
+            predicates.add(builder.lessThanOrEqualTo(goodsRoot.get("duration"), catalogQuery.getDuration()));
         }
         if (catalogQuery.getPrice() != null) {
             if (catalogQuery.getPrice() <= 3000) {
-                criteria.where(builder.lessThanOrEqualTo(goodsRoot.get("price"), catalogQuery.getPrice()));
+                predicates.add(builder.lessThanOrEqualTo(goodsRoot.get("price"), catalogQuery.getPrice()));
             } else {
-                criteria.where(builder.greaterThanOrEqualTo(goodsRoot.get("price"), catalogQuery.getPrice()));
+                predicates.add(builder.greaterThanOrEqualTo(goodsRoot.get("price"), catalogQuery.getPrice()));
             }
         }
         if (catalogQuery.getRules() != null) {
-            criteria.where(builder.equal(goodsRoot.get("rule").get("name"), catalogQuery.getRules()));
+            predicates.add(builder.equal(goodsRoot.get("rule").get("name"), catalogQuery.getRules()));
         }
-
-        return criteria;
+        return criteria.where(builder.and(predicates.toArray(new Predicate[predicates.size()])));
     }
 
     @Override

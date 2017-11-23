@@ -165,10 +165,18 @@
 											<div class="controls">
 												<spring:input path="id" readonly="true" type="text" placeholder="Enter name of goods" class="input-xlarge" />
 											</div>
-										</div><div class="control-group">
+										</div>
+										<div class="control-group">
 											<label class="control-label">Name:</label>
 											<div class="controls">
 												<spring:input path="name" type="text" placeholder="Enter name of goods" class="input-xlarge" />
+												<spring:errors path="name" cssClass="error"/>
+											</div>
+										</div>
+										<div class="control-group">
+											<label class="control-label">Goods receipt date:</label>
+											<div class="controls">
+												<spring:input path="date" readonly="true" type="text" placeholder="Enter name of goods" class="input-xlarge" />
 												<spring:errors path="name" cssClass="error"/>
 											</div>
 										</div>
@@ -378,7 +386,7 @@
 					<div class="span3 col">
 						<div class="block">
 							<c:if test="${client.role.name=='ROLE_EMPLOYEE'}" >
-								<form action="/catalog/employee/add">
+								<form action="/employee/administration">
 									<button type="submit" class="btn btn-inverse">Add new Goods or Category</button>
 								</form>
 							</c:if>

@@ -27,6 +27,7 @@ public class Goods {
     private int rating;
     private Category category;
     private Rule rule;
+    private String date;
 
 
     public Goods() {
@@ -46,7 +47,7 @@ public class Goods {
         this.rule = rule;
     }
 
-    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, int rating, Category category, Rule rule) {
+    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, int rating, Category category, Rule rule, String date) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -60,6 +61,7 @@ public class Goods {
         this.rating = rating;
         this.category = category;
         this.rule = rule;
+        this.date = date;
     }
 
     public Category getCategory() {
@@ -164,5 +166,13 @@ public class Goods {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

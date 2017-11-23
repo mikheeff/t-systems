@@ -33,6 +33,8 @@ public class GoodsEntity {
     private int salesCounter;
     @Column (name = "rating")
     private int rating;
+    @Column (name = "add_time")
+    private String date;
     @ManyToOne
     @JoinColumn(name = "id_category")
     private CategoryEntity category;
@@ -58,7 +60,7 @@ public class GoodsEntity {
         this.rule = rule;
     }
 
-    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, int rating, CategoryEntity category, RuleEntity rule) {
+    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, int rating, String date, CategoryEntity category, RuleEntity rule) {
         this.name = name;
         this.price = price;
         this.numberOfPlayers = numberOfPlayers;
@@ -69,6 +71,7 @@ public class GoodsEntity {
         this.img = img;
         this.salesCounter = salesCounter;
         this.rating = rating;
+        this.date = date;
         this.category = category;
         this.rule = rule;
     }
@@ -175,5 +178,13 @@ public class GoodsEntity {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

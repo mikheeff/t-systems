@@ -448,9 +448,10 @@
 										<div class="controls">
 											<spring:select path="price" class="input-xlarge" id="filterInput">
 												<spring:option value="${null}">---Please Select---</spring:option>
-												<c:forEach  begin = "1" end = "4"  varStatus="count">
-													<spring:option value="${count.index*500}">less then ${count.index*500}</spring:option>
-												</c:forEach>
+												<spring:option value="500">less then 500</spring:option>
+												<spring:option value="1000">less then 1000</spring:option>
+												<spring:option value="1500">less then 1500</spring:option>
+												<spring:option value="2000">less then 2000</spring:option>
 												<spring:option value="3000">less then 3000</spring:option>
 												<spring:option value="3001">more then 3000</spring:option>
 											</spring:select>

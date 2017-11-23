@@ -13,10 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class GoodsServiceImpl implements GoodsService {
@@ -125,6 +124,10 @@ public class GoodsServiceImpl implements GoodsService {
     public void addGoods(Goods goods) {
         logger.info("addGoods");
         goods.setSalesCounter(0); //When employee adds new goods its counter is 0
+        Date date = new Date();
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
+        goods.setDate(format.format(date));
         int idNewGoods = this.goodsRepository.addGoods(convertGoodsToDAO(goods));
         goods.setId(idNewGoods);
         createAddMessage(goods);
@@ -198,7 +201,8 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsEntity.getSalesCounter(),
                 goodsEntity.getRating(),
                 category,
-                rule);
+                rule,
+                goodsEntity.getDate());
         return goods;
     }
 
@@ -421,6 +425,9 @@ public class GoodsServiceImpl implements GoodsService {
                 goods.getImg(),
                 categoryEntity,
                 ruleEntity);
+
+        goodsEntity.setDate(goods.getDate());
+
         return goodsEntity;
     }
 
@@ -446,7 +453,8 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsEntity.getSalesCounter(),
                 goodsEntity.getRating(),
                 category,
-                rule);
+                rule,
+                goodsEntity.getDate());
         return goods;
     }
 
