@@ -65,13 +65,13 @@ public class GoodsControllerTest {
         item2.setGoods(goods2);
         item2.setQuantity(3);
         List<CartItem> cartList = Arrays.asList(item1,item2);
-        float sum = OrderController.getSumOfOrder(cartList);
+        float sum = orderService.getSumOfOrder(cartList);
         assertEquals(3420,sum,0.01);
     }
     @Test
     public void getSumOfOrderEmptyCart(){
         List<CartItem> cartList = new ArrayList<>();
-        float sum = OrderController.getSumOfOrder(cartList);
+        float sum = orderService.getSumOfOrder(cartList);
         assertEquals(0,sum,0.01);
     }
 

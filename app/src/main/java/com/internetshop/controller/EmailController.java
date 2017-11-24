@@ -44,9 +44,7 @@ public class EmailController {
 
     @RequestMapping(value = "/email/send", method = RequestMethod.GET)
     public String sendEmailConfirm(ModelMap modelMap) {
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        goodsService.putDefaultAttributes(modelMap);
         String email = (String) session.getAttribute("nonVerifiedClientEmail");
         if (email == null) {
             return "redirect:/";
@@ -66,9 +64,7 @@ public class EmailController {
 
     @RequestMapping(value = "/email/send", method = RequestMethod.POST)
     public String resendEmailConfirm(String email,ModelMap modelMap) {
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        goodsService.putDefaultAttributes(modelMap);
         Client client = clientService.getUserByEmail(email);
         if (client.getIsConfirm()==1){
             modelMap.put("error","Account is confirmed");
@@ -81,9 +77,7 @@ public class EmailController {
 
     @RequestMapping(value = "/confirm")
     public String confirmEmail(@RequestParam(value = "id", required = false) String id, ModelMap modelMap) {
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        goodsService.putDefaultAttributes(modelMap);
         String email;
         try {
             email = clientService.getEmailByConfirmationId(id);
@@ -104,17 +98,13 @@ public class EmailController {
 
     @RequestMapping(value = "/send/recover", method = RequestMethod.GET)
     public String recoverMail(ModelMap modelMap) {
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        goodsService.putDefaultAttributes(modelMap);
         return "recover_page";
     }
 
     @RequestMapping(value = "/send/recover", method = RequestMethod.POST)
     public String recoverMail(String email, ModelMap modelMap) {
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        goodsService.putDefaultAttributes(modelMap);
         try {
             clientService.recoverConfirmationIdAndSendEmail(email);
         } catch (NoResultException e) {
@@ -127,9 +117,7 @@ public class EmailController {
 
     @RequestMapping(value = "/recover/password", method = RequestMethod.GET)
     public String recoverPassword(@RequestParam(value = "id", required = false) String id, ModelMap modelMap) {
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        goodsService.putDefaultAttributes(modelMap);
         String email;
         try {
             email = clientService.getEmailByConfirmationId(id);
@@ -149,9 +137,7 @@ public class EmailController {
 
     @RequestMapping(value = "/recover/password", method = RequestMethod.POST)
     public String recoverPassword(@ModelAttribute(value = "passwordField") @Valid PasswordField passwordField, BindingResult bindingResult, ModelMap modelMap) {
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
+        goodsService.putDefaultAttributes(modelMap);
         if (bindingResult.hasErrors()) {
             modelMap.put("passwordField", new PasswordField());
             modelMap.put("error", "Entered characters are not allowed!");
@@ -173,29 +159,6 @@ public class EmailController {
             return "recover_password";
         }
         modelMap.put("msg", "Password has been successfully changed");
-        return "message";
-    }
-
-
-    @RequestMapping(value = "/send/order/{id}", method = RequestMethod.GET)
-    public String sendOrderMail(ModelMap modelMap,
-                                @PathVariable(value = "id") int id) {
-        Order order = orderService.getOrderById(id);
-        Client client = order.getClient();
-
-        mailService.sendEmail(client,
-                "your order with ID:" + id + " is accepted for processing",
-                AppConfig.HOST_URL + "/order/details/" + id,
-                "Dice Games, new order",
-                "order.txt");
-
-        if (client.getPhone() != null) {
-            mailService.sendSMS("Your order ID: " + id + " DiceGames.com", client.getPhone());
-        }
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
-        modelMap.put("msg", "Dear customer, your order with ID: " + id + " is accepted for processing. In the near future an operator will contact you.");
         return "message";
     }
 }

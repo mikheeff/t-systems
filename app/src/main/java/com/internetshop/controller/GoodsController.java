@@ -58,14 +58,12 @@ public class GoodsController {
     @RequestMapping(value = "/page/{page}", method = RequestMethod.GET)
     public String getAllGoods(@PathVariable(value = "page") int page, ModelMap modelMap) {
         logger.info("getAllGoods");
+        goodsService.putDefaultAttributes(modelMap);
         modelMap.put("currentPage", page);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods", goodsService.getAllGoods(amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage));
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("categoryFilter", false);
         modelMap.put("cartList", session.getAttribute("cartList"));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
         modelMap.put("catalogQuery", new CatalogQuery());
         return "goods";
     }
@@ -78,15 +76,13 @@ public class GoodsController {
     @RequestMapping(value = "/{category}/page/{page}", method = RequestMethod.GET)
     public String getAllGoodsByCategory(@PathVariable("category") String categoryName, @PathVariable(value = "page") int page, ModelMap modelMap) {
         logger.info("getAllGoodsByCategory");
+        goodsService.putDefaultAttributes(modelMap);
         modelMap.put("currentPage", page);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoodsByCategoryName(categoryName)));
         modelMap.put("listGoods", goodsService.getAllGoodsByCategoryName(amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage, categoryName));
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("categoryName", categoryName);
         modelMap.put("categoryFilter", true);
         modelMap.put("cartList", session.getAttribute("cartList"));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
         modelMap.put("catalogQuery", new CatalogQuery());
         return "goods";
     }
@@ -99,15 +95,12 @@ public class GoodsController {
     @RequestMapping(value = "/search/{searchStr}/page/{page}", method = RequestMethod.GET)
     public String getAllGoodsBySearch(@PathVariable(value = "searchStr") String searchStr, @PathVariable(value = "page") Integer page, ModelMap modelMap) {
         List<Goods> listGoods = goodsService.getAllGoodsBySearch(searchStr, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
+        goodsService.putDefaultAttributes(modelMap);
         modelMap.put("currentPage", page);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoodsBySearch(searchStr)));
         modelMap.put("listGoods", listGoods);
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("searchFlag", true);
-//        modelMap.put("categoryFilter", false);
         modelMap.put("cartList", session.getAttribute("cartList"));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
         modelMap.put("catalogQuery", new CatalogQuery());
         return "goods";
     }
@@ -127,16 +120,17 @@ public class GoodsController {
 
     @RequestMapping(value = "/filter/page/{page}", method = RequestMethod.GET)
     public String getAllGoodsByFilter(@PathVariable(value = "page") int page, ModelMap modelMap) {
+        goodsService.putDefaultAttributes(modelMap);
         CatalogQuery catalogQuery = (CatalogQuery) session.getAttribute("catalogQuery");
+        if (catalogQuery == null) {
+            return "404";
+        }
         List<Goods> listGoods = goodsService.getAllGoodsByFilter(catalogQuery, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
         modelMap.put("currentPage", page);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoodsByFilter(catalogQuery)));
         modelMap.put("listGoods", listGoods);
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("cartList", session.getAttribute("cartList"));
         modelMap.put("catalogQuery", catalogQuery);
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
         modelMap.put("isFilter", true);
         return "goods";
     }
@@ -191,7 +185,6 @@ public class GoodsController {
 
         this.goodsService.addCategory(category);
         modelMap.put("msgC", "You've been added new category successfully.");
-
         modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("goods", new Goods());
         modelMap.put("category", new Category());
@@ -205,9 +198,15 @@ public class GoodsController {
      */
 
     @RequestMapping(value = "/employee/delete/{id}", method = RequestMethod.GET)
-    public String deleteGoods(@PathVariable(value = "id") int id) {
+    public String deleteGoods(@PathVariable(value = "id") int id, ModelMap modelMap) {
         logger.info("deleteGoods");
-        this.goodsService.deleteGoodsById(id);
+        goodsService.putDefaultAttributes(modelMap);
+        try {
+            this.goodsService.deleteGoodsById(id);
+        } catch (IllegalArgumentException e) {
+            modelMap.put("error", "No goods with such id");
+            return "404";
+        }
         return "redirect:/catalog/page/1";
     }
 
@@ -221,10 +220,7 @@ public class GoodsController {
     public String editGoods(@ModelAttribute(value = "goods") @Valid Goods goods, BindingResult bindingResult,
                             ModelMap modelMap) {
         logger.info("editGoods");
-
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
-        modelMap.put("listCategory", goodsService.getAllCategories());
+        goodsService.putDefaultAttributes(modelMap);
         List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4, goods);  //If needs 3 goods set 4, because one of goods could be current goods
         modelMap.put("relatedGoodsList", relatedGoodsList);
 
@@ -253,10 +249,15 @@ public class GoodsController {
     @RequestMapping(value = "/goods/{id}", method = RequestMethod.GET)
     public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap) {
         logger.info("getGoodsById");
-        Goods goods = goodsService.getGoodsById(id);
+        goodsService.putDefaultAttributes(modelMap);
+        Goods goods;
+        try {
+            goods = goodsService.getGoodsById(id);
+        } catch (NullPointerException e){
+            modelMap.put("error", "No goods with such id");
+            return "404";
+        }
         modelMap.put("goods", goods);
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
         CartItem cartItem = new CartItem();
         cartItem.setQuantity(1);
         modelMap.put("cartItem", cartItem);
@@ -265,21 +266,11 @@ public class GoodsController {
             modelMap.put("isCartContainsGoods", goodsService.isCartContainsGoods(cartList, id));
         }
         modelMap.put("cartList", cartList);
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
         List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4, goods);
         modelMap.put("relatedGoodsList", relatedGoodsList);
         return "goods_detail";
     }
 
-//    @ResponseBody
-//    @RequestMapping(value = "goods/addToCart")
-//    protected  addToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        response.setContentType("text/plain");
-//        String quantity = request.getParameter("quantity");
-//        String id = request.getParameter("id");
-//        PrintWriter out = response.getWriter();
-//        out.print("2");
-//    }
 
     /**
      * adds goodsItem model to session
@@ -299,7 +290,13 @@ public class GoodsController {
             return "redirect:/catalog/goods/cart";
         }
         CartItem cartItem = new CartItem();
-        cartItem.setGoods(goodsService.getGoodsById(id));
+        Goods goods;
+        try {
+            goods = goodsService.getGoodsById(id);
+        } catch (NullPointerException e){
+            return cartList.size() + "";
+        }
+        cartItem.setGoods(goods);
         cartItem.setQuantity(quantity);
         cartList.add(cartItem);
 
@@ -318,18 +315,16 @@ public class GoodsController {
     public String getCartItems(ModelMap modelMap,
                                @RequestParam(value = "error", required = false) String error) {
         logger.info("getCartItems");
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
+        goodsService.putDefaultAttributes(modelMap);
         ArrayList<CartItem> cartList = (ArrayList<CartItem>) session.getAttribute("cartList");
         if (cartList != null) {
-            modelMap.put("sum", OrderController.getSumOfOrder(cartList));
+            modelMap.put("sum", orderService.getSumOfOrder(cartList));
             modelMap.put("cartList", cartList);
         }
         modelMap.put("client", session.getAttribute("client"));
         if (error != null) {
             modelMap.put("error", "To place an order please log in");
         }
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
 
         return "cart";
     }
@@ -340,9 +335,14 @@ public class GoodsController {
      * @return cart page
      */
     @RequestMapping(value = "/goods/cart/delete/item/{index}", method = RequestMethod.GET)
-    public String deleteCartItem(@PathVariable(value = "index") int index) {
+    public String deleteCartItem(@PathVariable(value = "index") int index, ModelMap modelMap) {
         logger.info("deleteCartItem");
+        goodsService.putDefaultAttributes(modelMap);
         ArrayList<CartItem> cartList = (ArrayList<CartItem>) session.getAttribute("cartList");
+        if (cartList == null || cartList.size()-1<index ){
+            modelMap.put("error","Invalid params!");
+            return "404";
+        }
         cartList.remove(index);
         return "redirect:/catalog/goods/cart";
     }
@@ -357,15 +357,18 @@ public class GoodsController {
     public String editCategory(@PathVariable(value = "id") int id, ModelMap modelMap) {
         logger.info("editCategory");
         boolean editCatFlag = true;
+        goodsService.putDefaultAttributes(modelMap);
         modelMap.put("editCatFlag", editCatFlag);
         modelMap.put("currentPage", 1);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods", goodsService.getAllGoods(0, amountOfGoodsOnPage));
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("categoryFilter", false);
-        modelMap.put("category", goodsService.getCategoryById(id));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
+        try {
+            modelMap.put("category", goodsService.getCategoryById(id));
+        } catch (NullPointerException e){
+            modelMap.put("error", "No such category");
+            return "404";
+        }
         return "goods";
     }
 
@@ -379,13 +382,11 @@ public class GoodsController {
     public String editCategory(@ModelAttribute(value = "category") @Valid Category category, BindingResult bindingResult,
                                ModelMap modelMap) {
         logger.info("editCategory");
+        goodsService.putDefaultAttributes(modelMap);
         modelMap.put("currentPage", 1);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("categoryFilter", false);
         modelMap.put("listGoods", goodsService.getAllGoods(0, amountOfGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfBestSellers));
         if (bindingResult.hasErrors()) {
             boolean editCatFlag = true;
             logger.warn("category validation error");
@@ -404,9 +405,15 @@ public class GoodsController {
      * @return catalog page
      */
     @RequestMapping(value = "/employee/delete/category/{id}", method = RequestMethod.GET)
-    public String deleteCategory(@PathVariable(value = "id") int id) {
+    public String deleteCategory(@PathVariable(value = "id") int id, ModelMap modelMap) {
         logger.info("deleteCategory");
-        this.goodsService.deleteCategoryById(id);
+        goodsService.putDefaultAttributes(modelMap);
+        try {
+            this.goodsService.deleteCategoryById(id);
+        } catch (IllegalArgumentException e){
+            modelMap.put("error", "No such category");
+            return "404";
+        }
         return "redirect:/catalog/page/1";
     }
 
@@ -425,6 +432,5 @@ public class GoodsController {
             return amountOfGoods / amountOfGoodsOnPage + 1;
         }
     }
-
 
 }

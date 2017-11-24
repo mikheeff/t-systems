@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-@RequestMapping("/order")
+@RequestMapping("")
 public class OrderController {
 
     private static Logger logger = LoggerFactory.getLogger(OrderController.class.getName());
@@ -45,13 +45,17 @@ public class OrderController {
      *
      * @return confirm order page
      */
-    @RequestMapping(value = "/continue", method = RequestMethod.GET)
+    @RequestMapping(value = "/order/continue", method = RequestMethod.GET)
     public String getOrder(ModelMap modelMap) {
         logger.info("getOrder");
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("cartList", session.getAttribute("cartList"));
-        modelMap.put("sum", getSumOfOrder((ArrayList<CartItem>) session.getAttribute("cartList")));
+        goodsService.putDefaultAttributes(modelMap);
+        ArrayList<CartItem> cartList = (ArrayList<CartItem>) session.getAttribute("cartList");
+        if (cartList == null){
+            modelMap.put("error","No products in cart");
+            return "404";
+        }
+        modelMap.put("cartList", cartList);
+        modelMap.put("sum", orderService.getSumOfOrder(cartList));
         modelMap.put("client", session.getAttribute("client"));
         Date date = new Date();
         SimpleDateFormat formatForDateNow = new SimpleDateFormat("yyyy.MM.dd");
@@ -59,7 +63,6 @@ public class OrderController {
         modelMap.put("order", new Order());
         modelMap.put("listDeliveryMethod", orderService.getAllDeliveryMethods());
         modelMap.put("listPaymentType", orderService.getAllPaymentTypes());
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
         return "confirm_order";
     }
 
@@ -70,17 +73,23 @@ public class OrderController {
      * @return order success page
      */
 
-    @RequestMapping(value = "/confirm", method = RequestMethod.POST)
-    public String addOrder(ModelMap modelMap, Order order) {
+    @RequestMapping(value = "/order/confirm", method = RequestMethod.POST)
+    public String addOrder(Order order, ModelMap modelMap) {
         logger.info("addOrder");
         Set<CartItem> cartItemSet = new HashSet<>((ArrayList<CartItem>) session.getAttribute("cartList"));
         order.setCartItems(cartItemSet);
         Client client = (Client) session.getAttribute("client");
         order.setClient(client);
         int orderId = orderService.addOrder(order);
-//        modelMap.put("orderId", orderId);
+        orderService.sendNewOrderMail(orderId);
+        return "redirect:/order/message?id="+orderId;
+    }
 
-        return "redirect:/send/order/"+orderId;
+    @RequestMapping(value = "/order/message", method = RequestMethod.GET)
+    public String showOrderMessage (@RequestParam(value = "id", required = false) String id, ModelMap modelMap) {
+        goodsService.putDefaultAttributes(modelMap);
+        modelMap.put("msg", "Dear customer, your order with ID: " + id + " is accepted for processing. In the near future an operator will contact you.");
+        return "message";
     }
 
     /**
@@ -88,18 +97,16 @@ public class OrderController {
      *
      * @return order details page
      */
-    @RequestMapping(value = "/employee/details/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/employee/order/details/{id}", method = RequestMethod.GET)
     public String getOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap,
                                   @RequestParam(value = "msg", required = false) String msg) {
         logger.info("getOrderDetails");
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
-        modelMap.put("listCategory", goodsService.getAllCategories());
+        goodsService.putDefaultAttributes(modelMap);
         modelMap.put("orderItemsList", orderService.getAllCartItemsFromOrderByOrderId(id));
         modelMap.put("listDeliveryMethod", orderService.getAllDeliveryMethods());
         modelMap.put("listPaymentType", orderService.getAllPaymentTypes());
         modelMap.put("listStatus", orderService.getAllStatuses());
-        modelMap.put("sum", getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
+        modelMap.put("sum", orderService.getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
         modelMap.put("order", orderService.getOrderById(id));
         if (msg != null) {
             modelMap.put("msg", "Order has been successfully edited");
@@ -107,17 +114,15 @@ public class OrderController {
         return "order_details";
     }
 
-    @RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/order/details/{id}", method = RequestMethod.GET)
     public String getClientOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap,
                                         @RequestParam(value = "msg", required = false) String msg, HttpServletRequest httpServletRequest) {
         if (session.getAttribute("client") == null){
             session.setAttribute("client",clientService.getUserByEmail( httpServletRequest.getUserPrincipal().getName()));
         }
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
-        modelMap.put("listCategory", goodsService.getAllCategories());
+        goodsService.putDefaultAttributes(modelMap);
         modelMap.put("orderItemsList", orderService.getAllCartItemsFromOrderByOrderId(id));
-        modelMap.put("sum", getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
+        modelMap.put("sum", orderService.getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
         Client client = (Client) session.getAttribute("client");
         modelMap.put("client", client);
         Order order;
@@ -142,31 +147,30 @@ public class OrderController {
      *
      * @return order details page
      */
-    @RequestMapping(value = "/employee/edit/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/employee/order/edit/{id}", method = RequestMethod.POST)
     public String updateOrderStatus(Order order, @PathVariable(value = "id") int id,ModelMap modelMap) {
         logger.info("updateOrderStatus");
         order.setId(id);
         try {
             orderService.updateOrderStatus(order);
         } catch (IllegalThreadStateException e){
-            modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-            modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
-            modelMap.put("listCategory", goodsService.getAllCategories());
+            goodsService.putDefaultAttributes(modelMap);
             modelMap.put("error","Lost connection with MQ Server");
             return "500";
         }
-        return "redirect:/order/employee/details/" + order.getId() + "?msg";
+        return "redirect:/employee/order/details/" + order.getId() + "?msg";
     }
-    @RequestMapping(value = "/pay/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/order/pay/{id}", method = RequestMethod.GET)
     public String payOrder(@PathVariable(value = "id") int orderId, ModelMap modelMap){
-        modelMap.put("randomGoods", goodsService.getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
-        modelMap.put("bestSellersList", goodsService.getBestSellers(GoodsController.amountOfBestSellers));
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("sum", getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(orderId)));
+        goodsService.putDefaultAttributes(modelMap);
+        if (orderService.getOrderById(orderId).getPayStatus() == 1){
+            return "redirect:/order/details/" + orderId + "?msg";
+        }
+        modelMap.put("sum", orderService.getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(orderId)));
         modelMap.put("id",orderId);
         return "pay_page";
     }
-    @RequestMapping(value = "/pay/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/order/pay/{id}", method = RequestMethod.POST)
     public String payOrder(@PathVariable(value = "id") int orderId){
         orderService.setPayStatus(orderId);
         return "redirect:/order/details/" + orderId + "?msg";
@@ -177,12 +181,6 @@ public class OrderController {
      *
      * @return total cost
      */
-    public static float getSumOfOrder(List<CartItem> cartList) {
-        float sum = 0;
-        for (int i = 0; i < cartList.size(); i++) {
-            sum = sum + cartList.get(i).getQuantity() * cartList.get(i).getGoods().getPrice();
-        }
-        return sum;
-    }
+
 
 }

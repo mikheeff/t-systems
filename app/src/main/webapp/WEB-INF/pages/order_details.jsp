@@ -331,13 +331,20 @@
                     <hr>
                     <c:if test="${order.paymentType.name=='card' and order.payStatus == 0}">
 
-                    <form action="/order/pay/${order.id}" method="get">
+                    <%--<form action="/order/pay/${order.id}" method="get">--%>
                     <form action="/order/pay/${order.id}" method="get">
                         <span class="pull-right">
                             <button type="submit" class="btn btn-inverse">Pay an order</button>
                         </span>
                     </form>
 
+                    </c:if>
+                    <c:if test="${not empty msg}">
+                        <form action="/clients/profile" method="get">
+                            <span class="pull-right">
+                                <button type="submit" class="btn btn-inverse">Back to account</button>
+                            </span>
+                        </form>
                     </c:if>
                 </div>
             </c:if>
@@ -393,7 +400,7 @@
                             <th>&nbsp;</th>
                         </tr>
                     </c:forEach>
-                    <spring:form action="/order/employee/edit/${order.id}" method="post" commandName="order" class="form-inline">
+                    <spring:form action="/employee/order/edit/${order.id}" method="post" commandName="order" class="form-inline">
                     </tbody>
                 </table>
                 <table class="table table-striped">

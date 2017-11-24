@@ -59,7 +59,6 @@ public class HomeController {
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
     public String main(ModelMap modelMap) {
         logger.info("main");
-        modelMap.put("randomGoods", goodsService.getRandomGoods(amountOfGoodsOnHomePage));
         modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfGoodsOnHomePage));
         modelMap.put("newGoodsList", goodsService.getNewGoods(amountOfGoodsOnHomePage));

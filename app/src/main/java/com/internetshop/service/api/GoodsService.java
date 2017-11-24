@@ -6,6 +6,7 @@ import com.internetshop.entities.GoodsEntity;
 import com.internetshop.entities.OrderEntity;
 import com.internetshop.model.*;
 import com.tsystems.SmallGoods;
+import org.springframework.ui.ModelMap;
 
 import javax.swing.text.html.parser.Entity;
 import java.util.List;
@@ -39,7 +40,7 @@ public interface GoodsService {
     void deleteCategoryById(int id);
     void createUpdateMessage(GoodsEntity goodsEntity);
     boolean isCartContainsGoods(List<CartItem> cartList, int id);
-
+    void putDefaultAttributes(ModelMap modelMap);
 
 
 }

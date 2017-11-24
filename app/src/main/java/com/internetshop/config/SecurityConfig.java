@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/clients/profile/**","/order/**")
                 .access("hasRole('ROLE_CLIENT') or hasRole('ROLE_EMPLOYEE')")
-                .antMatchers("/catalog/employee/**","/order/employee/**","/employee/**").access("hasRole('ROLE_EMPLOYEE')")
+                .antMatchers("/catalog/employee/**","/employee/**").access("hasRole('ROLE_EMPLOYEE')")
                 .and()
                 .formLogin().loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/clients/profile")
                 .loginPage("/clients/identification").failureUrl("/clients/identification?error")

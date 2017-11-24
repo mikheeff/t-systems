@@ -18,6 +18,8 @@ public interface OrderService {
     void setPayStatus(int id);
     long getAmountOfClosedOrdersByClientId(int id);
     List<Float> getListOfRevenueForEachDayOfCurrentMonth();
+    void sendNewOrderMail(int id);
+    float getSumOfOrder(List<CartItem> cartList);
 
 
 }

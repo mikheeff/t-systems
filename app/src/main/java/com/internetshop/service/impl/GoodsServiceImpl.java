@@ -1,6 +1,7 @@
 package com.internetshop.service.impl;
 
 import com.internetshop.config.AppConfig;
+import com.internetshop.controller.GoodsController;
 import com.internetshop.entities.*;
 import com.internetshop.jms.JmsProducer;
 import com.internetshop.model.*;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -403,6 +405,13 @@ public class GoodsServiceImpl implements GoodsService {
             }
         }
         return false;
+    }
+
+    @Override
+    public void putDefaultAttributes(ModelMap modelMap) {
+        modelMap.put("listCategory", getAllCategories());
+        modelMap.put("randomGoods", getRandomGoods(GoodsController.amountOfRandomGoodsOnPage));
+        modelMap.put("bestSellersList", getBestSellers(GoodsController.amountOfBestSellers));
     }
 
     @Override

@@ -371,7 +371,7 @@
                                                 </td>
                                                 <td><big>${clientOrder.date}</big></td>
                                                 <td>
-                                                    <a href="/order/employee/details/${clientOrder.id}"><big>Details</big></a>
+                                                    <a href="/employee/order/details/${clientOrder.id}"><big>Details</big></a>
                                                 </td>
                                             </tr>
                                             </tbody>
@@ -398,7 +398,7 @@
                                             <tr>
                                                 <th><big>ID:</big></th>
                                                 <th><big>Name:</big></th>
-                                                <th><big>Price:</big></th>
+                                                <th style="width:20%" ><big>Price:</big></th>
                                                 <th><big>Sales Counter:</big></th>
                                                 <th></th>
                                             </tr>
@@ -409,7 +409,7 @@
                                                 <tr>
                                                     <td><big>${goodsVar.id}</big></td>
                                                     <td><big>${goodsVar.name}</big></td>
-                                                    <td><big>${goodsVar.price} &#8381;</big></td>
+                                                    <td style="width:20%" ><big>${goodsVar.price} &#8381;</big></td>
                                                     <td><big style="margin-left: 30%">${goodsVar.salesCounter}</big>
                                                     </td>
                                                     <td><a href="/catalog/goods/${goodsVar.id}"><big>Details</big></a>
@@ -428,7 +428,7 @@
                                                 <th><big>ID:</big></th>
                                                 <th><big>Name:</big></th>
                                                 <th><big>E-mail:</big></th>
-                                                <th><big>Amount of Orders:</big></th>
+                                                <th style="width:20%" ><big>Amount of Orders:</big></th>
                                                 <th><big>Total:</big></th>
                                             </tr>
                                             </thead>
@@ -439,8 +439,8 @@
                                                     <td><big>${clientVar.id}</big></td>
                                                     <td><big>${clientVar.name}</big></td>
                                                     <td><big>${clientVar.email}</big></td>
-                                                    <td><big
-                                                            style="margin-left: 30%">${amountOfOrders.get(count.index)}</big>
+                                                    <td style="width:20%" ><big
+                                                            style="margin-left: 45%">${amountOfOrders.get(count.index)}</big>
                                                     </td>
                                                     <td><big>${clientVar.orderCounter} &#8381;</big></td>
                                                 </tr>

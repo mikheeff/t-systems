@@ -198,7 +198,7 @@ public class OrderServiceImpl implements OrderService {
             if (orderEntity.getStatus().getName().equals("closed")) {
                 decreaseSalesCounter(orderEntity);
                 ClientEntity clientEntity = orderEntity.getClientEntity();
-                clientEntity.setOrderCounter(clientEntity.getOrderCounter() - OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
+                clientEntity.setOrderCounter(clientEntity.getOrderCounter() - getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
                 clientRepository.updateUser(clientEntity);
             }
             StatusEntity statusEntity = orderRepository.getStatusByName(order.getStatus().getName());
@@ -207,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
                 setPayStatus(order.getId());
                 increaseSalesCounter(orderEntity);
                 ClientEntity clientEntity = orderEntity.getClientEntity();
-                clientEntity.setOrderCounter(clientEntity.getOrderCounter() + OrderController.getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
+                clientEntity.setOrderCounter(clientEntity.getOrderCounter() + getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
                 clientRepository.updateUser(clientEntity);
             }
             if ((orderEntity.getStatus().getName().equals("shipped") && orderEntity.getDeliveryMethod().getName().equals("pickup"))||(orderEntity.getStatus().getName().equals("canceled"))){
@@ -318,6 +318,33 @@ public class OrderServiceImpl implements OrderService {
         }
         return resultList;
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public void sendNewOrderMail(int id) {
+        Order order = getOrderById(id);
+        Client client = order.getClient();
+
+        mailService.sendEmail(client,
+                "your order with ID:" + id + " is accepted for processing",
+                AppConfig.HOST_URL + "/order/details/" + id,
+                "Dice Games, new order",
+                "order.txt");
+
+        if (client.getPhone() != null) {
+            mailService.sendSMS("Your order ID: " + id + " DiceGames.com", client.getPhone());
+        }
+    }
+
+    @Override
+    public float getSumOfOrder(List<CartItem> cartList) {
+        float sum = 0;
+        for (int i = 0; i < cartList.size(); i++) {
+            sum = sum + cartList.get(i).getQuantity() * cartList.get(i).getGoods().getPrice();
+        }
+        return sum;
+    }
+
     /**
      * convert Order Entity to Order Model
      */
