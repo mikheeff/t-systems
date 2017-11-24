@@ -9,7 +9,7 @@
 			<meta name="description" content="">
 			<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
 			<!-- bootstrap -->
-			<link href="${pageContext.request.contextPath}/resources/themes/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+			<link href="${pageContext.request.contextPath}/resources/themes/bootstrap/css/bootstrap.css" rel="stylesheet">
 			<link href="${pageContext.request.contextPath}/resources/themes/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 
 			<link href="${pageContext.request.contextPath}/resources/themes/css/bootstrappage.css" rel="stylesheet"/>
@@ -25,7 +25,6 @@
 			<script type="text/javascript">
                 $(document).ready(function (){
                     $('#cart_form').submit(function () {
-//                    $('#btnCart').click(function () {
                         if ($('#btnCart').attr("value") != 'In cart' ){
                         var quantity = $('#quantity').val();
                         var id = ${goods.id};
@@ -345,42 +344,47 @@
 								</address>
 								<h4><strong>Price: ${goods.price} &#8381;</strong></h4>
 							</div>
+						<c:if test="${goods.amount>0}" >
+								<div class="span5" >
+									<form id="cart_form" class="form-inline" action="javascript:void(0);">
+										<c:if test="${!isCartContainsGoods}">
+										<p>&nbsp;</p>
+										<label id="qty">Qty:</label>
+										<input path="quantity" id="quantity" type="text" class="span1" value="1" pattern="^[1-9][0-9]*$" title="Amount must be a integer and more then zero"/>
+											<input class="btn btn-inverse" id="btnCart" type="submit"  value="Add to cart">
+										</c:if>
+										<c:if test="${isCartContainsGoods}">
+											<button class="btn" onclick="redirectToCart()">In cart</button>
+										</c:if>
+									</form>
+								</div>
+						</c:if>
+						<c:if test="${goods.amount<=0}" >
 							<div class="span5" >
-								<form id="cart_form" class="form-inline" action="javascript:void(0);">
-									<c:if test="${!isCartContainsGoods}">
-									<p>&nbsp;</p>
-									<label id="qty">Qty:</label>
-									<input path="quantity" id="quantity" type="text" class="span1" value="1" pattern="^[1-9][0-9]*$" title="Amount must be a integer and more then zero"/>
-										<input class="btn btn-inverse" id="btnCart" type="submit"  value="Add to cart">
-									</c:if>
-									<c:if test="${isCartContainsGoods}">
-										<button class="btn" onclick="redirectToCart()">In cart</button>
-									</c:if>
-								</form>
-							</div>							
-						</div>
+								<span style="width: 115px; height: 20px; font-size: 150%; margin-top: 3px;" class="label label-warning">Out Of Stock</span>
+							</div>
+						</c:if>
+					</div>
 						</c:if>
 						<div class="row">
 							<div class="span9">
 								<ul class="nav nav-tabs" id="myTab">
 									<li class="active"><a href="#home">Description</a></li>
-									<li class=""><a href="#profile">Additional Information</a></li>
+									<li class=""><a href="#profile">Give Feedback</a></li>
 								</ul>							 
 								<div class="tab-content">
 									<div class="tab-pane active" id="home">${goods.description}</div>
 									<div class="tab-pane" id="profile">
-										<table class="table table-striped shop_attributes">	
-											<tbody>
-												<tr class="">
-													<th>Size</th>
-													<td>Large, Medium, Small, X-Large</td>
-												</tr>		
-												<tr class="alt">
-													<th>Colour</th>
-													<td>Orange, Yellow</td>
-												</tr>
-											</tbody>
-										</table>
+										<div class="media">
+											<div class="media-left">
+												<img src="https://www.w3schools.com/bootstrap/img_avatar1.png" class="media-object" style="width:60px">
+											</div>
+											<div class="media-body">
+												<h4 class="media-heading">Left-aligned</h4>
+												<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+											</div>
+										</div>
+										<hr>
 									</div>
 								</div>							
 							</div>

@@ -136,6 +136,11 @@ public class OrderServiceImpl implements OrderService {
             itemEntity.setQuantity(item.getQuantity());
             itemEntity.setGoodsEntity(goodsRepository.getGoodsById(item.getGoods().getId()));
             itemEntity.setOrderEntity(orderEntity);
+
+            GoodsEntity goodsEntity = goodsRepository.getGoodsById(item.getGoods().getId());
+            goodsEntity.setAmount(goodsEntity.getAmount() - item.getQuantity());
+            goodsRepository.updateGoods(goodsEntity);
+
             cartItemEntitySet.add(itemEntity);
         }
         orderEntity.setClientEntity(convertClientToDAO(order.getClient(), order.getClient().getRole().getId()));
@@ -210,32 +215,41 @@ public class OrderServiceImpl implements OrderService {
                 clientEntity.setOrderCounter(clientEntity.getOrderCounter() + getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
                 clientRepository.updateUser(clientEntity);
             }
-            if ((orderEntity.getStatus().getName().equals("shipped") && orderEntity.getDeliveryMethod().getName().equals("pickup"))||(orderEntity.getStatus().getName().equals("canceled"))){
+            if ((orderEntity.getStatus().getName().equals("shipped") && orderEntity.getDeliveryMethod().getName().equals("pickup")) || (orderEntity.getStatus().getName().equals("canceled"))) {
                 ClientEntity client = orderEntity.getClientEntity();
                 Client client1 = clientService.convertClientToDTO(client);
 
                 mailService.sendEmail(client1,
-                        "your order status is "+"\""+orderEntity.getStatus().getName()+"\"",
-                        AppConfig.HOST_URL+"/order/details/"+orderEntity.getId(),
+                        "your order status is " + "\"" + orderEntity.getStatus().getName() + "\"",
+                        AppConfig.HOST_URL + "/order/details/" + orderEntity.getId(),
                         "Dice Games, New order",
                         "order.txt");
 
-                if (client.getPhone()!=null) {
-                    mailService.sendSMS("Dear, "+client.getName()+
-                            " , your order status is "+
-                            orderEntity.getStatus().getName()+". Order ID: "+orderEntity.getId(),
+                if (client.getPhone() != null) {
+                    mailService.sendSMS("Dear, " + client.getName() +
+                                    " , your order status is " +
+                                    orderEntity.getStatus().getName() + ". Order ID: " + orderEntity.getId(),
                             client.getPhone());
+                }
+                if (orderEntity.getStatus().getName().equals("canceled")) {
+                    for (CartItem item : getAllCartItemsFromOrderByOrderId(orderEntity.getId())) {
+                        GoodsEntity goodsEntity = goodsRepository.getGoodsById(item.getGoods().getId());
+                        goodsEntity.setAmount(goodsEntity.getAmount() + item.getQuantity());
+                        goodsRepository.updateGoods(goodsEntity);
+                    }
                 }
             }
         }
         orderRepository.updateOrder(orderEntity);
     }
+
     @Transactional
     public void setPayStatus(int id) {
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         orderEntity.setPayStatus(1);
         orderRepository.updateOrder(orderEntity);
     }
+
     @Transactional
     public void increaseSalesCounter(OrderEntity orderEntity) {
         for (CartItemEntity item : orderEntity.getCartItemEntities()) {
@@ -246,6 +260,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
     }
+
     @Transactional
     public void decreaseSalesCounter(OrderEntity orderEntity) {
         for (CartItemEntity item : orderEntity.getCartItemEntities()) {
@@ -308,8 +323,8 @@ public class OrderServiceImpl implements OrderService {
         for (int day = 1; day <= currentDay; day++) {
             resultList.add(0.0f);
             for (int id : orderRepository.getAllClosedOrdersIdsByDayOfMonth(day)) {
-                for ( CartItemEntity item : orderRepository.getAllCartItemsFromOrderByOrderId(id)){
-                    resultList.set(day-1,resultList.get(day-1)+item.getQuantity()*item.getGoodsEntity().getPrice());
+                for (CartItemEntity item : orderRepository.getAllCartItemsFromOrderByOrderId(id)) {
+                    resultList.set(day - 1, resultList.get(day - 1) + item.getQuantity() * item.getGoodsEntity().getPrice());
                 }
             }
         }
@@ -345,6 +360,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean isOrdersContainsGoods(int id) {
         return orderRepository.isOrdersContainsGoods(id);
+    }
+
+    @Override
+    public boolean isPossibleToCreateOrder(List<CartItem> cartList) {
+        for (CartItem cartItem : cartList) {
+            Goods goods = goodsService.getGoodsById(cartItem.getGoods().getId());
+            if (goods.getAmount() < cartItem.getQuantity()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -390,7 +416,6 @@ public class OrderServiceImpl implements OrderService {
         order.setClient(client);
         return order;
     }
-
 
 
     /**

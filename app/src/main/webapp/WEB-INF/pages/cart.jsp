@@ -9,7 +9,7 @@
 		<meta name="description" content="">
 		<!--[if ie]><meta content='IE=8' http-equiv='X-UA-Compatible'/><![endif]-->
 		<!-- bootstrap -->
-		<link href="${pageContext.request.contextPath}/resources/themes/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="${pageContext.request.contextPath}/resources/themes/bootstrap/css/bootstrap.css" rel="stylesheet">
 		<link href="${pageContext.request.contextPath}/resources/themes/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 
 		<link href="${pageContext.request.contextPath}/resources/themes/css/bootstrappage.css" rel="stylesheet"/>
@@ -242,6 +242,12 @@
 					<div class="span9">
 
 						<h4 class="title"><span class="text"><strong>Your</strong> Cart</span></h4>
+						<c:if test="${client==null}">
+							<div class="msg">To place an order please log in</div>
+						</c:if>
+						<c:if test="${not empty error}">
+							<div class="error">${error}</div>
+						</c:if>
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -262,9 +268,16 @@
 										</div>
 									</td>
 									<td><a href="${cartItem.goods.img}"><img alt="" height="100" width="100" src="${cartItem.goods.img}"></a></td>
-										<td><big>${cartItem.goods.name}</big></td>
-										<%--<spring:input path="cartItem" type="text" class="span1" placeholder="1" pattern="^[1-9]+$" title="Amount must be a integer and more then zero"/>--%>
-									<%--<td><input type="text" placeholder="1" class="input-mini"></td>--%>
+										<td><big>
+												${cartItem.goods.name}
+												<br>
+											<c:if test="${cartItem.goods.amount>0}">
+												<span class="label label-success">Available</span>
+											</c:if>
+											<c:if test="${cartItem.goods.amount<=0}">
+												<span class="label label-warning">Out of Stock</span>
+											</c:if>
+											</big></td>
 										<td><big>${cartItem.quantity}</big></td>
 										<td><big>${cartItem.goods.price}</big></td>
 										<td><big>${cartItem.goods.price*cartItem.quantity}</big></td>
@@ -280,23 +293,6 @@
 								</tr>
 							</tbody>
 						</table>
-						<%--<h4>What would you like to do next?</h4>--%>
-						<%--<p>Choose if you have a discount code or reward points you want to use or would like to estimate your delivery cost.</p>--%>
-						<%--<label class="radio">--%>
-							<%--<input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked="">--%>
-							<%--Use Coupon Code--%>
-						<%--</label>--%>
-						<%--<label class="radio">--%>
-							<%--<input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">--%>
-							<%--Estimate Shipping &amp; Taxes--%>
-						<%--</label>--%>
-						<%--<hr>--%>
-						<%--<p class="cart-total right">--%>
-							<%--<strong>Sub-Total</strong>:	$100.00<br>--%>
-							<%--<strong>Eco Tax (-2.00)</strong>: $2.00<br>--%>
-							<%--<strong>VAT (17.5%)</strong>: $17.50<br>--%>
-							<%--<strong>Total</strong>: $119.50<br>--%>
-						<%--</p>--%>
 						<hr/>
 						<c:if test="${client!=null and cartList!=null and cartList.size()!=0}">
 							<spring:form action="/order/continue" method="get">
@@ -305,9 +301,7 @@
 									</span>
 							</spring:form>
 						</c:if>
-						<c:if test="${client==null}">
-							<div class="msg">To place an order please log in</div>
-						</c:if>
+
 
 					</div>
 					<div class="span3 col">

@@ -21,6 +21,7 @@ public interface OrderService {
     void sendNewOrderMail(int id);
     float getSumOfOrder(List<CartItem> cartList);
     boolean isOrdersContainsGoods(int id);
+    boolean isPossibleToCreateOrder(List<CartItem> cartList);
 
 
 
