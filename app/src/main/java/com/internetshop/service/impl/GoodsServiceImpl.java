@@ -24,6 +24,8 @@ public class GoodsServiceImpl implements GoodsService {
 
     private final GoodsRepository goodsRepository;
     private static Logger logger = LoggerFactory.getLogger(GoodsServiceImpl.class.getName());
+
+
     private static JmsProducer producer = new JmsProducer(AppConfig.ACTIVE_MQ_URL);
 
     @Autowired
@@ -422,6 +424,8 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsList;
     }
+
+
 
     /**
      * converts goods to data access object

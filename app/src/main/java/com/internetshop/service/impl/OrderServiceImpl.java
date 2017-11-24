@@ -228,10 +228,7 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
         }
-
-            orderRepository.updateOrder(orderEntity);
-
-
+        orderRepository.updateOrder(orderEntity);
     }
     @Transactional
     public void setPayStatus(int id) {
@@ -343,6 +340,11 @@ public class OrderServiceImpl implements OrderService {
             sum = sum + cartList.get(i).getQuantity() * cartList.get(i).getGoods().getPrice();
         }
         return sum;
+    }
+
+    @Override
+    public boolean isOrdersContainsGoods(int id) {
+        return orderRepository.isOrdersContainsGoods(id);
     }
 
     /**

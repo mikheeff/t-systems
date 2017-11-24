@@ -82,6 +82,7 @@ public class HomeController {
         modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("clientOrdersList", orderService.getAllOrders());
         modelMap.put("bestSellersList", goodsService.getBestSellers(10));
+        modelMap.put("allGoodsList", goodsService.getAllGoods());
         List<Client> bestClientsList = clientService.getBestClientsList(10);
         modelMap.put("bestClientsList", bestClientsList);
         List<Long> amountOfOrders = new ArrayList<>();

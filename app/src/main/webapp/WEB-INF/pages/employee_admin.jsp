@@ -196,9 +196,7 @@
                                                 <div class="control-group">
                                                     <label class="control-label">Price:</label>
                                                     <div class="controls">
-                                                        <spring:input path="price" type="text" placeholder="Enter price"
-                                                                      class="input-xlarge" pattern="\d+(\.\d{2})?"
-                                                                      title="Price must be a number"/>
+                                                        <spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge" maxlength="7" pattern="\d+(\.\d{2})?" title="Price must be a number"/>
                                                         <fieldset>
                                                             <spring:errors path="price" cssClass="error"/>
                                                         </fieldset>
@@ -232,7 +230,8 @@
                                                         <spring:input path="amount" type="text"
                                                                       placeholder="Enter the quantity of goods"
                                                                       class="input-xlarge" pattern="^[ 0-9]+$"
-                                                                      title="Amount must be a integer"/>
+                                                                      title="Amount must be a integer"
+                                                                      maxlength="7"/>
                                                         <fieldset>
                                                             <spring:errors path="amount" cssClass="error"/>
                                                         </fieldset>
@@ -386,6 +385,60 @@
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+                               href="#collapseFour">Show All Goods</a>
+                        </div>
+                        <div id="collapseFour" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <div class="accordion-inner">
+                                    <h4>All Goods</h4>
+                                    <c:if test="${allGoodsList.size()!=0}">
+
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th><big>ID:</big></th>
+                                                <th><big>Name:</big></th>
+                                                <th><big>Price:</big></th>
+                                                <th><big>Number Of Players:</big></th>
+                                                <th><big>Duration:</big></th>
+                                                <th><big>Amount:</big></th>
+                                                <th><big>Is Visible:</big></th>
+                                                <th><big>Details:</big></th>
+                                            </tr>
+                                            </thead>
+
+                                            <c:forEach var="goodsVar" items="${allGoodsList}">
+                                                <tbody>
+                                                    <%--<c:if test="${not(clientOrder.status.name=='closed' and hide == true)}">--%>
+                                                <tr>
+                                                    <td><big>${goodsVar.id}</big></td>
+                                                    <td><big>${goodsVar.name}</big></td>
+                                                    <td><big>${goodsVar.price}</big></td>
+                                                    <td><big>${goodsVar.numberOfPlayers}</big></td>
+                                                    <td><big>${goodsVar.duration}</big></td>
+                                                    <td><big>${goodsVar.amount}</big></td>
+                                                    <c:if test="${goodsVar.visible == 1}">
+                                                        <td><big>Yes</big></td>
+                                                    </c:if>
+                                                    <c:if test="${goodsVar.visible == 0}">
+                                                        <td><big>No</big></td>
+                                                    </c:if>
+                                                    <td>
+                                                        <a href="/catalog/goods/${goodsVar.id}"><big>Details</big></a>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </c:forEach>
+
+                                        </table>
+                                    </c:if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
                                href="#collapseThree">Show Statistic</a>
                         </div>
                         <div id="collapseThree" class="accordion-body collapse">
@@ -469,6 +522,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

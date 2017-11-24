@@ -23,4 +23,6 @@ public interface OrderRepository {
     void updateOrder(OrderEntity orderEntity);
     long getAmountOfClosedOrdersByClientId(int id);
     List<Integer> getAllClosedOrdersIdsByDayOfMonth(int day);
+    boolean isOrdersContainsGoods(int id);
+
 }

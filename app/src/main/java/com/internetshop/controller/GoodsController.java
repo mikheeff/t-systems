@@ -88,14 +88,10 @@ public class GoodsController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String getAllGoodsBySearch(String searchStr) {
-        return "redirect:/catalog/search/" + searchStr + "/page/" + 1;
-    }
-
-    @RequestMapping(value = "/search/{searchStr}/page/{page}", method = RequestMethod.GET)
-    public String getAllGoodsBySearch(@PathVariable(value = "searchStr") String searchStr, @PathVariable(value = "page") Integer page, ModelMap modelMap) {
+    public String getAllGoodsBySearch(String searchStr, @RequestParam(value = "page", required = false) int page, ModelMap modelMap) {
         List<Goods> listGoods = goodsService.getAllGoodsBySearch(searchStr, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
         goodsService.putDefaultAttributes(modelMap);
+        modelMap.put("searchStr", searchStr);
         modelMap.put("currentPage", page);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoodsBySearch(searchStr)));
         modelMap.put("listGoods", listGoods);
@@ -104,6 +100,12 @@ public class GoodsController {
         modelMap.put("catalogQuery", new CatalogQuery());
         return "goods";
     }
+
+//    @RequestMapping(value = "/search/{searchStr}/page/{page}", method = RequestMethod.GET)
+//    public String getAllGoodsBySearch(@PathVariable(value = "searchStr") String searchStr, @PathVariable(value = "page") Integer page, ModelMap modelMap) {
+//
+//        return "goods";
+//    }
 
     @RequestMapping(value = "/filter/page/{page}", method = RequestMethod.POST)
     public String getAllGoodsByFilter(@PathVariable(value = "page") int page, @ModelAttribute(value = "catalogQuery") CatalogQuery catalogQuery, ModelMap modelMap) {
@@ -201,6 +203,10 @@ public class GoodsController {
     public String deleteGoods(@PathVariable(value = "id") int id, ModelMap modelMap) {
         logger.info("deleteGoods");
         goodsService.putDefaultAttributes(modelMap);
+        if (orderService.isOrdersContainsGoods(id)) {
+            modelMap.put("error", "Can't delete goods, which used in orders!");
+            return "message";
+        }
         try {
             this.goodsService.deleteGoodsById(id);
         } catch (IllegalArgumentException e) {
@@ -253,8 +259,12 @@ public class GoodsController {
         Goods goods;
         try {
             goods = goodsService.getGoodsById(id);
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             modelMap.put("error", "No goods with such id");
+            return "404";
+        }
+        Client client = (Client) session.getAttribute("client");
+        if ((client == null || !client.getRole().getName().equals("ROLE_EMPLOYEE")) && (goods.getVisible() == 0)) {
             return "404";
         }
         modelMap.put("goods", goods);
@@ -293,7 +303,7 @@ public class GoodsController {
         Goods goods;
         try {
             goods = goodsService.getGoodsById(id);
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return cartList.size() + "";
         }
         cartItem.setGoods(goods);
@@ -339,8 +349,8 @@ public class GoodsController {
         logger.info("deleteCartItem");
         goodsService.putDefaultAttributes(modelMap);
         ArrayList<CartItem> cartList = (ArrayList<CartItem>) session.getAttribute("cartList");
-        if (cartList == null || cartList.size()-1<index ){
-            modelMap.put("error","Invalid params!");
+        if (cartList == null || cartList.size() - 1 < index) {
+            modelMap.put("error", "Invalid params!");
             return "404";
         }
         cartList.remove(index);
@@ -365,7 +375,7 @@ public class GoodsController {
         modelMap.put("categoryFilter", false);
         try {
             modelMap.put("category", goodsService.getCategoryById(id));
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             modelMap.put("error", "No such category");
             return "404";
         }
@@ -410,7 +420,7 @@ public class GoodsController {
         goodsService.putDefaultAttributes(modelMap);
         try {
             this.goodsService.deleteCategoryById(id);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             modelMap.put("error", "No such category");
             return "404";
         }

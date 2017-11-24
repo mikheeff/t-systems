@@ -111,7 +111,7 @@ public class EmailController {
             modelMap.put("error", "User with such email not found");
             return "recover_page";
         }
-        modelMap.put("msg", "To recover the password, follow the instructions in the email that was sent to you...");
+        modelMap.put("error", "To recover the password, follow the instructions in the email that was sent to you...");
         return "message";
     }
 
@@ -131,7 +131,7 @@ public class EmailController {
             return "recover_password";
         }
 
-        modelMap.put("msg", "Session is unavailable, please go to recover page to resend mail...");
+        modelMap.put("error", "Session is unavailable, please go to recover page to resend mail...");
         return "message";
     }
 

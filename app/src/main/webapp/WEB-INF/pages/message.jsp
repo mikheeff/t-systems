@@ -36,6 +36,15 @@
             background-color: #d9edf7;
             border-color: #bce8f1;
         }
+        .error {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
     </style>
 </head>
 <body>
@@ -118,6 +127,9 @@
             <div class="span9">
                 <c:if test="${not empty msg}">
                     <div class="msg"><span><big>${msg}</big></span></div>
+                </c:if>
+                <c:if test="${not empty error}">
+                    <div class="error"><span><big>${error}</big></span></div>
                 </c:if>
                 <%--<h5>Now, if you want to see your account, please log in</h5>--%>
             </div>

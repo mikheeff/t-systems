@@ -20,6 +20,8 @@ public interface OrderService {
     List<Float> getListOfRevenueForEachDayOfCurrentMonth();
     void sendNewOrderMail(int id);
     float getSumOfOrder(List<CartItem> cartList);
+    boolean isOrdersContainsGoods(int id);
+
 
 
 }

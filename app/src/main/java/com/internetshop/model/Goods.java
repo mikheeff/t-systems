@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -14,10 +15,12 @@ public class Goods {
     @NotEmpty(message = "Name must not be empty")
     private String name;
     @NotNull(message = "Price must not be empty")
+    @Max(value = 9999999)
     private float price;
     private int numberOfPlayers;
     private float duration;
     @NotNull(message = "Amount must not be empty")
+    @Max(value = 9999999)
     private int amount;
     private int visible;
     @Size(max = 5000,message = "Description must be less then 1000 character long")

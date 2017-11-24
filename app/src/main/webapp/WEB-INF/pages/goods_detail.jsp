@@ -221,7 +221,7 @@
 										<div class="control-group">
 											<label class="control-label">Price:</label>
 											<div class="controls">
-												<spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge" pattern="\d+(\.\d{1})?"/>
+												<spring:input path="price" type="text" placeholder="Enter price" class="input-xlarge" maxlength="7" pattern="\d+(\.\d{1})?"/>
 												<spring:errors path="price" cssClass="error"/>
 											</div>
 										</div>
@@ -248,7 +248,7 @@
 										<div class="control-group">
 											<label class="control-label">Amount:</label>
 											<div class="controls">
-												<spring:input path="amount" type="text" placeholder="Enter the quantity of goods" class="input-xlarge" pattern="^[ 0-9]+$"/>
+												<spring:input path="amount" type="text" placeholder="Enter the quantity of goods" class="input-xlarge" maxlength="7" pattern="^[ 0-9]+$"/>
 											</div>
 										</div>
 										<div class="control-group">

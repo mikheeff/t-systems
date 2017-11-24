@@ -84,7 +84,6 @@ public class JmsProducer extends Thread implements AutoCloseable {
                         msg.setObject(text);
                         msg.setObjectProperty("Created", (new Date()).toString());
                         producer.send(msg);
-                        System.out.println("Message " + msg.getJMSMessageID() + " was sent");
                     }
 
                 }

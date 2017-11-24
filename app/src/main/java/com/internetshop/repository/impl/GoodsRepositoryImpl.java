@@ -30,34 +30,35 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     public List<GoodsEntity> getAll(int firstId, int maxResults) {
-        return em.createQuery("select goods from GoodsEntity goods", GoodsEntity.class).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
+        return em.createQuery("select goods from GoodsEntity goods where goods.visible =:visible", GoodsEntity.class).setParameter("visible",1).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
     }
 
 
     @Override
     public List<GoodsEntity> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName) {
         return em
-                .createQuery("select goods from GoodsEntity goods where category.name = :category", GoodsEntity.class)
-                .setParameter("category", categoryName).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
+                .createQuery("select goods from GoodsEntity goods where category.name = :category and goods.visible =:visible", GoodsEntity.class)
+                .setParameter("visible",1).setParameter("category", categoryName).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
     }
 
     @Override
     public List<GoodsEntity> getRelatedGoodsByCategoryName(int amount, String categoryName) {
         return em
-                .createQuery("select goods from GoodsEntity goods where category.name = :category order by goods.salesCounter DESC", GoodsEntity.class)
-                .setParameter("category", categoryName).setMaxResults(amount).getResultList();
+                .createQuery("select goods from GoodsEntity goods where category.name = :category and goods.visible =:visible order by goods.salesCounter DESC", GoodsEntity.class)
+                .setParameter("visible",1).setParameter("category", categoryName).setMaxResults(amount).getResultList();
     }
 
     @Override
     public List<GoodsEntity> getAllGoodsBySearch(String searchStr, int firstId, int maxResults) {
         return em
-                .createQuery("select goods from GoodsEntity goods where goods.name LIKE CONCAT('%', :searchStr, '%')", GoodsEntity.class)
-                .setParameter("searchStr", searchStr).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
+                .createQuery("select goods from GoodsEntity goods where goods.name LIKE CONCAT('%', :searchStr, '%') and goods.visible =:visible", GoodsEntity.class)
+                .setParameter("visible",1).setParameter("searchStr", searchStr).setFirstResult(firstId).setMaxResults(maxResults).getResultList();
     }
 
     @Override
     public List<GoodsEntity> getBestSellersByCategoryName(String name, int amount) {
-        return em.createQuery("select goods from GoodsEntity goods where category.name =:name order by goods.salesCounter desc", GoodsEntity.class).setParameter("name",name).setMaxResults(amount).getResultList();
+        return em.createQuery("select goods from GoodsEntity goods where category.name =:name and goods.visible =:visible order by goods.salesCounter desc", GoodsEntity.class)
+                .setParameter("visible",1).setParameter("name",name).setMaxResults(amount).getResultList();
     }
 
     @Override
@@ -97,7 +98,7 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     private CriteriaQuery buildFilterQueryString(CatalogQuery catalogQuery, CriteriaBuilder builder, CriteriaQuery criteria, Root<GoodsEntity> goodsRoot) {
         criteria.select(goodsRoot);
         final List<Predicate> predicates = new ArrayList<>();
-
+        predicates.add(builder.equal(goodsRoot.get("visible"),1));
         if (catalogQuery.getNumberOfPlayers() != null) {
             predicates.add(builder.lessThanOrEqualTo(goodsRoot.get("numberOfPlayers"), catalogQuery.getNumberOfPlayers()));
         }
@@ -140,29 +141,34 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public long getAmountOfGoods() {
-        return em.createQuery("select count(*) FROM GoodsEntity goods", Long.class).getSingleResult();
+        return em.createQuery("select count(*) FROM GoodsEntity goods where goods.visible =:visible ", Long.class).setParameter("visible",1).getSingleResult();
     }
 
     @Override
     public long getAmountOfGoodsByCategoryName(String categoryName) {
-        return em.createQuery("select count(*) from GoodsEntity goods where category.name = :category", Long.class).setParameter("category", categoryName).getSingleResult();
+        return em.createQuery("select count(*) from GoodsEntity goods where category.name = :category and goods.visible =:visible", Long.class)
+                .setParameter("visible",1)
+                .setParameter("category", categoryName).getSingleResult();
     }
 
     @Override
     public long getAmountOfGoodsBySearch(String searchStr) {
         return em
-                .createQuery("select count(*) from GoodsEntity goods where goods.name LIKE CONCAT('%', :searchStr, '%')", Long.class)
-                .setParameter("searchStr", searchStr).getSingleResult();
+                .createQuery("select count(*) from GoodsEntity goods where goods.name LIKE CONCAT('%', :searchStr, '%') and goods.visible =:visible", Long.class)
+                .setParameter("visible",1).setParameter("searchStr", searchStr).getSingleResult();
     }
 
     @Override
     public List<GoodsEntity> getRandomGoods(int amountOfGoodsOnPage) {
-        return em.createQuery("select goods from GoodsEntity goods order by rand()", GoodsEntity.class).setMaxResults(amountOfGoodsOnPage).getResultList();
+        return em.createQuery("select goods from GoodsEntity goods where goods.visible =:visible order by rand()", GoodsEntity.class)
+                .setParameter("visible",1)
+                .setMaxResults(amountOfGoodsOnPage).getResultList();
     }
 
     @Override
     public List<GoodsEntity> getNewGoods(int amountOfNewGoodsOnPage) {
-        return em.createQuery("select goods from GoodsEntity goods order by date desc", GoodsEntity.class).setMaxResults(amountOfNewGoodsOnPage).getResultList();
+        return em.createQuery("select goods from GoodsEntity goods where goods.visible =:visible order by date desc", GoodsEntity.class)
+                .setParameter("visible",1).setMaxResults(amountOfNewGoodsOnPage).getResultList();
     }
 
     @Override
@@ -208,6 +214,9 @@ public class GoodsRepositoryImpl implements GoodsRepository {
 
     @Override
     public List<GoodsEntity> getBestSellers(int amountOfBestSellers) {
-        return em.createQuery("select goods from GoodsEntity goods order by goods.salesCounter desc", GoodsEntity.class).setMaxResults(amountOfBestSellers).getResultList();
+        return em.createQuery("select goods from GoodsEntity goods where goods.visible =:visible order by goods.salesCounter desc", GoodsEntity.class)
+                .setParameter("visible",1).setMaxResults(amountOfBestSellers).getResultList();
     }
+
+
 }

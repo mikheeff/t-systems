@@ -133,4 +133,8 @@ public class OrderRepositoryImpl implements OrderRepository {
 
         return em.createQuery("select orderM.id from OrderEntity orderM where status.name = :status and date between :dateStart and :dateEnd",Integer.class).setParameter("status","closed").setParameter("dateStart",dateStart).setParameter("dateEnd",dateEnd).getResultList();
     }
+
+    @Override
+    public boolean isOrdersContainsGoods(int id) {
+        return em.createQuery("select count(*) from CartItemEntity item where item.goodsEntity.id =:id", Long.class).setParameter("id",id).getSingleResult() > 0;    }
 }

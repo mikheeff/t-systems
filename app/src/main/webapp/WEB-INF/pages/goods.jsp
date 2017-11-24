@@ -261,8 +261,8 @@
 				<div class="row">						
 					<div class="span9">
 						<ul class="thumbnails listing-products">
-							<c:forEach var="goodsVar" begin="0" end="8" items="${listGoods}">
-							<li class="span3" >
+							<c:forEach var="goodsVar" items="${listGoods}">
+							<li class="span3">
 								<div class="product-box">
 									<span class="sale_tag"></span>												
 									<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}" style="height: 270px; width: 270px;" ></a><br/>
@@ -319,7 +319,7 @@
 								<c:if test="${searchFlag}" >
 
 									<c:if test="${currentPage>1}" >
-									<li><a href="${pageContext.request.contextPath}/catalog/search/${searchStr}/page/${currentPage-1}">Prev</a></li>
+									<li><a href="${pageContext.request.contextPath}/catalog/search?page=${currentPage-1}">Prev</a></li>
 									</c:if>
 
 									<c:forEach var="i"  begin = "1" end = "${amountOfPages}" varStatus="count"  >
@@ -327,11 +327,11 @@
 										<c:if test="${count.index==currentPage}" >
 											 class="active"
 										</c:if>
-										><a href="${pageContext.request.contextPath}/catalog/search/${searchStr}/page/${i}">${i}</a></li>
+										><a href="${pageContext.request.contextPath}/catalog/search?page=${i}">${i}</a></li>
 									</c:forEach>
 
 									<c:if test="${currentPage<amountOfPages}" >
-										<li><a href="${pageContext.request.contextPath}/catalog/search/${searchStr}/page/${currentPage+1}">Next</a></li>
+										<li><a href="${pageContext.request.contextPath}/catalog/search?page=${currentPage+1}">Next</a></li>
 									</c:if>
 
 								</c:if>
