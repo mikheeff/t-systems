@@ -4,6 +4,7 @@ import com.internetshop.Exceptions.NoSuchCategoryException;
 import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.entities.GoodsEntity;
 import com.internetshop.entities.OrderEntity;
+import com.internetshop.entities.ReviewEntity;
 import com.internetshop.model.*;
 import com.tsystems.SmallGoods;
 import org.springframework.ui.ModelMap;
@@ -43,6 +44,9 @@ public interface GoodsService {
     void createUpdateMessage(GoodsEntity goodsEntity);
     boolean isCartContainsGoods(List<CartItem> cartList, int id);
     void putDefaultAttributes(ModelMap modelMap);
+    void updateGoodsRating(ReviewEntity reviewEntity);
+    long getPlaceOfGoods(int id);
+    boolean isAvailableToLeaveReview(Review review);
 
 
 }

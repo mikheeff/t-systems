@@ -280,31 +280,23 @@ public class GoodsController {
         List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4, goods);
         modelMap.put("relatedGoodsList", relatedGoodsList);
         modelMap.put("listReviews", goodsService.getAllReviewsByGoodsId(id));
+        modelMap.put("goodsPlace", goodsService.getPlaceOfGoods(id));
         return "goods_detail";
     }
 
-    @RequestMapping(value = "/goods/review", method = RequestMethod.POST)
-    public String createReview(String content, int rating, @RequestParam(value = "id") int id, ModelMap modelMap) {
+    @ResponseBody
+    @RequestMapping(value = "/goods/review/{id}", method = RequestMethod.POST)
+    public Review createReview(Review review, @PathVariable(value = "id") int id, ModelMap modelMap) {
         goodsService.putDefaultAttributes(modelMap);
         Client client = (Client) session.getAttribute("client");
-        if (client == null) {
-            return "404";
-        }
-        Goods goods;
-        try {
-            goods = goodsService.getGoodsById(id);
-        } catch (NullPointerException e) {
-            modelMap.put("error", "No goods with such id");
-            return "404";
-        }
-        Review review = new Review();
+        Goods goods = goodsService.getGoodsById(id);
         review.setClient(client);
         review.setGoods(goods);
-        review.setContent(content);
-        review.setRating(rating);
+        if (!goodsService.isAvailableToLeaveReview(review)){
+            return null;
+        }
         goodsService.addReview(review);
-        modelMap.put("msg","Your review has been successfully added! Thank you");
-        return "message";
+        return review;
     }
 
 

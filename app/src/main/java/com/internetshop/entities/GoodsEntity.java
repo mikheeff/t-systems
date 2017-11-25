@@ -32,7 +32,7 @@ public class GoodsEntity {
     @Column (name = "sales_counter")
     private int salesCounter;
     @Column (name = "rating")
-    private int rating;
+    private double rating;
     @Column (name = "add_time")
     private String date;
     @ManyToOne
@@ -60,7 +60,7 @@ public class GoodsEntity {
         this.rule = rule;
     }
 
-    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, int rating, String date, CategoryEntity category, RuleEntity rule) {
+    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, double rating, String date, CategoryEntity category, RuleEntity rule) {
         this.name = name;
         this.price = price;
         this.numberOfPlayers = numberOfPlayers;
@@ -172,11 +172,11 @@ public class GoodsEntity {
         this.salesCounter = salesCounter;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

@@ -234,5 +234,19 @@ public class GoodsRepositoryImpl implements GoodsRepository {
                 .setParameter("visible", 1).setMaxResults(amountOfBestSellers).getResultList();
     }
 
+    @Override
+    public double getGoodsRating(int id) {
+        return em.createQuery("select avg(review.rating) from ReviewEntity review where goodsEntity.id =:id",Double.class).setParameter("id",id).getSingleResult();
+    }
 
+    @Override
+    public long getPlaceOfGoods(double rating) {
+        return em.createQuery("select count(*) from GoodsEntity goods where goods.rating >:rating order by goods.rating desc",Long.class).setParameter("rating", rating).getSingleResult()+1;
+    }
+
+    @Override
+    public boolean isAvailableToLeaveReview(int clientId, int goodsId) {
+        return em.createQuery("select count(*) from ReviewEntity review where review.clientEntity.id =:clientId and review.goodsEntity.id =:goodsId",Long.class)
+                .setParameter("clientId",clientId).setParameter("goodsId",goodsId).getSingleResult() == 0;
+    }
 }

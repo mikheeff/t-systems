@@ -36,5 +36,8 @@ public interface GoodsRepository {
     void deleteCategoryById(int id);
     int getIdRuleByName(String name);
     RuleEntity getRuleByName(String name);
+    double getGoodsRating(int id);
+    long getPlaceOfGoods(double rating);
+    boolean isAvailableToLeaveReview(int clientId, int goodsId);
 
 }

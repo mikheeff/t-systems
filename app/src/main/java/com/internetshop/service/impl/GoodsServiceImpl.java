@@ -189,6 +189,16 @@ public class GoodsServiceImpl implements GoodsService {
         reviewEntity.setContent(review.getContent());
         reviewEntity.setRating(review.getRating());
         goodsRepository.addReview(reviewEntity);
+
+        updateGoodsRating(reviewEntity);
+
+    }
+    @Transactional
+    @Override
+    public void updateGoodsRating(ReviewEntity reviewEntity) {
+        GoodsEntity goodsEntity = reviewEntity.getGoodsEntity();
+        goodsEntity.setRating(goodsRepository.getGoodsRating(goodsEntity.getId()));
+        goodsRepository.updateGoods(goodsEntity);
     }
 
     /**
@@ -211,7 +221,7 @@ public class GoodsServiceImpl implements GoodsService {
         if (!producer.isAlive()) {
             producer.start();
         }
-        producer.send(event); //close??
+        producer.send(event);
     }
 
     /**
@@ -322,7 +332,7 @@ public class GoodsServiceImpl implements GoodsService {
     public long getAmountOfGoodsBySearch(String searchStr) {
         return goodsRepository.getAmountOfGoodsBySearch(searchStr);
     }
-
+    @Transactional(readOnly = true)
     @Override
     public long getAmountOfGoodsByFilter(CatalogQuery catalogQuery) {
         return goodsRepository.getAmountOfGoodsByFilter(catalogQuery);
@@ -430,6 +440,11 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsList;
     }
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isAvailableToLeaveReview(Review review) {
+        return goodsRepository.isAvailableToLeaveReview(review.getClient().getId(),review.getGoods().getId());
+    }
 
     @Override
     public boolean isCartContainsGoods(List<CartItem> cartList, int id) {
@@ -455,6 +470,11 @@ public class GoodsServiceImpl implements GoodsService {
             goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
+    }
+
+    @Override
+    public long getPlaceOfGoods(int id) {
+        return goodsRepository.getPlaceOfGoods(goodsRepository.getGoodsById(id).getRating());
     }
 
 

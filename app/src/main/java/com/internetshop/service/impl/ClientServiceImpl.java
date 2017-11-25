@@ -153,6 +153,7 @@ public class ClientServiceImpl implements ClientService {
         ClientEntity clientEntity = clientRepository.getUserById(id);
         client.setId(clientEntity.getId());
         client.setName(clientEntity.getName());
+        client.setSurname(clientEntity.getSurname());
         client.setBirthdate(clientEntity.getBirthdate());
         client.setEmail(clientEntity.getEmail());
         client.setPassword(clientEntity.getPassword());
@@ -282,6 +283,7 @@ public class ClientServiceImpl implements ClientService {
         role.setName(client.getRole().getName());
         ClientEntity clientEntity = new ClientEntity();
         clientEntity.setName(client.getName());
+        clientEntity.setSurname(client.getSurname());
         clientEntity.setEmail(client.getEmail());
         clientEntity.setPassword(client.getPassword());
         clientEntity.setPhone(client.getPhone());
