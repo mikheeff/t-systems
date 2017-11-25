@@ -5,7 +5,9 @@ import com.internetshop.controller.GoodsController;
 import com.internetshop.entities.*;
 import com.internetshop.jms.JmsProducer;
 import com.internetshop.model.*;
+import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.repository.api.GoodsRepository;
+import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
 import com.tsystems.*;
 import org.slf4j.Logger;
@@ -23,14 +25,18 @@ import java.util.*;
 public class GoodsServiceImpl implements GoodsService {
 
     private final GoodsRepository goodsRepository;
+    private final ClientRepository clientRepository;
+    private final ClientService clientService;
     private static Logger logger = LoggerFactory.getLogger(GoodsServiceImpl.class.getName());
 
 
     private static JmsProducer producer = new JmsProducer(AppConfig.ACTIVE_MQ_URL);
 
     @Autowired
-    public GoodsServiceImpl(GoodsRepository goodsRepository) {
+    public GoodsServiceImpl(GoodsRepository goodsRepository, ClientRepository clientRepository, ClientService clientService) {
         this.goodsRepository = goodsRepository;
+        this.clientRepository = clientRepository;
+        this.clientService = clientService;
     }
 
     /**
@@ -111,6 +117,7 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsList;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults) {
         List<Goods> goodsList = new ArrayList<>();
@@ -119,7 +126,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsList;
     }
-
+    @Transactional(readOnly = true)
     @Override
     public List<Goods> getBestSellersByCategory(Category category, int amount) {
         List<Goods> goodsList = new ArrayList<>();
@@ -127,6 +134,16 @@ public class GoodsServiceImpl implements GoodsService {
             goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Review> getAllReviewsByGoodsId(int id) {
+        List<Review> reviewList = new ArrayList<>();
+        for(ReviewEntity reviewEntity : goodsRepository.getAllReviewsByGoodsId(id)){
+            reviewList.add(convertReviewToDTO(reviewEntity));
+        }
+        return reviewList;
     }
 
     /**
@@ -157,6 +174,21 @@ public class GoodsServiceImpl implements GoodsService {
 
         Event event = new AddEvent(smallGoods);
         sendMessage(event);
+    }
+    @Transactional
+    @Override
+    public void addReview(Review review) {
+        ReviewEntity reviewEntity = new ReviewEntity();
+
+        ClientEntity clientEntity = clientRepository.getUserById(review.getClient().getId());
+        reviewEntity.setClientEntity(clientEntity);
+
+        GoodsEntity goodsEntity = goodsRepository.getGoodsById(review.getGoods().getId());
+        reviewEntity.setGoodsEntity(goodsEntity);
+
+        reviewEntity.setContent(review.getContent());
+        reviewEntity.setRating(review.getRating());
+        goodsRepository.addReview(reviewEntity);
     }
 
     /**
@@ -434,13 +466,10 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public GoodsEntity convertGoodsToDAO(Goods goods) {
-        CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.setId(goodsRepository.getIdCategoryByName(goods.getCategory().getName()));
-        categoryEntity.setName(goods.getName());
 
-        RuleEntity ruleEntity = new RuleEntity();
-        ruleEntity.setId(goodsRepository.getIdRuleByName(goods.getRule().getName()));
-        ruleEntity.setName(goods.getName());
+        CategoryEntity categoryEntity = goodsRepository.getCategoryByName(goods.getCategory().getName());
+
+        RuleEntity ruleEntity = goodsRepository.getRuleByName(goods.getRule().getName());
 
         GoodsEntity goodsEntity = new GoodsEntity(
                 goods.getName(),
@@ -484,6 +513,18 @@ public class GoodsServiceImpl implements GoodsService {
                 rule,
                 goodsEntity.getDate());
         return goods;
+    }
+
+    Review convertReviewToDTO(ReviewEntity reviewEntity){
+        Review review = new Review();
+        review.setId(reviewEntity.getId());
+        Client client = clientService.getClientById(reviewEntity.getClientEntity().getId());
+        review.setClient(client);
+        Goods goods = getGoodsById(reviewEntity.getGoodsEntity().getId());
+        review.setGoods(goods);
+        review.setContent(reviewEntity.getContent());
+        review.setRating(reviewEntity.getRating());
+        return review;
     }
 
 

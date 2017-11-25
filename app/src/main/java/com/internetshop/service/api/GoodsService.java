@@ -23,7 +23,9 @@ public interface GoodsService {
     List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage);
     List<Goods> getNewGoods(int amountOfNewGoodsOnPage);
     List<Goods> getBestSellersByCategory(Category category, int amount);
+    List<Review> getAllReviewsByGoodsId(int id);
     void addGoods(Goods goods);
+    void addReview(Review review);
     void deleteGoodsById(int id);
     Goods getGoodsById(int id);
     void updateGoods(Goods goods);

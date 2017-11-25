@@ -16,8 +16,10 @@ public interface GoodsRepository {
     List<GoodsEntity> getRandomGoods(int amountOfRandomGoodsOnPage);
     List<GoodsEntity> getNewGoods(int amountOfNewGoodsOnPage);
     List<GoodsEntity> getBestSellersByCategoryName(String name, int amount);
+    List<ReviewEntity> getAllReviewsByGoodsId(int id);
 
     int addGoods(GoodsEntity goodsEntity);
+    void addReview(ReviewEntity reviewEntity);
     void deleteGoodsById(int id);
     GoodsEntity getGoodsById(int id);
     void updateGoods(GoodsEntity goodsEntity);
@@ -27,6 +29,7 @@ public interface GoodsRepository {
     long getAmountOfGoodsByFilter(CatalogQuery catalogQuery);
     List<CategoryEntity> getAllCategories();
     int getIdCategoryByName(String name);
+    CategoryEntity getCategoryByName(String name);
     void addCategory(CategoryEntity categoryEntity);
     CategoryEntity getCategoryById(int id);
     void updateCategory(CategoryEntity categoryEntity);

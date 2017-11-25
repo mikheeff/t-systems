@@ -91,6 +91,8 @@
 					-moz-border-radius: 2px;
 					border: 1px solid #000;
 				}
+
+
 			</style>
 		</head>
 		<body>
@@ -375,16 +377,42 @@
 								<div class="tab-content">
 									<div class="tab-pane active" id="home">${goods.description}</div>
 									<div class="tab-pane" id="profile">
-										<div class="media">
-											<div class="media-left">
-												<img src="https://www.w3schools.com/bootstrap/img_avatar1.png" class="media-object" style="width:60px">
+										<c:if test="${listReviews == null or listReviews.size() != 0}">
+											<c:forEach var="review" items="${listReviews}">
+												<div class="media">
+													<div class="media pull-left">
+														<img src="/resources/themes/images/img_avatar.png" class="media-object" style="width:60px">
+													</div>
+													<div class="media-body">
+														<h4 class="media-heading">${review.client.name} ${review.client.surname}</h4>
+														<p>${review.content}</p>
+													</div>
+												</div>
+												<hr>
+											</c:forEach>
+										</c:if>
+										<c:if test="${client==null}">
+											<div class="msg">To leave a review please log in</div>
+										</c:if>
+										<c:if test="${client.role.name=='ROLE_CLIENT'}">
+											<div class="row-fluid">
+												<form action="/catalog/goods/review?id=${goods.id}" method="post">
+													<div class="control-group">
+														<label for="textarea" class="control-label">Comments</label>
+														<div class="controls">
+															<textarea name="content" rows="3" id="textarea" class="span12"></textarea>
+														</div>
+													</div>
+													<select name="rating" class="input-xlarge" id="filterInput">
+														<c:forEach   begin = "1" end = "10"  varStatus="count">
+															<option value="${count.index}">${count.index}</option>
+														</c:forEach>
+													</select>
+													<big><strong>Rate product</strong></big>
+													<input class="btn btn-inverse pull-right" type="submit" value="Leave review">
+												</form>
 											</div>
-											<div class="media-body">
-												<h4 class="media-heading">Left-aligned</h4>
-												<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-											</div>
-										</div>
-										<hr>
+										</c:if>
 									</div>
 								</div>							
 							</div>
