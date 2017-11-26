@@ -57,7 +57,6 @@
             $('#review_form').submit(function () {
                 var id = ${goods.id};
                 $.post('/catalog/goods/review/' + id, $(this).serialize(), function (review) {
-//							$('#review_msg').html(msg);
                     if (review.client === undefined) {
                         document.getElementById("review_error").style.display = 'block';
                     } else {
@@ -136,7 +135,7 @@
 <div id="top-bar" class="container">
     <div class="row">
         <div class="span4">
-            <form action="/catalog/search" method="POST" command class="search_form">
+            <form action="/catalog/search?page=1" method="POST" command class="search_form">
                 <input name="searchStr" type="text" class="input-block-level search-query" maxlength="15"
                        Placeholder="Search games">
             </form>
@@ -373,30 +372,30 @@
                         <el style="text-decoration: underline"><h3><strong>${goods.name}</strong></h3></el>
                         <td><span class="label label-info">${goodsPlace} place in the rating of shop</span></td>
                         <br>
-                        <table border="3" width="100%" cellpadding="3" cellspacing="2">
+                        <table class="table table-striped">
                             <tr>
-                                <td><big><big><strong>Number of players:</strong></big></big></td>
-                                <td><big><strong>${goods.numberOfPlayers}</strong></big></td>
+                                <td><strong>Number of players:</strong></td>
+                                <td><big><big><strong>${goods.numberOfPlayers}</big></big></strong></big></td>
                             </tr>
                             <tr>
-                                <td><big><big><strong>Duration of the game:</strong></big></big></td>
-                                <td><big><strong>${goods.duration}</strong></big></td>
+                                <td><strong>Duration of the game:</strong></td>
+                                <td><big><big><strong>${goods.duration}</strong></big></big></td>
                             </tr>
                             <tr>
-                                <td><big><big><strong>Complexity of the rules:</strong></big></big></td>
-                                <td><big><strong>${goods.rule.name}</strong></big></td>
+                                <td><strong>Complexity of the rules:</strong></td>
+                                <td><big><big><strong>${goods.rule.name}</strong></big></big></td>
                             </tr>
                             <tr>
-                                <td><big><big><strong>Availability:</strong></big></big></td>
+                                <td><strong>Availability:</strong></td>
                                 <c:if test="${goods.amount==0}">
-                                    <td><big><strong>Out Of Stock</strong></big></td>
+                                    <td><big><big><strong>Out Of Stock</strong></big></big></td>
                                 </c:if>
                                 <c:if test="${goods.amount!=0}">
-                                    <td><big><strong>Available</strong></big></td>
+                                    <td><big><big><strong>Available</strong></big></big></td>
                                 </c:if>
                             </tr>
                             <tr>
-                                <td><big><big><strong>Rating:</strong></big></big></td>
+                                <td><strong>Rating:</strong></td>
                                 <td><span class="label label-info">${goods.rating}</span></td>
                             </tr>
                         </table>
@@ -439,10 +438,18 @@
                             <div id="reviews">
                                 <c:forEach var="review" items="${listReviews}">
                                     <div class="media">
+                                        <c:if test="${client.img == null}">
                                         <div class="media pull-left">
                                             <img src="/resources/themes/images/img_avatar.png" class="media-object"
                                                  style="width:60px">
                                         </div>
+                                        </c:if>
+                                        <c:if test="${client.img != null}">
+                                        <div class="media pull-left">
+                                            <img src="data:image/jpeg;base64,${client.imgBase64}" class="media-object"
+                                                 style="width:60px">
+                                        </div>
+                                        </c:if>
                                         <div class="media-body">
                                             <h4 class="media-heading">${review.client.name} ${review.client.surname}</h4>
                                             <p>${review.content}</p>

@@ -2,8 +2,11 @@ package com.internetshop.model;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import org.apache.commons.codec.binary.Base64;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +43,7 @@ public class Client {
     private String confirmationId;
     private Role role;
     private byte[] img;
+    private String imgBase64;
     private ClientAddress clientAddress;
     private Set<Order> order = new HashSet<>();
 
@@ -167,6 +171,17 @@ public class Client {
 
     public byte[] getImg() {
         return img;
+    }
+
+    public String getImgBase64() {
+        byte[] encodeBase64 = Base64.encodeBase64(img);
+        String base64Encoded = "";
+        try {
+            base64Encoded = new String(encodeBase64, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return base64Encoded;
     }
 
     public void setImg(byte[] img) {

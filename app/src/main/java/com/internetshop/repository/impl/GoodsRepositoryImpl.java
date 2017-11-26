@@ -101,7 +101,7 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         return em.createQuery(criteria.select(builder.count(goodsRoot))).getSingleResult();
     }
 
-    private CriteriaQuery buildFilterQueryString(CatalogQuery catalogQuery, CriteriaBuilder builder, CriteriaQuery criteria, Root<GoodsEntity> goodsRoot) {
+    private <T> CriteriaQuery<T> buildFilterQueryString(CatalogQuery catalogQuery, CriteriaBuilder builder, CriteriaQuery criteria, Root<GoodsEntity> goodsRoot) {
         criteria.select(goodsRoot);
         final List<Predicate> predicates = new ArrayList<>();
         predicates.add(builder.equal(goodsRoot.get("visible"), 1));

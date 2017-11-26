@@ -65,7 +65,7 @@
 <div id="top-bar" class="container">
     <div class="row">
         <div class="span4">
-            <form action="/catalog/search" method="POST" command class="search_form">
+            <form action="/catalog/search?page=1" method="POST" command class="search_form">
                 <input name="searchStr" type="text" class="input-block-level search-query" maxlength="15"
                        Placeholder="Search games">
             </form>
@@ -297,9 +297,6 @@
                                                 <div class="actions"><input tabindex="9" class="btn btn-inverse large"
                                                                             type="submit" value="Add new goods"></div>
                                             </fieldset>
-                                            <%--<input type="hidden"--%>
-                                            <%--name="${_csrf.parameterName}"--%>
-                                            <%--value="${_csrf.token}"/>--%>
                                         </spring:form>
                                     </div>
                                 </div>
@@ -319,9 +316,6 @@
                                     <input type="checkbox" onclick="hideStuff('closed-row')" id="hide-check"> Hide
                                     closed orders
                                 </label>
-                                <%--<input type="submit" onclick="hideStuff('closed-row')" id="hide">--%>
-                                <%--<div id="msg"></div>--%>
-                                <%--<form id="all-orders" action="" method="GET"></form>--%>
                                 <c:if test="${clientOrdersList.size()!=0}">
 
                                     <table class="table table-striped">
@@ -339,7 +333,6 @@
 
                                         <c:forEach var="clientOrder" items="${clientOrdersList}">
                                             <tbody>
-                                                <%--<c:if test="${not(clientOrder.status.name=='closed' and hide == true)}">--%>
                                             <tr
                                                     <c:if test="${clientOrder.status.name=='closed'}">
                                                         id="closed-row${clientOrder.id}"
@@ -409,7 +402,6 @@
 
                                             <c:forEach var="goodsVar" items="${allGoodsList}">
                                                 <tbody>
-                                                    <%--<c:if test="${not(clientOrder.status.name=='closed' and hide == true)}">--%>
                                                 <tr>
                                                     <td><big>${goodsVar.id}</big></td>
                                                     <td><big>${goodsVar.name}</big></td>

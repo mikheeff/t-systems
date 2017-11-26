@@ -9,21 +9,21 @@ import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.OrderService;
 import com.internetshop.service.impl.ClientServiceImpl;
 import com.internetshop.service.impl.UserDetailsServiceImpl;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 
 @Controller
@@ -134,7 +134,6 @@ public class ClientController {
             modelMap.put("msgClient", "Information has been changed successfully!");
         }
         modelMap.put("passwordField", new PasswordField());
-        modelMap.put("hide", false);
         return "profile";
     }
 
@@ -210,7 +209,24 @@ public class ClientController {
             return "redirect:/clients/profile?errorMatch";
         }
         return "redirect:/clients/profile?msg";
-
+    }
+    @RequestMapping(value = "/profile/edit/avatar", method = RequestMethod.POST)
+    public String uploadAvatar(HttpServletRequest httpServletRequest, @RequestParam CommonsMultipartFile[] fileUpload){
+        Client client = (Client) session.getAttribute("client");
+        if (fileUpload != null && fileUpload.length > 0) {
+            CommonsMultipartFile aFile = fileUpload[0];
+                System.out.println("Saving file: " + aFile.getOriginalFilename());
+                client.setImg(aFile.getBytes());
+                clientService.uploadAvatar(client);
+        }
+        return "redirect:/clients/profile";
+    }
+    @ResponseBody
+    @RequestMapping(value = "/profile/edit/avatar/delete", method = RequestMethod.GET)
+    public void deleteAvatar(){
+        Client client = (Client) session.getAttribute("client");
+        clientService.deleteAvatar(client);
+//        return "redirect:/clients/profile";
     }
 
 }

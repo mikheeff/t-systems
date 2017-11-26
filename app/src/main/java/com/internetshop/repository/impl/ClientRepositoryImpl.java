@@ -37,10 +37,6 @@ public class ClientRepositoryImpl implements ClientRepository {
         em.persist(clientEntity);
     }
 
-    @Override
-    public void addAddress(ClientAddressEntity clientAddressEntity) {
-        em.persist(clientAddressEntity);
-    }
 
     @Override
     public ClientEntity getUserByEmail(String email) {
@@ -72,8 +68,4 @@ public class ClientRepositoryImpl implements ClientRepository {
         return em.createQuery("select roleEntity from RoleEntity roleEntity where id = :id", RoleEntity.class).setParameter("id",id).getSingleResult();
     }
 
-    @Override
-    public ClientAddressEntity getAddressById(int id) {
-        return em.createQuery("select clientAddressEntity from ClientAddressEntity clientAddressEntity where id = :id", ClientAddressEntity.class).setParameter("id",id).getSingleResult();
-    }
 }

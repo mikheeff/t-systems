@@ -3,7 +3,6 @@ package com.internetshop.service.impl;
 import com.internetshop.Exceptions.EmailExistException;
 import com.internetshop.Exceptions.PasswordWrongException;
 import com.internetshop.config.AppConfig;
-import com.internetshop.controller.HomeController;
 import com.internetshop.entities.ClientAddressEntity;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.OrderEntity;
@@ -15,10 +14,7 @@ import com.internetshop.service.api.MailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,20 +32,22 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder,MailService mailService){
+    public ClientServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder, MailService mailService) {
         this.clientRepository = clientRepository;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
     }
 
     @Transactional(readOnly = true)
-    public List<ClientEntity> getAllClients(){ return clientRepository.getAll(); }
+    public List<ClientEntity> getAllClients() {
+        return clientRepository.getAll();
+    }
 
     @Transactional(readOnly = true)
     @Override
     public List<Client> getBestClientsList(int amountOfBestClients) {
         List<Client> clientList = new ArrayList<>();
-        for(ClientEntity clientEntity : clientRepository.getBestClientsList(amountOfBestClients)){
+        for (ClientEntity clientEntity : clientRepository.getBestClientsList(amountOfBestClients)) {
             clientList.add(convertClientToDTO(clientEntity));
         }
         return clientList;
@@ -57,6 +55,7 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Adds new client
+     *
      * @param client new client model
      * @throws EmailExistException email already exists
      */
@@ -64,7 +63,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void addClient(Client client) throws EmailExistException {
         logger.info("addClient");
-        if (clientRepository.isEmailExist(client.getEmail())){
+        if (clientRepository.isEmailExist(client.getEmail())) {
             throw new EmailExistException(client.getEmail());
         }
         Role role = new Role();
@@ -84,13 +83,14 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Changes user's password
+     *
      * @throws PasswordWrongException
      */
     @Transactional
     @Override
     public void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException {
         logger.info("changePassword");
-        if(passwordEncoder.matches(passwordField.getPassword(),client.getPassword())){
+        if (passwordEncoder.matches(passwordField.getPassword(), client.getPassword())) {
             logger.info("password matches = true");
             ClientEntity clientEntity = clientRepository.getUserById(client.getId());
             clientEntity.setPassword(passwordEncoder.encode(passwordField.getNewPasswordFirst()));
@@ -102,6 +102,7 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Gets client model by email
+     *
      * @return Client
      */
     @Transactional(readOnly = true)
@@ -114,6 +115,7 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Get client model by ID
+     *
      * @return Client
      */
     @Transactional(readOnly = true)
@@ -125,6 +127,7 @@ public class ClientServiceImpl implements ClientService {
 
         return convertClientToDTO(clientEntity);
     }
+
     @Transactional(readOnly = true)
     @Override
     public String getEmailByConfirmationId(String id) {
@@ -133,6 +136,7 @@ public class ClientServiceImpl implements ClientService {
 
     /**
      * Updates client model fields
+     *
      * @param client
      */
     @Transactional
@@ -150,30 +154,39 @@ public class ClientServiceImpl implements ClientService {
         clientAddressEntity.setHouse(client.getClientAddress().getHouse());
         clientAddressEntity.setFlat(client.getClientAddress().getFlat());
         clientAddressEntity.setAddition(client.getClientAddress().getAddition());
-        if(client.getName()!=null) {
+        if (client.getName() != null) {
             clientEntity.setName(client.getName());
         }
         clientEntity.setSurname(client.getSurname());
         clientEntity.setBirthdate(client.getBirthdate());
-        if(client.getEmail()!=null){
-        clientEntity.setEmail(client.getEmail());
+        if (client.getEmail() != null) {
+            clientEntity.setEmail(client.getEmail());
         }
-        if(client.getPassword()!=null) {
+        if (client.getPassword() != null) {
             clientEntity.setPassword(client.getPassword());
         }
-        if(client.getPhone()!=null) {
+        if (client.getPhone() != null) {
             clientEntity.setPhone(client.getPhone());
         }
 
         clientRepository.updateUser(clientEntity);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
-    public boolean isIdContains(String email, String id) {
-        ClientEntity clientEntity = clientRepository.getUserByEmail(email);
-        return id.equals(clientEntity.getConfirmationId());
+    public void uploadAvatar(Client client) {
+        ClientEntity clientEntity = clientRepository.getUserById(client.getId());
+        clientEntity.setImg(client.getImg());
+        clientRepository.updateUser(clientEntity);
     }
+    @Transactional
+    @Override
+    public void deleteAvatar(Client client) {
+        ClientEntity clientEntity = clientRepository.getUserById(client.getId());
+        clientEntity.setImg(null);
+        clientRepository.updateUser(clientEntity);
+    }
+
     @Transactional
     @Override
     public void confirmClientEmail(String email) {
@@ -181,6 +194,7 @@ public class ClientServiceImpl implements ClientService {
         clientEntity.setIsConfirm(1);
         clientRepository.updateUser(clientEntity);
     }
+
     @Transactional
     @Override
     public String resetConfirmationId(String email) {
@@ -190,7 +204,6 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.updateUser(client);
         return confirmationId;
     }
-
 
 
     @Transactional
@@ -204,19 +217,20 @@ public class ClientServiceImpl implements ClientService {
         mail.setMailTo(client.getEmail());
         mail.setMailSubject("Dice Games. Recover Password");
 
-        Map< String, Object > model = new HashMap<>();
+        Map<String, Object> model = new HashMap<>();
 
         model.put("firstName", client.getName());
         model.put("location", AppConfig.MAIL_LOCATION);
         model.put("signature", AppConfig.MAIL_SIGNATURE);
         model.put("mailMsg", "To recover your password follow the link below");
-        model.put("link", AppConfig.HOST_URL+"/recover/password?id="+confirmationId);
+        model.put("link", AppConfig.HOST_URL + "/recover/password?id=" + confirmationId);
         mail.setModel(model);
-        mailService.sendEmail(mail,"email-template.txt");
+        mailService.sendEmail(mail, "email-template.txt");
     }
 
     /**
      * Converts client model to client Entity
+     *
      * @return Client Entity
      */
 
@@ -232,9 +246,9 @@ public class ClientServiceImpl implements ClientService {
         return clientEntity;
     }
 
-    public Client convertClientToDTO(ClientEntity clientEntity){
+    public Client convertClientToDTO(ClientEntity clientEntity) {
         Client client = new Client();
-        Role role = new Role(clientEntity.getRoleEntity().getId(),clientEntity.getRoleEntity().getName());
+        Role role = new Role(clientEntity.getRoleEntity().getId(), clientEntity.getRoleEntity().getName());
         client.setRole(role);
 
         client.setId(clientEntity.getId());
@@ -247,6 +261,7 @@ public class ClientServiceImpl implements ClientService {
         client.setOrderCounter(clientEntity.getOrderCounter());
         client.setIsConfirm(clientEntity.getIsConfirm());
         client.setConfirmationId(clientEntity.getConfirmationId());
+        client.setImg(clientEntity.getImg());
 
 
         ClientAddress clientAddress = new ClientAddress();

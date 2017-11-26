@@ -88,7 +88,10 @@ public class GoodsController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public String getAllGoodsBySearch(String searchStr, @RequestParam(value = "page", required = false) int page, ModelMap modelMap) {
+    public String getAllGoodsBySearch(String searchStr, @RequestParam(value = "page") int page, ModelMap modelMap) {
+//        if (page == 0){
+//
+//        }
         List<Goods> listGoods = goodsService.getAllGoodsBySearch(searchStr, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
         goodsService.putDefaultAttributes(modelMap);
         modelMap.put("searchStr", searchStr);
@@ -225,7 +228,7 @@ public class GoodsController {
     @RequestMapping(value = "/employee/edit", method = RequestMethod.POST)
     public String editGoods(@ModelAttribute(value = "goods") @Valid Goods goods, BindingResult bindingResult,
                             ModelMap modelMap) {
-        logger.info("editGoods");
+        logger.info("editGoods {1}", goods);
         goodsService.putDefaultAttributes(modelMap);
         List<Goods> relatedGoodsList = goodsService.getRelatedGoods(4, goods);  //If needs 3 goods set 4, because one of goods could be current goods
         modelMap.put("relatedGoodsList", relatedGoodsList);
@@ -255,7 +258,7 @@ public class GoodsController {
      */
     @RequestMapping(value = "/goods/{id}", method = RequestMethod.GET)
     public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap) {
-        logger.info("getGoodsById");
+        logger.info("getGoodsById {}", id);
         goodsService.putDefaultAttributes(modelMap);
         Goods goods;
         try {

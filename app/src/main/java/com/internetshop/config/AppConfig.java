@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 //import org.apache.commons.dbcp.BasicDataSource;
 //import org.hibernate.SessionFactory;
+import com.internetshop.jms.JmsProducer;
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -37,10 +38,10 @@ import javax.sql.DataSource;
 @EnableWebMvc
 @Configuration
 @EnableTransactionManagement
-@ComponentScan({ "com.internetshop.*" })
-@Import({ SecurityConfig.class })
+@ComponentScan({"com.internetshop.*"})
+@Import({SecurityConfig.class})
 
-public class AppConfig{
+public class AppConfig {
 
     public final static String HOST_URL = "http://93.100.84.138";
     public static final String ACTIVE_MQ_URL = "tcp://localhost:61616";
@@ -50,6 +51,7 @@ public class AppConfig{
     public static final String ACCOUNT_SID = "ACe9fc023d790d7d7ba114547654c43cfc";
     public static final String AUTH_TOKEN = "c267734dc9f8552f0ac2d5c326181c1d";
     public static final String TWILIO_NUMBER = "+18782050971";
+
     @Bean
     public InternalResourceViewResolver viewResolver() {
         InternalResourceViewResolver viewResolver
@@ -103,10 +105,13 @@ public class AppConfig{
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver getCommonsMultipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(20971520);   // 20MB
+        multipartResolver.setMaxUploadSize(4194000);   // 20MB
         multipartResolver.setMaxInMemorySize(1048576);  // 1MB
         return multipartResolver;
     }
 
-
+    @Bean
+    public JmsProducer getProducer() {
+        return new JmsProducer(AppConfig.ACTIVE_MQ_URL);
+    }
 }

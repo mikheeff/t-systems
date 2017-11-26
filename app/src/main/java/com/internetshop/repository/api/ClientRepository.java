@@ -15,9 +15,7 @@ public interface ClientRepository {
     ClientEntity getUserById(int id);
     String getEmailByConfirmationId(String id);
     void updateUser(ClientEntity clientEntity);
-    void addAddress(ClientAddressEntity clientAddressEntity);
     RoleEntity getRoleById(int id);
     boolean isEmailExist(String email);
-    ClientAddressEntity getAddressById(int id);
 
 }

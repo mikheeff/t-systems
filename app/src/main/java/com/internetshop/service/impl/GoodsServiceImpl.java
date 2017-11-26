@@ -28,15 +28,14 @@ public class GoodsServiceImpl implements GoodsService {
     private final ClientRepository clientRepository;
     private final ClientService clientService;
     private static Logger logger = LoggerFactory.getLogger(GoodsServiceImpl.class.getName());
-
-
-    private static JmsProducer producer = new JmsProducer(AppConfig.ACTIVE_MQ_URL);
+    private final JmsProducer producer;
 
     @Autowired
-    public GoodsServiceImpl(GoodsRepository goodsRepository, ClientRepository clientRepository, ClientService clientService) {
+    public GoodsServiceImpl(GoodsRepository goodsRepository, ClientRepository clientRepository, ClientService clientService, JmsProducer jmsProducer) {
         this.goodsRepository = goodsRepository;
         this.clientRepository = clientRepository;
         this.clientService = clientService;
+        this.producer = jmsProducer;
     }
 
     /**
@@ -54,6 +53,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsList;
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<SmallGoods> getAllSmallGoods() {
@@ -107,6 +107,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsList;
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoodsBySearch(String searchStr, int firstId, int maxResults) {
@@ -121,16 +122,17 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults) {
         List<Goods> goodsList = new ArrayList<>();
-        for (GoodsEntity goodsEntity : goodsRepository.getAllGoodsByFilter(catalogQuery, firstId, maxResults)){
+        for (GoodsEntity goodsEntity : goodsRepository.getAllGoodsByFilter(catalogQuery, firstId, maxResults)) {
             goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getBestSellersByCategory(Category category, int amount) {
         List<Goods> goodsList = new ArrayList<>();
-        for (GoodsEntity goodsEntity : goodsRepository.getBestSellersByCategoryName(category.getName(),amount)){
+        for (GoodsEntity goodsEntity : goodsRepository.getBestSellersByCategoryName(category.getName(), amount)) {
             goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
@@ -140,7 +142,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Review> getAllReviewsByGoodsId(int id) {
         List<Review> reviewList = new ArrayList<>();
-        for(ReviewEntity reviewEntity : goodsRepository.getAllReviewsByGoodsId(id)){
+        for (ReviewEntity reviewEntity : goodsRepository.getAllReviewsByGoodsId(id)) {
             reviewList.add(convertReviewToDTO(reviewEntity));
         }
         return reviewList;
@@ -175,6 +177,7 @@ public class GoodsServiceImpl implements GoodsService {
         Event event = new AddEvent(smallGoods);
         sendMessage(event);
     }
+
     @Transactional
     @Override
     public void addReview(Review review) {
@@ -193,6 +196,7 @@ public class GoodsServiceImpl implements GoodsService {
         updateGoodsRating(reviewEntity);
 
     }
+
     @Transactional
     @Override
     public void updateGoodsRating(ReviewEntity reviewEntity) {
@@ -217,7 +221,7 @@ public class GoodsServiceImpl implements GoodsService {
         sendMessage(event);
     }
 
-    public void sendMessage(Event event){
+    public void sendMessage(Event event) {
         if (!producer.isAlive()) {
             producer.start();
         }
@@ -327,11 +331,13 @@ public class GoodsServiceImpl implements GoodsService {
 
         return goodsRepository.getAmountOfGoodsByCategoryName(categoryName);
     }
+
     @Transactional(readOnly = true)
     @Override
     public long getAmountOfGoodsBySearch(String searchStr) {
         return goodsRepository.getAmountOfGoodsBySearch(searchStr);
     }
+
     @Transactional(readOnly = true)
     @Override
     public long getAmountOfGoodsByFilter(CatalogQuery catalogQuery) {
@@ -414,6 +420,7 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsBestSellersList;
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getRelatedGoods(int amount, Goods goods) {
@@ -435,21 +442,22 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(readOnly = true)
     public List<Goods> getRandomGoods(int amountOfRandomGoodsOnPage) {
         List<Goods> goodsList = new ArrayList<>();
-        for(GoodsEntity goodsEntity : goodsRepository.getRandomGoods(amountOfRandomGoodsOnPage)){
+        for (GoodsEntity goodsEntity : goodsRepository.getRandomGoods(amountOfRandomGoodsOnPage)) {
             goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
     }
+
     @Transactional(readOnly = true)
     @Override
     public boolean isAvailableToLeaveReview(Review review) {
-        return goodsRepository.isAvailableToLeaveReview(review.getClient().getId(),review.getGoods().getId());
+        return goodsRepository.isAvailableToLeaveReview(review.getClient().getId(), review.getGoods().getId());
     }
 
     @Override
     public boolean isCartContainsGoods(List<CartItem> cartList, int id) {
-        for (CartItem item : cartList){
-            if (item.getGoods().getId() == id){
+        for (CartItem item : cartList) {
+            if (item.getGoods().getId() == id) {
                 return true;
             }
         }
@@ -466,7 +474,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public List<Goods> getNewGoods(int amountOfNewGoodsOnPage) {
         List<Goods> goodsList = new ArrayList<>();
-        for(GoodsEntity goodsEntity : goodsRepository.getNewGoods(amountOfNewGoodsOnPage)){
+        for (GoodsEntity goodsEntity : goodsRepository.getNewGoods(amountOfNewGoodsOnPage)) {
             goodsList.add(convertGoodsToDTO(goodsEntity));
         }
         return goodsList;
@@ -476,7 +484,6 @@ public class GoodsServiceImpl implements GoodsService {
     public long getPlaceOfGoods(int id) {
         return goodsRepository.getPlaceOfGoods(goodsRepository.getGoodsById(id).getRating());
     }
-
 
 
     /**
@@ -535,7 +542,7 @@ public class GoodsServiceImpl implements GoodsService {
         return goods;
     }
 
-    Review convertReviewToDTO(ReviewEntity reviewEntity){
+    Review convertReviewToDTO(ReviewEntity reviewEntity) {
         Review review = new Review();
         review.setId(reviewEntity.getId());
         Client client = clientService.getClientById(reviewEntity.getClientEntity().getId());

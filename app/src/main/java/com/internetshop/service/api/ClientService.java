@@ -20,9 +20,11 @@ public interface ClientService {
     Client getClientById(int id);
     String getEmailByConfirmationId(String id);
     void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException;
-    boolean isIdContains(String email, String id);
     void confirmClientEmail(String email);
     void recoverConfirmationIdAndSendEmail(String email) throws UsernameNotFoundException;
     String resetConfirmationId(String email);
     Client convertClientToDTO(ClientEntity clientEntity);
+    void uploadAvatar(Client client);
+    void deleteAvatar(Client client);
+
 }

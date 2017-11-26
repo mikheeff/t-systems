@@ -17,7 +17,25 @@
 	<!-- global styles -->
 	<link href="${pageContext.request.contextPath}/resources/themes/css/flexslider.css" rel="stylesheet"/>
 	<link href="${pageContext.request.contextPath}/resources/themes/css/main.css" rel="stylesheet"/>
-
+	<script src="${pageContext.request.contextPath}/resources/themes/js/jquery-1.7.2.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/themes/js/jquery.fancybox.js"></script>
+	<script type="text/javascript">
+        $(document).ready(function () {
+            $('#cross').click(function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: "/clients/profile/edit/avatar/delete",
+                        dataType: 'json',
+                        success: function () {
+                            document.getElementById("default_img").style.display = 'block';
+                            document.getElementById("old_img").style.display = 'none';
+                            document.getElementById("cross").style.display = 'none';
+                            document.getElementById("row").style.display = 'none';
+                        }
+                    });
+            });
+        });
+	</script>
 	<!-- scripts -->
 	<script src="${pageContext.request.contextPath}/resources/themes/js/jquery-1.7.2.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/themes/bootstrap/js/bootstrap.min.js"></script>
@@ -29,6 +47,112 @@
 
 	<![endif]-->
 	<style>
+
+		html, body{
+			min-height:100%;
+		}
+
+		body{
+			background-image: -webkit-linear-gradient(top, #edecec, #cecbc9);
+			background-image: linear-gradient(top, #edecec, #cecbc9);
+		}
+
+		.buttonHolder{
+			margin:23px auto;
+			width:23px;
+		}
+
+
+		.button{
+			background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
+			background-image: linear-gradient(top, #f4f1ee, #fff);
+			border-radius: 50%;
+			box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgba(204,198,197,.5);
+			float:left;
+			height: 20px;
+			margin: 0 8px 8px 0;
+			position: relative;
+			width: 20px;
+			-webkit-transition: all .1s linear;
+			transition: all .1s linear;
+		}
+
+		.button:after{
+			color:#e9e6e4;
+			content: "";
+			display: block;
+			font-size: 15px;
+			height: 15px;
+			text-decoration: none;
+			text-shadow: 0px -1px 1px #bdb5b4, 1px 1px 1px white;
+			position: absolute;
+			width: 15px;
+		}
+
+
+		.heart:after{
+			content: "❤";
+			left: 6px;
+			top: 4px;
+		}
+
+		.flower:after{
+			content: "\270E";
+			left: 3px;
+			top: 0px;
+		}
+
+		.tick:after{
+			content: "✔";
+			left:6px;
+			top:4px;
+		}
+
+		.cross:after{
+			content: "\2716";
+			left: 3px;
+			top: 1px;
+		}
+
+		.button:hover{
+			background-image: -webkit-linear-gradient(top, #fff, #f4f1ee);
+			background-image: linear-gradient(top, #fff, #f4f1ee);
+			color:#0088cc;
+		}
+
+		.heart:hover:after{
+			color:#f94e66;
+			text-shadow:0px 0px 6px #f94e66;
+		}
+
+		.flower:hover:after{
+			color:#f99e4e;
+			text-shadow:0px 0px 6px #f99e4e;
+		}
+
+		.tick:hover:after{
+			color:#83d244;
+			text-shadow:0px 0px 6px #83d244;
+		}
+
+		.cross:hover:after{
+			color:#eb2f2f;
+			text-shadow:0px 0px 6px #eb2f2f;
+		}
+
+
+
+		.button:active{
+			background-image: -webkit-linear-gradient(top, #efedec, #f7f4f4);
+			background-image: linear-gradient(top, #efedec, #f7f4f4);
+			box-shadow: 0 3px 5px 0 rgba(0,0,0,.4), inset 0px -3px 1px 1px rgba(204,198,197,.5);
+		}
+
+		.button:active:after{
+			color:#dbd2d2;
+			text-shadow: 0px -1px 1px #bdb5b4, 0px 1px 1px white;
+		}
+
 		.error {
 			padding: 15px;
 			margin-bottom: 20px;
@@ -58,6 +182,26 @@
 			-moz-border-radius: 2px;
 			border: 1px solid #000;
 		}
+
+		.btn-file {
+			position: relative;
+			overflow: hidden;
+		}
+		.btn-file input[type=file] {
+			position: absolute;
+			top: 0;
+			right: 0;
+			min-width: 100%;
+			min-height: 100%;
+			font-size: 50%;
+			text-align: right;
+			filter: alpha(opacity=0);
+			opacity: 0;
+			outline: none;
+			background: orangered;
+			cursor: inherit;
+			display: block;
+		}
 	</style>
 
 </head>
@@ -65,7 +209,7 @@
 <div id="top-bar" class="container">
 	<div class="row">
 		<div class="span4">
-			<form action="/catalog/search" method="POST" command class="search_form">
+			<form action="/catalog/search?page=1" method="POST" command class="search_form">
 				<input name="searchStr" type="text" class="input-block-level search-query" maxlength="15" Placeholder="Search games">
 			</form>
 		</div>
@@ -162,6 +306,7 @@
 								</div>
 								<div id="collapseOne" class="accordion-body collapse">
 									<div class="accordion-inner">
+
 										<spring:form action="/clients/profile/edit" method="post" modelAttribute="client" class="form-stacked">
 										<div class="row-fluid">
 											<div class="span6">
@@ -172,6 +317,7 @@
 												<c:if test="${not empty msgClient}">
 													<div class="msg">${msgClient}</div>
 												</c:if>
+
 													<fieldset>
 														<div class="control-group">
 															<label class="control-label">Your ID</label>
@@ -284,24 +430,14 @@
 													</div>
 												</fieldset>
 												<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Edit your profile"></div>
+												</spring:form>
+
 											</div>
 										</div>
 											<hr>
-										</spring:form>
 										<div class="row-fluid">
 											<div class="span6">
-												<h1>Spring MVC - Hibernate File Upload to Database Demo</h1>
-												<form method="post" action="doUpload" enctype="multipart/form-data">
-													<table border="0">
-														<tr>
-															<td>Pick file #1:</td>
-															<td><input type="file" name="fileUpload" size="50" /></td>
-														</tr>
-														<tr>
-															<td colspan="2" align="center"><input type="submit" value="Upload" /></td>
-														</tr>
-													</table>
-												</form>
+
 												<h4>Set New Password</h4>
 												<spring:form action="/clients/profile/edit/password" method="post" modelAttribute="passwordField" class="form-stacked">
 													<fieldset>
@@ -328,12 +464,40 @@
 													<div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit" value="Edit your password"></div>
 												</spring:form>
 											</div>
-
+											<div class="span6">
+												<h4>Set Profile Image</h4>
+												<fieldset>
+														<div class="control-group">
+															<c:if test="${client.img != null}">
+															<div id="row" class="row">
+																<div class="buttonHolder" style="display: inline">
+																	<a id="cross" class="button cross" onclick="return confirm('Do you want to delete your profile photo?')"></a>
+																</div>
+																<label class="control-label">Your Profile Image</label>
+															</div>
+															</c:if>
+															<c:if test="${client.img == null}">
+															<label class="control-label">Your Profile Image</label>
+															</c:if>
+															<div class="controls" >
+																<c:if test="${client.img == null}">
+																	<img src="/resources/themes/images/img_avatar.png" class="media-object" style="width:100px">
+																</c:if>
+																<c:if test="${client.img != null}">
+																	<img id="old_img" alt="img" src="data:image/jpeg;base64,${client.imgBase64}"  style="height: 150px; width: 150px;"/>
+																</c:if>
+																<img id="default_img" src="/resources/themes/images/img_avatar.png" class="media-object" style="width:100px; display: none">
+																<form method="post" action="/clients/profile/edit/avatar" enctype="multipart/form-data">
+																	<span class="btn btn-small btn-file">
+																		Browse <input type="file"  name="fileUpload">
+																	</span>
+															</div>
+														</div>
+													</fieldset>
+												<div class="actions"><input class="btn btn-inverse pull-left" type="submit" value="Upload" /></div>
+												</form>
+											</div>
 										</div>
-											<%--<input type="hidden"--%>
-												   <%--name="${_csrf.parameterName}"--%>
-												   <%--value="${_csrf.token}"/>--%>
-
 									</div>
 								</div>
 							</div>
@@ -344,7 +508,6 @@
 									</div>
 									<div id="collapseTwo" class="accordion-body collapse">
 										<div class="accordion-inner">
-
 												<h4>Your Orders History</h4>
 												<c:if test="${clientOrdersList.size()!=0}">
 												<table class="table table-striped">

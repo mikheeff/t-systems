@@ -52,7 +52,7 @@
 <div id="top-bar" class="container">
     <div class="row">
         <div class="span4">
-            <form action="/catalog/search" method="POST" command class="search_form">
+            <form action="/catalog/search?page=1" method="POST" command class="search_form">
                 <input name="searchStr" type="text" class="input-block-level search-query" maxlength="15" Placeholder="Search games">
             </form>
         </div>
