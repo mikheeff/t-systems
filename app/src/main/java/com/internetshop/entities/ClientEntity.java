@@ -30,6 +30,8 @@ public class ClientEntity {
     private int isConfirm;
     @Column (name = "confirmation_id")
     private String confirmationId;
+    @Column (name = "img_data")
+    private byte[] img;
 
     @OneToMany(mappedBy = "clientEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<OrderEntity> orderEntities = new HashSet<>();
@@ -161,5 +163,13 @@ public class ClientEntity {
 
     public void setConfirmationId(String confirmationId) {
         this.confirmationId = confirmationId;
+    }
+
+    public byte[] getImg() {
+        return img;
+    }
+
+    public void setImg(byte[] img) {
+        this.img = img;
     }
 }

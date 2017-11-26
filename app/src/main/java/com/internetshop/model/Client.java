@@ -39,6 +39,7 @@ public class Client {
     private int isConfirm;
     private String confirmationId;
     private Role role;
+    private byte[] img;
     private ClientAddress clientAddress;
     private Set<Order> order = new HashSet<>();
 
@@ -162,6 +163,14 @@ public class Client {
 
     public void setConfirmationId(String confirmationId) {
         this.confirmationId = confirmationId;
+    }
+
+    public byte[] getImg() {
+        return img;
+    }
+
+    public void setImg(byte[] img) {
+        this.img = img;
     }
 
     @Override

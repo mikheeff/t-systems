@@ -69,7 +69,6 @@ public class ClientServiceImpl implements ClientService {
         }
         Role role = new Role();
         role.setId(3);
-        role.setName(clientRepository.getRoleById(role.getId()).getName());
         client.setRole(role);
 
         client.setPassword(passwordEncoder.encode(client.getPassword()));
@@ -110,34 +109,7 @@ public class ClientServiceImpl implements ClientService {
     public Client getUserByEmail(String email) {
         logger.info("getUserByEmail");
         ClientEntity clientEntity = clientRepository.getUserByEmail(email);
-        Role role = new Role(clientEntity.getRoleEntity().getId(),clientEntity.getRoleEntity().getName());
-
-        ClientAddress clientAddress = new ClientAddress(
-                clientEntity.getClientAddressEntity().getId(),
-                clientEntity.getClientAddressEntity().getCountry(),
-                clientEntity.getClientAddressEntity().getCity(),
-                clientEntity.getClientAddressEntity().getPostcode(),
-                clientEntity.getClientAddressEntity().getStreet(),
-                clientEntity.getClientAddressEntity().getHouse(),
-                clientEntity.getClientAddressEntity().getFlat(),
-                clientEntity.getClientAddressEntity().getAddition());
-
-        Client client = new Client(
-                clientEntity.getId(),
-                clientEntity.getName(),
-                clientEntity.getSurname(),
-                clientEntity.getBirthdate(),
-                clientEntity.getEmail(),
-                clientEntity.getPassword(),
-                clientEntity.getPhone(),
-                clientEntity.getOrderCounter(),
-                role,
-                clientAddress);
-
-        client.setIsConfirm(clientEntity.getIsConfirm());
-        client.setConfirmationId(clientEntity.getConfirmationId());
-
-        return client;
+        return convertClientToDTO(clientEntity);
     }
 
     /**
@@ -149,38 +121,9 @@ public class ClientServiceImpl implements ClientService {
     public Client getClientById(int id) {
         logger.info("getClientById");
 
-        Client client = new Client();
         ClientEntity clientEntity = clientRepository.getUserById(id);
-        client.setId(clientEntity.getId());
-        client.setName(clientEntity.getName());
-        client.setSurname(clientEntity.getSurname());
-        client.setBirthdate(clientEntity.getBirthdate());
-        client.setEmail(clientEntity.getEmail());
-        client.setPassword(clientEntity.getPassword());
-        client.setPhone(clientEntity.getPhone());
-        client.setOrderCounter(clientEntity.getOrderCounter());
-        client.setIsConfirm(clientEntity.getIsConfirm());
-        client.setConfirmationId(clientEntity.getConfirmationId());
 
-        Role role = new Role();
-
-        role.setId(clientEntity.getRoleEntity().getId());
-        role.setName(clientEntity.getRoleEntity().getName());
-        client.setRole(role);
-
-        ClientAddress clientAddress = new ClientAddress();
-        clientAddress.setId(clientEntity.getClientAddressEntity().getId());
-        clientAddress.setCountry(clientEntity.getClientAddressEntity().getCountry());
-        clientAddress.setCity(clientEntity.getClientAddressEntity().getCity());
-        clientAddress.setPostcode(clientEntity.getClientAddressEntity().getPostcode());
-        clientAddress.setStreet(clientEntity.getClientAddressEntity().getStreet());
-        clientAddress.setHouse(clientEntity.getClientAddressEntity().getHouse());
-        clientAddress.setFlat(clientEntity.getClientAddressEntity().getFlat());
-        clientAddress.setAddition(clientEntity.getClientAddressEntity().getAddition());
-        client.setClientAddress(clientAddress);
-
-
-        return client;
+        return convertClientToDTO(clientEntity);
     }
     @Transactional(readOnly = true)
     @Override
@@ -278,9 +221,7 @@ public class ClientServiceImpl implements ClientService {
      */
 
     public ClientEntity convertClientToDAO(Client client) {
-        RoleEntity role = new RoleEntity();
-        role.setId(client.getRole().getId());
-        role.setName(client.getRole().getName());
+        RoleEntity role = clientRepository.getRoleById(client.getRole().getId());
         ClientEntity clientEntity = new ClientEntity();
         clientEntity.setName(client.getName());
         clientEntity.setSurname(client.getSurname());
@@ -292,17 +233,34 @@ public class ClientServiceImpl implements ClientService {
     }
 
     public Client convertClientToDTO(ClientEntity clientEntity){
-        Role role = new Role(clientEntity.getId(),clientEntity.getName());
         Client client = new Client();
+        Role role = new Role(clientEntity.getRoleEntity().getId(),clientEntity.getRoleEntity().getName());
+        client.setRole(role);
+
         client.setId(clientEntity.getId());
         client.setName(clientEntity.getName());
         client.setSurname(client.getSurname());
         client.setBirthdate(clientEntity.getBirthdate());
         client.setEmail(clientEntity.getEmail());
+        client.setPassword(clientEntity.getPassword());
         client.setPhone(clientEntity.getPhone());
         client.setOrderCounter(clientEntity.getOrderCounter());
         client.setIsConfirm(clientEntity.getIsConfirm());
-        client.setRole(role);
+        client.setConfirmationId(clientEntity.getConfirmationId());
+
+
+        ClientAddress clientAddress = new ClientAddress();
+        clientAddress.setId(clientEntity.getClientAddressEntity().getId());
+        clientAddress.setCountry(clientEntity.getClientAddressEntity().getCountry());
+        clientAddress.setCity(clientEntity.getClientAddressEntity().getCity());
+        clientAddress.setPostcode(clientEntity.getClientAddressEntity().getPostcode());
+        clientAddress.setStreet(clientEntity.getClientAddressEntity().getStreet());
+        clientAddress.setHouse(clientEntity.getClientAddressEntity().getHouse());
+        clientAddress.setFlat(clientEntity.getClientAddressEntity().getFlat());
+        clientAddress.setAddition(clientEntity.getClientAddressEntity().getAddition());
+        client.setClientAddress(clientAddress);
+
+
         return client;
     }
 }
