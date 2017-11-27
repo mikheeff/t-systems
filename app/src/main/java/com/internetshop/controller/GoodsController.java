@@ -89,9 +89,6 @@ public class GoodsController {
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
     public String getAllGoodsBySearch(String searchStr, @RequestParam(value = "page") int page, ModelMap modelMap) {
-//        if (page == 0){
-//
-//        }
         List<Goods> listGoods = goodsService.getAllGoodsBySearch(searchStr, amountOfGoodsOnPage * (page - 1), amountOfGoodsOnPage);
         goodsService.putDefaultAttributes(modelMap);
         modelMap.put("searchStr", searchStr);
@@ -293,7 +290,7 @@ public class GoodsController {
         goodsService.putDefaultAttributes(modelMap);
         Client client = (Client) session.getAttribute("client");
         Goods goods = goodsService.getGoodsById(id);
-        review.setClient(client);
+        review.setClient(clientService.getClientById(client.getId()));
         review.setGoods(goods);
         if (!goodsService.isAvailableToLeaveReview(review)){
             return null;

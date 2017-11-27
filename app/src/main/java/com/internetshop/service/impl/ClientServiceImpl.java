@@ -253,7 +253,7 @@ public class ClientServiceImpl implements ClientService {
 
         client.setId(clientEntity.getId());
         client.setName(clientEntity.getName());
-        client.setSurname(client.getSurname());
+        client.setSurname(clientEntity.getSurname());
         client.setBirthdate(clientEntity.getBirthdate());
         client.setEmail(clientEntity.getEmail());
         client.setPassword(clientEntity.getPassword());

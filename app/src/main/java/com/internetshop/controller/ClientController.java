@@ -226,7 +226,6 @@ public class ClientController {
     public void deleteAvatar(){
         Client client = (Client) session.getAttribute("client");
         clientService.deleteAvatar(client);
-//        return "redirect:/clients/profile";
     }
 
 }

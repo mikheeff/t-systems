@@ -61,22 +61,41 @@
                         document.getElementById("review_error").style.display = 'block';
                     } else {
                         document.getElementById("review_msg").style.display = 'block';
-                        $('#reviews').last().append(
-                            '<div class="media">' +
-                            '<div class="media pull-left">' +
-                            '<img src="/resources/themes/images/img_avatar.png" class="media-object" style="width:60px">' +
-                            '</div>' +
-                            '<div class="media-body">' +
-                            '<h4 class="media-heading">' + review.client.name + ' ' + review.client.surname + '</h4>' +
-                            '<p>' + review.content + '</p>' +
-                            '</div>' +
-                            '</div>' +
-                            '<div class="pull-right">' +
-                            '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF/SURBVEhL7dbNKwRxGMDx8Z63uJCLCOWgXISTixQlF6L4C5xdlLg4cFFukpc/QPkDtpxIuXOQ3ETKWw6SvH+f3ZmaHc+OmfntTCnf+tTutPs8a+3OjvUXq0FR5mZyleMGq+l7CTaGL8jyRP/qHchiMSAHkqgST3AWbyKRxuEsFbcoQeztwr1YDCLWqvEM7+JtxNokvEvFA0oRqVq0KDrQZUtBWyym4TyuDd45jShDVhPQhuXbHbKqxxG0B+fLB+bxI/lKrOAT2hNNXKMfvg1D3hJtQBR7aECg5INwAG1QUO9YQCFCVYwlyP9GG+znEn0wagTa8FxOUAfjhqAtyOUCBTBuHdoCP3ISMUo+GFfQhvtZhFG90AaLF+WY4xhGLUMbfIhmTOHRPubVisidwj3sDXLac19nNUH7zs8gUu1wDzpHD7TkhczhFc7j9xGpWThDtlCF3+rGGeQ5cuaSH5/QreEeo+l7wZOLwQ3Ij02nHAibvH0VmZuRksuk/+ws6xvtQBEuX1e9tQAAAABJRU5ErkJggg==" >' +
-                            '<strong>' + '<big>' + '<big>' + review.rating + '</big>' + '</big>' + '</strong>' +
-                            '</div>' +
-                            '<hr>'
-                        )
+
+                        if (review.client.imgBase64 === null) {
+                            $('#reviews').last().append(
+                                '<div class="media">' +
+                                '<div class="media pull-left">' +
+                                '<img src="/resources/themes/images/img_avatar.png" class="media-object" style="width:60px">' +
+                                '</div>'+
+                                '<div class="media-body">' +
+                                '<h4 class="media-heading">' + review.client.name + '</h4>' +
+                                '<p>' + review.content + '</p>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="pull-right">' +
+                                '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF/SURBVEhL7dbNKwRxGMDx8Z63uJCLCOWgXISTixQlF6L4C5xdlLg4cFFukpc/QPkDtpxIuXOQ3ETKWw6SvH+f3ZmaHc+OmfntTCnf+tTutPs8a+3OjvUXq0FR5mZyleMGq+l7CTaGL8jyRP/qHchiMSAHkqgST3AWbyKRxuEsFbcoQeztwr1YDCLWqvEM7+JtxNokvEvFA0oRqVq0KDrQZUtBWyym4TyuDd45jShDVhPQhuXbHbKqxxG0B+fLB+bxI/lKrOAT2hNNXKMfvg1D3hJtQBR7aECg5INwAG1QUO9YQCFCVYwlyP9GG+znEn0wagTa8FxOUAfjhqAtyOUCBTBuHdoCP3ISMUo+GFfQhvtZhFG90AaLF+WY4xhGLUMbfIhmTOHRPubVisidwj3sDXLac19nNUH7zs8gUu1wDzpHD7TkhczhFc7j9xGpWThDtlCF3+rGGeQ5cuaSH5/QreEeo+l7wZOLwQ3Ij02nHAibvH0VmZuRksuk/+ws6xvtQBEuX1e9tQAAAABJRU5ErkJggg==" >' +
+                                '<strong>' + '<big>' + '<big>' + review.rating + '</big>' + '</big>' + '</strong>' +
+                                '</div>' +
+                                '<hr>')
+                        } else {
+                            $('#reviews').last().append(
+                                '<div class="media">' +
+                                '<div class="media pull-left" style="display: inline">' +
+                                '<img src="data:image/jpeg;base64,' + review.client.imgBase64 + '" class="media-object" style="width:60px">' +
+                                '</div>' +
+                                '<div class="media-body">' +
+                                '<h4 class="media-heading">' + review.client.name + '</h4>' +
+                                '<p>' + review.content + '</p>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="pull-right">' +
+                                '<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF/SURBVEhL7dbNKwRxGMDx8Z63uJCLCOWgXISTixQlF6L4C5xdlLg4cFFukpc/QPkDtpxIuXOQ3ETKWw6SvH+f3ZmaHc+OmfntTCnf+tTutPs8a+3OjvUXq0FR5mZyleMGq+l7CTaGL8jyRP/qHchiMSAHkqgST3AWbyKRxuEsFbcoQeztwr1YDCLWqvEM7+JtxNokvEvFA0oRqVq0KDrQZUtBWyym4TyuDd45jShDVhPQhuXbHbKqxxG0B+fLB+bxI/lKrOAT2hNNXKMfvg1D3hJtQBR7aECg5INwAG1QUO9YQCFCVYwlyP9GG+znEn0wagTa8FxOUAfjhqAtyOUCBTBuHdoCP3ISMUo+GFfQhvtZhFG90AaLF+WY4xhGLUMbfIhmTOHRPubVisidwj3sDXLac19nNUH7zs8gUu1wDzpHD7TkhczhFc7j9xGpWThDtlCF3+rGGeQ5cuaSH5/QreEeo+l7wZOLwQ3Ij02nHAibvH0VmZuRksuk/+ws6xvtQBEuX1e9tQAAAABJRU5ErkJggg==" >' +
+                                '<strong>' + '<big>' + '<big>' + review.rating + '</big>' + '</big>' + '</strong>' +
+                                '</div>' +
+                                '<hr>')
+                        }
+
                     }
                 });
             });
@@ -438,17 +457,18 @@
                             <div id="reviews">
                                 <c:forEach var="review" items="${listReviews}">
                                     <div class="media">
-                                        <c:if test="${client.img == null}">
-                                        <div class="media pull-left">
-                                            <img src="/resources/themes/images/img_avatar.png" class="media-object"
-                                                 style="width:60px">
-                                        </div>
+                                        <c:if test="${review.client.img == null}">
+                                            <div class="media pull-left">
+                                                <img src="/resources/themes/images/img_avatar.png" class="media-object"
+                                                     style="width:60px">
+                                            </div>
                                         </c:if>
-                                        <c:if test="${client.img != null}">
-                                        <div class="media pull-left">
-                                            <img src="data:image/jpeg;base64,${client.imgBase64}" class="media-object"
-                                                 style="width:60px">
-                                        </div>
+                                        <c:if test="${review.client.img != null}">
+                                            <div class="media pull-left">
+                                                <img src="data:image/jpeg;base64,${review.client.imgBase64}"
+                                                     class="media-object"
+                                                     style="width:60px">
+                                            </div>
                                         </c:if>
                                         <div class="media-body">
                                             <h4 class="media-heading">${review.client.name} ${review.client.surname}</h4>

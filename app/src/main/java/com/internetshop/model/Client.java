@@ -3,15 +3,17 @@ package com.internetshop.model;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.codec.binary.Base64;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Client {
+public class Client implements Serializable{
     private int id;
 
     @Size(max = 50,message = "Username must be less then 50 character long")
@@ -168,12 +170,15 @@ public class Client {
     public void setConfirmationId(String confirmationId) {
         this.confirmationId = confirmationId;
     }
-
+    @JsonIgnore
     public byte[] getImg() {
         return img;
     }
-
+//    @JsonIgnore
     public String getImgBase64() {
+        if (img == null){
+            return null;
+        }
         byte[] encodeBase64 = Base64.encodeBase64(img);
         String base64Encoded = "";
         try {
