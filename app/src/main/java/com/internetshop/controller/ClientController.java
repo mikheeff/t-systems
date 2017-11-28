@@ -104,7 +104,8 @@ public class ClientController {
                              @RequestParam(value = "error", required = false) String error,
                              @RequestParam(value = "errorInvalidPass", required = false) String errorInvalidPass,
                              @RequestParam(value = "clientError", required = false) String clientError,
-                             @RequestParam(value = "msgClient", required = false) String msgClient) {
+                             @RequestParam(value = "msgClient", required = false) String msgClient,
+                             @RequestParam(value = "msg_img", required = false) String msg_img){
         logger.info("editClient");
         session.setAttribute("client", clientService.getUserByEmail(httpServletRequest.getUserPrincipal().getName()));
         modelMap.put("client", session.getAttribute("client"));
@@ -132,6 +133,9 @@ public class ClientController {
         }
         if (msgClient != null) {
             modelMap.put("msgClient", "Information has been changed successfully!");
+        }
+        if (msg_img != null){
+            modelMap.put("msg_img","Image is too large. It must be less then 2MB");
         }
         modelMap.put("passwordField", new PasswordField());
         return "profile";
@@ -215,7 +219,9 @@ public class ClientController {
         Client client = (Client) session.getAttribute("client");
         if (fileUpload != null && fileUpload.length > 0) {
             CommonsMultipartFile aFile = fileUpload[0];
-                System.out.println("Saving file: " + aFile.getOriginalFilename());
+                if(aFile.getSize()>2000000){
+                    return "redirect:/clients/profile?msg_img";
+                }
                 client.setImg(aFile.getBytes());
                 clientService.uploadAvatar(client);
         }

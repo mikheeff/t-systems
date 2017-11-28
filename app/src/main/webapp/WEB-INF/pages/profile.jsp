@@ -437,7 +437,6 @@
 											<hr>
 										<div class="row-fluid">
 											<div class="span6">
-
 												<h4>Set New Password</h4>
 												<spring:form action="/clients/profile/edit/password" method="post" modelAttribute="passwordField" class="form-stacked">
 													<fieldset>
@@ -466,6 +465,7 @@
 											</div>
 											<div class="span6">
 												<h4>Set Profile Image</h4>
+
 												<fieldset>
 														<div class="control-group">
 															<c:if test="${client.img != null}">
@@ -496,6 +496,11 @@
 													</fieldset>
 												<div class="actions"><input class="btn btn-inverse pull-left" type="submit" value="Upload" /></div>
 												</form>
+												<br>
+												<br>
+												<c:if test="${not empty msg_img}">
+													<div class="error">${msg_img}</div>
+												</c:if>
 											</div>
 										</div>
 									</div>

@@ -282,17 +282,6 @@
                                                         </spring:select>
                                                     </div>
                                                 </div>
-                                                <div class="control-group">
-                                                    <label class="control-label">Image (1x1):</label>
-                                                    <div class="controls">
-                                                        <spring:input path="img" type="text"
-                                                                      placeholder="Put URL of image here"
-                                                                      class="input-xlarge"/>
-                                                        <fieldset>
-                                                            <spring:errors path="img" cssClass="error"/>
-                                                        </fieldset>
-                                                    </div>
-                                                </div>
                                                 <hr>
                                                 <div class="actions"><input tabindex="9" class="btn btn-inverse large"
                                                                             type="submit" value="Add new goods"></div>

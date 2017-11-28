@@ -121,7 +121,7 @@
                                                 <li class="span3">
                                                     <div class="product-box">
                                                         <span class="sale_tag"></span>
-                                                        <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+                                                        <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="/catalog/goods/image?id=${goodsVar.id}&number=0"></a><br/>
                                                         <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
                                                         <a href="#" class="category">${goodsVar.category.name}</a>
                                                         <p class="price">${goodsVar.price} &#8381;</p>
@@ -136,50 +136,6 @@
                     </div>
                 </c:forEach>
                 <br/>
-                <%--<div class="row">--%>
-                    <%--<div class="span12">--%>
-                        <%--<h4 class="title">--%>
-                            <%--<span class="pull-left"><span class="text"><span class="line">New <strong>Products</strong></span></span></span>--%>
-                            <%--<span class="pull-right">--%>
-										<%--<a class="left button" href="#myCarousel-2" data-slide="prev"></a><a class="right button" href="#myCarousel-2" data-slide="next"></a>--%>
-									<%--</span>--%>
-                        <%--</h4>--%>
-                        <%--<div id="myCarousel-2" class="myCarousel carousel slide">--%>
-                            <%--<div class="carousel-inner">--%>
-                                <%--<div class="active item">--%>
-                                    <%--<ul class="thumbnails">--%>
-                                        <%--<c:forEach var="goodsVar"  begin = "0" end = "3" items="${newGoodsList}">--%>
-                                            <%--<li class="span3">--%>
-                                                <%--<div class="product-box">--%>
-                                                    <%--<span class="sale_tag"></span>--%>
-                                                    <%--<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>--%>
-                                                    <%--<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>--%>
-                                                    <%--<a href="#" class="category">${goodsVar.category.name}</a>--%>
-                                                    <%--<p class="price">${goodsVar.price} &#8381;</p>--%>
-                                                <%--</div>--%>
-                                            <%--</li>--%>
-                                        <%--</c:forEach>--%>
-                                    <%--</ul>--%>
-                                <%--</div>--%>
-                                <%--<div class="item">--%>
-                                    <%--<ul class="thumbnails">--%>
-                                        <%--<c:forEach var="goodsVar"  begin = "4" end = "7" items="${newGoodsList}">--%>
-                                            <%--<li class="span3">--%>
-                                                <%--<div class="product-box">--%>
-                                                    <%--<span class="sale_tag"></span>--%>
-                                                    <%--<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>--%>
-                                                    <%--<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>--%>
-                                                    <%--<a href="#" class="category">${goodsVar.category.name}</a>--%>
-                                                    <%--<p class="price">${goodsVar.price} &#8381;</p>--%>
-                                                <%--</div>--%>
-                                            <%--</li>--%>
-                                        <%--</c:forEach>--%>
-                                    <%--</ul>--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
             </div>
         </div>
     </section>

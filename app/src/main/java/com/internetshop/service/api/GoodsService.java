@@ -25,6 +25,8 @@ public interface GoodsService {
     List<Goods> getNewGoods(int amountOfNewGoodsOnPage);
     List<Goods> getBestSellersByCategory(Category category, int amount);
     List<Review> getAllReviewsByGoodsId(int id);
+    List<GoodsImage> getAllImagesByGoodsId(int id);
+
     void addGoods(Goods goods);
     void addReview(Review review);
     void deleteGoodsById(int id);
@@ -47,6 +49,9 @@ public interface GoodsService {
     void updateGoodsRating(ReviewEntity reviewEntity);
     long getPlaceOfGoods(int id);
     boolean isAvailableToLeaveReview(Review review);
+    void addGoodsImage(GoodsImage goodsImage);
+    void deleteImageById(int id);
+
 
 
 }

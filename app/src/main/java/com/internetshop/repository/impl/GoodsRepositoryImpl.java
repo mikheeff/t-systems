@@ -2,10 +2,7 @@ package com.internetshop.repository.impl;
 
 import com.internetshop.Exceptions.NoSuchCategoryException;
 import com.internetshop.Exceptions.NoSuchRulesException;
-import com.internetshop.entities.CategoryEntity;
-import com.internetshop.entities.GoodsEntity;
-import com.internetshop.entities.ReviewEntity;
-import com.internetshop.entities.RuleEntity;
+import com.internetshop.entities.*;
 import com.internetshop.model.CatalogQuery;
 import com.internetshop.repository.api.GoodsRepository;
 import org.springframework.stereotype.Repository;
@@ -248,5 +245,20 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     public boolean isAvailableToLeaveReview(int clientId, int goodsId) {
         return em.createQuery("select count(*) from ReviewEntity review where review.clientEntity.id =:clientId and review.goodsEntity.id =:goodsId",Long.class)
                 .setParameter("clientId",clientId).setParameter("goodsId",goodsId).getSingleResult() == 0;
+    }
+
+    @Override
+    public void addGoodsImage(GoodsImageEntity goodsImageEntity) {
+        em.persist(goodsImageEntity);
+    }
+
+    @Override
+    public List<GoodsImageEntity> getAllImagesByGoodsId(int id) {
+        return em.createQuery("select img from GoodsImageEntity img where goodsEntity.id =:id",GoodsImageEntity.class).setParameter("id",id).getResultList();
+    }
+
+    @Override
+    public void deleteImageById(int id) {
+        em.remove(em.find(GoodsImageEntity.class,id));
     }
 }

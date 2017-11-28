@@ -70,9 +70,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
     {
         try
         {
-            System.out.println("Init producer...");
             MessageProducer producer = init();
-            System.out.println("Producer successfully initialized");
             while (_active)
             {
                 try

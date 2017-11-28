@@ -138,7 +138,7 @@
 													<li class="span3">
 														<div class="product-box">
 															<span class="sale_tag"></span>
-															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="/catalog/goods/image?id=${goodsVar.id}&number=0"></a><br/>
 															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
 															<a href="#" class="category">${goodsVar.category.name}</a>
 															<p class="price">${goodsVar.price} &#8381;</p>
@@ -153,7 +153,7 @@
 													<li class="span3">
 														<div class="product-box">
 															<span class="sale_tag"></span>
-															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="/catalog/goods/image?id=${goodsVar.id}&number=0"></a><br/>
 															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
 															<a href="#" class="category">${goodsVar.category.name}</a>
 															<p class="price">${goodsVar.price} &#8381;</p>
@@ -183,7 +183,7 @@
 													<li class="span3">
 														<div class="product-box">
 															<span class="sale_tag"></span>
-															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="/catalog/goods/image?id=${goodsVar.id}&number=0"></a><br/>
 															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
 															<a href="#" class="category">${goodsVar.category.name}</a>
 															<p class="price">${goodsVar.price} &#8381;</p>
@@ -198,7 +198,7 @@
 													<li class="span3">
 														<div class="product-box">
 															<span class="sale_tag"></span>
-															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="/catalog/goods/image?id=${goodsVar.id}&number=0"></a><br/>
 															<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
 															<a href="#" class="category">${goodsVar.category.name}</a>
 															<p class="price">${goodsVar.price} &#8381;</p>

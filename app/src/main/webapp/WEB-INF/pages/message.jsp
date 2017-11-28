@@ -169,7 +169,7 @@
                                 <li class="span3">
                                     <div class="product-box">
                                         <span class="sale_tag"></span>
-                                        <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+                                        <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="/catalog/goods/image?id=${goodsVar.id}&number=0"></a><br/>
                                         <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
                                         <a href="#" class="category">${goodsVar.category.name}</a>
                                         <p class="price">${goodsVar.price} &#8381;</p>
@@ -186,7 +186,7 @@
                         <c:forEach var="goodsVar" items="${bestSellersList}">
                             <li>
                                 <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}" title="${goodsVar.name}">
-                                    <img src="${goodsVar.img}" alt="">
+                                    <img src="/catalog/goods/image?id=${goodsVar.id}&number=0" alt="">
                                 </a>
                                 <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a>
                             </li>
@@ -195,32 +195,6 @@
                 </div>
             </div>
         </div>
-
-        <%--</c:if>--%>
-
-         <%--<c:if test="${confirmation==true}">--%>
-                <%--<h4><span>Please, confirm an email</span></h4>--%>
-    <%--</section>--%>
-    <%--<section class="main-content">--%>
-        <%--<div class="row">--%>
-            <%--<div class="span12">--%>
-                <%--<h5>Check your mail, we've sent you a verification letter</h5>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-
-        <%--</c:if>--%>
-                <%--<c:if test="${isSessionUnAvailable==true}">--%>
-                <%--<h4><span>Session is unavailable</span></h4>--%>
-    <%--</section>--%>
-    <%--<section class="main-content">--%>
-        <%--<div class="row">--%>
-            <%--<div class="span12">--%>
-                <%--<h5>To confirm an address enter it to the form below</h5>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-<%----%>
-        <%--</c:if>--%>
-
     </section>
     <section id="footer-bar">
         <div class="row">

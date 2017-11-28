@@ -63,7 +63,6 @@ public class GoodsServiceImpl implements GoodsService {
             smallGoods.setId(goodsEntity.getId());
             smallGoods.setName(goodsEntity.getName());
             smallGoods.setPrice(goodsEntity.getPrice());
-            smallGoods.setImg(goodsEntity.getImg());
             smallGoods.setSalesCounter(goodsEntity.getSalesCounter());
             smallGoodsList.add(smallGoods);
         }
@@ -171,7 +170,6 @@ public class GoodsServiceImpl implements GoodsService {
         smallGoods.setId(goods.getId());
         smallGoods.setName(goods.getName());
         smallGoods.setPrice(goods.getPrice());
-        smallGoods.setImg(goods.getImg());
         smallGoods.setSalesCounter(goods.getSalesCounter());
 
         Event event = new AddEvent(smallGoods);
@@ -256,7 +254,6 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsEntity.getAmount(),
                 goodsEntity.getVisible(),
                 goodsEntity.getDescription(),
-                goodsEntity.getImg(),
                 goodsEntity.getSalesCounter(),
                 goodsEntity.getRating(),
                 category,
@@ -281,7 +278,6 @@ public class GoodsServiceImpl implements GoodsService {
         goodsEntity.setAmount(goods.getAmount());
         goodsEntity.setVisible(goods.getVisible());
         goodsEntity.setDescription(goods.getDescription());
-        goodsEntity.setImg(goods.getImg());
 
         RuleEntity ruleEntity = goodsRepository.getRuleByName(goods.getRule().getName());
         CategoryEntity categoryEntity = goodsRepository.getCategoryById(goodsRepository.getIdCategoryByName(goods.getCategory().getName()));
@@ -299,7 +295,6 @@ public class GoodsServiceImpl implements GoodsService {
         smallGoods.setId(goods.getId());
         smallGoods.setName(goods.getName());
         smallGoods.setPrice(goods.getPrice());
-        smallGoods.setImg(goods.getImg());
         smallGoods.setSalesCounter(goods.getSalesCounter());
         Event event = new UpdateEvent(smallGoods);
         sendMessage(event);
@@ -453,6 +448,47 @@ public class GoodsServiceImpl implements GoodsService {
     public boolean isAvailableToLeaveReview(Review review) {
         return goodsRepository.isAvailableToLeaveReview(review.getClient().getId(), review.getGoods().getId());
     }
+    @Transactional(readOnly = true)
+    @Override
+    public List<Goods> getNewGoods(int amountOfNewGoodsOnPage) {
+        List<Goods> goodsList = new ArrayList<>();
+        for (GoodsEntity goodsEntity : goodsRepository.getNewGoods(amountOfNewGoodsOnPage)) {
+            goodsList.add(convertGoodsToDTO(goodsEntity));
+        }
+        return goodsList;
+    }
+    @Transactional(readOnly = true)
+    @Override
+    public long getPlaceOfGoods(int id) {
+        return goodsRepository.getPlaceOfGoods(goodsRepository.getGoodsById(id).getRating());
+    }
+
+    @Transactional
+    @Override
+    public void addGoodsImage(GoodsImage goodsImage) {
+        GoodsImageEntity goodsImageEntity = new GoodsImageEntity();
+        GoodsEntity goodsEntity = goodsRepository.getGoodsById(goodsImage.getGoods().getId());
+        goodsImageEntity.setGoodsEntity(goodsEntity);
+        goodsImageEntity.setImg(goodsImage.getImg());
+        goodsRepository.addGoodsImage(goodsImageEntity);
+        createUpdateMessage(goodsEntity);
+    }
+    @Transactional(readOnly = true)
+    @Override
+    public List<GoodsImage> getAllImagesByGoodsId(int id) {
+        List<GoodsImage> goodsImageList = new ArrayList<>();
+        for (GoodsImageEntity img : goodsRepository.getAllImagesByGoodsId(id)){
+            GoodsImage goodsImage = new GoodsImage(img.getId(),img.getImg(),convertGoodsToDTO(img.getGoodsEntity()));
+            goodsImage.setImgBase64(img.getImgBase64());
+            goodsImageList.add(goodsImage);
+        }
+        return goodsImageList;
+    }
+    @Transactional
+    @Override
+    public void deleteImageById(int id) {
+        goodsRepository.deleteImageById(id);
+    }
 
     @Override
     public boolean isCartContainsGoods(List<CartItem> cartList, int id) {
@@ -464,6 +500,7 @@ public class GoodsServiceImpl implements GoodsService {
         return false;
     }
 
+
     @Override
     public void putDefaultAttributes(ModelMap modelMap) {
         modelMap.put("listCategory", getAllCategories());
@@ -471,19 +508,6 @@ public class GoodsServiceImpl implements GoodsService {
         modelMap.put("bestSellersList", getBestSellers(GoodsController.amountOfBestSellers));
     }
 
-    @Override
-    public List<Goods> getNewGoods(int amountOfNewGoodsOnPage) {
-        List<Goods> goodsList = new ArrayList<>();
-        for (GoodsEntity goodsEntity : goodsRepository.getNewGoods(amountOfNewGoodsOnPage)) {
-            goodsList.add(convertGoodsToDTO(goodsEntity));
-        }
-        return goodsList;
-    }
-
-    @Override
-    public long getPlaceOfGoods(int id) {
-        return goodsRepository.getPlaceOfGoods(goodsRepository.getGoodsById(id).getRating());
-    }
 
 
     /**
@@ -506,7 +530,6 @@ public class GoodsServiceImpl implements GoodsService {
                 goods.getAmount(),
                 goods.getVisible(),
                 goods.getDescription(),
-                goods.getImg(),
                 categoryEntity,
                 ruleEntity);
 
@@ -514,6 +537,7 @@ public class GoodsServiceImpl implements GoodsService {
 
         return goodsEntity;
     }
+
 
     /**
      * Converts goods to Data Tranfer Object
@@ -533,7 +557,6 @@ public class GoodsServiceImpl implements GoodsService {
                 goodsEntity.getAmount(),
                 goodsEntity.getVisible(),
                 goodsEntity.getDescription(),
-                goodsEntity.getImg(),
                 goodsEntity.getSalesCounter(),
                 goodsEntity.getRating(),
                 category,

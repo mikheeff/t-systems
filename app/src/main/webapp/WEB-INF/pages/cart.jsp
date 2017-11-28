@@ -267,7 +267,7 @@
 										<a href="/catalog/goods/cart/delete/item/${count.index}" class="button cross"></a>
 										</div>
 									</td>
-									<td><a href="${cartItem.goods.img}"><img alt="" height="100" width="100" src="${cartItem.goods.img}"></a></td>
+									<td><a href="${cartItem.goods.img}"><img alt="" height="100" width="100" src="/catalog/goods/image?id=${cartItem.goods.id}&number=0"></a></td>
 										<td><big>
 												${cartItem.goods.name}
 												<br>
@@ -339,7 +339,7 @@
 										<li class="span3">
 											<div class="product-box">
 												<span class="sale_tag"></span>
-												<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="${goodsVar.img}"></a><br/>
+												<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img alt="" src="/catalog/goods/image?id=${goodsVar.id}&number=0"></a><br/>
 												<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
 												<a href="#" class="category">${goodsVar.category.name}</a>
 												<p class="price">${goodsVar.price} &#8381;</p>
@@ -357,7 +357,7 @@
 								<c:forEach var="goodsVar" items="${bestSellersList}">
 									<li>
 										<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}" title="${goodsVar.name}">
-											<img src="${goodsVar.img}" alt="">
+											<img src="/catalog/goods/image?id=${goodsVar.id}&number=0" alt="">
 										</a>
 										<a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a>
 									</li>

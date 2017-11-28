@@ -27,8 +27,6 @@ public class GoodsEntity {
     private int visible;
     @Column(name = "description")
     private String description;
-    @Column (name = "img")
-    private String img;
     @Column (name = "sales_counter")
     private int salesCounter;
     @Column (name = "rating")
@@ -47,7 +45,7 @@ public class GoodsEntity {
     public GoodsEntity() {
     }
 
-    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, CategoryEntity category, RuleEntity rule) {
+    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, CategoryEntity category, RuleEntity rule) {
         this.name = name;
         this.price = price;
         this.numberOfPlayers = numberOfPlayers;
@@ -55,12 +53,11 @@ public class GoodsEntity {
         this.amount = amount;
         this.visible = visible;
         this.description = description;
-        this.img = img;
         this.category = category;
         this.rule = rule;
     }
 
-    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, double rating, String date, CategoryEntity category, RuleEntity rule) {
+    public GoodsEntity(String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, int salesCounter, double rating, String date, CategoryEntity category, RuleEntity rule) {
         this.name = name;
         this.price = price;
         this.numberOfPlayers = numberOfPlayers;
@@ -68,7 +65,6 @@ public class GoodsEntity {
         this.amount = amount;
         this.visible = visible;
         this.description = description;
-        this.img = img;
         this.salesCounter = salesCounter;
         this.rating = rating;
         this.date = date;
@@ -154,14 +150,6 @@ public class GoodsEntity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
     }
 
     public int getSalesCounter() {

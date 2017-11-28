@@ -4,6 +4,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.internetshop.service.api.ClientService;
 import org.apache.commons.codec.binary.Base64;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -176,17 +177,7 @@ public class Client implements Serializable{
     }
 //    @JsonIgnore
     public String getImgBase64() {
-        if (img == null){
-            return null;
-        }
-        byte[] encodeBase64 = Base64.encodeBase64(img);
-        String base64Encoded = "";
-        try {
-            base64Encoded = new String(encodeBase64, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return base64Encoded;
+        return ClientService.convertImgToBase64(img);
     }
 
     public void setImg(byte[] img) {

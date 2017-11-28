@@ -25,7 +25,6 @@ public class Goods {
     private int visible;
     @Size(max = 5000,message = "Description must be less then 1000 character long")
     private String description;
-    private String img;
     private int salesCounter;
     private double rating;
     private Category category;
@@ -36,7 +35,7 @@ public class Goods {
     public Goods() {
     }
 
-    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, Category category, Rule rule) {
+    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, Category category, Rule rule) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -45,12 +44,11 @@ public class Goods {
         this.amount = amount;
         this.visible = visible;
         this.description = description;
-        this.img = img;
         this.category = category;
         this.rule = rule;
     }
 
-    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, String img, int salesCounter, double rating, Category category, Rule rule, String date) {
+    public Goods(int id, String name, float price, int numberOfPlayers, float duration, int amount, int visible, String description, int salesCounter, double rating, Category category, Rule rule, String date) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -59,7 +57,6 @@ public class Goods {
         this.amount = amount;
         this.visible = visible;
         this.description = description;
-        this.img = img;
         this.salesCounter = salesCounter;
         this.rating = rating;
         this.category = category;
@@ -145,14 +142,6 @@ public class Goods {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
     }
 
     public int getSalesCounter() {

@@ -17,6 +17,7 @@ public interface GoodsRepository {
     List<GoodsEntity> getNewGoods(int amountOfNewGoodsOnPage);
     List<GoodsEntity> getBestSellersByCategoryName(String name, int amount);
     List<ReviewEntity> getAllReviewsByGoodsId(int id);
+    List<GoodsImageEntity> getAllImagesByGoodsId(int id);
 
     int addGoods(GoodsEntity goodsEntity);
     void addReview(ReviewEntity reviewEntity);
@@ -39,5 +40,7 @@ public interface GoodsRepository {
     double getGoodsRating(int id);
     long getPlaceOfGoods(double rating);
     boolean isAvailableToLeaveReview(int clientId, int goodsId);
+    void addGoodsImage(GoodsImageEntity goodsImageEntity);
+    void deleteImageById(int id);
 
 }

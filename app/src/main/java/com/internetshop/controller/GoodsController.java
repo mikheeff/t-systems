@@ -13,9 +13,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.*;
 
 @Controller
@@ -254,7 +259,8 @@ public class GoodsController {
      * @return goods detail page
      */
     @RequestMapping(value = "/goods/{id}", method = RequestMethod.GET)
-    public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap) {
+    public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap,
+                               @RequestParam(value = "msg_img", required = false) String msg_img) {
         logger.info("getGoodsById {}", id);
         goodsService.putDefaultAttributes(modelMap);
         Goods goods;
@@ -281,6 +287,10 @@ public class GoodsController {
         modelMap.put("relatedGoodsList", relatedGoodsList);
         modelMap.put("listReviews", goodsService.getAllReviewsByGoodsId(id));
         modelMap.put("goodsPlace", goodsService.getPlaceOfGoods(id));
+        if (msg_img != null){
+            modelMap.put("msg_img","Image is too large. It must be less then 2MB");
+        }
+        modelMap.put("imgList",goodsService.getAllImagesByGoodsId(id));
         return "goods_detail";
     }
 
@@ -443,6 +453,39 @@ public class GoodsController {
             return "404";
         }
         return "redirect:/catalog/page/1";
+    }
+
+    @RequestMapping(value = "/employee/goods/upload/{id}", method = RequestMethod.POST)
+    public String uploadGoodsImage(@PathVariable int id, @RequestParam CommonsMultipartFile[] fileUpload){
+        if (fileUpload != null && fileUpload.length > 0) {
+            for (CommonsMultipartFile aFile : fileUpload){
+                if(aFile.getSize()>2000000){
+                    return "redirect:/catalog/goods/"+id+"?msg_img";
+                }
+                if (aFile.getSize()>0) {
+                    GoodsImage goodsImage = new GoodsImage();
+                    goodsImage.setGoods(goodsService.getGoodsById(id));
+                    goodsImage.setImg(aFile.getBytes());
+                    goodsService.addGoodsImage(goodsImage);
+                }
+            }
+        }
+        return "redirect:/catalog/goods/"+id;
+    }
+    @RequestMapping(value = "/employee/goods/image/delete")
+    public String deleteGoodsPhoto(@RequestParam (value = "id", required = false) int id,@RequestParam (value = "goodsId", required = false) int goodsId){
+        goodsService.deleteImageById(id);
+        return "redirect:/catalog/goods/"+goodsId;
+    }
+
+    @RequestMapping(value = "/goods/image", method = RequestMethod.GET)
+    public void showImage(@RequestParam Map<String,String> requestParams, HttpServletResponse response, HttpServletRequest request) throws ServletException, IOException {
+        int goodsId = Integer.parseInt(requestParams.get("id"));
+        int imgNumber = Integer.parseInt(requestParams.get("number"));
+        List<GoodsImage> goodsImageList = goodsService.getAllImagesByGoodsId(goodsId);
+        response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+        response.getOutputStream().write(goodsImageList.get(imgNumber).getImg());
+        response.getOutputStream().close();
     }
 
 

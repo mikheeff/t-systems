@@ -111,8 +111,115 @@
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <script src="/resources/themes/js/respond.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap-filestyle.min.js"> </script>
     <![endif]-->
     <style>
+
+        html, body{
+            min-height:100%;
+        }
+
+        body{
+            background-image: -webkit-linear-gradient(top, #edecec, #cecbc9);
+            background-image: linear-gradient(top, #edecec, #cecbc9);
+        }
+
+        .buttonHolder{
+            margin:23px auto;
+            width:23px;
+        }
+
+
+        .button{
+            background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
+            background-image: linear-gradient(top, #f4f1ee, #fff);
+            border-radius: 50%;
+            box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgba(204,198,197,.5);
+            float:left;
+            height: 20px;
+            margin: 0 8px 8px 0;
+            position: relative;
+            width: 20px;
+            -webkit-transition: all .1s linear;
+            transition: all .1s linear;
+        }
+
+        .button:after{
+            color:#e9e6e4;
+            content: "";
+            display: block;
+            font-size: 15px;
+            height: 15px;
+            text-decoration: none;
+            text-shadow: 0px -1px 1px #bdb5b4, 1px 1px 1px white;
+            position: absolute;
+            width: 15px;
+        }
+
+
+        .heart:after{
+            content: "❤";
+            left: 6px;
+            top: 4px;
+        }
+
+        .flower:after{
+            content: "\270E";
+            left: 3px;
+            top: 0px;
+        }
+
+        .tick:after{
+            content: "✔";
+            left:6px;
+            top:4px;
+        }
+
+        .cross:after{
+            content: "\2716";
+            left: 3px;
+            top: 1px;
+        }
+
+        .button:hover{
+            background-image: -webkit-linear-gradient(top, #fff, #f4f1ee);
+            background-image: linear-gradient(top, #fff, #f4f1ee);
+            color:#0088cc;
+        }
+
+        .heart:hover:after{
+            color:#f94e66;
+            text-shadow:0px 0px 6px #f94e66;
+        }
+
+        .flower:hover:after{
+            color:#f99e4e;
+            text-shadow:0px 0px 6px #f99e4e;
+        }
+
+        .tick:hover:after{
+            color:#83d244;
+            text-shadow:0px 0px 6px #83d244;
+        }
+
+        .cross:hover:after{
+            color:#eb2f2f;
+            text-shadow:0px 0px 6px #eb2f2f;
+        }
+
+
+
+        .button:active{
+            background-image: -webkit-linear-gradient(top, #efedec, #f7f4f4);
+            background-image: linear-gradient(top, #efedec, #f7f4f4);
+            box-shadow: 0 3px 5px 0 rgba(0,0,0,.4), inset 0px -3px 1px 1px rgba(204,198,197,.5);
+        }
+
+        .button:active:after{
+            color:#dbd2d2;
+            text-shadow: 0px -1px 1px #bdb5b4, 0px 1px 1px white;
+        }
+
         .error {
             padding: 15px;
             margin-bottom: 20px;
@@ -231,27 +338,56 @@
         <div class="row">
             <div class="span9">
                 <div class="row">
+                    <c:if test="${client.role.name == 'ROLE_EMPLOYEE'}">
+                        <div class="buttonHolder pull-left">
+                            <a href="/catalog/employee/goods/image/delete?id=${imgList.get(0).id}&goodsId=${goods.id}" class="button cross" onclick="return confirm('Do you want to delete this photo?')"></a>
+                        </div>
+                    </c:if>
                     <div class="span4">
-                        <a href="${goods.img}" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img
-                                alt="" src="${goods.img}"></a>
+                        <a href="/catalog/goods/image?id=${goods.id}&number=0" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="" src="/catalog/goods/image?id=${goods.id}&number=0"></a>
                         <ul class="thumbnails small">
-                            <li class="span1">
-                                <a href="${goods.img}" class="thumbnail" data-fancybox-group="group1"
-                                   title="Description 2"><img src="${goods.img}" alt=""></a>
-                            </li>
-                            <li class="span1">
-                                <a href="${goods.img}" class="thumbnail" data-fancybox-group="group1"
-                                   title="Description 3"><img src="${goods.img}" alt=""></a>
-                            </li>
-                            <li class="span1">
-                                <a href="${goods.img}" class="thumbnail" data-fancybox-group="group1"
-                                   title="Description 4"><img src="${goods.img}" alt=""></a>
-                            </li>
-                            <li class="span1">
-                                <a href="${goods.img}" class="thumbnail" data-fancybox-group="group1"
-                                   title="Description 5"><img src="${goods.img}" alt=""></a>
-                            </li>
+                            <c:forEach var="imgVar" begin="1" end="4" items="${imgList}" varStatus="counter">
+                                <li class="span1">
+                                    <a href="/catalog/goods/image?id=${goods.id}&number=${counter.index}" class="thumbnail" data-fancybox-group="group1" title="Description 2"><img src="/catalog/goods/image?id=${goods.id}&number=${counter.index}" alt=""></a>
+                                </li>
+                                <c:if test="${client.role.name == 'ROLE_EMPLOYEE'}">
+                                <div class="buttonHolder" style="display: inline">
+                                    <a href="/catalog/employee/goods/image/delete?id=${imgVar.id}&goodsId=${goods.id}" class="button cross" onclick="return confirm('Do you want to delete this photo?')"></a>
+                                </div>
+                                </c:if>
+                            </c:forEach>
                         </ul>
+                        <c:if test="${client.role.name == 'ROLE_EMPLOYEE'}">
+                            <h4>Set Goods Images</h4>
+                            <c:if test="${not empty msg_img}">
+                                <div class="error">${msg_img}</div>
+                            </c:if>
+                            <form method="post" action="/catalog/employee/goods/upload/${goods.id}" enctype="multipart/form-data">
+                                <table border="0">
+                                    <tr>
+                                        <td>Pick image #1:</td>
+                                        <td><input type="file" name="fileUpload" size="50" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pick image #2:</td>
+                                        <td><input type="file" name="fileUpload" size="50" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pick image #3:</td>
+                                        <td><input type="file"  name="fileUpload" size="50" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pick image #4:</td>
+                                        <td><input type="file"  name="fileUpload" size="50" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pick image #5:</td>
+                                        <td><input type="file" name="fileUpload" size="50" /></td>
+                                    </tr>
+                                </table>
+                                <div class="actions"><input class="btn btn-inverse pull-left" type="submit" value="Upload" /></div>
+                            </form>
+                        </c:if>
                     </div>
                     <c:if test="${client.role.name=='ROLE_EMPLOYEE'}">
                     <div class="span5" id="user">
@@ -364,13 +500,6 @@
                                         </spring:select>
                                     </div>
                                 </div>
-                                <div class="control-group">
-                                    <label class="control-label">Image:</label>
-                                    <div class="controls">
-                                        <spring:input path="img" type="text" placeholder="Put URL of image here"
-                                                      class="input-xlarge"/>
-                                    </div>
-                                </div>
                                 <hr>
                                 <div class="actions"><input tabindex="9" class="btn btn-inverse large" type="submit"
                                                             value="Edit goods"></div>
@@ -394,7 +523,7 @@
                         <table class="table table-striped">
                             <tr>
                                 <td><strong>Number of players:</strong></td>
-                                <td><big><big><strong>${goods.numberOfPlayers}</big></big></strong></big></td>
+                                <td><big><big><strong>${goods.numberOfPlayers}</strong></big></big></td>
                             </tr>
                             <tr>
                                 <td><strong>Duration of the game:</strong></td>
@@ -530,7 +659,7 @@
                                                     <div class="product-box">
                                                         <span class="sale_tag"></span>
                                                         <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img
-                                                                alt="" src="${goodsVar.img}"></a><br/>
+                                                                alt="" src="/catalog/goods/image?id=${goodsVar.id}&number=0"></a><br/>
                                                         <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
                                                         <a href="#" class="category">${goodsVar.category.name}</a>
                                                         <p class="price">${goodsVar.price} &#8381;</p>
@@ -592,7 +721,7 @@
                                 <div class="product-box">
                                     <span class="sale_tag"></span>
                                     <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"><img
-                                            alt="" src="${goodsVar.img}"></a><br/>
+                                            alt="" src="/catalog/goods/image?id=${goodsVar.id}&number=0"></a><br/>
                                     <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a><br/>
                                     <a href="#" class="category">${goodsVar.category.name}</a>
                                     <p class="price">${goodsVar.price} &#8381;</p>
@@ -611,7 +740,7 @@
                     <li>
                         <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}"
                            title="${goodsVar.name}">
-                            <img src="${goodsVar.img}" alt="">
+                            <img src="/catalog/goods/image?id=${goodsVar.id}&number=0" alt="">
                         </a>
                         <a href="${pageContext.request.contextPath}/catalog/goods/${goodsVar.id}">${goodsVar.name}</a>
                     </li>

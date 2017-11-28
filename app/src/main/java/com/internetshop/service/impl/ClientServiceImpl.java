@@ -11,6 +11,7 @@ import com.internetshop.model.*;
 import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.MailService;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Service
@@ -204,6 +206,10 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.updateUser(client);
         return confirmationId;
     }
+
+//    public static String convertImgToBase64(byte[] img){
+//
+//    }
 
 
     @Transactional

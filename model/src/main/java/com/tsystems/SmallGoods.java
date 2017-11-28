@@ -6,18 +6,16 @@ public class SmallGoods implements Serializable,Comparable{
     private int id;
     private String name;
     private float price;
-    private String img;
     private int salesCounter;
 
     public SmallGoods(){
 
     }
 
-    public SmallGoods(int id, String name, float price, String img, int salesCounter) {
+    public SmallGoods(int id, String name, float price, int salesCounter) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.img = img;
         this.salesCounter = salesCounter;
     }
 
@@ -45,20 +43,12 @@ public class SmallGoods implements Serializable,Comparable{
         this.price = price;
     }
 
-    public String getImg() {
-        return img;
-    }
-
     public int getSalesCounter() {
         return salesCounter;
     }
 
     public void setSalesCounter(int salesCounter) {
         this.salesCounter = salesCounter;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
     }
 
     @Override
