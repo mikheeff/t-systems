@@ -267,7 +267,7 @@
 										<a href="/catalog/goods/cart/delete/item/${count.index}" class="button cross"></a>
 										</div>
 									</td>
-									<td><a href="${cartItem.goods.img}"><img alt="" height="100" width="100" src="/catalog/goods/image?id=${cartItem.goods.id}&number=0"></a></td>
+									<td><a href="/catalog/goods/${cartItem.goods.id}"><img alt="" height="100" width="100" src="/catalog/goods/image?id=${cartItem.goods.id}&number=0"></a></td>
 										<td><big>
 												${cartItem.goods.name}
 												<br>

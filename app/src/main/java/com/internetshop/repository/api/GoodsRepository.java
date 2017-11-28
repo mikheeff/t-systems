@@ -2,6 +2,7 @@ package com.internetshop.repository.api;
 
 import com.internetshop.entities.*;
 import com.internetshop.model.CatalogQuery;
+import com.internetshop.model.GoodsImage;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public interface GoodsRepository {
     List<GoodsEntity> getBestSellersByCategoryName(String name, int amount);
     List<ReviewEntity> getAllReviewsByGoodsId(int id);
     List<GoodsImageEntity> getAllImagesByGoodsId(int id);
+    GoodsImageEntity getImageById(int id);
 
     int addGoods(GoodsEntity goodsEntity);
     void addReview(ReviewEntity reviewEntity);

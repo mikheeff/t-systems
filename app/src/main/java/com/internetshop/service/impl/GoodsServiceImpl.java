@@ -64,6 +64,7 @@ public class GoodsServiceImpl implements GoodsService {
             smallGoods.setName(goodsEntity.getName());
             smallGoods.setPrice(goodsEntity.getPrice());
             smallGoods.setSalesCounter(goodsEntity.getSalesCounter());
+            smallGoods.setVisible(goodsEntity.getVisible());
             smallGoodsList.add(smallGoods);
         }
         return smallGoodsList;
@@ -171,6 +172,7 @@ public class GoodsServiceImpl implements GoodsService {
         smallGoods.setName(goods.getName());
         smallGoods.setPrice(goods.getPrice());
         smallGoods.setSalesCounter(goods.getSalesCounter());
+        smallGoods.setVisible(goods.getVisible());
 
         Event event = new AddEvent(smallGoods);
         sendMessage(event);
@@ -296,6 +298,7 @@ public class GoodsServiceImpl implements GoodsService {
         smallGoods.setName(goods.getName());
         smallGoods.setPrice(goods.getPrice());
         smallGoods.setSalesCounter(goods.getSalesCounter());
+        smallGoods.setVisible(goods.getVisible());
         Event event = new UpdateEvent(smallGoods);
         sendMessage(event);
     }
@@ -487,6 +490,8 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional
     @Override
     public void deleteImageById(int id) {
+        GoodsEntity goodsEntity = goodsRepository.getImageById(id).getGoodsEntity();
+        createUpdateMessage(goodsEntity);
         goodsRepository.deleteImageById(id);
     }
 

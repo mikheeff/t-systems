@@ -7,16 +7,18 @@ public class SmallGoods implements Serializable,Comparable{
     private String name;
     private float price;
     private int salesCounter;
+    private int visible;
 
     public SmallGoods(){
 
     }
 
-    public SmallGoods(int id, String name, float price, int salesCounter) {
+    public SmallGoods(int id, String name, float price, int salesCounter, int visible) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.salesCounter = salesCounter;
+        this.visible = visible;
     }
 
     public int getId() {
@@ -49,6 +51,14 @@ public class SmallGoods implements Serializable,Comparable{
 
     public void setSalesCounter(int salesCounter) {
         this.salesCounter = salesCounter;
+    }
+
+    public int getVisible() {
+        return visible;
+    }
+
+    public void setVisible(int visible) {
+        this.visible = visible;
     }
 
     @Override

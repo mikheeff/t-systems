@@ -338,12 +338,12 @@
         <div class="row">
             <div class="span9">
                 <div class="row">
-                    <c:if test="${client.role.name == 'ROLE_EMPLOYEE'}">
-                        <div class="buttonHolder pull-left">
-                            <a href="/catalog/employee/goods/image/delete?id=${imgList.get(0).id}&goodsId=${goods.id}" class="button cross" onclick="return confirm('Do you want to delete this photo?')"></a>
-                        </div>
-                    </c:if>
                     <div class="span4">
+                        <c:if test="${client.role.name == 'ROLE_EMPLOYEE' and imgList.size() != 0}">
+                            <div class="buttonHolder pull-left">
+                                <a href="/catalog/employee/goods/image/delete?id=${imgList.get(0).id}&goodsId=${goods.id}" class="button cross" onclick="return confirm('Do you want to delete this photo?')"></a>
+                            </div>
+                        </c:if>
                         <a href="/catalog/goods/image?id=${goods.id}&number=0" class="thumbnail" data-fancybox-group="group1" title="Description 1"><img alt="" src="/catalog/goods/image?id=${goods.id}&number=0"></a>
                         <ul class="thumbnails small">
                             <c:forEach var="imgVar" begin="1" end="4" items="${imgList}" varStatus="counter">

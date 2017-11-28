@@ -74,7 +74,7 @@ public class GoodsRepositoryImpl implements GoodsRepository {
                 criteria.orderBy(builder.asc(goodsRoot.get("name")));
             }
             if (catalogQuery.getSort().equals("RATING")) {
-                criteria.orderBy(builder.asc(goodsRoot.get("price")));
+                criteria.orderBy(builder.desc(goodsRoot.get("rating")));
             }
             if (catalogQuery.getSort().equals("DATE")) {
                 criteria.orderBy(builder.desc(goodsRoot.get("date")));
@@ -260,5 +260,10 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     @Override
     public void deleteImageById(int id) {
         em.remove(em.find(GoodsImageEntity.class,id));
+    }
+
+    @Override
+    public GoodsImageEntity getImageById(int id) {
+        return em.find(GoodsImageEntity.class,id);
     }
 }

@@ -456,7 +456,8 @@ public class GoodsController {
     }
 
     @RequestMapping(value = "/employee/goods/upload/{id}", method = RequestMethod.POST)
-    public String uploadGoodsImage(@PathVariable int id, @RequestParam CommonsMultipartFile[] fileUpload){
+    public String uploadGoodsImage(@PathVariable int id, @RequestParam CommonsMultipartFile[] fileUpload,ModelMap modelMap){
+        goodsService.putDefaultAttributes(modelMap);
         if (fileUpload != null && fileUpload.length > 0) {
             for (CommonsMultipartFile aFile : fileUpload){
                 if(aFile.getSize()>2000000){
@@ -466,7 +467,13 @@ public class GoodsController {
                     GoodsImage goodsImage = new GoodsImage();
                     goodsImage.setGoods(goodsService.getGoodsById(id));
                     goodsImage.setImg(aFile.getBytes());
-                    goodsService.addGoodsImage(goodsImage);
+                    try {
+                        goodsService.addGoodsImage(goodsImage);
+                    } catch (IllegalThreadStateException e){
+                        logger.error("mq server connection is lost",e);
+                        modelMap.put("error", "Lost connection with MQ Server");
+                        return "500";
+                    }
                 }
             }
         }
