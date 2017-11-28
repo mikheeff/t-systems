@@ -121,7 +121,11 @@ public class OrderController {
         modelMap.put("listPaymentType", orderService.getAllPaymentTypes());
         modelMap.put("listStatus", orderService.getAllStatuses());
         modelMap.put("sum", orderService.getSumOfOrder(orderService.getAllCartItemsFromOrderByOrderId(id)));
-        modelMap.put("order", orderService.getOrderById(id));
+        try {
+            modelMap.put("order", orderService.getOrderById(id));
+        } catch (NullPointerException e){
+            return "404";
+        }
         if (msg != null) {
             modelMap.put("msg", "Order has been successfully edited");
         }
@@ -132,7 +136,7 @@ public class OrderController {
     public String getClientOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap,
                                         @RequestParam(value = "msg", required = false) String msg, HttpServletRequest httpServletRequest) {
         if (session.getAttribute("client") == null) {
-            session.setAttribute("client", clientService.getUserByEmail(httpServletRequest.getUserPrincipal().getName()));
+            session.setAttribute("client", clientService.getClientByEmail(httpServletRequest.getUserPrincipal().getName()));
         }
         goodsService.putDefaultAttributes(modelMap);
         modelMap.put("orderItemsList", orderService.getAllCartItemsFromOrderByOrderId(id));
@@ -191,12 +195,18 @@ public class OrderController {
         orderService.setPayStatus(orderId);
         return "redirect:/order/details/" + orderId + "?msg";
     }
-
-    /**
-     * Evaluates total cost of order
-     *
-     * @return total cost
-     */
+    @RequestMapping(value = "/employee/order/search")
+    public String searchOrder(String searchStr){
+        int orderId;
+        Order order;
+        try {
+             orderId = Integer.parseInt(searchStr);
+             order = orderService.getOrderById(orderId);
+        } catch (Exception e){
+            return "redirect:/employee/administration?error";
+        }
+        return "redirect:/employee/order/details/"+order.getId();
+    }
 
 
 }

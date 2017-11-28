@@ -1,8 +1,6 @@
 package com.internetshop.service.impl;
 
 import com.internetshop.config.AppConfig;
-import com.internetshop.controller.GoodsController;
-import com.internetshop.controller.OrderController;
 import com.internetshop.entities.*;
 import com.internetshop.model.*;
 import com.internetshop.repository.api.ClientRepository;
@@ -204,7 +202,7 @@ public class OrderServiceImpl implements OrderService {
                 decreaseSalesCounter(orderEntity);
                 ClientEntity clientEntity = orderEntity.getClientEntity();
                 clientEntity.setOrderCounter(clientEntity.getOrderCounter() - getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
-                clientRepository.updateUser(clientEntity);
+                clientRepository.updateClient(clientEntity);
             }
             StatusEntity statusEntity = orderRepository.getStatusByName(order.getStatus().getName());
             orderEntity.setStatus(statusEntity);
@@ -213,7 +211,7 @@ public class OrderServiceImpl implements OrderService {
                 increaseSalesCounter(orderEntity);
                 ClientEntity clientEntity = orderEntity.getClientEntity();
                 clientEntity.setOrderCounter(clientEntity.getOrderCounter() + getSumOfOrder(getAllCartItemsFromOrderByOrderId(order.getId())));
-                clientRepository.updateUser(clientEntity);
+                clientRepository.updateClient(clientEntity);
             }
             if ((orderEntity.getStatus().getName().equals("shipped") && orderEntity.getDeliveryMethod().getName().equals("pickup")) || (orderEntity.getStatus().getName().equals("canceled"))) {
                 ClientEntity client = orderEntity.getClientEntity();

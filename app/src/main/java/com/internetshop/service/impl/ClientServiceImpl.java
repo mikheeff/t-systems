@@ -11,7 +11,6 @@ import com.internetshop.model.*;
 import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.MailService;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 @Service
@@ -38,11 +36,6 @@ public class ClientServiceImpl implements ClientService {
         this.clientRepository = clientRepository;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
-    }
-
-    @Transactional(readOnly = true)
-    public List<ClientEntity> getAllClients() {
-        return clientRepository.getAll();
     }
 
     @Transactional(readOnly = true)
@@ -92,14 +85,22 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException {
         logger.info("changePassword");
-        if (passwordEncoder.matches(passwordField.getPassword(), client.getPassword())) {
-            logger.info("password matches = true");
-            ClientEntity clientEntity = clientRepository.getUserById(client.getId());
-            clientEntity.setPassword(passwordEncoder.encode(passwordField.getNewPasswordFirst()));
-            clientRepository.updateUser(clientEntity);
+        if (passwordField.getPassword() == null){
+            savePassword(passwordField,client);
         } else {
-            throw new PasswordWrongException();
+            if (passwordEncoder.matches(passwordField.getPassword(), client.getPassword())) {
+                logger.info("password matches = true");
+                savePassword(passwordField,client);
+            } else {
+                throw new PasswordWrongException();
+            }
         }
+    }
+
+    private void savePassword(PasswordField passwordField, Client client){
+        ClientEntity clientEntity = clientRepository.getClientById(client.getId());
+        clientEntity.setPassword(passwordEncoder.encode(passwordField.getNewPasswordFirst()));
+        clientRepository.updateClient(clientEntity);
     }
 
     /**
@@ -109,9 +110,9 @@ public class ClientServiceImpl implements ClientService {
      */
     @Transactional(readOnly = true)
     @Override
-    public Client getUserByEmail(String email) {
-        logger.info("getUserByEmail");
-        ClientEntity clientEntity = clientRepository.getUserByEmail(email);
+    public Client getClientByEmail(String email) {
+        logger.info("getClientByEmail");
+        ClientEntity clientEntity = clientRepository.getClientByEmail(email);
         return convertClientToDTO(clientEntity);
     }
 
@@ -125,7 +126,7 @@ public class ClientServiceImpl implements ClientService {
     public Client getClientById(int id) {
         logger.info("getClientById");
 
-        ClientEntity clientEntity = clientRepository.getUserById(id);
+        ClientEntity clientEntity = clientRepository.getClientById(id);
 
         return convertClientToDTO(clientEntity);
     }
@@ -143,10 +144,10 @@ public class ClientServiceImpl implements ClientService {
      */
     @Transactional
     @Override
-    public void updateUser(Client client) {
-        logger.info("updateUser");
+    public void updateClient(Client client) {
+        logger.info("updateClient");
 
-        ClientEntity clientEntity = clientRepository.getUserById(client.getId());
+        ClientEntity clientEntity = clientRepository.getClientById(client.getId());
 
         ClientAddressEntity clientAddressEntity = clientEntity.getClientAddressEntity();
         clientAddressEntity.setCountry(client.getClientAddress().getCountry());
@@ -171,52 +172,49 @@ public class ClientServiceImpl implements ClientService {
             clientEntity.setPhone(client.getPhone());
         }
 
-        clientRepository.updateUser(clientEntity);
+        clientRepository.updateClient(clientEntity);
     }
 
     @Transactional
     @Override
     public void uploadAvatar(Client client) {
-        ClientEntity clientEntity = clientRepository.getUserById(client.getId());
+        ClientEntity clientEntity = clientRepository.getClientById(client.getId());
         clientEntity.setImg(client.getImg());
-        clientRepository.updateUser(clientEntity);
+        clientRepository.updateClient(clientEntity);
     }
     @Transactional
     @Override
     public void deleteAvatar(Client client) {
-        ClientEntity clientEntity = clientRepository.getUserById(client.getId());
+        ClientEntity clientEntity = clientRepository.getClientById(client.getId());
         clientEntity.setImg(null);
-        clientRepository.updateUser(clientEntity);
+        clientRepository.updateClient(clientEntity);
     }
 
     @Transactional
     @Override
     public void confirmClientEmail(String email) {
-        ClientEntity clientEntity = clientRepository.getUserByEmail(email);
+        ClientEntity clientEntity = clientRepository.getClientByEmail(email);
         clientEntity.setIsConfirm(1);
-        clientRepository.updateUser(clientEntity);
+        clientRepository.updateClient(clientEntity);
     }
 
     @Transactional
     @Override
     public String resetConfirmationId(String email) {
-        ClientEntity client = clientRepository.getUserByEmail(email);
+        ClientEntity client = clientRepository.getClientByEmail(email);
         String confirmationId = UUID.randomUUID().toString();
         client.setConfirmationId(confirmationId);
-        clientRepository.updateUser(client);
+        clientRepository.updateClient(client);
         return confirmationId;
     }
 
-//    public static String convertImgToBase64(byte[] img){
-//
-//    }
 
 
     @Transactional
     @Override
     public void recoverConfirmationIdAndSendEmail(String email) throws UsernameNotFoundException {
         String confirmationId = resetConfirmationId(email);
-        ClientEntity client = clientRepository.getUserByEmail(email);
+        ClientEntity client = clientRepository.getClientByEmail(email);
 
         Mail mail = new Mail();
         mail.setMailFrom(AppConfig.MAIL_FROM);
@@ -229,7 +227,7 @@ public class ClientServiceImpl implements ClientService {
         model.put("location", AppConfig.MAIL_LOCATION);
         model.put("signature", AppConfig.MAIL_SIGNATURE);
         model.put("mailMsg", "To recover your password follow the link below");
-        model.put("link", AppConfig.HOST_URL + "/recover/password?id=" + confirmationId);
+        model.put("link", AppConfig.HOST_URL + "/clients/recover/password?id=" + confirmationId);
         mail.setModel(model);
         mailService.sendEmail(mail, "email-template.txt");
     }

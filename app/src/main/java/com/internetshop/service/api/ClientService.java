@@ -14,20 +14,19 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface ClientService {
-    List<ClientEntity> getAllClients();
     List<Client> getBestClientsList(int amountOfBestClients);
     void addClient(Client client) throws EmailExistException;
-    Client getUserByEmail(String email);
-    void updateUser(Client client);
+    Client getClientByEmail(String email);
+    void updateClient(Client client);
     Client getClientById(int id);
     String getEmailByConfirmationId(String id);
     void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException;
     void confirmClientEmail(String email);
     void recoverConfirmationIdAndSendEmail(String email) throws UsernameNotFoundException;
     String resetConfirmationId(String email);
-    Client convertClientToDTO(ClientEntity clientEntity);
     void uploadAvatar(Client client);
     void deleteAvatar(Client client);
+    Client convertClientToDTO(ClientEntity clientEntity);
     static String convertImgToBase64(byte[] img){
         if (img == null){
             return null;

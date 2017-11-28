@@ -19,10 +19,6 @@ public class ClientRepositoryImpl implements ClientRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public List<ClientEntity> getAll() {
-        return em.createQuery("select c from ClientEntity c ", ClientEntity.class).getResultList();
-    }
-
     @Override
     public List<ClientEntity> getBestClientsList(int amountOfBestClients) {
         return em.createQuery("select client from ClientEntity client order by client.orderCounter desc",ClientEntity.class).setMaxResults(amountOfBestClients).getResultList();
@@ -39,12 +35,12 @@ public class ClientRepositoryImpl implements ClientRepository {
 
 
     @Override
-    public ClientEntity getUserByEmail(String email) {
+    public ClientEntity getClientByEmail(String email) {
         return em.createQuery("select client from ClientEntity client where email = :email", ClientEntity.class).setParameter("email",email).getSingleResult();
     }
 
     @Override
-    public ClientEntity getUserById(int id) {
+    public ClientEntity getClientById(int id) {
         return em.find(ClientEntity.class, id);
     }
 
@@ -54,7 +50,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public void updateUser(ClientEntity clientEntity) {
+    public void updateClient(ClientEntity clientEntity) {
         em.merge(clientEntity);
     }
 

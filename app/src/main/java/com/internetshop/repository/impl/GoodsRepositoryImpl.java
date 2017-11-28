@@ -216,11 +216,6 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     }
 
     @Override
-    public int getIdRuleByName(String name) {
-        return em.createQuery("select ruleEntity.id from RuleEntity ruleEntity where name = :name", Integer.class).setParameter("name", name).getSingleResult();
-    }
-
-    @Override
     public RuleEntity getRuleByName(String name) {
         return em.createQuery("select ruleEntity from RuleEntity ruleEntity where name = :name", RuleEntity.class).setParameter("name", name).getSingleResult();
     }

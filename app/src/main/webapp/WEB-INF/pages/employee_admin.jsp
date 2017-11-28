@@ -59,6 +59,10 @@
             -moz-border-radius: 2px;
             border: 1px solid #000;
         }
+
+        #orderSearch {
+            width: 200px; /* Ширина поля в пикселах */
+        }
     </style>
 </head>
 <body>
@@ -301,6 +305,14 @@
                             <div class="accordion-inner">
 
                                 <h4>All Orders</h4>
+                                <form action="/employee/order/search" method="POST" command class="search_form">
+                                    <input name="searchStr" type="text" id="orderSearch" class="input-block-level search-query" maxlength="15"
+                                           Placeholder="Enter order ID">
+                                </form>
+                                <br>
+                                <c:if test="${not empty error}">
+                                    <div class="error"><span><big>${error}</big></span></div>
+                                </c:if>
                                 <label class="checkbox">
                                     <input type="checkbox" onclick="hideStuff('closed-row')" id="hide-check"> Hide
                                     closed orders

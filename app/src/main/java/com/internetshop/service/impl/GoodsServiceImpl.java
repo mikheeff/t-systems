@@ -1,6 +1,5 @@
 package com.internetshop.service.impl;
 
-import com.internetshop.config.AppConfig;
 import com.internetshop.controller.GoodsController;
 import com.internetshop.entities.*;
 import com.internetshop.jms.JmsProducer;
@@ -183,7 +182,7 @@ public class GoodsServiceImpl implements GoodsService {
     public void addReview(Review review) {
         ReviewEntity reviewEntity = new ReviewEntity();
 
-        ClientEntity clientEntity = clientRepository.getUserById(review.getClient().getId());
+        ClientEntity clientEntity = clientRepository.getClientById(review.getClient().getId());
         reviewEntity.setClientEntity(clientEntity);
 
         GoodsEntity goodsEntity = goodsRepository.getGoodsById(review.getGoods().getId());

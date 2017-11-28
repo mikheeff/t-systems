@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -76,7 +77,7 @@ public class HomeController {
 
 
     @RequestMapping(value = "employee/administration", method = RequestMethod.GET)
-    public String getAdminPage(ModelMap modelMap) {
+    public String getAdminPage(@RequestParam(value = "error", required = false) String error,ModelMap modelMap) {
         modelMap.put("goods", new Goods());
         modelMap.put("category", new Category());
         modelMap.put("listCategory", goodsService.getAllCategories());
@@ -102,6 +103,9 @@ public class HomeController {
         }
         modelMap.put("monthlyRevenue",monthlyRevenue);
         modelMap.put("todayMoney",revenueList.get(revenueList.size()-1));
+        if (error != null){
+            modelMap.put("error","No order with such id");
+        }
         return "employee_admin";
     }
 

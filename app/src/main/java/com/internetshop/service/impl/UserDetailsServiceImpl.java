@@ -1,13 +1,8 @@
 package com.internetshop.service.impl;
 
-import com.internetshop.Exceptions.UserNotConfirmException;
-import com.internetshop.controller.ClientController;
 import com.internetshop.entities.ClientEntity;
 import com.internetshop.entities.RoleEntity;
-import com.internetshop.model.Client;
-import com.internetshop.model.Role;
 import com.internetshop.repository.api.ClientRepository;
-import com.internetshop.service.api.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +12,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
         logger.info("loadUserByUsername with param:"+email);
         ClientEntity clientEntity;
         try {
-            clientEntity = clientRepository.getUserByEmail(email);
+            clientEntity = clientRepository.getClientByEmail(email);
             if(clientEntity.getIsConfirm()==0){
                 throw new UsernameNotFoundException("User not confirm");
             }

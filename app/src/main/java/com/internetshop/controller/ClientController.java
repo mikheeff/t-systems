@@ -7,9 +7,6 @@ import com.internetshop.model.PasswordField;
 import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.OrderService;
-import com.internetshop.service.impl.ClientServiceImpl;
-import com.internetshop.service.impl.UserDetailsServiceImpl;
-import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +16,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
-import java.security.Principal;
 
 @Controller
 @RequestMapping("/clients")
@@ -76,7 +71,7 @@ public class ClientController {
         }
         Client client = (Client) session.getAttribute("client");
         if (client == null && httpServletRequest.getUserPrincipal() != null) {
-            session.setAttribute("client", clientService.getUserByEmail(httpServletRequest.getUserPrincipal().getName()));
+            session.setAttribute("client", clientService.getClientByEmail(httpServletRequest.getUserPrincipal().getName()));
         }
         modelMap.put("client", client);
         return "register";
@@ -107,7 +102,7 @@ public class ClientController {
                              @RequestParam(value = "msgClient", required = false) String msgClient,
                              @RequestParam(value = "msg_img", required = false) String msg_img){
         logger.info("editClient");
-        session.setAttribute("client", clientService.getUserByEmail(httpServletRequest.getUserPrincipal().getName()));
+        session.setAttribute("client", clientService.getClientByEmail(httpServletRequest.getUserPrincipal().getName()));
         modelMap.put("client", session.getAttribute("client"));
         if (modelMap.get("client") == null) {
             logger.info("client is null");
@@ -180,8 +175,8 @@ public class ClientController {
             logger.warn("Entered information not valid");
             return "redirect:/clients/profile?clientError";
         }
-        this.clientService.updateUser(client);
-        session.setAttribute("client", clientService.getUserByEmail(client.getEmail()));
+        this.clientService.updateClient(client);
+        session.setAttribute("client", clientService.getClientByEmail(client.getEmail()));
         return "redirect:/clients/profile?msgClient";
     }
 
@@ -232,6 +227,53 @@ public class ClientController {
     public void deleteAvatar(){
         Client client = (Client) session.getAttribute("client");
         clientService.deleteAvatar(client);
+    }
+
+    @RequestMapping(value = "/recover/password", method = RequestMethod.GET)
+    public String recoverPassword(@RequestParam(value = "id", required = false) String id, ModelMap modelMap) {
+        goodsService.putDefaultAttributes(modelMap);
+        String email;
+        try {
+            email = clientService.getEmailByConfirmationId(id);
+            clientService.resetConfirmationId(email);
+        } catch (NoResultException e) {
+            email = null;
+        }
+        if (email != null) {
+            session.setAttribute("emailForRecovery", email);
+            modelMap.put("passwordField", new PasswordField());
+            return "recover_password";
+        }
+
+        modelMap.put("error", "Session is unavailable, please go to recover page to resend mail...");
+        return "message";
+    }
+
+    @RequestMapping(value = "/recover/password", method = RequestMethod.POST)
+    public String recoverPassword(@ModelAttribute(value = "passwordField") @Valid PasswordField passwordField, BindingResult bindingResult, ModelMap modelMap) {
+        goodsService.putDefaultAttributes(modelMap);
+        if (bindingResult.hasFieldErrors("newPasswordFirst") && bindingResult.hasFieldErrors("newPasswordSecond")) {
+            modelMap.put("passwordField", new PasswordField());
+            modelMap.put("error", "Entered characters are not allowed!");
+            return "recover_password";
+        }
+        String email = (String) session.getAttribute("emailForRecovery");
+        Client client = clientService.getClientByEmail(email);
+        if (passwordField.getNewPasswordFirst().equals(passwordField.getNewPasswordSecond())) {
+            try {
+                clientService.changePassword(passwordField, client);
+            } catch (PasswordWrongException e) {
+                modelMap.put("passwordField", new PasswordField());
+                modelMap.put("error", "Password is not valid!");
+                return "recover_password";
+            }
+        } else {
+            modelMap.put("passwordField", new PasswordField());
+            modelMap.put("error", "Entered New passwords doesn't match!");
+            return "recover_password";
+        }
+        modelMap.put("msg", "Password has been successfully changed");
+        return "message";
     }
 
 }

@@ -145,15 +145,8 @@
                 <c:if test="${not empty msg}">
                     <div class="msg">${msg}</div>
                 </c:if>
-                <spring:form action="/recover/password" method="post" modelAttribute="passwordField" class="form-stacked">
+                <spring:form action="/clients/recover/password" method="post" modelAttribute="passwordField" class="form-stacked">
                     <fieldset>
-                        <div class="control-group">
-                            <label class="control-label">Old Password*</label>
-                            <div class="controls">
-                                <spring:input path="password" type="password" placeholder="" class="input-xlarge" />
-                            </div>
-                        </div>
-                            <%--<hr>--%>
                         <div class="control-group">
                             <label class="control-label">New Password*</label>
                             <div class="controls">

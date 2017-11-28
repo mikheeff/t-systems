@@ -37,7 +37,6 @@ public interface GoodsRepository {
     CategoryEntity getCategoryById(int id);
     void updateCategory(CategoryEntity categoryEntity);
     void deleteCategoryById(int id);
-    int getIdRuleByName(String name);
     RuleEntity getRuleByName(String name);
     double getGoodsRating(int id);
     long getPlaceOfGoods(double rating);

@@ -8,7 +8,6 @@ public class ClientAddressEntity {
     @Id
     @Column(name= "address_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @GenericGenerator(name="gen",strategy = "foreign", parameters = @org.hibernate.annotations.Parameter(name="property", value="clientEntity"))
     private int id;
     @Column(name = "country")
     private String country;
@@ -24,12 +23,6 @@ public class ClientAddressEntity {
     private String flat;
     @Column(name = "prim")
     private String addition;
-
-//    @OneToOne
-//    @PrimaryKeyJoinColumn
-//    private ClientEntity clientEntity;
-//    @OneToOne(mappedBy="clientAddressEntity", cascade = CascadeType.ALL,  fetch = FetchType.LAZY, orphanRemoval = true)
-//    private ClientEntity clientEntity;
 
     public ClientAddressEntity(){
 

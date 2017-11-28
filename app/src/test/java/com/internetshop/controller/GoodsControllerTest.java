@@ -29,7 +29,6 @@ public class GoodsControllerTest {
     public void setUp() throws Exception {
         GoodsService goodsService = mock(GoodsService.class);
         ClientService clientService = mock(ClientService.class);
-        OrderService orderService = mock(OrderService.class);
         HttpSession session = mock(HttpSession.class);
         OrderController orderController = mock(OrderController.class);
         goodsController = new GoodsController(goodsService,clientService,orderService,session);
@@ -52,22 +51,7 @@ public class GoodsControllerTest {
     public void getAmountOfPagesSetNumberConst(){
         assertEquals(1,goodsController.getAmountOfPages(amountOfGoodsOnPage));
     }
-    @Test
-    public void getSumOfOrderTest(){
-        CartItem item1 = new CartItem();
-        CartItem item2 = new CartItem();
-        Goods goods1 = new Goods();
-        Goods goods2 = new Goods();
-        goods1.setPrice(1200);
-        goods2.setPrice(340);
-        item1.setGoods(goods1);
-        item1.setQuantity(2);
-        item2.setGoods(goods2);
-        item2.setQuantity(3);
-        List<CartItem> cartList = Arrays.asList(item1,item2);
-        float sum = orderService.getSumOfOrder(cartList);
-        assertEquals(3420,sum,0.01);
-    }
+
     @Test
     public void getSumOfOrderEmptyCart(){
         List<CartItem> cartList = new ArrayList<>();

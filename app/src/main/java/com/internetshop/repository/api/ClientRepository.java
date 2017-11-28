@@ -8,13 +8,12 @@ import com.internetshop.model.Client;
 import java.util.List;
 
 public interface ClientRepository {
-    List<ClientEntity> getAll();
     List<ClientEntity> getBestClientsList(int amountOfBestClients);
     void addClient(ClientEntity clientEntity);
-    ClientEntity getUserByEmail(String email);
-    ClientEntity getUserById(int id);
+    ClientEntity getClientByEmail(String email);
+    ClientEntity getClientById(int id);
     String getEmailByConfirmationId(String id);
-    void updateUser(ClientEntity clientEntity);
+    void updateClient(ClientEntity clientEntity);
     RoleEntity getRoleById(int id);
     boolean isEmailExist(String email);
 
