@@ -65,6 +65,12 @@ public class HomeController {
         modelMap.put("newGoodsList", goodsService.getNewGoods(amountOfGoodsOnHomePage));
         return "index";
     }
+    @RequestMapping(value = "contact",method = RequestMethod.GET)
+    public String contactUs(ModelMap modelMap){
+        goodsService.putDefaultAttributes(modelMap);
+        return "contact";
+    }
+
     @RequestMapping(value = "bestsellers", method = RequestMethod.GET)
     public String getBestSellersPage(ModelMap modelMap){
         List<Category> categoryList = goodsService.getAllCategories();

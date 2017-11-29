@@ -323,9 +323,7 @@
                         </ul>
                     </li>
                     <li><a href="${pageContext.request.contextPath}/bestsellers">Best Sellers</a>
-                    <li><a href="#">How To Buy</a></li>
-                    <li><a href="#">F.A.Q</a></li>
-                    <li><a href="#">About us</a></li>
+                    <li><a href="${pageContext.request.contextPath}/contact">Contact us</a></li>
                 </ul>
             </nav>
         </div>
@@ -757,30 +755,15 @@
             <h4>Navigation</h4>
             <ul class="nav">
                 <li><a href="/">Homepage</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Contac Us</a></li>
-                <c:if test="${cartList==null}">
-                    <li><a href="cart.jsp">Your Cart(0)</a></li>
-                </c:if>
-                <c:if test="${cartList!=null}">
-                    <li><a href="cart.jsp">Your Cart(${cartList.size()})</a></li>
-                </c:if>
-                <li><a href="register.jsp">Login</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+                <li><a href="/clients/identification">Login</a></li>
+                <li><a href="/catalog/goods/cart">Your Cart</a></li>
+                <li><a href="/clients/profile">My Account</a></li>
             </ul>
         </div>
-        <div class="span4">
-            <h4>My Account</h4>
-            <ul class="nav">
-                <li><a href="#">My Account</a></li>
-                <li><a href="#">Order History</a></li>
-                <li><a href="#">Wish List</a></li>
-                <li><a href="#">Newsletter</a></li>
-            </ul>
-        </div>
-        <div class="span5">
+        <div class="span5 pull-right">
             <p class="logo"><img src="/resources/themes/images/logo.png" class="site_logo" alt=""></p>
-            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. the Lorem Ipsum has been the
-                industry's standard dummy text ever since the you.</p>
+            <p>Site was made by Pavel Mikheev</p>
             <br/>
             <span class="social_icons">
 							<a class="facebook" href="#">Facebook</a>

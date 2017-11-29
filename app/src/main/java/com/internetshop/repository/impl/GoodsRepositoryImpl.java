@@ -1,7 +1,5 @@
 package com.internetshop.repository.impl;
 
-import com.internetshop.Exceptions.NoSuchCategoryException;
-import com.internetshop.Exceptions.NoSuchRulesException;
 import com.internetshop.entities.*;
 import com.internetshop.model.CatalogQuery;
 import com.internetshop.repository.api.GoodsRepository;

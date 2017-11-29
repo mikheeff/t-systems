@@ -1,9 +1,7 @@
 package com.internetshop.service.impl;
 
-import com.internetshop.model.CartItem;
-import com.internetshop.model.Goods;
-import com.internetshop.model.Mail;
-import com.internetshop.model.Order;
+import com.internetshop.entities.*;
+import com.internetshop.model.*;
 import com.internetshop.repository.api.ClientRepository;
 import com.internetshop.repository.api.GoodsRepository;
 import com.internetshop.repository.api.OrderRepository;
@@ -11,15 +9,16 @@ import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.MailService;
 import com.internetshop.service.api.OrderService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.*;
 
 public class OrderServiceTest {
 
@@ -30,9 +29,13 @@ public class OrderServiceTest {
     private GoodsService goodsService;
     private ClientService clientService;
     private MailService mailService;
+    private OrderEntity orderEntity;
+    private Order order;
 
     @Before
     public void setUp() throws Exception {
+        order = getOrder();
+        orderEntity = getOrderEntity();
         orderRepository = mock(OrderRepository.class);
         goodsRepository = mock(GoodsRepository.class);
         clientRepository = mock(ClientRepository.class);
@@ -65,5 +68,101 @@ public class OrderServiceTest {
         List<CartItem> cartList = Arrays.asList(item1,item2);
         float sum = orderService.getSumOfOrder(cartList);
         assertEquals(3420,sum,0.01);
+    }
+    @Test
+    public void getOrderById(){
+        Order order = this.order;
+        when(orderRepository.getOrderById(anyInt())).thenReturn(orderEntity);
+        Assert.assertEquals(orderService.getOrderById(order.getId()).getId(),order.getId());
+
+    }
+//    @Test
+//    public void addOrder(){
+//        Order order = this.order;
+//        when(orderRepository.addOrder(any(OrderEntity.class),any(Set.class))).thenReturn(1);
+//        when(orderRepository.getStatusById(anyInt())).thenReturn(any(StatusEntity.class));
+//        when(orderRepository.getIdPaymentTypeByName(anyString())).thenReturn(anyInt());
+//        when(orderRepository.getIdDeliveryMethodByName(anyString())).thenReturn(anyInt());
+//        when(orderRepository.getStatusById(anyInt()).getName()).thenReturn(anyString());
+//        when(goodsRepository.getGoodsById(anyInt())).thenReturn(any(GoodsEntity.class));
+//        doNothing().when(goodsRepository).updateGoods(any(GoodsEntity.class));
+//
+//        orderService.addOrder(order);
+//        verify(orderRepository,atLeastOnce()).addOrder(any(OrderEntity.class),any(HashSet.class));
+//    }
+
+    public Order getOrder(){
+        Client client1 = new Client();
+        client1.setId(1);
+        client1.setName("Alex");
+        client1.setEmail("alex@mail.ru");
+        client1.setPassword("123456");
+        client1.setPhone("+79818829192");
+        Role role = new Role();
+        role.setId(3);
+        role.setName("ROLE_CLIENT");
+        client1.setRole(role);
+        ClientAddress clientAddress = new ClientAddress();
+        clientAddress.setId(1);
+        client1.setClientAddress(clientAddress);
+
+        Order order = new Order();
+        order.setClient(client1);
+        CartItem cartItem = new CartItem();
+        Goods goods = new Goods();
+        cartItem.setGoods(goods);
+        cartItem.setOrder(order);
+        Set<CartItem> set = new HashSet<>();
+        set.add(cartItem);
+        order.setCartItems(set);
+        order.setId(1);
+        return order;
+    }
+
+    public OrderEntity getOrderEntity(){
+        OrderEntity orderEntity = new OrderEntity();
+        PaymentTypeEntity paymentTypeEntity = new PaymentTypeEntity();
+        paymentTypeEntity.setId(1);
+        paymentTypeEntity.setName("card");
+        DeliveryMethodEntity deliveryMethodEntity = new DeliveryMethodEntity();
+        deliveryMethodEntity.setId(1);
+        deliveryMethodEntity.setName("pickup");
+        StatusEntity statusEntity = new StatusEntity();
+        statusEntity.setId(2);
+        statusEntity.setName("closed");
+        orderEntity.setId(1);
+        orderEntity.setPayStatus(0);
+        orderEntity.setDate("2017-11-11 16:04:54");
+        orderEntity.setStatus(statusEntity);
+        orderEntity.setDeliveryMethod(deliveryMethodEntity);
+        orderEntity.setPaymentType(paymentTypeEntity);
+
+        ClientEntity clientEntity = new ClientEntity();
+        clientEntity.setId(1);
+        clientEntity.setName("Alex");
+        clientEntity.setPassword("123456");
+        clientEntity.setEmail("alex@mail.ru");
+        clientEntity.setPhone("+79818829192");
+        RoleEntity roleEntity = new RoleEntity();
+        roleEntity.setId(3);
+        roleEntity.setName("ROLE_CLIENT");
+        clientEntity.setRoleEntity(roleEntity);
+        ClientAddressEntity clientAddressEntity = new ClientAddressEntity();
+        clientAddressEntity.setId(1);
+        clientEntity.setClientAddressEntity(clientAddressEntity);
+
+        orderEntity.setClientEntity(clientEntity);
+
+        CartItemEntity cartItemEntity = new CartItemEntity();
+        cartItemEntity.setId(1);
+        cartItemEntity.setOrderEntity(orderEntity);
+        GoodsEntity goodsEntity = new GoodsEntity();
+        goodsEntity.setId(1);
+        goodsEntity.setName("uno");
+        cartItemEntity.setGoodsEntity(goodsEntity);
+        Set<CartItemEntity> set = new HashSet<>();
+        set.add(cartItemEntity);
+        orderEntity.setCartItemEntities(set);
+        return orderEntity;
     }
 }

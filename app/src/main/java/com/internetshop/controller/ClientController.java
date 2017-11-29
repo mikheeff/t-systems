@@ -35,8 +35,6 @@ public class ClientController {
     private GoodsService goodsService;
     @Autowired
     private OrderService orderService;
-//    @Autowired
-//    private EmailController emailController;
 
     @Autowired
     private HttpSession session;
@@ -59,15 +57,17 @@ public class ClientController {
         modelMap.put("newClient", new Client());
         modelMap.put("listCategory", goodsService.getAllCategories());
         if (error != null) {
+            logger.warn("trying to enter with invalid email or password or not confirmed account");
             modelMap.put("error", "Invalid email or password or not confirmed account!");
         }
         if (regError != null) {
+            logger.warn("Invalid params");
             modelMap.put("regError", "Invalid params!");
         }
 
         if (logout != null) {
-            modelMap.put("msg", "You've been logged out successfully.");
             logger.info("user logged out");
+            modelMap.put("msg", "You've been logged out successfully.");
         }
         Client client = (Client) session.getAttribute("client");
         if (client == null && httpServletRequest.getUserPrincipal() != null) {
