@@ -167,4 +167,23 @@ public class Goods {
     public void setDate(String date) {
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return "Goods{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", numberOfPlayers=" + numberOfPlayers +
+                ", duration=" + duration +
+                ", amount=" + amount +
+                ", visible=" + visible +
+                ", description='" + description + '\'' +
+                ", salesCounter=" + salesCounter +
+                ", rating=" + rating +
+                ", category=" + category +
+                ", rule=" + rule +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

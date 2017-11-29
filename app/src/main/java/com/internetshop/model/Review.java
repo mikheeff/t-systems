@@ -60,4 +60,15 @@ public class Review implements Serializable {
     public void setClient(Client client) {
         this.client = client;
     }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", rating=" + rating +
+                ", goods=" + goods +
+                ", client=" + client +
+                '}';
+    }
 }

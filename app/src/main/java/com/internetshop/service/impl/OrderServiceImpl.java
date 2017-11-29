@@ -50,7 +50,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public List<DeliveryMethod> getAllDeliveryMethods() {
-        logger.info("getAllDeliveryMethods");
         List<DeliveryMethod> deliveryMethods = new ArrayList<>();
         for (DeliveryMethodEntity deliveryMethodEntity : orderRepository.getAllDeliveryMethods()) {
             DeliveryMethod deliveryMethod = new DeliveryMethod(deliveryMethodEntity.getId(), deliveryMethodEntity.getName());
@@ -65,7 +64,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public List<PaymentType> getAllPaymentTypes() {
-        logger.info("getAllPaymentTypes");
         List<PaymentType> paymentTypes = new ArrayList<>();
         for (PaymentTypeEntity paymentTypeEntity : orderRepository.getAllPaymentTypes()) {
             PaymentType paymentType = new PaymentType(paymentTypeEntity.getId(), paymentTypeEntity.getName());
@@ -80,8 +78,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public List<Status> getAllStatuses() {
-        logger.info("getAllStatuses");
-
         List<Status> statuses = new ArrayList<>();
         for (StatusEntity statusEntity : orderRepository.getAllStatuses()) {
             Status status = new Status(statusEntity.getId(), statusEntity.getName());
@@ -156,7 +152,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public List<Order> getAllOrdersByClientId(int id) {
-        logger.info("getAllOrdersByClientId");
         List<Order> orderList = new ArrayList<>();
         for (OrderEntity orderEntity : orderRepository.getAllOrdersByClientId(id)) {
             orderList.add(convertOrderToDTO(orderEntity));
@@ -172,8 +167,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public List<Order> getAllOrders() {
-        logger.info("getAllOrders");
-
         List<Order> orderList = new ArrayList<>();
         for (OrderEntity orderEntity : orderRepository.getAllOrders()) {
             orderList.add(convertOrderToDTO(orderEntity));
@@ -187,7 +180,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void updateOrderStatus(Order order) {
-        logger.info("updateOrderStatus");
+        logger.info("updateOrderStatus {}",order);
 
         OrderEntity orderEntity = orderRepository.getOrderById(order.getId());
 
@@ -277,8 +270,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public List<CartItem> getAllCartItemsFromOrderByOrderId(int id) {
-        logger.info("getAllCartItemsFromOrderByOrderId");
-
         List<CartItem> cartItemList = new ArrayList<>();
         for (CartItemEntity itemEntity : orderRepository.getAllCartItemsFromOrderByOrderId(id)) {
             CartItem item = new CartItem();
@@ -298,8 +289,6 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     @Override
     public Order getOrderById(int id) {
-        logger.info("getOrderById");
-
         OrderEntity orderEntity = orderRepository.getOrderById(id);
         return convertOrderToDTO(orderEntity);
     }
@@ -375,7 +364,6 @@ public class OrderServiceImpl implements OrderService {
      * convert Order Entity to Order Model
      */
     public Order convertOrderToDTO(OrderEntity orderEntity) {
-        logger.info("convertOrderToDTO");
 
         Order order = new Order();
         order.setId(orderEntity.getId());
@@ -422,7 +410,6 @@ public class OrderServiceImpl implements OrderService {
      * @return client entity
      */
     public ClientEntity convertClientToDAO(Client client, int id) {
-        logger.info("convertClientToDAO");
 
         RoleEntity role = new RoleEntity();
         role.setId(id);

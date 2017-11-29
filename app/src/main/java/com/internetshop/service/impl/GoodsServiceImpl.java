@@ -45,7 +45,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoods() {
-        logger.info("getAllGoods without pagination");
         List<Goods> goodsList = new ArrayList<>();
         for (GoodsEntity goodsEntity : goodsRepository.getAll()) {
             goodsList.add(convertGoodsToDTO(goodsEntity));
@@ -80,8 +79,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoods(int firstId, int maxResults) {
-        logger.info("getAllGoods ");
-
         List<Goods> goodsList = new ArrayList<>();
         for (GoodsEntity goodsEntity : goodsRepository.getAll(firstId, maxResults)) {
             goodsList.add(convertGoodsToDTO(goodsEntity));
@@ -98,8 +95,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoodsByCategoryName(int firstId, int maxResults, String categoryName) {
-        logger.info("getAllGoodsByCategoryName");
-
         List<Goods> goodsList = new ArrayList<>();
         for (GoodsEntity goodsEntity : goodsRepository.getAllGoodsByCategoryName(firstId, maxResults, categoryName)) {
             goodsList.add(convertGoodsToDTO(goodsEntity));
@@ -180,6 +175,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional
     @Override
     public void addReview(Review review) {
+        logger.info("addReview {}",review);
         ReviewEntity reviewEntity = new ReviewEntity();
 
         ClientEntity clientEntity = clientRepository.getClientById(review.getClient().getId());
@@ -210,7 +206,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional
     @Override
     public void deleteGoodsById(int id) {
-        logger.info("deleteGoodsById");
+        logger.info("deleteGoodsById {}",id);
         this.goodsRepository.deleteGoodsById(id);
         createDeleteMessage(id);
     }
@@ -235,7 +231,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(readOnly = true)
     @Override
     public Goods getGoodsById(int id) {
-        logger.info("getGoodsById");
         GoodsEntity goodsEntity = goodsRepository.getGoodsById(id);
 
         Category category = new Category();
@@ -269,7 +264,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional
     @Override
     public void updateGoods(Goods goods) {
-        logger.info("updateGoods");
+        logger.info("updateGoods {}", goods);
 
         GoodsEntity goodsEntity = this.goodsRepository.getGoodsById(goods.getId());
         goodsEntity.setName(goods.getName());
@@ -311,8 +306,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(readOnly = true)
     @Override
     public long getAmountOfGoods() {
-        logger.info("getAmountOfGoods");
-
         return goodsRepository.getAmountOfGoods();
     }
 
@@ -324,8 +317,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(readOnly = true)
     @Override
     public long getAmountOfGoodsByCategoryName(String categoryName) {
-        logger.info("getAmountOfGoodsByCategoryName");
-
         return goodsRepository.getAmountOfGoodsByCategoryName(categoryName);
     }
 
@@ -347,7 +338,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(readOnly = true)
     @Override
     public List<Category> getAllCategories() {
-        logger.info("getAllCategories");
         List<Category> categories = new ArrayList<>();
         for (CategoryEntity categoryEntity : goodsRepository.getAllCategories()) {
             Category category = new Category(categoryEntity.getId(), categoryEntity.getName());
@@ -364,7 +354,6 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional(readOnly = true)
     @Override
     public Category getCategoryById(int id) {
-        logger.info("getCategoryById");
         CategoryEntity categoryEntity = goodsRepository.getCategoryById(id);
         Category category = new Category(categoryEntity.getId(), categoryEntity.getName());
         return category;
@@ -376,7 +365,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional
     @Override
     public void addCategory(Category category) {
-        logger.info("addCategory");
+        logger.info("addCategory {}",category);
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setName(category.getName());
         goodsRepository.addCategory(categoryEntity);
@@ -468,6 +457,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional
     @Override
     public void addGoodsImage(GoodsImage goodsImage) {
+        logger.info("addGoodsImage");
         GoodsImageEntity goodsImageEntity = new GoodsImageEntity();
         GoodsEntity goodsEntity = goodsRepository.getGoodsById(goodsImage.getGoods().getId());
         goodsImageEntity.setGoodsEntity(goodsEntity);
@@ -489,6 +479,7 @@ public class GoodsServiceImpl implements GoodsService {
     @Transactional
     @Override
     public void deleteImageById(int id) {
+        logger.info("deleteImageById", id);
         GoodsEntity goodsEntity = goodsRepository.getImageById(id).getGoodsEntity();
         createUpdateMessage(goodsEntity);
         goodsRepository.deleteImageById(id);

@@ -85,12 +85,12 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     @Override
     public void changePassword(PasswordField passwordField, Client client) throws PasswordWrongException {
-        logger.info("changePassword");
+        logger.info("changePassword {1}", client);
         if (passwordField.getPassword() == null){
             savePassword(passwordField,client);
         } else {
             if (passwordEncoder.matches(passwordField.getPassword(), client.getPassword())) {
-                logger.info("password matches = true");
+                logger.info("password matches == true");
                 savePassword(passwordField,client);
             } else {
                 throw new PasswordWrongException();
@@ -112,7 +112,6 @@ public class ClientServiceImpl implements ClientService {
     @Transactional(readOnly = true)
     @Override
     public Client getClientByEmail(String email) {
-        logger.info("getClientByEmail");
         ClientEntity clientEntity = clientRepository.getClientByEmail(email);
         return convertClientToDTO(clientEntity);
     }
@@ -125,10 +124,7 @@ public class ClientServiceImpl implements ClientService {
     @Transactional(readOnly = true)
     @Override
     public Client getClientById(int id) {
-        logger.info("getClientById");
-
         ClientEntity clientEntity = clientRepository.getClientById(id);
-
         return convertClientToDTO(clientEntity);
     }
 
@@ -194,6 +190,7 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     @Override
     public void confirmClientEmail(String email) {
+        logger.info("confirmClientEmail {}", email);
         ClientEntity clientEntity = clientRepository.getClientByEmail(email);
         clientEntity.setIsConfirm(1);
         clientRepository.updateClient(clientEntity);
@@ -214,6 +211,7 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     @Override
     public void recoverConfirmationIdAndSendEmail(String email) throws UsernameNotFoundException {
+        logger.info("recoverConfirmationIdAndSendEmail {}", email);
         String confirmationId = resetConfirmationId(email);
         ClientEntity client = clientRepository.getClientByEmail(email);
 

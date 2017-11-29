@@ -62,7 +62,6 @@ public class GoodsController {
      */
     @RequestMapping(value = "/page/{page}", method = RequestMethod.GET)
     public String getAllGoods(@PathVariable(value = "page") int page, ModelMap modelMap) {
-        logger.info("getAllGoods");
         goodsService.putDefaultAttributes(modelMap);
         modelMap.put("currentPage", page);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoods()));
@@ -80,7 +79,6 @@ public class GoodsController {
      */
     @RequestMapping(value = "/{category}/page/{page}", method = RequestMethod.GET)
     public String getAllGoodsByCategory(@PathVariable("category") String categoryName, @PathVariable(value = "page") int page, ModelMap modelMap) {
-        logger.info("getAllGoodsByCategory");
         goodsService.putDefaultAttributes(modelMap);
         modelMap.put("currentPage", page);
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoodsByCategoryName(categoryName)));
@@ -175,7 +173,6 @@ public class GoodsController {
     @RequestMapping(value = "/employee/add/category", method = RequestMethod.POST)
     public String addCategory(@ModelAttribute(value = "category") @Valid Category category,
                               BindingResult bindingResult, ModelMap modelMap) {
-        logger.info("addCategory");
         if (bindingResult.hasErrors()) {
             logger.warn("Category validation failed");
             modelMap.put("error2", "Invalid params!");
@@ -201,15 +198,16 @@ public class GoodsController {
 
     @RequestMapping(value = "/employee/delete/{id}", method = RequestMethod.GET)
     public String deleteGoods(@PathVariable(value = "id") int id, ModelMap modelMap) {
-        logger.info("deleteGoods");
         goodsService.putDefaultAttributes(modelMap);
         if (orderService.isOrdersContainsGoods(id)) {
+            logger.warn("Trying to delete goods which used in orders goods id: "+id);
             modelMap.put("error", "Can't delete goods, which used in orders!");
             return "message";
         }
         try {
             this.goodsService.deleteGoodsById(id);
         } catch (IllegalArgumentException e) {
+            logger.error("delete error, no goods with such id", e);
             modelMap.put("error", "No goods with such id");
             return "404";
         }
@@ -239,6 +237,7 @@ public class GoodsController {
         try {
             this.goodsService.updateGoods(goods);
         } catch (IllegalThreadStateException e) {
+            logger.error("edit goods error, lost connection with MQ Server", e);
             modelMap.put("error", "Lost connection with MQ Server");
             return "500";
         }
@@ -256,12 +255,12 @@ public class GoodsController {
     @RequestMapping(value = "/goods/{id}", method = RequestMethod.GET)
     public String getGoodsById(@PathVariable(value = "id") int id, ModelMap modelMap,
                                @RequestParam(value = "msg_img", required = false) String msg_img) {
-        logger.info("getGoodsById {}", id);
         goodsService.putDefaultAttributes(modelMap);
         Goods goods;
         try {
             goods = goodsService.getGoodsById(id);
         } catch (NullPointerException e) {
+            logger.warn("no goods with such id",e);
             modelMap.put("error", "No goods with such id");
             return "404";
         }
@@ -298,6 +297,7 @@ public class GoodsController {
         review.setClient(clientService.getClientById(client.getId()));
         review.setGoods(goods);
         if (!goodsService.isAvailableToLeaveReview(review)){
+            logger.warn("trying to add review second time {}",review);
             return null;
         }
         goodsService.addReview(review);
@@ -327,6 +327,7 @@ public class GoodsController {
         try {
             goods = goodsService.getGoodsById(id);
         } catch (NullPointerException e) {
+            logger.warn("no goods with such id: "+id);
             return cartList.size() + "";
         }
         cartItem.setGoods(goods);
@@ -369,10 +370,11 @@ public class GoodsController {
      */
     @RequestMapping(value = "/goods/cart/delete/item/{index}", method = RequestMethod.GET)
     public String deleteCartItem(@PathVariable(value = "index") int index, ModelMap modelMap) {
-        logger.info("deleteCartItem");
+        logger.info("deleteCartItem from cart");
         goodsService.putDefaultAttributes(modelMap);
         ArrayList<CartItem> cartList = (ArrayList<CartItem>) session.getAttribute("cartList");
         if (cartList == null || cartList.size() - 1 < index) {
+            logger.warn("deleteCartItem error: invalid param, delete index: "+index);
             modelMap.put("error", "Invalid params!");
             return "404";
         }
@@ -399,6 +401,7 @@ public class GoodsController {
         try {
             modelMap.put("category", goodsService.getCategoryById(id));
         } catch (NullPointerException e) {
+            logger.warn("No such category with id: "+id);
             modelMap.put("error", "No such category");
             return "404";
         }
@@ -421,8 +424,8 @@ public class GoodsController {
         modelMap.put("categoryFilter", false);
         modelMap.put("listGoods", goodsService.getAllGoods(0, amountOfGoodsOnPage));
         if (bindingResult.hasErrors()) {
-            boolean editCatFlag = true;
             logger.warn("category validation error");
+            boolean editCatFlag = true;
             modelMap.put("editCatFlag", editCatFlag);
             modelMap.put("category", category);
             return "goods";
@@ -444,6 +447,7 @@ public class GoodsController {
         try {
             this.goodsService.deleteCategoryById(id);
         } catch (IllegalArgumentException e) {
+            logger.warn("no such category for delete, id: "+id);
             modelMap.put("error", "No such category");
             return "404";
         }
@@ -456,6 +460,7 @@ public class GoodsController {
         if (fileUpload != null && fileUpload.length > 0) {
             for (CommonsMultipartFile aFile : fileUpload){
                 if(aFile.getSize()>2000000){
+                    logger.warn("uploadGoodsImage error: image too large, goods id: "+id);
                     return "redirect:/catalog/goods/"+id+"?msg_img";
                 }
                 if (aFile.getSize()>0) {

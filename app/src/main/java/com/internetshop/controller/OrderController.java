@@ -47,7 +47,6 @@ public class OrderController {
      */
     @RequestMapping(value = "/order/continue", method = RequestMethod.GET)
     public String getOrder(ModelMap modelMap) {
-        logger.info("getOrder");
         ArrayList<CartItem> cartList = (ArrayList<CartItem>) session.getAttribute("cartList");
         goodsService.putDefaultAttributes(modelMap);
         modelMap.put("cartList", cartList);
@@ -80,7 +79,6 @@ public class OrderController {
 
     @RequestMapping(value = "/order/confirm", method = RequestMethod.POST)
     public String addOrder(Order order, ModelMap modelMap) {
-        logger.info("addOrder");
         goodsService.putDefaultAttributes(modelMap);
         ArrayList<CartItem> cartList = (ArrayList<CartItem>) session.getAttribute("cartList");
         Client client = (Client) session.getAttribute("client");
@@ -114,7 +112,6 @@ public class OrderController {
     @RequestMapping(value = "/employee/order/details/{id}", method = RequestMethod.GET)
     public String getOrderDetails(@PathVariable(value = "id") int id, ModelMap modelMap,
                                   @RequestParam(value = "msg", required = false) String msg) {
-        logger.info("getOrderDetails");
         goodsService.putDefaultAttributes(modelMap);
         modelMap.put("orderItemsList", orderService.getAllCartItemsFromOrderByOrderId(id));
         modelMap.put("listDeliveryMethod", orderService.getAllDeliveryMethods());
@@ -124,6 +121,7 @@ public class OrderController {
         try {
             modelMap.put("order", orderService.getOrderById(id));
         } catch (NullPointerException e){
+            logger.warn("no order with such id: "+id);
             return "404";
         }
         if (msg != null) {

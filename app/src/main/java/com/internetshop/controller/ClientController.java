@@ -215,6 +215,7 @@ public class ClientController {
         if (fileUpload != null && fileUpload.length > 0) {
             CommonsMultipartFile aFile = fileUpload[0];
                 if(aFile.getSize()>2000000){
+                    logger.warn("upload image error, image is too large {}",client);
                     return "redirect:/clients/profile?msg_img";
                 }
                 client.setImg(aFile.getBytes());

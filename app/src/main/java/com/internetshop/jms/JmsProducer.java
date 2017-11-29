@@ -10,6 +10,8 @@ import com.tsystems.Event;
 import com.tsystems.SmallGoods;
 import com.tsystems.TestModel;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JmsProducer extends Thread implements AutoCloseable {
     private static String DEF_QUEUE = "test.in";
@@ -19,9 +21,10 @@ public class JmsProducer extends Thread implements AutoCloseable {
     private Session _session = null;
     private Queue<Event> _messagesQueue;
     private boolean _active = true;
+    private static Logger logger = LoggerFactory.getLogger("JmsProducer");
 
     /**
-     * Конструктор используется в случае, когда брокер не требует авторизации.
+     * The constructor is used in the case when the broker does not require authorization.
      */
     public JmsProducer(String url)
     {
@@ -29,7 +32,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
     }
 
     /**
-     * Конструктор используется в случае, когда брокер требует авторизацию.
+     * The constructor is used in the case when the broker requires authorization.
      */
     public JmsProducer(String url, String user, String password)
     {
@@ -42,10 +45,11 @@ public class JmsProducer extends Thread implements AutoCloseable {
     }
 
     /**
-     * Инициализация producer-а.
+     * producer init
      */
     private MessageProducer init() throws JMSException
     {
+        logger.info("Producer initialisation");
         _connection = _connectionFactory.createConnection();
         _connection.start();
         _session = _connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -54,8 +58,8 @@ public class JmsProducer extends Thread implements AutoCloseable {
     }
 
     /**
-     * Метод отправки только лишь добавляет сообщение во внутреннюю очередь.
-     * Самой отправки в брокер здесь не происходит, она делается в методе run.
+     * The send method just adds the message to the internal queue.
+     * The send itself to the broker does not happen here, it is done in the run method.
      */
     public void send(Event line)
     {
@@ -63,7 +67,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
     }
 
     /**
-     * Метод цикла отправки сообщений в брокер.
+     * The method of the cycle of sending messages to the broker.
      */
     @Override
     public void run()
@@ -82,6 +86,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
                         msg.setObject(text);
                         msg.setObjectProperty("Created", (new Date()).toString());
                         producer.send(msg);
+                        logger.info("message was sent");
                     }
 
                 }
@@ -90,13 +95,14 @@ public class JmsProducer extends Thread implements AutoCloseable {
                     e.printStackTrace();
                     _session.close();
                     _connection.close();
-                    producer = init(); // trying to reconnect
+                    producer = init();
+                    logger.warn("Trying to reconnect");
                 }
             }
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            logger.error("jms exception", ex);
         }
     }
 
@@ -112,7 +118,7 @@ public class JmsProducer extends Thread implements AutoCloseable {
             }
             catch (JMSException e)
             {
-                e.printStackTrace();
+                logger.error("jms exception", e);
             }
         }
     }

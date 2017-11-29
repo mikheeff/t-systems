@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -187,11 +188,18 @@ public class Client implements Serializable{
     @Override
     public String toString() {
         return "Client{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", birthdate='" + birthdate + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", orderCounter=" + orderCounter +
+                ", isConfirm=" + isConfirm +
+                ", confirmationId='" + confirmationId + '\'' +
+                ", role=" + role +
+                ", clientAddress=" + clientAddress +
                 '}';
     }
 }

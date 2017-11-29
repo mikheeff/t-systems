@@ -104,4 +104,19 @@ public class Order {
     public void setClient(Client client) {
         this.client = client;
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", payStatus=" + payStatus +
+                ", comment='" + comment + '\'' +
+                ", status=" + status +
+                ", paymentType=" + paymentType +
+                ", deliveryMethod=" + deliveryMethod +
+                ", cartItems=" + cartItems +
+                ", client=" + client +
+                '}';
+    }
 }

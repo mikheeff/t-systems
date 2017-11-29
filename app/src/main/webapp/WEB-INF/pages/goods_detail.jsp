@@ -554,7 +554,7 @@
                             <c:if test="${!isCartContainsGoods}">
                                 <p>&nbsp;</p>
                                 <label id="qty">Qty:</label>
-                                <input path="quantity" id="quantity" type="text" class="span1" value="1"
+                                <input path="quantity" id="quantity" type="text" maxlength="5" class="span1" value="1"
                                        pattern="^[1-9][0-9]*$" title="Amount must be a integer and more then zero"/>
                                 <input class="btn btn-inverse" id="btnCart" type="submit" value="Add to cart">
                             </c:if>

@@ -102,4 +102,19 @@ public class Mail {
     public void setModel(Map < String, Object > model) {
         this.model = model;
     }
+
+    @Override
+    public String toString() {
+        return "Mail{" +
+                "mailFrom='" + mailFrom + '\'' +
+                ", mailTo='" + mailTo + '\'' +
+                ", mailCc='" + mailCc + '\'' +
+                ", mailBcc='" + mailBcc + '\'' +
+                ", mailSubject='" + mailSubject + '\'' +
+                ", mailContent='" + mailContent + '\'' +
+                ", contentType='" + contentType + '\'' +
+                ", attachments=" + attachments +
+                ", model=" + model +
+                '}';
+    }
 }
