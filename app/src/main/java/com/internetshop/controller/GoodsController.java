@@ -106,11 +106,6 @@ public class GoodsController {
         return "goods";
     }
 
-//    @RequestMapping(value = "/search/{searchStr}/page/{page}", method = RequestMethod.GET)
-//    public String getAllGoodsBySearch(@PathVariable(value = "searchStr") String searchStr, @PathVariable(value = "page") Integer page, ModelMap modelMap) {
-//
-//        return "goods";
-//    }
 
     @RequestMapping(value = "/filter/page/{page}", method = RequestMethod.POST)
     public String getAllGoodsByFilter(@PathVariable(value = "page") int page, @ModelAttribute(value = "catalogQuery") CatalogQuery catalogQuery, ModelMap modelMap) {

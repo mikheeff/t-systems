@@ -31,6 +31,7 @@ public class ClientServiceImpl implements ClientService {
     private static Logger logger = LoggerFactory.getLogger(ClientServiceImpl.class.getName());
 
 
+
     @Autowired
     public ClientServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder, MailService mailService) {
         this.clientRepository = clientRepository;

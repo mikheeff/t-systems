@@ -2,10 +2,19 @@ package com.internetshop.service.impl;
 
 import com.internetshop.model.CartItem;
 import com.internetshop.model.Goods;
+import com.internetshop.model.Mail;
+import com.internetshop.model.Order;
+import com.internetshop.repository.api.ClientRepository;
+import com.internetshop.repository.api.GoodsRepository;
+import com.internetshop.repository.api.OrderRepository;
+import com.internetshop.service.api.ClientService;
+import com.internetshop.service.api.GoodsService;
+import com.internetshop.service.api.MailService;
 import com.internetshop.service.api.OrderService;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,11 +24,30 @@ import static org.mockito.Mockito.mock;
 public class OrderServiceTest {
 
     private OrderService orderService;
+    private OrderRepository orderRepository;
+    private GoodsRepository goodsRepository;
+    private ClientRepository clientRepository;
+    private GoodsService goodsService;
+    private ClientService clientService;
+    private MailService mailService;
 
     @Before
     public void setUp() throws Exception {
-        this.orderService = mock(OrderService.class);
+        orderRepository = mock(OrderRepository.class);
+        goodsRepository = mock(GoodsRepository.class);
+        clientRepository = mock(ClientRepository.class);
+        goodsService = mock(GoodsService.class);
+        clientService = mock(ClientService.class);
+        mailService = mock(MailService.class);
+        orderService = new OrderServiceImpl(orderRepository,goodsRepository,clientRepository,goodsService,clientService,mailService);
 
+    }
+
+    @Test
+    public void getSumOfOrderEmptyCart(){
+        List<CartItem> cartList = new ArrayList<>();
+        float sum = orderService.getSumOfOrder(cartList);
+        assertEquals(0,sum,0.01);
     }
 
     @Test

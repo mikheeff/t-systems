@@ -52,11 +52,6 @@ public class GoodsControllerTest {
         assertEquals(1,goodsController.getAmountOfPages(amountOfGoodsOnPage));
     }
 
-    @Test
-    public void getSumOfOrderEmptyCart(){
-        List<CartItem> cartList = new ArrayList<>();
-        float sum = orderService.getSumOfOrder(cartList);
-        assertEquals(0,sum,0.01);
-    }
+
 
 }
