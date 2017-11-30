@@ -82,6 +82,9 @@ public class HomeController {
         return "best_sellers";
     }
 
+    /**
+     * loads an administration page
+     */
 
     @RequestMapping(value = "employee/administration", method = RequestMethod.GET)
     public String getAdminPage(@RequestParam(value = "error", required = false) String error,
