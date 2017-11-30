@@ -24,6 +24,7 @@ public interface GoodsService {
     List<Goods> getBestSellersByCategory(Category category, int amount);
     List<Review> getAllReviewsByGoodsId(int id);
     List<GoodsImage> getAllImagesByGoodsId(int id);
+    boolean isAnyGoodsConnectedWithCategory(int id);
 
     void addGoods(Goods goods);
     void addReview(Review review);

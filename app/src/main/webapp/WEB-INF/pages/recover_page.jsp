@@ -162,8 +162,8 @@
                     </div>
                     <div class="span5">
                         <h4 class="title"><span class="text"><strong>Confirm</strong> Email</span></h4>
-                        <%--<c:if test="${not empty error}">--%>
-                            <%--<div class="error">${error}</div>--%>
+                        <%--<c:if test="${not empty error1}">--%>
+                            <%--<div class="error">${error1}</div>--%>
                         <%--</c:if>--%>
                         <%--<c:if test="${not empty msg}">--%>
                             <%--<div class="msg">${msg}</div>--%>

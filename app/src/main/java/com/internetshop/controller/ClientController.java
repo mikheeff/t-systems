@@ -101,7 +101,6 @@ public class ClientController {
                              @RequestParam(value = "clientError", required = false) String clientError,
                              @RequestParam(value = "msgClient", required = false) String msgClient,
                              @RequestParam(value = "msg_img", required = false) String msg_img){
-        logger.info("editClient");
         session.setAttribute("client", clientService.getClientByEmail(httpServletRequest.getUserPrincipal().getName()));
         modelMap.put("client", session.getAttribute("client"));
         if (modelMap.get("client") == null) {

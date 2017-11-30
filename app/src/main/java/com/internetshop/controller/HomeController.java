@@ -37,6 +37,7 @@ public class HomeController {
     private GoodsService goodsService;
     private OrderService orderService;
     private ClientService clientService;
+    private HttpSession session;
 
     public static final int amountOfGoodsOnHomePage = 8;
     public static final int amountOfBestSellersOnPage = 4;
@@ -45,10 +46,11 @@ public class HomeController {
     private static Logger logger = LoggerFactory.getLogger(HomeController.class.getName());
 
     @Autowired
-    public HomeController(GoodsService goodsService, OrderService orderService, ClientService clientService) {
+    public HomeController(GoodsService goodsService, OrderService orderService, ClientService clientService,HttpSession session) {
         this.goodsService = goodsService;
         this.orderService = orderService;
         this.clientService = clientService;
+        this.session = session;
     }
 
 
@@ -59,7 +61,6 @@ public class HomeController {
      */
     @RequestMapping(method = RequestMethod.GET, produces = "text/html")
     public String main(ModelMap modelMap) {
-        logger.info("main");
         modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("bestSellersList", goodsService.getBestSellers(amountOfGoodsOnHomePage));
         modelMap.put("newGoodsList", goodsService.getNewGoods(amountOfGoodsOnHomePage));
@@ -83,7 +84,11 @@ public class HomeController {
 
 
     @RequestMapping(value = "employee/administration", method = RequestMethod.GET)
-    public String getAdminPage(@RequestParam(value = "error", required = false) String error,ModelMap modelMap) {
+    public String getAdminPage(@RequestParam(value = "error", required = false) String error,
+                               @RequestParam(value = "msgC", required = false) String msgC,
+                               @RequestParam(value = "error2", required = false) String error2,
+                               @RequestParam(value = "msgG", required = false) String msgG,
+                               @RequestParam(value = "error1", required = false) String error1,ModelMap modelMap) {
         modelMap.put("goods", new Goods());
         modelMap.put("category", new Category());
         modelMap.put("listCategory", goodsService.getAllCategories());
@@ -111,6 +116,19 @@ public class HomeController {
         modelMap.put("todayMoney",revenueList.get(revenueList.size()-1));
         if (error != null){
             modelMap.put("error","No order with such id");
+        }
+        if (msgC != null){
+            modelMap.put("msgC","You've been added new category successfully.");
+        }
+        if (error2 != null){
+            modelMap.put("error2", "Invalid params!");
+        }
+        if (msgG != null){
+            modelMap.put("msgG","You've been added new goods successfully.");
+        }
+        if (error1 != null){
+            modelMap.put("goods",session.getAttribute("goodsInv"));
+            modelMap.put("error1","Invalid params!");
         }
         return "employee_admin";
     }

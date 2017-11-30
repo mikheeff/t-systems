@@ -8,6 +8,8 @@ import com.internetshop.service.api.ClientService;
 import com.internetshop.service.api.GoodsService;
 import com.internetshop.service.api.MailService;
 import com.internetshop.service.api.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -27,6 +29,9 @@ public class EmailController {
     public final HttpSession session;
     GoodsService goodsService;
     OrderService orderService;
+
+    private static Logger logger = LoggerFactory.getLogger(EmailController.class.getName());
+
 
     @Autowired
     public EmailController(MailService mailService, ClientService clientService, HttpSession session, GoodsService goodsService, OrderService orderService) {
@@ -58,14 +63,22 @@ public class EmailController {
     }
 
     @RequestMapping(value = "/email/send", method = RequestMethod.POST)
-    public String resendEmailConfirm(String email,ModelMap modelMap) {
+    public String resendEmailConfirm(String email, ModelMap modelMap) {
         goodsService.putDefaultAttributes(modelMap);
-        Client client = clientService.getClientByEmail(email);
-        if (client.getIsConfirm()==1){
-            modelMap.put("error","Account is confirmed");
+        Client client;
+        try {
+            client = clientService.getClientByEmail(email);
+        } catch (NoResultException e){
+            logger.warn("resendEmailConfirm error : User with such email not found {}",email);
+            modelMap.put("error", "User with such email not found");
             return "recover_page";
         }
-        session.setAttribute("nonVerifiedClientEmail",email);
+        if (client.getIsConfirm() == 1) {
+            logger.warn("resendEmailConfirm error: Account is {} confirmed",email);
+            modelMap.put("error", "Account is confirmed");
+            return "recover_page";
+        }
+        session.setAttribute("nonVerifiedClientEmail", email);
         return "redirect:/email/send";
     }
 

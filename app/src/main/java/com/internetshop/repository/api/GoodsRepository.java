@@ -43,5 +43,6 @@ public interface GoodsRepository {
     boolean isAvailableToLeaveReview(int clientId, int goodsId);
     void addGoodsImage(GoodsImageEntity goodsImageEntity);
     void deleteImageById(int id);
+    boolean isAnyGoodsConnectedWithCategory(int id);
 
 }

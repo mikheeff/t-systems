@@ -494,7 +494,11 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return false;
     }
-
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isAnyGoodsConnectedWithCategory(int id) {
+        return goodsRepository.isAnyGoodsConnectedWithCategory(id);
+    }
 
     @Override
     public void putDefaultAttributes(ModelMap modelMap) {

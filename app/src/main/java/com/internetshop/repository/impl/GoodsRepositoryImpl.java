@@ -259,4 +259,9 @@ public class GoodsRepositoryImpl implements GoodsRepository {
     public GoodsImageEntity getImageById(int id) {
         return em.find(GoodsImageEntity.class,id);
     }
+
+    @Override
+    public boolean isAnyGoodsConnectedWithCategory(int id) {
+        return em.createQuery("select count(*) from GoodsEntity goods where goods.category.id =:id",Long.class).setParameter("id",id).getSingleResult()>0;
+    }
 }

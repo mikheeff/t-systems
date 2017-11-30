@@ -148,20 +148,21 @@ public class GoodsController {
         logger.info("addGoods");
         if (bindingResultGoods.hasErrors()) {
             logger.warn("Goods validation failed");
-            modelMap.put("error1", "Invalid params!");
-            modelMap.put("goods", goods);
-            modelMap.put("category", new Category());
-            modelMap.put("listCategory", goodsService.getAllCategories());
-            return "employee_admin";
+//            modelMap.put("error1", "Invalid params!");
+//            modelMap.put("goods", goods);
+            session.setAttribute("goodsInv",goods);
+//            modelMap.put("category", new Category());
+//            modelMap.put("listCategory", goodsService.getAllCategories());
+            return "redirect:/employee/administration?error1";
         }
 
         this.goodsService.addGoods(goods);
-        modelMap.put("msgG", "You've been added new goods successfully.");
+//        modelMap.put("msgG", "You've been added new goods successfully.");
 
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("goods", new Goods());
-        modelMap.put("category", new Category());
-        return "employee_admin";
+//        modelMap.put("listCategory", goodsService.getAllCategories());
+//        modelMap.put("goods", new Goods());
+//        modelMap.put("category", new Category());
+        return "redirect:/employee/administration?msgG";
     }
 
     /**
@@ -172,22 +173,14 @@ public class GoodsController {
      */
     @RequestMapping(value = "/employee/add/category", method = RequestMethod.POST)
     public String addCategory(@ModelAttribute(value = "category") @Valid Category category,
-                              BindingResult bindingResult, ModelMap modelMap) {
+                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             logger.warn("Category validation failed");
-            modelMap.put("error2", "Invalid params!");
-            modelMap.put("goods", new Goods());
-            modelMap.put("category", category);
-            modelMap.put("listCategory", goodsService.getAllCategories());
-            return "employee_admin";
+            return "redirect:/employee/administration?error2";
         }
 
         this.goodsService.addCategory(category);
-        modelMap.put("msgC", "You've been added new category successfully.");
-        modelMap.put("listCategory", goodsService.getAllCategories());
-        modelMap.put("goods", new Goods());
-        modelMap.put("category", new Category());
-        return "employee_admin";
+        return "redirect:/employee/administration?msgC";
     }
 
     /**
@@ -398,6 +391,7 @@ public class GoodsController {
         modelMap.put("amountOfPages", getAmountOfPages(goodsService.getAmountOfGoods()));
         modelMap.put("listGoods", goodsService.getAllGoods(0, amountOfGoodsOnPage));
         modelMap.put("categoryFilter", false);
+        modelMap.put("catalogQuery",new CatalogQuery());
         try {
             modelMap.put("category", goodsService.getCategoryById(id));
         } catch (NullPointerException e) {
@@ -431,6 +425,7 @@ public class GoodsController {
             return "goods";
         }
         goodsService.updateCategory(category);
+        modelMap.put("listCategory", goodsService.getAllCategories());
         modelMap.put("msg", "You've been edited category successfully.");
         return "goods";
     }
@@ -444,6 +439,11 @@ public class GoodsController {
     public String deleteCategory(@PathVariable(value = "id") int id, ModelMap modelMap) {
         logger.info("deleteCategory");
         goodsService.putDefaultAttributes(modelMap);
+        if (goodsService.isAnyGoodsConnectedWithCategory(id)){
+            logger.error("can not delete category, that connected with goods, category id: {}",id);
+            modelMap.put("error","can not delete category, that connected with goods");
+            return "message";
+        }
         try {
             this.goodsService.deleteCategoryById(id);
         } catch (IllegalArgumentException e) {

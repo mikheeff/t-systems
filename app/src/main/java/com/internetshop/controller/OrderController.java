@@ -145,6 +145,7 @@ public class OrderController {
         try {
             order = orderService.getOrderById(id);
         } catch (NullPointerException e) {
+            logger.warn("no orders with such id: "+ id);
             return "404";
         }
         if (order.getClient().getId() != client.getId()) {
@@ -170,6 +171,7 @@ public class OrderController {
         try {
             orderService.updateOrderStatus(order);
         } catch (IllegalThreadStateException e) {
+            logger.error("error, Lost connection with MQ Server",e);
             goodsService.putDefaultAttributes(modelMap);
             modelMap.put("error", "Lost connection with MQ Server");
             return "500";
@@ -201,6 +203,7 @@ public class OrderController {
              orderId = Integer.parseInt(searchStr);
              order = orderService.getOrderById(orderId);
         } catch (Exception e){
+            logger.warn("invalid search param", e);
             return "redirect:/employee/administration?error";
         }
         return "redirect:/employee/order/details/"+order.getId();

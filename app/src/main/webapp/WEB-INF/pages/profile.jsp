@@ -326,14 +326,14 @@
 														<div class="control-group">
 															<label class="control-label">First Name*</label>
 															<div class="controls">
-																<spring:input path="name" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
+																<spring:input path="name" type="text" placeholder="" maxlength="30" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 																<spring:errors path="name" cssClass="error"/>
 															</div>
 														</div>
 														<div class="control-group">
 															<label class="control-label">Last Name</label>
 															<div class="controls">
-																<spring:input path="surname" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
+																<spring:input path="surname" type="text" placeholder="" maxlength="30" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 															</div>
 														</div>
 														<div class="control-group">
@@ -345,7 +345,7 @@
 														<div class="control-group">
 															<label class="control-label">Email Address*</label>
 															<div class="controls">
-																<spring:input path="email" type="text" placeholder="" class="input-xlarge" pattern="^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$"/>
+																<spring:input path="email" type="text" placeholder="" maxlength="30" class="input-xlarge" pattern="^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$"/>
 																<spring:errors path="email" cssClass="error"/>
 															</div>
 														</div>
@@ -393,37 +393,37 @@
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> Region / State:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.city" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$"/>
+															<spring:input path="clientAddress.city" type="text" maxlength="30" placeholder="" class="input-xlarge" pattern="^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$"/>
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> Post Code:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.postcode" type="text" placeholder="" class="input-xlarge" pattern="^[ 0-9]+$"/>
+															<spring:input path="clientAddress.postcode" maxlength="30" type="text" placeholder="" class="input-xlarge" pattern="^[ 0-9]+$"/>
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> Street:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.street" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
+															<spring:input path="clientAddress.street" type="text" maxlength="30" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> House:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.house" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
+															<spring:input path="clientAddress.house" maxlength="10" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> Flat:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.flat" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
+															<spring:input path="clientAddress.flat" maxlength="10" type="text" placeholder="" class="input-xlarge" pattern="^[a-zA-Z0-9_]*$"/>
 														</div>
 													</div>
 													<div class="control-group">
 														<label class="control-label"><span class="required"></span> Additional Information:</label>
 														<div class="controls">
-															<spring:input path="clientAddress.addition" type="text" placeholder="" class="input-xlarge"/>
+															<spring:input path="clientAddress.addition" maxlength="500" type="text" placeholder="" class="input-xlarge"/>
 														</div>
 													</div>
 												</fieldset>
