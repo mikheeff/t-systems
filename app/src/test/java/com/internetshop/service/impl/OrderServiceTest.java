@@ -76,20 +76,6 @@ public class OrderServiceTest {
         Assert.assertEquals(orderService.getOrderById(order.getId()).getId(),order.getId());
 
     }
-//    @Test
-//    public void addOrder(){
-//        Order order = this.order;
-//        when(orderRepository.addOrder(any(OrderEntity.class),any(Set.class))).thenReturn(1);
-//        when(orderRepository.getStatusById(anyInt())).thenReturn(any(StatusEntity.class));
-//        when(orderRepository.getIdPaymentTypeByName(anyString())).thenReturn(anyInt());
-//        when(orderRepository.getIdDeliveryMethodByName(anyString())).thenReturn(anyInt());
-//        when(orderRepository.getStatusById(anyInt()).getName()).thenReturn(anyString());
-//        when(goodsRepository.getGoodsById(anyInt())).thenReturn(any(GoodsEntity.class));
-//        doNothing().when(goodsRepository).updateGoods(any(GoodsEntity.class));
-//
-//        orderService.addOrder(order);
-//        verify(orderRepository,atLeastOnce()).addOrder(any(OrderEntity.class),any(HashSet.class));
-//    }
 
     public Order getOrder(){
         Client client1 = new Client();

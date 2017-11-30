@@ -52,6 +52,10 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsList;
     }
 
+    /**
+     * loads all goods from database then creates small goods object
+     * which contains short information about goods.
+     */
     @Transactional(readOnly = true)
     @Override
     public List<SmallGoods> getAllSmallGoods() {
@@ -102,6 +106,9 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsList;
     }
 
+    /**
+     * gets all goods by search line
+     */
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoodsBySearch(String searchStr, int firstId, int maxResults) {
@@ -112,6 +119,9 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsList;
     }
 
+    /**
+     * gets all goods by filter query
+     */
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults) {
@@ -122,6 +132,9 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsList;
     }
 
+    /**
+     * gets list of best sellers by specified category
+     */
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getBestSellersByCategory(Category category, int amount) {
@@ -132,6 +145,11 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsList;
     }
 
+    /**
+     * gets list of reviews about specified goods
+     * @param id goods id
+     * @return list of reviews
+     */
     @Transactional(readOnly = true)
     @Override
     public List<Review> getAllReviewsByGoodsId(int id) {
@@ -160,6 +178,10 @@ public class GoodsServiceImpl implements GoodsService {
 
     }
 
+    /**
+     * creates add message for second app
+     * @param goods
+     */
     public void createAddMessage(Goods goods) {
         SmallGoods smallGoods = new SmallGoods();
         smallGoods.setId(goods.getId());
@@ -172,6 +194,9 @@ public class GoodsServiceImpl implements GoodsService {
         sendMessage(event);
     }
 
+    /**
+     * add new review about goods
+     */
     @Transactional
     @Override
     public void addReview(Review review) {
@@ -192,6 +217,10 @@ public class GoodsServiceImpl implements GoodsService {
 
     }
 
+    /**
+     * evaluates goods ration by counting all reviews marks
+     * @param reviewEntity
+     */
     @Transactional
     @Override
     public void updateGoodsRating(ReviewEntity reviewEntity) {
@@ -286,6 +315,9 @@ public class GoodsServiceImpl implements GoodsService {
         createUpdateMessage(goodsEntity);
     }
 
+    /**
+     * creates update message for second app
+     */
     public void createUpdateMessage(GoodsEntity goods) {
         SmallGoods smallGoods = new SmallGoods();
         smallGoods.setId(goods.getId());
@@ -320,12 +352,18 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsRepository.getAmountOfGoodsByCategoryName(categoryName);
     }
 
+    /**
+     * gets amount of goods by search line
+     */
     @Transactional(readOnly = true)
     @Override
     public long getAmountOfGoodsBySearch(String searchStr) {
         return goodsRepository.getAmountOfGoodsBySearch(searchStr);
     }
 
+    /**
+     * gets amount of goods by filter query
+     */
     @Transactional(readOnly = true)
     @Override
     public long getAmountOfGoodsByFilter(CatalogQuery catalogQuery) {
@@ -397,6 +435,10 @@ public class GoodsServiceImpl implements GoodsService {
         goodsRepository.deleteCategoryById(id);
     }
 
+    /**
+     * gets list of best sellers
+     * @param amountOfBestSellers amount of needed goods
+     */
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getBestSellers(int amountOfBestSellers) {
@@ -407,6 +449,10 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsBestSellersList;
     }
 
+    /**
+     * gets best sellers list from the same category as specified goods
+     * ordered by popularity
+     */
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getRelatedGoods(int amount, Goods goods) {
@@ -434,11 +480,19 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsList;
     }
 
+    /**
+     * checks if client had already left a review
+     */
     @Transactional(readOnly = true)
     @Override
     public boolean isAvailableToLeaveReview(Review review) {
         return goodsRepository.isAvailableToLeaveReview(review.getClient().getId(), review.getGoods().getId());
     }
+
+    /**
+     * gets top new goods
+     * @param amountOfNewGoodsOnPage needed amount of goods
+     */
     @Transactional(readOnly = true)
     @Override
     public List<Goods> getNewGoods(int amountOfNewGoodsOnPage) {
@@ -448,12 +502,19 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsList;
     }
+
+    /**
+     * evaluates a place of goods if goods are ordered by rating
+     */
     @Transactional(readOnly = true)
     @Override
     public long getPlaceOfGoods(int id) {
         return goodsRepository.getPlaceOfGoods(goodsRepository.getGoodsById(id).getRating());
     }
 
+    /**
+     * adds new goods image
+     */
     @Transactional
     @Override
     public void addGoodsImage(GoodsImage goodsImage) {
@@ -465,6 +526,10 @@ public class GoodsServiceImpl implements GoodsService {
         goodsRepository.addGoodsImage(goodsImageEntity);
         createUpdateMessage(goodsEntity);
     }
+
+    /**
+     * returns list of all images of goods
+     */
     @Transactional(readOnly = true)
     @Override
     public List<GoodsImage> getAllImagesByGoodsId(int id) {
@@ -476,6 +541,10 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return goodsImageList;
     }
+
+    /**
+     * delete image of goods by entered id
+     */
     @Transactional
     @Override
     public void deleteImageById(int id) {
@@ -485,6 +554,9 @@ public class GoodsServiceImpl implements GoodsService {
         goodsRepository.deleteImageById(id);
     }
 
+    /**
+     * checks does cart contain goods
+     */
     @Override
     public boolean isCartContainsGoods(List<CartItem> cartList, int id) {
         for (CartItem item : cartList) {
@@ -494,12 +566,19 @@ public class GoodsServiceImpl implements GoodsService {
         }
         return false;
     }
+
+    /**
+     * Checks is any goods in database have specified category
+     */
     @Transactional(readOnly = true)
     @Override
     public boolean isAnyGoodsConnectedWithCategory(int id) {
         return goodsRepository.isAnyGoodsConnectedWithCategory(id);
     }
 
+    /**
+     * puts default objects to model map
+     */
     @Override
     public void putDefaultAttributes(ModelMap modelMap) {
         modelMap.put("listCategory", getAllCategories());
@@ -564,6 +643,9 @@ public class GoodsServiceImpl implements GoodsService {
         return goods;
     }
 
+    /**
+     * converts review entity to data access object
+     */
     Review convertReviewToDTO(ReviewEntity reviewEntity) {
         Review review = new Review();
         review.setId(reviewEntity.getId());

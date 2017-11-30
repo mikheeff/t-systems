@@ -40,6 +40,14 @@ public class MailServiceImpl implements MailService {
     private static Logger logger = LoggerFactory.getLogger(MailServiceImpl.class.getName());
 
 
+    /**
+     * builds a mail
+     * @param client who will gets email
+     * @param mailMsg message in main
+     * @param link special link for client
+     * @param subject main subject of mail
+     * @param template template of mail, which contains html code
+     */
     @Override
     public void sendEmail(Client client, String mailMsg, String link, String subject, String template) {
         Mail mail = new Mail();
@@ -58,6 +66,10 @@ public class MailServiceImpl implements MailService {
         sendEmail(mail, template);
     }
 
+    /**
+     * finishes building message
+     * and call mail sender to send mail
+     */
     public void sendEmail(Mail mail, String template) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
@@ -78,6 +90,9 @@ public class MailServiceImpl implements MailService {
         }
     }
 
+    /**
+     * gets content from template
+     */
     public String getContentFromTemplate(Map<String, Object> model, String template) {
         logger.info("getting content from template");
         StringBuffer content = new StringBuffer();
@@ -91,6 +106,11 @@ public class MailServiceImpl implements MailService {
         return content.toString();
     }
 
+    /**
+     * send sms to client mobile phone
+     * @param msg message
+     * @param number of client
+     */
     public void sendSMS(String msg, String number) {
         try {
             logger.info("sending sms to "+number);

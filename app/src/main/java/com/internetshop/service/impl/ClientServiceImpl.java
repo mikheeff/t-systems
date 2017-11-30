@@ -39,6 +39,11 @@ public class ClientServiceImpl implements ClientService {
         this.mailService = mailService;
     }
 
+    /**
+     * gets list of best sellers
+     * @param amountOfBestClients needed amount of goods
+     * @return goods list
+     */
     @Transactional(readOnly = true)
     @Override
     public List<Client> getBestClientsList(int amountOfBestClients) {
@@ -98,6 +103,9 @@ public class ClientServiceImpl implements ClientService {
         }
     }
 
+    /**
+     * sets new password for client
+     */
     private void savePassword(PasswordField passwordField, Client client){
         ClientEntity clientEntity = clientRepository.getClientById(client.getId());
         clientEntity.setPassword(passwordEncoder.encode(passwordField.getNewPasswordFirst()));
@@ -172,6 +180,9 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.updateClient(clientEntity);
     }
 
+    /**
+     * sets new image to client entity
+     */
     @Transactional
     @Override
     public void uploadAvatar(Client client) {
@@ -179,6 +190,10 @@ public class ClientServiceImpl implements ClientService {
         clientEntity.setImg(client.getImg());
         clientRepository.updateClient(clientEntity);
     }
+
+    /**
+     * deletes clients profile image
+     */
     @Transactional
     @Override
     public void deleteAvatar(Client client) {
@@ -187,6 +202,9 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.updateClient(clientEntity);
     }
 
+    /**
+     * marks clients accounts as confirmed
+     */
     @Transactional
     @Override
     public void confirmClientEmail(String email) {
@@ -196,6 +214,9 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.updateClient(clientEntity);
     }
 
+    /**
+     * resets clients confirmation id
+     */
     @Transactional
     @Override
     public String resetConfirmationId(String email) {
@@ -207,7 +228,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
 
-
+    /**
+     * resets clients confirmation id and send email with recover link
+     * @param email clients email
+     * @throws UsernameNotFoundException when no user with such email
+     */
     @Transactional
     @Override
     public void recoverConfirmationIdAndSendEmail(String email) throws UsernameNotFoundException {
@@ -249,6 +274,10 @@ public class ClientServiceImpl implements ClientService {
         return clientEntity;
     }
 
+    /**
+     * converts clients entity to model
+     * @return client model
+     */
     public Client convertClientToDTO(ClientEntity clientEntity) {
         Client client = new Client();
         Role role = new Role(clientEntity.getRoleEntity().getId(), clientEntity.getRoleEntity().getName());

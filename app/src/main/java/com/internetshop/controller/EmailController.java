@@ -42,6 +42,9 @@ public class EmailController {
         this.orderService = orderService;
     }
 
+    /**
+     * sends a confirmation mail
+     */
     @RequestMapping(value = "/email/send", method = RequestMethod.GET)
     public String sendEmailConfirm(ModelMap modelMap) {
         goodsService.putDefaultAttributes(modelMap);
@@ -62,6 +65,10 @@ public class EmailController {
         return "message";
     }
 
+    /**
+     * if clients account is not confirmed
+     * send a new confirmation mail
+     */
     @RequestMapping(value = "/email/send", method = RequestMethod.POST)
     public String resendEmailConfirm(String email, ModelMap modelMap) {
         goodsService.putDefaultAttributes(modelMap);
@@ -83,6 +90,9 @@ public class EmailController {
     }
 
 
+    /**
+     * confirms client email
+     */
     @RequestMapping(value = "/confirm")
     public String confirmEmail(@RequestParam(value = "id", required = false) String id, ModelMap modelMap) {
         goodsService.putDefaultAttributes(modelMap);
@@ -91,6 +101,7 @@ public class EmailController {
             email = clientService.getEmailByConfirmationId(id);
             clientService.resetConfirmationId(email);
         } catch (NoResultException e) {
+            logger.error("no clients with such id" + id,e);
             email = null;
         }
         if (email != null) {
@@ -104,12 +115,18 @@ public class EmailController {
         return "message";
     }
 
+    /**
+     * gets recover page
+     */
     @RequestMapping(value = "/send/recover", method = RequestMethod.GET)
     public String recoverMail(ModelMap modelMap) {
         goodsService.putDefaultAttributes(modelMap);
         return "recover_page";
     }
 
+    /**
+     * gets email and call service to send recover mail
+     */
     @RequestMapping(value = "/send/recover", method = RequestMethod.POST)
     public String recoverMail(String email, ModelMap modelMap) {
         goodsService.putDefaultAttributes(modelMap);

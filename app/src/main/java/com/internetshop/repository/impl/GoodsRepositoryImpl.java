@@ -57,6 +57,10 @@ public class GoodsRepositoryImpl implements GoodsRepository {
                 .setParameter("visible", 1).setParameter("name", name).setMaxResults(amount).getResultList();
     }
 
+    /**
+     * finishes query and gets result list
+     *
+     */
     @Override
     public List<GoodsEntity> getAllGoodsByFilter(CatalogQuery catalogQuery, int firstId, int maxResults) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
@@ -87,6 +91,9 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         return em.createQuery("select revievEntity from ReviewEntity revievEntity where revievEntity.goodsEntity.id =:id", ReviewEntity.class).setParameter("id", id).getResultList();
     }
 
+    /**
+     * evaluates amount of goods by filter query
+     */
     @Override
     public long getAmountOfGoodsByFilter(CatalogQuery catalogQuery) {
         CriteriaBuilder builder = em.getCriteriaBuilder();
@@ -96,6 +103,10 @@ public class GoodsRepositoryImpl implements GoodsRepository {
         return em.createQuery(criteria.select(builder.count(goodsRoot))).getSingleResult();
     }
 
+    /**
+     *
+     * build predicates which depends on entered params
+     */
     private <T> CriteriaQuery<T> buildFilterQueryString(CatalogQuery catalogQuery, CriteriaBuilder builder, CriteriaQuery criteria, Root<GoodsEntity> goodsRoot) {
         criteria.select(goodsRoot);
         final List<Predicate> predicates = new ArrayList<>();

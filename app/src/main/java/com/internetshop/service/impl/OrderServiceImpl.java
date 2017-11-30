@@ -234,6 +234,10 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.updateOrder(orderEntity);
     }
 
+    /**
+     * sets orders pay status
+     *
+     */
     @Transactional
     public void setPayStatus(int id) {
         OrderEntity orderEntity = orderRepository.getOrderById(id);
@@ -241,6 +245,9 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.updateOrder(orderEntity);
     }
 
+    /**
+     * increasing sales counter of goods
+     */
     @Transactional
     public void increaseSalesCounter(OrderEntity orderEntity) {
         for (CartItemEntity item : orderEntity.getCartItemEntities()) {
@@ -252,6 +259,9 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    /**
+     * decreasing sales counter of goods
+     */
     @Transactional
     public void decreaseSalesCounter(OrderEntity orderEntity) {
         for (CartItemEntity item : orderEntity.getCartItemEntities()) {
@@ -293,12 +303,18 @@ public class OrderServiceImpl implements OrderService {
         return convertOrderToDTO(orderEntity);
     }
 
+    /**
+     * gets amount of closed orders by client id
+     */
     @Transactional(readOnly = true)
     @Override
     public long getAmountOfClosedOrdersByClientId(int id) {
         return orderRepository.getAmountOfClosedOrdersByClientId(id);
     }
 
+    /**
+     * evaluates a list of each day revenue
+     */
     @Transactional(readOnly = true)
     @Override
     public List<Float> getListOfRevenueForEachDayOfCurrentMonth() {
@@ -318,6 +334,9 @@ public class OrderServiceImpl implements OrderService {
         return resultList;
     }
 
+    /**
+     * sends mail to client about creating new order
+     */
     @Transactional(readOnly = true)
     @Override
     public void sendNewOrderMail(int id) {
@@ -335,6 +354,9 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    /**
+     * evaluates total cost of goods in cart
+     */
     @Override
     public float getSumOfOrder(List<CartItem> cartList) {
         float sum = 0;
@@ -344,6 +366,9 @@ public class OrderServiceImpl implements OrderService {
         return sum;
     }
 
+    /**
+     * checks are any orders contain specified goods
+     */
     @Override
     public boolean isOrdersContainsGoods(int id) {
         return orderRepository.isOrdersContainsGoods(id);
